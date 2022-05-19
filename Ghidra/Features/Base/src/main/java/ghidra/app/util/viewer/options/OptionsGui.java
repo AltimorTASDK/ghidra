@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -340,12 +340,10 @@ public class OptionsGui extends JPanel {
 		GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		String envfonts[] = gEnv.getAvailableFontFamilyNames();
 		fontNameField = new GComboBox<>(envfonts);
-		fontNameField.setBackground(Color.white);
 		fontNameField.setRenderer(new FontRenderer());
 		panel1.add(fontNameField);
 
 		fontSizeField = new GComboBox<>(IntStream.rangeClosed(6, 32).boxed().toArray(Integer[]::new));
-		fontSizeField.setBackground(Color.white);
 		panel1.add(fontSizeField);
 		panel.add(panel1, BorderLayout.NORTH);
 
@@ -364,7 +362,10 @@ public class OptionsGui extends JPanel {
 	//Displays the font field with the actual fonts for easier selection
 	class FontRenderer extends GDLabel implements ListCellRenderer<String> {
 		private static final long serialVersionUID = 1L;
-		private final Color SELECTED_COLOR = new Color(10, 36, 106);
+		private final Color UNSELECTED_BG = UIManager.getColor("ComboBox.background");
+		private final Color SELECTED_BG = UIManager.getColor("ComboBox.selectionBackground");
+		private final Color UNSELECTED_FG = UIManager.getColor("ComboBox.foreground");
+		private final Color SELECTED_FG = UIManager.getColor("ComboBox.selectionForeground");
 
 		public FontRenderer() {
 			setOpaque(true);
@@ -377,8 +378,8 @@ public class OptionsGui extends JPanel {
 			Font origFont = fontNameField.getFont();
 			setFont(new Font(value.toString(), origFont.getStyle(), origFont.getSize()));
 
-			setBackground(isSelected ? SELECTED_COLOR : Color.white);
-			setForeground(isSelected ? Color.white : Color.black);
+			setBackground(isSelected ? SELECTED_BG : UNSELECTED_BG);
+			setForeground(isSelected ? SELECTED_FG : UNSELECTED_FG);
 
 			return this;
 		}
@@ -796,9 +797,9 @@ public class OptionsGui extends JPanel {
 		setSelectedIndex(selectedIndex);
 	}
 
-//==================================================================================================	
+//==================================================================================================
 // Inner Classes
-//==================================================================================================	
+//==================================================================================================
 
 	/**
 	 * Simple layoutModel to be used for the preview panel.

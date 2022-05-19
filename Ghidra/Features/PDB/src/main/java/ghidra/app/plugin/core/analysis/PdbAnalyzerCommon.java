@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.Set;
 
 import ghidra.app.services.Analyzer;
+import ghidra.app.util.opinion.MSCoffLoader;
 import ghidra.app.util.opinion.PeLoader;
 import ghidra.framework.options.Options;
 import ghidra.program.model.listing.Program;
@@ -46,13 +47,13 @@ public class PdbAnalyzerCommon {
 	/**
 	 * Returns true if the specified program is supported by either of the
 	 * Pdb analyzers.
-	 * 
+	 *
 	 * @param program {@link Program}
 	 * @return boolean true if program is supported by Pdb analyzers
 	 */
 	public static boolean canAnalyzeProgram(Program program) {
 		String executableFormat = program.getExecutableFormat();
-		return executableFormat != null && (executableFormat.indexOf(PeLoader.PE_NAME) != -1);
+		//return executableFormat != null && (executableFormat.indexOf(PeLoader.PE_NAME) != -1);
 		// TODO: Check for MSCOFF_NAME.  Initial investigation shows that the .debug$T section of
 		//  the MSCOFF (*.obj) file has type records and the .debug$S section has symbol records.
 		//  More than that, in at least one instance, there has been a TypeServer2MsType type
@@ -73,8 +74,8 @@ public class PdbAnalyzerCommon {
 		//  MSCOFF ARCHIVE.  Initial indication is that each MSCOFF within the archive will have
 		//  the PDB file that it needs listed, even if redundant for each MSCOFF within the
 		//  archive.
-//		return executableFormat != null && (executableFormat.indexOf(PeLoader.PE_NAME) != -1 ||
-//				executableFormat.indexOf(MSCoffLoader.MSCOFF_NAME) != -1);
+		return executableFormat != null && (executableFormat.indexOf(PeLoader.PE_NAME) != -1 ||
+				executableFormat.indexOf(MSCoffLoader.MSCOFF_NAME) != -1);
 
 	}
 
@@ -83,7 +84,7 @@ public class PdbAnalyzerCommon {
 	 * when it is invoked later<p>
 	 * Each specific analyzer has a public method that calls this to supply the
 	 * actual analyzer name to make it easier for script writers to call.
-	 * 
+	 *
 	 * @param analyzerName name of analyzer
 	 * @param program {@link Program}
 	 * @param pdbFile the file
@@ -98,7 +99,7 @@ public class PdbAnalyzerCommon {
 	 * when it is invoked later<p>
 	 * Each specific analyzer has a public method that calls this to supply the
 	 * actual analyzer name to make it easier for script writers to call.
-	 * 
+	 *
 	 * @param analyzerName name of analyzer
 	 * @param program {@link Program}
 	 * @param allowRemote boolean flag, true means the analyzer can search remote
@@ -111,11 +112,11 @@ public class PdbAnalyzerCommon {
 
 	/**
 	 * Common pdb searching logic between both analyzers.
-	 * 
+	 *
 	 * @param pdbAnalyzer the analyzer doing the searching
 	 * @param program the program
 	 * @param allowRemote boolean flag, true means searching remote symbol servers
-	 *  is allowed 
+	 *  is allowed
 	 * @param monitor {@link TaskMonitor} to let user cancel
 	 * @return File pointing to the found pdb, or null if not found or error
 	 */

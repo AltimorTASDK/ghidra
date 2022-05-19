@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -98,7 +98,7 @@ PrintC::PrintC(Architecture *g,const string &nm) : PrintLanguage(g,nm)
 
 {
   nullToken = "NULL";
-  
+
   // Set the flip tokens
   less_than.negate = &greater_equal;
   less_equal.negate = &greater_than;
@@ -245,7 +245,7 @@ void PrintC::pushTypeStart(const Datatype *ct,bool noident)
 
   ct = typestack.back();	// The base type
   OpToken *tok;
-  
+
   if (noident && (typestack.size()==1))
     tok = &type_expr_nospace;
   else
@@ -289,7 +289,7 @@ void PrintC::pushTypeEnd(const Datatype *ct)
 {
   pushMod();
   setMod(force_dec);
-  
+
   for(;;) {
     if (ct->getName().size() != 0)	// This is the base type
       break;
@@ -852,7 +852,7 @@ void PrintC::opPtrsub(const PcodeOp *op)
       arrayvalue = valueon;	// If printing value, use [0]
       valueon = true;		// Don't print &
     }
-    
+
     if (!valueon) {		// Printing an ampersand
       if (flex) {		// EMIT  &( ).name
 	pushOp(&addressof,op);
@@ -1714,7 +1714,7 @@ void PrintC::pushAnnotation(const Varnode *vn,const PcodeOp *op)
     else
       size = vn->getSize();
   }
-  
+
   if (entry != (SymbolEntry *)0) {
     if (entry->getSize() == size)
       pushSymbol(entry->getSymbol(),vn,op);
@@ -1742,6 +1742,8 @@ void PrintC::pushSymbol(const Symbol *sym,const Varnode *vn,const PcodeOp *op)
     tokenColor = EmitXml::global_color;
   else if (sym->getCategory() == 0)
     tokenColor = EmitXml::param_color;
+  else if (sym->isNameLocked() && sym->getCategory() == 1)
+    tokenColor = EmitXml::const_color;
   else
     tokenColor = EmitXml::var_color;
   pushSymbolScope(sym);
@@ -1781,7 +1783,7 @@ void PrintC::pushPartialSymbol(const Symbol *sym,int4 off,int4 sz,
   //                       globalstruct.(arrayfield[0])
   vector<PartialSymbolEntry> stack;
   Datatype *finalcast = (Datatype *)0;
-  
+
   Datatype *ct = sym->getType();
 
   while(ct != (Datatype *)0) {
@@ -1996,7 +1998,7 @@ void PrintC::emitPrototypeInputs(const FuncProto *proto)
 
 {
   int4 sz = proto->numParams();
-  
+
   if (sz == 0)
     emit->print("void",EmitXml::keyword_color);
   else {
@@ -2229,7 +2231,7 @@ bool PrintC::emitInplaceOp(const PcodeOp *op)
 }
 
 void PrintC::emitExpression(const PcodeOp *op)
-   
+
 {
   const Varnode *outvn = op->getOut();
   if (outvn != (Varnode *)0) {
@@ -2266,7 +2268,7 @@ void PrintC::emitVarDecl(const Symbol *sym)
   pushSymbol(sym,(Varnode *)0,(PcodeOp *)0);
   pushTypeEnd(sym->getType());
   recurse();
-  
+
   emit->endVarDecl(id);
 }
 
@@ -2282,7 +2284,7 @@ bool PrintC::emitScopeVarDecls(const Scope *symScope,int4 cat)
 
 {
   bool notempty = false;
-  
+
   if (cat >= 0) {		// If a category is specified
     int4 sz = symScope->getCategorySize(cat);
     for(int4 i=0;i<sz;++i) {
@@ -2929,7 +2931,7 @@ void PrintC::emitSwitchCase(int4 casenum,const BlockSwitch *switchbl)
   int4 i,num;
   uintb val;
   const Datatype *ct;
-    
+
   ct = switchbl->getSwitchType();
 
   if (switchbl->isDefaultCase(casenum)) {
@@ -3018,7 +3020,7 @@ void PrintC::emitAnyLabelStatement(const FlowBlock *bl)
   if (bl == (FlowBlock *)0) return;
   emitLabelStatement(bl);
 }
-  
+
 /// Collect any comment lines the sorter has associated with a statement
 /// rooted at a given PcodeOp and emit them using appropriate delimiters
 /// \param inst is the given PcodeOp

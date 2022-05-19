@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ import java.awt.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import docking.widgets.label.GDHtmlLabel;
@@ -31,8 +32,6 @@ import docking.widgets.label.GDHtmlLabel;
  *
  */
 public abstract class AbstractGCellRenderer extends GDHtmlLabel {
-
-	private static final Color ALTERNATE_BACKGROUND_COLOR = new Color(237, 243, 254);
 
 	/** Allows the user to disable alternating row colors on JLists and JTables */
 	private static final String DISABLE_ALTERNATING_ROW_COLORS_PROPERTY =
@@ -156,15 +155,15 @@ public abstract class AbstractGCellRenderer extends GDHtmlLabel {
 	}
 
 	protected Color getDefaultBackgroundColor() {
-		return Color.WHITE;
+		return UIManager.getColor("Table:\"Table.cellRenderer\".background");
 	}
 
 	protected Color getBackgroundColorForRow(int row) {
 
 		if ((row & 1) == 1) {
-			return getDefaultBackgroundColor();
+			return UIManager.getColor("Table.alternativeRowBackground");
 		}
-		return ALTERNATE_BACKGROUND_COLOR;
+		return getDefaultBackgroundColor();
 	}
 
 // ==================================================================================================

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,12 +33,12 @@ import docking.widgets.label.GDLabel;
 // TODO: should this be put into generic?
 public class GenericHeader extends JPanel {
 
-	private static final Color NON_FOCUS_START_COLOR = new Color(150, 150, 150);
-	private static final Color FOCUS_START_COLOR = new Color(30, 30, 150);
+	private static final Color NON_FOCUS_COLOR = UIManager.getColor("TableHeader.background");
+	private static final Color FOCUS_COLOR = UIManager.getColor("TableHeader.focusCellBackground");
 	private static final int MINIMUM_TITLE_SIZE = 80;
 
-	private Color nonFocusColor = NON_FOCUS_START_COLOR;
-	private Color focusColor = FOCUS_START_COLOR;
+	private Color nonFocusColor = NON_FOCUS_COLOR;
+	private Color focusColor = FOCUS_COLOR;
 
 	protected Component component;
 	protected DockableToolBarManager toolBarMgr;
@@ -58,7 +58,7 @@ public class GenericHeader extends JPanel {
 	};
 
 	public GenericHeader() {
-		this(NON_FOCUS_START_COLOR, FOCUS_START_COLOR);
+		this(NON_FOCUS_COLOR, FOCUS_COLOR);
 	}
 
 	public GenericHeader(Color nonFocusColor, Color focusColor) {
@@ -68,7 +68,7 @@ public class GenericHeader extends JPanel {
 		BorderLayout layout = new BorderLayout();
 		layout.setVgap(1);
 		setLayout(layout);
-		setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		//setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		setFocusable(false);
 
 		titlePanel = new TitlePanel();
@@ -100,7 +100,7 @@ public class GenericHeader extends JPanel {
 
 	/**
 	 * Signals whether or not to break the toolbar actions into multiple rows.  The default is
-	 * to wrap as necessary.  
+	 * to wrap as necessary.
 	 * @param noWrap true signals not to break the actions into multiple rows
 	 */
 	public void setNoWrapToolbar(boolean noWrap) {
@@ -286,19 +286,19 @@ public class GenericHeader extends JPanel {
 
 //==================================================================================================
 // Inner Classes
-//==================================================================================================	
+//==================================================================================================
 
 	public class TitleFlasher {
 
 		Animator animator;
 
 		TitleFlasher() {
-			animator = PropertySetter.createAnimator(1000, this, "color", NON_FOCUS_START_COLOR,
-				NON_FOCUS_START_COLOR, Color.YELLOW, FOCUS_START_COLOR);
+			animator = PropertySetter.createAnimator(1000, this, "color", NON_FOCUS_COLOR,
+				NON_FOCUS_COLOR, Color.YELLOW, FOCUS_COLOR);
 
 //			animator =
-//				PropertySetter.createAnimator(1000, this, "color", NON_FOCUS_START_COLOR,
-//					NON_FOCUS_START_COLOR, Color.YELLOW, FOCUS_START_COLOR);
+//				PropertySetter.createAnimator(1000, this, "color", NON_FOCUS_COLOR,
+//					NON_FOCUS_COLOR, Color.YELLOW, FOCUS_COLOR);
 
 			animator.setAcceleration(0.2f);
 			animator.setDeceleration(0.8f);
@@ -325,7 +325,7 @@ public class GenericHeader extends JPanel {
 		}
 
 		private void done() {
-			focusColor = FOCUS_START_COLOR;
+			focusColor = FOCUS_COLOR;
 			titlePanel.repaint();
 		}
 	}
@@ -347,7 +347,7 @@ public class GenericHeader extends JPanel {
 			setFocusable(false);
 			titleLabel = new GDLabel();
 			titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 0));
-			titleLabel.setForeground(Color.BLACK);
+			titleLabel.setForeground(UIManager.getColor("TableHeader.foreground"));
 			titleLabel.setFocusable(false);
 			add(titleLabel, BorderLayout.CENTER);
 		}
@@ -371,11 +371,10 @@ public class GenericHeader extends JPanel {
 
 			GradientPaint gp;
 			if (isSelected) {
-				gp = new GradientPaint(r.x, r.y, focusColor, r.x + r.width, r.y, getBackground());
+				gp = new GradientPaint(r.x, r.y, focusColor, r.x + r.width, r.y, focusColor);
 			}
 			else {
-				gp = new GradientPaint(r.x, r.y, nonFocusColor, r.x + r.width, r.y,
-					getBackground());
+				gp = new GradientPaint(r.x, r.y, nonFocusColor, r.x + r.width, r.y, nonFocusColor);
 			}
 
 			g2d.setPaint(gp);
@@ -419,7 +418,6 @@ public class GenericHeader extends JPanel {
 		 */
 		void setSelected(boolean state) {
 			isSelected = state;
-			titleLabel.setForeground(state ? Color.WHITE : Color.BLACK);
 			repaint();
 		}
 

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,7 +63,7 @@ public class DropDownTextField<T> extends JTextField implements GComponent {
 	private static final int DEFAULT_MAX_UPDATE_DELAY = 2000;
 	private static final int MIN_HEIGHT = 300;
 	private static final int MIN_WIDTH = 200;
-	protected static final Color TOOLTIP_WINDOW_BGCOLOR = new Color(255, 255, 225);
+	protected static final Color TOOLTIP_WINDOW_BGCOLOR = UIManager.getColor("TextField.background");
 
 	private JWindow toolTipWindow; // delayed initialization for parenting
 	private JWindow matchingWindow; // delayed initialization for parenting
