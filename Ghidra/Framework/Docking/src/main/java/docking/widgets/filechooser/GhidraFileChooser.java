@@ -363,7 +363,7 @@ public class GhidraFileChooser extends DialogComponentProvider
 		shortCutPanel.add(recentButton);
 
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createLoweredBevelBorder());
+		panel.setBorder(BorderFactory.createEmptyBorder());
 		panel.setBackground(BACKGROUND_COLOR.darker());
 		panel.add(shortCutPanel, BorderLayout.NORTH);
 		return panel;
@@ -471,7 +471,7 @@ public class GhidraFileChooser extends DialogComponentProvider
 
 	private void buildWaitPanel() {
 		waitPanel = new JPanel(new BorderLayout());
-		waitPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+		waitPanel.setBorder(BorderFactory.createEmptyBorder());
 		waitPanel.setBackground(BACKGROUND_COLOR);
 		waitPanel.addMouseListener(new MouseAdapter() {
 			@Override

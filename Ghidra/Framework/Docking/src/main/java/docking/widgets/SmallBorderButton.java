@@ -5,9 +5,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,28 +25,28 @@ import javax.swing.border.Border;
 /**
  * Class that is a JButton that has an empty border and adds a mouse listener
  * so that the button looks raised when the mouse pointer enters the button,
- * and looks lowered when the mouse pointer exits the button. 
+ * and looks lowered when the mouse pointer exits the button.
  *
- */ 
+ */
 public class SmallBorderButton extends JButton {
-	
+
 	/**
 	 * A raised beveled border.
 	 */
     public static final Border RAISED_BORDER = BorderFactory.createCompoundBorder(
-				BorderFactory.createRaisedBevelBorder(),
+				BorderFactory.createLineBorder(UIManager.getColor("Button.borderColor")),
 				BorderFactory.createEmptyBorder(1,1,1,1));
     /**
      * An empty border.
      */
 //    public static final Border NO_BORDER = new EmptyBorder(RAISED_BORDER.getBorderInsets(new JButton()));
     public static final Border NO_BORDER = RAISED_BORDER;
-    
+
     /**
      * A lowered border beveled border.
      */
     public static final Border LOWERED_BORDER = BorderFactory.createCompoundBorder(
-				BorderFactory.createLoweredBevelBorder(),
+				BorderFactory.createLineBorder(UIManager.getColor("Button.borderColor")),
 				BorderFactory.createEmptyBorder(1,1,1,1));
 
 	private Border overrideBorder;
@@ -161,5 +161,5 @@ public class SmallBorderButton extends JButton {
 			}
 		}
 	}
-	
+
 }

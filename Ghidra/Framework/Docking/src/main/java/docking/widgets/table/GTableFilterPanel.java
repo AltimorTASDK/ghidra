@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,7 +67,7 @@ import utility.function.Callback;
  * <p>
  *
  * <u>Filtering</u><br>
- * The filtering behavior is controlled by the filter button displayed to the right of this 
+ * The filtering behavior is controlled by the filter button displayed to the right of this
  * panel's text field.
  * <p>
  *
@@ -104,7 +104,7 @@ import utility.function.Callback;
  *     To get a row count that is always all of the model's data, call
  *     {@link #getUnfilteredRowCount()}.
  * </ul>
- * 
+ *
  * @param <ROW_OBJECT> the row object type for this given table and model
  */
 public class GTableFilterPanel<ROW_OBJECT> extends JPanel {
@@ -346,7 +346,7 @@ public class GTableFilterPanel<ROW_OBJECT> extends JPanel {
 
 	private void buildPanel(String filterLabel) {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+		setBorder(BorderFactory.createEmptyBorder());
 
 		searchLabel = new GDLabel(filterLabel);
 		searchLabel.setToolTipText("Include only table elements that match the given search text");
@@ -915,7 +915,7 @@ public class GTableFilterPanel<ROW_OBJECT> extends JPanel {
 	 * a filter panel, then each provider will share the same filter settings when that provider
 	 * is created.  If this is not what you want, then you need to override this method to
 	 * generate a unique key for each provider.
-	 * 
+	 *
 	 * @param jTable the table
 	 * @return a key used to store user filter configuration state.
 	 */
@@ -992,7 +992,7 @@ public class GTableFilterPanel<ROW_OBJECT> extends JPanel {
 
 //==================================================================================================
 // Inner Classes
-//==================================================================================================	
+//==================================================================================================
 
 	private abstract class ColumnFilterActionState
 			extends ActionState<ColumnBasedTableFilter<ROW_OBJECT>> {

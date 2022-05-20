@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ import ghidra.util.layout.MiddleLayout;
 public class StatusBar extends JPanel {
 
 	private static final Border STATUS_BORDER = BorderFactory.createCompoundBorder(
-		BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(1, 2, 1, 2));
+		BorderFactory.createEmptyBorder(), BorderFactory.createEmptyBorder(1, 2, 1, 2));
 
 	private static final Border STATUS_ITEM_BORDER = BorderFactory.createCompoundBorder(
 		BorderFactory.createEmptyBorder(0, 3, 0, 0), STATUS_BORDER);
@@ -164,7 +164,7 @@ public class StatusBar extends JPanel {
 
 	/**
 	 * Deprecated.  Call {@link #setStatusText(String)} instead.
-	 * 
+	 *
 	 * @param text the text
 	 * @param isActiveWindow this parameter is ignored
 	 * @deprecated Call {@link #setStatusText(String)} instead.  Remove after 9.3
@@ -180,7 +180,7 @@ public class StatusBar extends JPanel {
 	 */
 	public void setStatusText(String text) {
 		// Run this later in case we are in the midst of a Java focus transition, such as when a
-		// dialog is closing.  If we don't let the focus transition finish, then we will not 
+		// dialog is closing.  If we don't let the focus transition finish, then we will not
 		// correctly locate the active window.
 		Swing.runLater(() -> doSetStatusText(text));
 	}

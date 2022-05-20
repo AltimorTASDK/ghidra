@@ -574,7 +574,7 @@ public class DropDownTextField<T> extends JTextField implements GComponent {
 		matchingWindow.setFocusable(false);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(
-			BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.GRAY, Color.BLACK));
+			BorderFactory.createLineBorder(UIManager.getColor("Button.borderColor")));
 		scrollPane.setFocusable(false);
 		scrollPane.getVerticalScrollBar().setFocusable(false);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

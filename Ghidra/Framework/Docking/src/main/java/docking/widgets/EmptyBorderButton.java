@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,8 @@ public class EmptyBorderButton extends JButton {
 	 * A raised beveled border.
 	 */
 	public static final Border RAISED_BUTTON_BORDER = BorderFactory.createCompoundBorder(
-		BorderFactory.createRaisedBevelBorder(), BorderFactory.createEmptyBorder(1, 1, 1, 1));
+				BorderFactory.createLineBorder(UIManager.getColor("Button.borderColor")),
+				BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
 	/**
 	 * An empty border.
@@ -52,7 +53,8 @@ public class EmptyBorderButton extends JButton {
 	 * A lowered border beveled border.
 	 */
 	public static final Border LOWERED_BUTTON_BORDER = BorderFactory.createCompoundBorder(
-		BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(1, 1, 1, 1));
+				BorderFactory.createLineBorder(UIManager.getColor("Button.borderColor")),
+				BorderFactory.createEmptyBorder(1,1,1,1));
 
 	/**
 	 * Construct a new EmptyBorderButton.
@@ -116,7 +118,7 @@ public class EmptyBorderButton extends JButton {
 	}
 
 	private void installLookAndFeelFix() {
-		// We want our custom buttons to paint themselves blended with the background.  Several 
+		// We want our custom buttons to paint themselves blended with the background.  Several
 		// LookAndFeels do not do this (WinXP and Metal), so we override that behavior here.
 		setContentAreaFilled(false);
 		setOpaque(true);
