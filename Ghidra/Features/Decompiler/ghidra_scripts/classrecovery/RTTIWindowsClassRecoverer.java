@@ -1300,44 +1300,57 @@ public class RTTIWindowsClassRecoverer extends RTTIClassRecoverer {
 			throws CancelledException, InvalidInputException, DuplicateNameException, Exception {
 
 		// find deleting destructors using various mechanisms
+		monitor.setMessage("Finding deleting destructors");
 		findDeletingDestructors(recoveredClasses);
 
 		// use atexit param list to find more destructors
+		monitor.setMessage("Finding atexit destructors");
 		findDestructorsUsingAtexitCalledFunctions(recoveredClasses);
 
 		// figure out which are inlined and put on separate list to be processed later
+		monitor.setMessage("Separating inlined constructors/destructors");
 		separateInlinedConstructorDestructors(recoveredClasses);
 
 		// figure out which member functions are constructors and which are destructors
 		// using the order their parents are called
+		monitor.setMessage("Separating constructors/destructors");
 		processRegularConstructorsAndDestructorsUsingCallOrder(recoveredClasses);
 
 		// determine which of the inlines are constructors and which are destructors
+		monitor.setMessage("Separating inlined constructors/destructors");
 		processInlinedConstructorsAndDestructors(recoveredClasses);
 
+		monitor.setMessage("Finding constructors/destructors using ancestor class functions");
 		findConstructorsAndDestructorsUsingAncestorClassFunctions(recoveredClasses);
 
+		monitor.setMessage("Finding constructors/destructors using related class functions");
 		findInlineConstructorsAndDestructorsUsingRelatedClassFunctions(recoveredClasses);
 
 		// use the load/store information from decompiler to figure out as many of the
 		// ones that could not be determined in earlier stages
+		monitor.setMessage("Processing indeterminate constructors/destructors");
 		processRemainingIndeterminateConstructorsAndDestructors(recoveredClasses);
 
 		// use the known constructors and known vfunctions to figure out
 		// clone functions
+		monitor.setMessage("Finding clone functions");
 		findCloneFunctions(recoveredClasses);
 
 		// This has to be here. It needs all the info from the previously run methods to do this.
 		// Finds the constructors that have multiple basic blocks, reference the vftable not in the
 		// first block, and call non-parent constructors and non operator new before the vftable ref
+		monitor.setMessage("Finding more inlined constructors");
 		findMoreInlinedConstructors(recoveredClasses);
 
+		monitor.setMessage("Finding destructors with no params or return");
 		findDestructorsWithNoParamsOrReturn(recoveredClasses);
 
 		// use vftables with references to all the same function (except possibly one deleting
 		// destructor)to find the purecall function
+		monitor.setMessage("Identifying pure virtual functions");
 		identifyPureVirtualFunction(recoveredClasses);
 
+		monitor.setMessage("Finding real virtual base functions");
 		findRealVBaseFunctions(recoveredClasses);
 
 	}
