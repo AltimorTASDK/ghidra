@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 
 import docking.widgets.table.*;
 import ghidra.docking.settings.Settings;
@@ -36,8 +37,10 @@ import ghidra.util.table.column.GColumnRenderer;
 public class AnalysisEnablementTableModel
 		extends GDynamicColumnTableModel<AnalyzerEnablementState, Object> {
 
-	private static Color BG_COLOR_NOT_DEFAULT_ENABLEMENT = new Color(255, 255, 200);
-	private static Color BG_COLOR_NOT_DEFAULT_ENABLEMENT_SELECTED = new Color(177, 212, 236);
+	private static Color BG_COLOR_NOT_DEFAULT_ENABLEMENT =
+			UIManager.getColor("Table.background").darker();
+	private static Color BG_COLOR_NOT_DEFAULT_ENABLEMENT_SELECTED =
+			UIManager.getColor("Table.selectionBackground").darker();
 
 	private List<AnalyzerEnablementState> analyzerStates;
 	private AnalysisPanel panel;
@@ -109,7 +112,7 @@ public class AnalysisEnablementTableModel
 
 //==================================================================================================
 // Inner Classes
-//==================================================================================================	
+//==================================================================================================
 
 	private class AnalyzerEnabledColumn
 			extends AbstractDynamicTableColumn<AnalyzerEnablementState, Boolean, Object> {
@@ -215,14 +218,25 @@ public class AnalysisEnablementTableModel
 				return component;
 			}
 
-			// not the default enablement			
-			if (data.isSelected()) {
+			// not the default enablement
+			float vals[] = new float[3];
+			Color src = component.getBackground();
+			Color.RGBtoHSB(src.getRed(), src.getGreen(), src.getBlue(), vals);
+			vals[0] = 54.f / 360;
+			vals[1] = 0.5f;
+			// Compress the brightness toward 0.5
+			vals[2] = 0.5f + (vals[2] - 0.5f) * 0.75f;
+
+			// Compute the color
+			component.setBackground(Color.getHSBColor(vals[0], vals[1], vals[2]));
+
+			/*if (data.isSelected()) {
 				component.setBackground(BG_COLOR_NOT_DEFAULT_ENABLEMENT_SELECTED);
 				component.setForeground(Color.BLACK);
 			}
 			else {
 				component.setBackground(BG_COLOR_NOT_DEFAULT_ENABLEMENT);
-			}
+			}*/
 
 			setToolTip(component, "This option differs from the default");
 			return component;
