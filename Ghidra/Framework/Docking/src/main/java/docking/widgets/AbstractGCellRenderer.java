@@ -155,7 +155,7 @@ public abstract class AbstractGCellRenderer extends GDHtmlLabel {
 	}
 
 	protected Color getDefaultBackgroundColor() {
-		return UIManager.getColor("Table:\"Table.cellRenderer\".background");
+		return UIManager.getColor("Table.background");
 	}
 
 	protected Color getBackgroundColorForRow(int row) {
