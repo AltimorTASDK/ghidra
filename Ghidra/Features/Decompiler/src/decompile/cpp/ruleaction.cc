@@ -3169,9 +3169,9 @@ int4 RuleSignShift::applyOp(PcodeOp *op,Funcdata &data)
 	// Only apply to signed types
 	Datatype *dt = inVn->getType();
 	type_metatype meta = dt->getMetatype();
-	if ((meta != TYPE_INT)&&(meta != TYPE_FLOAT)) return false;
-	if (dt->isCharPrint()) return false;
-	if (dt->isEnumType()) return false;
+	if ((meta != TYPE_INT)&&(meta != TYPE_FLOAT)) return 0;
+	if (dt->isCharPrint()) return 0;
+	if (dt->isEnumType()) return 0;
 
 	bool doConversion = false;
 	Varnode *outVn = op->getOut();
