@@ -22,44 +22,44 @@
 HighVariable::HighVariable(Varnode *vn)
 
 {
-  numMergeClasses = 1;
-  highflags = flagsdirty | namerepdirty | typedirty | coverdirty;
-  flags = 0;
-  type = (Datatype *)0;
-  symbol = (Symbol *)0;
-  nameRepresentative = (Varnode *)0;
-  symboloffset = -1;
-  inst.push_back(vn);
-  vn->setHigh( this, numMergeClasses-1 );
-  if (vn->getSymbolEntry() != (SymbolEntry *)0)
-    setSymbol(vn);
+	numMergeClasses = 1;
+	highflags = flagsdirty | namerepdirty | typedirty | coverdirty;
+	flags = 0;
+	type = (Datatype *)0;
+	symbol = (Symbol *)0;
+	nameRepresentative = (Varnode *)0;
+	symboloffset = -1;
+	inst.push_back(vn);
+	vn->setHigh( this, numMergeClasses-1 );
+	if (vn->getSymbolEntry() != (SymbolEntry *)0)
+		setSymbol(vn);
 }
 
 /// The given Varnode \b must be a member and \b must have a non-null SymbolEntry
 void HighVariable::setSymbol(Varnode *vn) const
 
 {
-  SymbolEntry *entry = vn->getSymbolEntry();
-  if (symbol != (Symbol *)0 && symbol != entry->getSymbol()) {
-    if ((highflags & symboldirty)==0) {
-      ostringstream s;
-      s << "Symbols \"" << symbol->getName() << "\" and \"" << entry->getSymbol()->getName();
-      s << "\" assigned to the same variable";
-      throw LowlevelError(s.str());
-    }
-  }
-  symbol = entry->getSymbol();
-  if (entry->isDynamic())	// Dynamic symbols match whole variable
-    symboloffset = -1;
-  else if (symbol->getCategory() == 1)
-    symboloffset = -1;			// For equates, we don't care about size
-  else if (symbol->getType()->getSize() == vn->getSize() &&
-      entry->getAddr() == vn->getAddr() && !entry->isPiece())
-    symboloffset = -1;			// A matching entry
-  else
-    symboloffset = vn->getAddr().overlap(0,entry->getAddr(),symbol->getType()->getSize()) + entry->getOffset();
+	SymbolEntry *entry = vn->getSymbolEntry();
+	if (symbol != (Symbol *)0 && symbol != entry->getSymbol()) {
+		if ((highflags & symboldirty)==0) {
+			ostringstream s;
+			s << "Symbols \"" << symbol->getName() << "\" and \"" << entry->getSymbol()->getName();
+			s << "\" assigned to the same variable";
+			throw LowlevelError(s.str());
+		}
+	}
+	symbol = entry->getSymbol();
+	if (entry->isDynamic())       // Dynamic symbols match whole variable
+		symboloffset = -1;
+	else if (symbol->getCategory() == 1)
+		symboloffset = -1;                  // For equates, we don't care about size
+	else if (symbol->getType()->getSize() == vn->getSize() &&
+			entry->getAddr() == vn->getAddr() && !entry->isPiece())
+		symboloffset = -1;                  // A matching entry
+	else
+		symboloffset = vn->getAddr().overlap(0,entry->getAddr(),symbol->getType()->getSize()) + entry->getOffset();
 
-  highflags &= ~((uint4)symboldirty);		// We are no longer dirty
+	highflags &= ~((uint4)symboldirty);           // We are no longer dirty
 }
 
 /// Link information to \b this from a Symbol that is not attached to a member Varnode.
@@ -71,9 +71,9 @@ void HighVariable::setSymbol(Varnode *vn) const
 void HighVariable::setSymbolReference(Symbol *sym,int4 off)
 
 {
-  symbol = sym;
-  symboloffset = off;
-  highflags &= ~((uint4)symboldirty);
+	symbol = sym;
+	symboloffset = off;
+	highflags &= ~((uint4)symboldirty);
 }
 
 /// Only update if the cover is marked as \e dirty.
@@ -82,13 +82,13 @@ void HighVariable::setSymbolReference(Symbol *sym,int4 off)
 void HighVariable::updateCover(void) const
 
 {
-  if ((highflags & coverdirty)==0) return; // Cover info is upto date
-  highflags &= ~coverdirty;
+	if ((highflags & coverdirty)==0) return; // Cover info is upto date
+	highflags &= ~coverdirty;
 
-  wholecover.clear();
-  if (!inst[0]->hasCover()) return;
-  for(int4 i=0;i<inst.size();++i)
-    wholecover.merge(*inst[i]->getCover());
+	wholecover.clear();
+	if (!inst[0]->hasCover()) return;
+	for(int4 i=0;i<inst.size();++i)
+		wholecover.merge(*inst[i]->getCover());
 }
 
 /// Only update if flags are marked as \e dirty.
@@ -97,19 +97,19 @@ void HighVariable::updateCover(void) const
 void HighVariable::updateFlags(void) const
 
 {
-  if ((highflags & flagsdirty)==0) return; // flags are up to date
+	if ((highflags & flagsdirty)==0) return; // flags are up to date
 
-  vector<Varnode *>::const_iterator iter;
-  uint4 fl = 0;
+	vector<Varnode *>::const_iterator iter;
+	uint4 fl = 0;
 
-  for(iter=inst.begin();iter!=inst.end();++iter)
-    fl |= (*iter)->getFlags();
+	for(iter=inst.begin();iter!=inst.end();++iter)
+		fl |= (*iter)->getFlags();
 
-				// Keep these flags
-  flags &= (Varnode::mark | Varnode::typelock);
-				// Update all but these
-  flags |= fl & ~(Varnode::mark | Varnode::directwrite | Varnode::typelock );
-  highflags &= ~flagsdirty; // Clear the dirty flag
+																// Keep these flags
+	flags &= (Varnode::mark | Varnode::typelock);
+																// Update all but these
+	flags |= fl & ~(Varnode::mark | Varnode::directwrite | Varnode::typelock );
+	highflags &= ~flagsdirty; // Clear the dirty flag
 }
 
 /// Find the member Varnode with the most \e specialized data-type, handling \e bool specially.
@@ -122,22 +122,22 @@ void HighVariable::updateFlags(void) const
 Varnode *HighVariable::getTypeRepresentative(void) const
 
 {
-  vector<Varnode *>::const_iterator iter;
-  Varnode *vn,*rep;
-  
-  iter = inst.begin();
-  rep = *iter;
-  ++iter;
-  for(;iter!=inst.end();++iter) {
-    vn = *iter;
-    if (rep->isTypeLock() != vn->isTypeLock()) {
-      if (vn->isTypeLock())
-	rep = vn;
-    }
-    else if (0>vn->getType()->typeOrderBool(*rep->getType()))
-      rep = vn;
-  }
-  return rep;
+	vector<Varnode *>::const_iterator iter;
+	Varnode *vn,*rep;
+	
+	iter = inst.begin();
+	rep = *iter;
+	++iter;
+	for(;iter!=inst.end();++iter) {
+		vn = *iter;
+		if (rep->isTypeLock() != vn->isTypeLock()) {
+			if (vn->isTypeLock())
+				rep = vn;
+		}
+		else if (0>vn->getType()->typeOrderBool(*rep->getType()))
+			rep = vn;
+	}
+	return rep;
 }
 
 /// Only update if the data-type is marked as \e dirty.
@@ -145,39 +145,39 @@ Varnode *HighVariable::getTypeRepresentative(void) const
 void HighVariable::updateType(void) const
 
 {
-  Varnode *vn;
+	Varnode *vn;
 
-  if ((highflags&typedirty)==0) return; // Type is up to date
-  highflags &= ~typedirty; // Mark type as clean
-  if ((highflags & type_finalized)!=0) return;	// Type has been finalized
-  vn = getTypeRepresentative();
+	if ((highflags&typedirty)==0) return; // Type is up to date
+	highflags &= ~typedirty; // Mark type as clean
+	if ((highflags & type_finalized)!=0) return;  // Type has been finalized
+	vn = getTypeRepresentative();
 
-  type = vn->getType();
-  if (type->hasStripped())
-    type = type->getStripped();
+	type = vn->getType();
+	if (type->hasStripped())
+		type = type->getStripped();
 
-				// Update lock flags
-  flags &= ~Varnode::typelock;
-  if (vn->isTypeLock())
-    flags |= Varnode::typelock;
+																// Update lock flags
+	flags &= ~Varnode::typelock;
+	if (vn->isTypeLock())
+		flags |= Varnode::typelock;
 }
 
 void HighVariable::updateSymbol(void) const
 
 {
-  if ((highflags & symboldirty)==0) return; // flags are up to date
-  highflags &= ~((uint4)symboldirty);
-  vector<Varnode *>::const_iterator iter;
-  symbol = (Symbol *)0;
-  Varnode *vn = (Varnode *)0;
+	if ((highflags & symboldirty)==0) return; // flags are up to date
+	highflags &= ~((uint4)symboldirty);
+	vector<Varnode *>::const_iterator iter;
+	symbol = (Symbol *)0;
+	Varnode *vn = (Varnode *)0;
 
-  for(iter=inst.begin();iter!=inst.end();++iter) {
-    Varnode *tmpvn = *iter;
-    if (tmpvn->getSymbolEntry() != (SymbolEntry *)0)
-      vn = tmpvn;
-  }
-  if (vn != (Varnode *)0)
-    setSymbol(vn);
+	for(iter=inst.begin();iter!=inst.end();++iter) {
+		Varnode *tmpvn = *iter;
+		if (tmpvn->getSymbolEntry() != (SymbolEntry *)0)
+			vn = tmpvn;
+	}
+	if (vn != (Varnode *)0)
+		setSymbol(vn);
 }
 
 /// Compare two Varnode objects based just on their storage address
@@ -187,7 +187,7 @@ void HighVariable::updateSymbol(void) const
 bool HighVariable::compareJustLoc(const Varnode *a,const Varnode *b)
 
 {
-  return (a->getAddr() < b->getAddr());
+	return (a->getAddr() < b->getAddr());
 }
 
 /// Given two Varnode (members), sort them based on naming properties:
@@ -204,33 +204,33 @@ bool HighVariable::compareJustLoc(const Varnode *a,const Varnode *b)
 bool HighVariable::compareName(Varnode *vn1,Varnode *vn2)
 
 {
-  if (vn1->isNameLock()) return false; // Check for namelocks
-  if (vn2->isNameLock()) return true;
+	if (vn1->isNameLock()) return false; // Check for namelocks
+	if (vn2->isNameLock()) return true;
 
-  if (vn1->isUnaffected() != vn2->isUnaffected()) // Prefer unaffected
-    return vn2->isUnaffected();
-  if (vn1->isPersist() != vn2->isPersist()) // Prefer persistent
-    return vn2->isPersist();
-  if (vn1->isInput() != vn2->isInput())	// Prefer an input
-    return vn2->isInput();
-  if (vn1->isAddrTied() != vn2->isAddrTied()) // Prefer address tied
-    return vn2->isAddrTied();
+	if (vn1->isUnaffected() != vn2->isUnaffected()) // Prefer unaffected
+		return vn2->isUnaffected();
+	if (vn1->isPersist() != vn2->isPersist()) // Prefer persistent
+		return vn2->isPersist();
+	if (vn1->isInput() != vn2->isInput()) // Prefer an input
+		return vn2->isInput();
+	if (vn1->isAddrTied() != vn2->isAddrTied()) // Prefer address tied
+		return vn2->isAddrTied();
 
-  // Prefer NOT internal
-  if ((vn1->getSpace()->getType() != IPTR_INTERNAL)&&
-      (vn2->getSpace()->getType() == IPTR_INTERNAL))
-    return false;
-  if ((vn1->getSpace()->getType() == IPTR_INTERNAL)&&
-      (vn2->getSpace()->getType() != IPTR_INTERNAL))
-    return true;
-  if (vn1->isWritten() != vn2->isWritten()) // Prefer written
-    return vn2->isWritten();
-  if (!vn1->isWritten())
-    return false;
-  // Prefer earlier
-  if (vn1->getDef()->getTime() != vn2->getDef()->getTime())
-    return (vn2->getDef()->getTime() < vn1->getDef()->getTime());
-  return false;
+	// Prefer NOT internal
+	if ((vn1->getSpace()->getType() != IPTR_INTERNAL)&&
+			(vn2->getSpace()->getType() == IPTR_INTERNAL))
+		return false;
+	if ((vn1->getSpace()->getType() == IPTR_INTERNAL)&&
+			(vn2->getSpace()->getType() != IPTR_INTERNAL))
+		return true;
+	if (vn1->isWritten() != vn2->isWritten()) // Prefer written
+		return vn2->isWritten();
+	if (!vn1->isWritten())
+		return false;
+	// Prefer earlier
+	if (vn1->getDef()->getTime() != vn2->getDef()->getTime())
+		return (vn2->getDef()->getTime() < vn1->getDef()->getTime());
+	return false;
 }
 
 /// Members are scored based the properties that are most dominating in choosing a name.
@@ -238,22 +238,22 @@ bool HighVariable::compareName(Varnode *vn1,Varnode *vn2)
 Varnode *HighVariable::getNameRepresentative(void) const
 
 {
-  if ((highflags & namerepdirty)==0)
-    return nameRepresentative;		// Name representative is up to date
-  highflags &= ~namerepdirty;
+	if ((highflags & namerepdirty)==0)
+		return nameRepresentative;          // Name representative is up to date
+	highflags &= ~namerepdirty;
 
-  vector<Varnode *>::const_iterator iter;
-  Varnode *vn;
+	vector<Varnode *>::const_iterator iter;
+	Varnode *vn;
 
-  iter = inst.begin();
-  nameRepresentative = *iter;
-  ++iter;
-  for(;iter!=inst.end();++iter) {
-    vn = *iter;
-    if (compareName(nameRepresentative,vn))
-      nameRepresentative = vn;
-  }
-  return nameRepresentative;
+	iter = inst.begin();
+	nameRepresentative = *iter;
+	++iter;
+	for(;iter!=inst.end();++iter) {
+		vn = *iter;
+		if (compareName(nameRepresentative,vn))
+			nameRepresentative = vn;
+	}
+	return nameRepresentative;
 }
 
 /// Search for the given Varnode and cut it out of the list, marking all properties as \e dirty.
@@ -261,18 +261,18 @@ Varnode *HighVariable::getNameRepresentative(void) const
 void HighVariable::remove(Varnode *vn)
 
 {
-  vector<Varnode *>::iterator iter;
+	vector<Varnode *>::iterator iter;
 
-  iter = lower_bound(inst.begin(),inst.end(),vn,compareJustLoc);
-  for(;iter!=inst.end();++iter) {
-    if (*iter == vn) {
-      inst.erase(iter);
-      highflags |= (flagsdirty|namerepdirty|coverdirty|typedirty);
-      if (vn->getSymbolEntry() != (SymbolEntry *)0)
-	highflags |= symboldirty;
-      return;
-    }
-  }
+	iter = lower_bound(inst.begin(),inst.end(),vn,compareJustLoc);
+	for(;iter!=inst.end();++iter) {
+		if (*iter == vn) {
+			inst.erase(iter);
+			highflags |= (flagsdirty|namerepdirty|coverdirty|typedirty);
+			if (vn->getSymbolEntry() != (SymbolEntry *)0)
+				highflags |= symboldirty;
+			return;
+		}
+	}
 }
 
 /// Assuming there is a Symbol attached to \b this, run through the Varnode members
@@ -281,12 +281,12 @@ void HighVariable::remove(Varnode *vn)
 SymbolEntry *HighVariable::getSymbolEntry(void) const
 
 {
-  for(int4 i=0;i<inst.size();++i) {
-    SymbolEntry *entry = inst[i]->getSymbolEntry();
-    if (entry != (SymbolEntry *)0 && entry->getSymbol() == symbol)
-      return entry;
-  }
-  return (SymbolEntry *)0;
+	for(int4 i=0;i<inst.size();++i) {
+		SymbolEntry *entry = inst[i]->getSymbolEntry();
+		if (entry != (SymbolEntry *)0 && entry->getSymbol() == symbol)
+			return entry;
+	}
+	return (SymbolEntry *)0;
 }
 
 /// The data-type its dirtying mechanism is disabled.  The data-type will not change, unless
@@ -295,8 +295,8 @@ SymbolEntry *HighVariable::getSymbolEntry(void) const
 void HighVariable::finalizeDatatype(Datatype *tp)
 
 {
-  type = tp;
-  highflags |= type_finalized;
+	type = tp;
+	highflags |= type_finalized;
 }
 
 /// The lists of members are merged and the other HighVariable is deleted.
@@ -305,45 +305,45 @@ void HighVariable::finalizeDatatype(Datatype *tp)
 void HighVariable::merge(HighVariable *tv2,bool isspeculative)
 
 {
-  int4 i;
+	int4 i;
 
-  if (tv2 == this) return;
+	if (tv2 == this) return;
 
-  highflags |= (flagsdirty|namerepdirty|typedirty);
-  if (tv2->symbol != (Symbol *)0) {		// Check if we inherit a Symbol
-    if ((tv2->highflags & symboldirty)==0) {
-      symbol = tv2->symbol;			// Overwrite our Symbol (assume it is the same)
-      symboloffset = tv2->symboloffset;
-      highflags &= ~((uint4)symboldirty);	// Mark that we are not symbol dirty
-    }
-  }
+	highflags |= (flagsdirty|namerepdirty|typedirty);
+	if (tv2->symbol != (Symbol *)0) {             // Check if we inherit a Symbol
+		if ((tv2->highflags & symboldirty)==0) {
+			symbol = tv2->symbol;                     // Overwrite our Symbol (assume it is the same)
+			symboloffset = tv2->symboloffset;
+			highflags &= ~((uint4)symboldirty);       // Mark that we are not symbol dirty
+		}
+	}
 
-  if (isspeculative) {
-    for(i=0;i<tv2->inst.size();++i) {
-      Varnode *vn = tv2->inst[i];
-      vn->setHigh(this,vn->getMergeGroup() + numMergeClasses);
-    }
-    numMergeClasses += tv2->numMergeClasses;
-  }
-  else {
-    if ((numMergeClasses!=1)||(tv2->numMergeClasses!=1))
-      throw LowlevelError("Making a non-speculative merge after speculative merges have occurred");
-    for(i=0;i<tv2->inst.size();++i) {
-      Varnode *vn = tv2->inst[i];
-      vn->setHigh(this,vn->getMergeGroup());
-    }
-  }
-  vector<Varnode *> instcopy(inst);
-  inst.resize(inst.size()+tv2->inst.size(),(Varnode *)0);
-  std::merge(instcopy.begin(),instcopy.end(),tv2->inst.begin(),tv2->inst.end(),inst.begin(),compareJustLoc);
-  tv2->inst.clear();
+	if (isspeculative) {
+		for(i=0;i<tv2->inst.size();++i) {
+			Varnode *vn = tv2->inst[i];
+			vn->setHigh(this,vn->getMergeGroup() + numMergeClasses);
+		}
+		numMergeClasses += tv2->numMergeClasses;
+	}
+	else {
+		if ((numMergeClasses!=1)||(tv2->numMergeClasses!=1))
+			throw LowlevelError("Making a non-speculative merge after speculative merges have occurred");
+		for(i=0;i<tv2->inst.size();++i) {
+			Varnode *vn = tv2->inst[i];
+			vn->setHigh(this,vn->getMergeGroup());
+		}
+	}
+	vector<Varnode *> instcopy(inst);
+	inst.resize(inst.size()+tv2->inst.size(),(Varnode *)0);
+	std::merge(instcopy.begin(),instcopy.end(),tv2->inst.begin(),tv2->inst.end(),inst.begin(),compareJustLoc);
+	tv2->inst.clear();
 
-  if (((highflags&coverdirty)==0)&&((tv2->highflags&coverdirty)==0))
-    wholecover.merge(tv2->wholecover);
-  else
-    highflags |= coverdirty;
+	if (((highflags&coverdirty)==0)&&((tv2->highflags&coverdirty)==0))
+		wholecover.merge(tv2->wholecover);
+	else
+		highflags |= coverdirty;
 
-  delete tv2;
+	delete tv2;
 }
 
 /// All Varnode objects are assigned a HighVariable, including those that don't get names like
@@ -353,32 +353,32 @@ void HighVariable::merge(HighVariable *tv2,bool isspeculative)
 bool HighVariable::hasName(void) const
 
 {
-  bool indirectonly = true;
-  for(int4 i=0;i<inst.size();++i) {
-    Varnode *vn = inst[i];
-    if (!vn->hasCover()) {
-      if (inst.size() > 1)
-	throw LowlevelError("Non-coverable varnode has been merged");
-      return false;
-    }
-    if (vn->isImplied()) {
-      if (inst.size() > 1)
-	throw LowlevelError("Implied varnode has been merged");
-      return false;
-    }
-    if (!vn->isIndirectOnly())
-      indirectonly = false;
-  }
-  if (isUnaffected()) {
-    if (!isInput()) return false;
-    if (indirectonly) return false;
-    Varnode *vn = getInputVarnode();
-    if (!vn->isIllegalInput()) { // A leftover unaff illegal input gets named
-      if (vn->isSpacebase())	// A legal input, unaff, gets named
-	return false;		// Unless it is the stackpointer
-    }
-  }
-  return true;
+	bool indirectonly = true;
+	for(int4 i=0;i<inst.size();++i) {
+		Varnode *vn = inst[i];
+		if (!vn->hasCover()) {
+			if (inst.size() > 1)
+				throw LowlevelError("Non-coverable varnode has been merged");
+			return false;
+		}
+		if (vn->isImplied()) {
+			if (inst.size() > 1)
+				throw LowlevelError("Implied varnode has been merged");
+			return false;
+		}
+		if (!vn->isIndirectOnly())
+			indirectonly = false;
+	}
+	if (isUnaffected()) {
+		if (!isInput()) return false;
+		if (indirectonly) return false;
+		Varnode *vn = getInputVarnode();
+		if (!vn->isIllegalInput()) { // A leftover unaff illegal input gets named
+			if (vn->isSpacebase())    // A legal input, unaff, gets named
+				return false;           // Unless it is the stackpointer
+		}
+	}
+	return true;
 }
 
 /// This should only be called if isAddrTied() returns \b true. If there is no address tied
@@ -387,13 +387,13 @@ bool HighVariable::hasName(void) const
 Varnode *HighVariable::getTiedVarnode(void) const
 
 {
-  int4 i;
+	int4 i;
 
-  for(i=0;i<inst.size();++i)
-    if (inst[i]->isAddrTied())
-      return inst[i];
+	for(i=0;i<inst.size();++i)
+		if (inst[i]->isAddrTied())
+			return inst[i];
 
-  throw LowlevelError("Could not find address-tied varnode");
+	throw LowlevelError("Could not find address-tied varnode");
 }
 
 /// This should only be called if isInput() returns \b true. If there is no input
@@ -402,10 +402,10 @@ Varnode *HighVariable::getTiedVarnode(void) const
 Varnode *HighVariable::getInputVarnode(void) const
 
 {
-  for(int4 i=0;i<inst.size();++i)
-    if (inst[i]->isInput())
-      return inst[i];
-  throw LowlevelError("Could not find input varnode");
+	for(int4 i=0;i<inst.size();++i)
+		if (inst[i]->isInput())
+			return inst[i];
+	throw LowlevelError("Could not find input varnode");
 }
 
 /// This is generally used for debug purposes.
@@ -413,28 +413,28 @@ Varnode *HighVariable::getInputVarnode(void) const
 void HighVariable::printInfo(ostream &s) const
 
 {
-  vector<Varnode *>::const_iterator viter;
-  Varnode *vn;
+	vector<Varnode *>::const_iterator viter;
+	Varnode *vn;
 
-  updateType();
-  if (symbol == (Symbol *)0) {
-    s << "Variable: UNNAMED" << endl;
-  }
-  else {
-    s << "Variable: " << symbol->getName();
-    if (symboloffset!=-1)
-      s << "(partial)";
-    s << endl;
-  }
-  s << "Type: ";
-  type->printRaw(s);
-  s << "\n\n";
-				
-  for(viter=inst.begin();viter!=inst.end();++viter) {
-    vn = *viter;
-    s << dec << vn->getMergeGroup() << ": ";
-    vn->printInfo(s);
-  }
+	updateType();
+	if (symbol == (Symbol *)0) {
+		s << "Variable: UNNAMED" << endl;
+	}
+	else {
+		s << "Variable: " << symbol->getName();
+		if (symboloffset!=-1)
+			s << "(partial)";
+		s << endl;
+	}
+	s << "Type: ";
+	type->printRaw(s);
+	s << "\n\n";
+																
+	for(viter=inst.begin();viter!=inst.end();++viter) {
+		vn = *viter;
+		s << dec << vn->getMergeGroup() << ": ";
+		vn->printInfo(s);
+	}
 }
 
 /// Find the index, for use with getInstance(), that will retrieve the given Varnode member
@@ -443,52 +443,52 @@ void HighVariable::printInfo(ostream &s) const
 int4 HighVariable::instanceIndex(const Varnode *vn) const
 
 {
-  int4 i;
+	int4 i;
 
-  for(i=0;i<inst.size();++i)
-    if (inst[i] == vn) return i;
+	for(i=0;i<inst.size();++i)
+		if (inst[i] == vn) return i;
 
-  return -1;
+	return -1;
 }
 
 /// \param s is the output stream to write XML to
 void HighVariable::saveXml(ostream &s) const
 
 {
-  Varnode *vn = getNameRepresentative(); // Get representative varnode
-  s << "<high ";
-  //    a_v(s,"name",high->getName());
-  a_v_u(s,"repref",vn->getCreateIndex());
-  if (isSpacebase()||isImplied()) // This is a special variable
-    a_v(s,"class",string("other"));
-  else if (isPersist()&&isAddrTied()) // Global variable
-    a_v(s,"class",string("global"));
-  else if (isConstant())
-    a_v(s,"class",string("constant"));
-  else if (!isPersist() && (symbol != (Symbol *)0)) {
-    if (symbol->getCategory() == 0)
-      a_v(s,"class",string("param"));
-    else
-      a_v(s,"class",string("local"));
-  }
-  else {
-    a_v(s,"class",string("other"));
-  }
-  if (isTypeLock())
-    a_v_b(s,"typelock",true);
-  if (symbol != (Symbol *)0) {
-    a_v_u(s,"symref",symbol->getId());
-    if (symboloffset >= 0)
-      a_v_i(s, "offset", symboloffset);
-  }
-  s << '>';
-  getType()->saveXml(s);
-  for(int4 j=0;j<inst.size();++j) {
-    s << "<addr ";
-    a_v_u(s,"ref",inst[j]->getCreateIndex());
-    s << "/>";
-  }
-  s << "</high>";
+	Varnode *vn = getNameRepresentative(); // Get representative varnode
+	s << "<high ";
+	//    a_v(s,"name",high->getName());
+	a_v_u(s,"repref",vn->getCreateIndex());
+	if (isSpacebase()||isImplied()) // This is a special variable
+		a_v(s,"class",string("other"));
+	else if (isPersist()&&isAddrTied()) // Global variable
+		a_v(s,"class",string("global"));
+	else if (isConstant())
+		a_v(s,"class",string("constant"));
+	else if (!isPersist() && (symbol != (Symbol *)0)) {
+		if (symbol->getCategory() == 0)
+			a_v(s,"class",string("param"));
+		else
+			a_v(s,"class",string("local"));
+	}
+	else {
+		a_v(s,"class",string("other"));
+	}
+	if (isTypeLock())
+		a_v_b(s,"typelock",true);
+	if (symbol != (Symbol *)0) {
+		a_v_u(s,"symref",symbol->getId());
+		if (symboloffset >= 0)
+			a_v_i(s, "offset", symboloffset);
+	}
+	s << '>';
+	getType()->saveXml(s);
+	for(int4 j=0;j<inst.size();++j) {
+		s << "<addr ";
+		a_v_u(s,"ref",inst[j]->getCreateIndex());
+		s << "/>";
+	}
+	s << "</high>";
 }
 
 /// Given a Varnode at the root of an expression, we collect all the \e explicit HighVariables
@@ -507,44 +507,44 @@ void HighVariable::saveXml(ostream &s) const
 int4 HighVariable::markExpression(Varnode *vn,vector<HighVariable *> &highList)
 
 {
-  HighVariable *high = vn->getHigh();
-  high->setMark();
-  highList.push_back(high);
-  int4 retVal = 0;
-  if (!vn->isWritten()) return retVal;
+	HighVariable *high = vn->getHigh();
+	high->setMark();
+	highList.push_back(high);
+	int4 retVal = 0;
+	if (!vn->isWritten()) return retVal;
 
-  vector<PcodeOpNode> path;
-  PcodeOp *op = vn->getDef();
-  if (op->isCall())
-    retVal |= 1;
-  if (op->code() == CPUI_LOAD)
-    retVal |= 2;
-  path.push_back(PcodeOpNode(op,0));
-  while(!path.empty()) {
-    PcodeOpNode &node(path.back());
-    if (node.op->numInput() <= node.slot) {
-      path.pop_back();
-      continue;
-    }
-    Varnode *curVn = node.op->getIn(node.slot);
-    node.slot += 1;
-    if (curVn->isAnnotation()) continue;
-    if (curVn->isExplicit()) {
-      high = curVn->getHigh();
-      if (high->isMark()) continue;	// Already in the list
-      high->setMark();
-      highList.push_back(high);
-      continue;				// Truncate at explicit
-    }
-    if (!curVn->isWritten()) continue;
-    op = curVn->getDef();
-    if (op->isCall())
-      retVal |= 1;
-    if (op->code() == CPUI_LOAD)
-      retVal |= 2;
-    path.push_back(PcodeOpNode(curVn->getDef(),0));
-  }
-  return retVal;
+	vector<PcodeOpNode> path;
+	PcodeOp *op = vn->getDef();
+	if (op->isCall())
+		retVal |= 1;
+	if (op->code() == CPUI_LOAD)
+		retVal |= 2;
+	path.push_back(PcodeOpNode(op,0));
+	while(!path.empty()) {
+		PcodeOpNode &node(path.back());
+		if (node.op->numInput() <= node.slot) {
+			path.pop_back();
+			continue;
+		}
+		Varnode *curVn = node.op->getIn(node.slot);
+		node.slot += 1;
+		if (curVn->isAnnotation()) continue;
+		if (curVn->isExplicit()) {
+			high = curVn->getHigh();
+			if (high->isMark()) continue;     // Already in the list
+			high->setMark();
+			highList.push_back(high);
+			continue;                         // Truncate at explicit
+		}
+		if (!curVn->isWritten()) continue;
+		op = curVn->getDef();
+		if (op->isCall())
+			retVal |= 1;
+		if (op->code() == CPUI_LOAD)
+			retVal |= 2;
+		path.push_back(PcodeOpNode(curVn->getDef(),0));
+	}
+	return retVal;
 }
 
 #ifdef MERGEMULTI_DEBUG
@@ -555,20 +555,20 @@ int4 HighVariable::markExpression(Varnode *vn,vector<HighVariable *> &highList)
 void HighVariable::verifyCover(void) const
 
 {
-  Cover accumCover;
+	Cover accumCover;
 
-  for(int4 i=0;i<inst.size();++i) {
-    Varnode *vn = inst[i];
-    if (accumCover.intersect(*vn->getCover()) == 2) {
-      for(int4 j=0;j<i;++j) {
-	Varnode *otherVn = inst[j];
-	if (otherVn->getCover()->intersect(*vn->getCover())==2) {
-	  if (!otherVn->copyShadow(vn))
-	    throw LowlevelError("HighVariable has internal intersection");
+	for(int4 i=0;i<inst.size();++i) {
+		Varnode *vn = inst[i];
+		if (accumCover.intersect(*vn->getCover()) == 2) {
+			for(int4 j=0;j<i;++j) {
+				Varnode *otherVn = inst[j];
+				if (otherVn->getCover()->intersect(*vn->getCover())==2) {
+					if (!otherVn->copyShadow(vn))
+						throw LowlevelError("HighVariable has internal intersection");
+				}
+			}
+		}
+		accumCover.merge(*vn->getCover());
 	}
-      }
-    }
-    accumCover.merge(*vn->getCover());
-  }
 }
 #endif

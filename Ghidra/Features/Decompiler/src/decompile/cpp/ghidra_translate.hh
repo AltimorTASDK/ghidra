@@ -32,25 +32,25 @@
 /// Messages are generally based on an XML format, but p-code responses in particular
 /// have a tight internal encoding.
 class GhidraTranslate : public Translate {
-  ArchitectureGhidra *glb;			///< The Ghidra Architecture and connection to the client
-  mutable map<string,VarnodeData> nm2addr;	///< Mapping from register name to Varnode
-  mutable map<VarnodeData,string> addr2nm;	///< Mapping rom Varnode to register name
-  const VarnodeData &cacheRegister(const string &nm,const VarnodeData &data) const;
-  void restoreXml(const Element *el);		///< Initialize \b this Translate from XML
+	ArchitectureGhidra *glb;                      ///< The Ghidra Architecture and connection to the client
+	mutable map<string,VarnodeData> nm2addr;      ///< Mapping from register name to Varnode
+	mutable map<VarnodeData,string> addr2nm;      ///< Mapping rom Varnode to register name
+	const VarnodeData &cacheRegister(const string &nm,const VarnodeData &data) const;
+	void restoreXml(const Element *el);           ///< Initialize \b this Translate from XML
 public:
-  GhidraTranslate(ArchitectureGhidra *g) { glb = g; }	///< Constructor
+	GhidraTranslate(ArchitectureGhidra *g) { glb = g; }   ///< Constructor
 
-  virtual void initialize(DocumentStorage &store);
-  virtual const VarnodeData &getRegister(const string &nm) const;
-  virtual string getRegisterName(AddrSpace *base,uintb off,int4 size) const;
-  virtual void getAllRegisters(map<VarnodeData,string> &reglist) const {
-    throw LowlevelError("Cannot currently get all registers through this interface"); }
-  virtual void getUserOpNames(vector<string> &res) const;
-  virtual int4 oneInstruction(PcodeEmit &emit,const Address &baseaddr) const;
-  virtual int4 instructionLength(const Address &baseaddr) const {
-    throw LowlevelError("Cannot currently get instruction length through this interface"); }
-  virtual int4 printAssembly(AssemblyEmit &emit,const Address &baseaddr) const {
-    throw LowlevelError("Cannot dump assembly through this interface"); }
+	virtual void initialize(DocumentStorage &store);
+	virtual const VarnodeData &getRegister(const string &nm) const;
+	virtual string getRegisterName(AddrSpace *base,uintb off,int4 size) const;
+	virtual void getAllRegisters(map<VarnodeData,string> &reglist) const {
+		throw LowlevelError("Cannot currently get all registers through this interface"); }
+	virtual void getUserOpNames(vector<string> &res) const;
+	virtual int4 oneInstruction(PcodeEmit &emit,const Address &baseaddr) const;
+	virtual int4 instructionLength(const Address &baseaddr) const {
+		throw LowlevelError("Cannot currently get instruction length through this interface"); }
+	virtual int4 printAssembly(AssemblyEmit &emit,const Address &baseaddr) const {
+		throw LowlevelError("Cannot dump assembly through this interface"); }
 };
 
 #endif

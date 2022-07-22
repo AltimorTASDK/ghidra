@@ -25,13 +25,13 @@
 bool ArchOption::onOrOff(const string &p)
 
 {
-  if (p.size()==0)
-    return true;
-  if (p == "on")
-    return true;
-  if (p == "off")
-    return false;
-  throw ParseError("Must specify toggle value, on/off");
+	if (p.size()==0)
+		return true;
+	if (p == "on")
+		return true;
+	if (p == "off")
+		return false;
+	throw ParseError("Must specify toggle value, on/off");
 }
 
 /// To facilitate command parsing, enter the new ArchOption instance into
@@ -40,7 +40,7 @@ bool ArchOption::onOrOff(const string &p)
 void OptionDatabase::registerOption(ArchOption *option)
 
 {
-  optionmap[option->getName()] = option;
+	optionmap[option->getName()] = option;
 }
 
 /// Register all possible ArchOption objects with this database and set-up the parsing map.
@@ -48,49 +48,49 @@ void OptionDatabase::registerOption(ArchOption *option)
 OptionDatabase::OptionDatabase(Architecture *g)
 
 {
-  glb = g;
-  registerOption(new OptionExtraPop());
-  registerOption(new OptionReadOnly());
-  registerOption(new OptionIgnoreUnimplemented());
-  registerOption(new OptionErrorUnimplemented());
-  registerOption(new OptionErrorReinterpreted());
-  registerOption(new OptionErrorTooManyInstructions());
-  registerOption(new OptionDefaultPrototype());
-  registerOption(new OptionInferConstPtr());
-  registerOption(new OptionForLoops());
-  registerOption(new OptionInline());
-  registerOption(new OptionNoReturn());
-  registerOption(new OptionStructAlign());
-  registerOption(new OptionProtoEval());
-  registerOption(new OptionWarning());
-  registerOption(new OptionNullPrinting());
-  registerOption(new OptionInPlaceOps());
-  registerOption(new OptionConventionPrinting());
-  registerOption(new OptionNoCastPrinting());
-  registerOption(new OptionMaxLineWidth());
-  registerOption(new OptionIndentIncrement());
-  registerOption(new OptionCommentIndent());
-  registerOption(new OptionCommentStyle());
-  registerOption(new OptionCommentHeader());
-  registerOption(new OptionCommentInstruction());
-  registerOption(new OptionIntegerFormat());
-  registerOption(new OptionCurrentAction());
-  registerOption(new OptionAllowContextSet());
-  registerOption(new OptionSetAction());
-  registerOption(new OptionSetLanguage());
-  registerOption(new OptionJumpLoad());
-  registerOption(new OptionToggleRule());
-  registerOption(new OptionAliasBlock());
-  registerOption(new OptionMaxInstruction());
-  registerOption(new OptionNamespaceStrategy());
+	glb = g;
+	registerOption(new OptionExtraPop());
+	registerOption(new OptionReadOnly());
+	registerOption(new OptionIgnoreUnimplemented());
+	registerOption(new OptionErrorUnimplemented());
+	registerOption(new OptionErrorReinterpreted());
+	registerOption(new OptionErrorTooManyInstructions());
+	registerOption(new OptionDefaultPrototype());
+	registerOption(new OptionInferConstPtr());
+	registerOption(new OptionForLoops());
+	registerOption(new OptionInline());
+	registerOption(new OptionNoReturn());
+	registerOption(new OptionStructAlign());
+	registerOption(new OptionProtoEval());
+	registerOption(new OptionWarning());
+	registerOption(new OptionNullPrinting());
+	registerOption(new OptionInPlaceOps());
+	registerOption(new OptionConventionPrinting());
+	registerOption(new OptionNoCastPrinting());
+	registerOption(new OptionMaxLineWidth());
+	registerOption(new OptionIndentIncrement());
+	registerOption(new OptionCommentIndent());
+	registerOption(new OptionCommentStyle());
+	registerOption(new OptionCommentHeader());
+	registerOption(new OptionCommentInstruction());
+	registerOption(new OptionIntegerFormat());
+	registerOption(new OptionCurrentAction());
+	registerOption(new OptionAllowContextSet());
+	registerOption(new OptionSetAction());
+	registerOption(new OptionSetLanguage());
+	registerOption(new OptionJumpLoad());
+	registerOption(new OptionToggleRule());
+	registerOption(new OptionAliasBlock());
+	registerOption(new OptionMaxInstruction());
+	registerOption(new OptionNamespaceStrategy());
 }
 
 OptionDatabase::~OptionDatabase(void)
 
 {
-  map<string,ArchOption *>::iterator iter;
-  for(iter=optionmap.begin();iter!=optionmap.end();++iter)
-    delete (*iter).second;
+	map<string,ArchOption *>::iterator iter;
+	for(iter=optionmap.begin();iter!=optionmap.end();++iter)
+		delete (*iter).second;
 }
 
 /// Perform an \e option \e command directly, given its name and optional parameters
@@ -102,12 +102,12 @@ OptionDatabase::~OptionDatabase(void)
 string OptionDatabase::set(const string &nm,const string &p1,const string &p2,const string &p3)
 
 {
-  map<string,ArchOption *>::const_iterator iter;
-  iter = optionmap.find(nm);
-  if (iter == optionmap.end())
-    throw ParseError("Unknown option: "+nm);
-  ArchOption *opt = (*iter).second;
-  return opt->apply(glb,p1,p2,p3);
+	map<string,ArchOption *>::const_iterator iter;
+	iter = optionmap.find(nm);
+	if (iter == optionmap.end())
+		throw ParseError("Unknown option: "+nm);
+	ArchOption *opt = (*iter).second;
+	return opt->apply(glb,p1,p2,p3);
 }
 
 /// Unwrap the name and optional parameters and call method set()
@@ -115,30 +115,30 @@ string OptionDatabase::set(const string &nm,const string &p1,const string &p2,co
 void OptionDatabase::parseOne(const Element *el)
 
 {
-  const string &optname( el->getName() );
-  const List &list(el->getChildren());
-  List::const_iterator iter;
-  
-  string p1,p2,p3;
+	const string &optname( el->getName() );
+	const List &list(el->getChildren());
+	List::const_iterator iter;
+	
+	string p1,p2,p3;
 
-  iter = list.begin();
-  if (iter != list.end()) {
-    p1 = (*iter)->getContent();
-    ++iter;
-    if (iter != list.end()) {
-      p2 = (*iter)->getContent();
-      ++iter;
-      if (iter != list.end()) {
-	p3 = (*iter)->getContent();
-	++iter;
-	if (iter != list.end())
-	  throw LowlevelError("Too many parameters to option: "+optname);
-      }
-    }
-  }
-  else
-    p1 = el->getContent();	// If no children, content is param 1
-  set(optname,p1,p2,p3);
+	iter = list.begin();
+	if (iter != list.end()) {
+		p1 = (*iter)->getContent();
+		++iter;
+		if (iter != list.end()) {
+			p2 = (*iter)->getContent();
+			++iter;
+			if (iter != list.end()) {
+				p3 = (*iter)->getContent();
+				++iter;
+				if (iter != list.end())
+					throw LowlevelError("Too many parameters to option: "+optname);
+			}
+		}
+	}
+	else
+		p1 = el->getContent();      // If no children, content is param 1
+	set(optname,p1,p2,p3);
 }
 
 /// Parse the \<optionslist> tag, treating each sub-tag as an \e option \e command.
@@ -146,11 +146,11 @@ void OptionDatabase::parseOne(const Element *el)
 void OptionDatabase::restoreXml(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter)
-    parseOne(*iter);
+	for(iter=list.begin();iter!=list.end();++iter)
+		parseOne(*iter);
 }
 
 /// \class OptionExtraPop
@@ -167,34 +167,34 @@ void OptionDatabase::restoreXml(const Element *el)
 string OptionExtraPop::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  int4 expop = -300;
-  string res;
-  if (p1 == "unknown")
-    expop = ProtoModel::extrapop_unknown;
-  else {
-    istringstream s1(p1);
-    s1.unsetf(ios::dec | ios::hex | ios::oct); // Let user specify base
-    s1 >> expop;
-  }
-  if (expop == -300)
-    throw ParseError("Bad extrapop adjustment parameter");
-  if (p2.size() != 0) {
-    Funcdata *fd;
-    fd = glb->symboltab->getGlobalScope()->queryFunction( p2 );
-    if (fd == (Funcdata *)0)
-      throw RecovError("Unknown function name: "+p2);
-    fd->getFuncProto().setExtraPop(expop);
-    res = "ExtraPop set for function "+p2;
-  }
-  else {
-    glb->defaultfp->setExtraPop(expop);
-    if (glb->evalfp_current != (ProtoModel *)0)
-      glb->evalfp_current->setExtraPop(expop);
-    if (glb->evalfp_called != (ProtoModel *)0)
-      glb->evalfp_called->setExtraPop(expop);
-    res = "Global extrapop set";
-  }
-  return res;
+	int4 expop = -300;
+	string res;
+	if (p1 == "unknown")
+		expop = ProtoModel::extrapop_unknown;
+	else {
+		istringstream s1(p1);
+		s1.unsetf(ios::dec | ios::hex | ios::oct); // Let user specify base
+		s1 >> expop;
+	}
+	if (expop == -300)
+		throw ParseError("Bad extrapop adjustment parameter");
+	if (p2.size() != 0) {
+		Funcdata *fd;
+		fd = glb->symboltab->getGlobalScope()->queryFunction( p2 );
+		if (fd == (Funcdata *)0)
+			throw RecovError("Unknown function name: "+p2);
+		fd->getFuncProto().setExtraPop(expop);
+		res = "ExtraPop set for function "+p2;
+	}
+	else {
+		glb->defaultfp->setExtraPop(expop);
+		if (glb->evalfp_current != (ProtoModel *)0)
+			glb->evalfp_current->setExtraPop(expop);
+		if (glb->evalfp_called != (ProtoModel *)0)
+			glb->evalfp_called->setExtraPop(expop);
+		res = "Global extrapop set";
+	}
+	return res;
 }
 
 /// \class OptionReadOnly
@@ -205,12 +205,12 @@ string OptionExtraPop::apply(Architecture *glb,const string &p1,const string &p2
 string OptionReadOnly::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if (p1.size()==0)
-    throw ParseError("Read-only option must be set \"on\" or \"off\"");
-  glb->readonlypropagate = onOrOff(p1);
-  if (glb->readonlypropagate)
-    return "Read-only memory locations now propagate as constants";
-  return "Read-only memory locations now do not propagate";
+	if (p1.size()==0)
+		throw ParseError("Read-only option must be set \"on\" or \"off\"");
+	glb->readonlypropagate = onOrOff(p1);
+	if (glb->readonlypropagate)
+		return "Read-only memory locations now propagate as constants";
+	return "Read-only memory locations now do not propagate";
 }
 
 /// \class OptionDefaultPrototype
@@ -220,8 +220,8 @@ string OptionReadOnly::apply(Architecture *glb,const string &p1,const string &p2
 string OptionDefaultPrototype::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  glb->setDefaultModel(p1);
-  return "Set default prototype to "+p1;
+	glb->setDefaultModel(p1);
+	return "Set default prototype to "+p1;
 }
 
 /// \class OptionInferConstPtr
@@ -232,18 +232,18 @@ string OptionDefaultPrototype::apply(Architecture *glb,const string &p1,const st
 string OptionInferConstPtr::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string res;
-  if (val) {
-    res = "Constant pointers are now inferred";
-    glb->infer_pointers = true;
-  }
-  else {
-    res = "Constant pointers must now be set explicitly";
-    glb->infer_pointers = false;
-  }
-  return res;
+	string res;
+	if (val) {
+		res = "Constant pointers are now inferred";
+		glb->infer_pointers = true;
+	}
+	else {
+		res = "Constant pointers must now be set explicitly";
+		glb->infer_pointers = false;
+	}
+	return res;
 }
 
 /// \class OptionForLoops
@@ -258,10 +258,10 @@ string OptionInferConstPtr::apply(Architecture *glb,const string &p1,const strin
 string OptionForLoops::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  glb->analyze_for_loops = onOrOff(p1);
+	glb->analyze_for_loops = onOrOff(p1);
 
-  string res = "Recovery of for-loops is " + p1;
-  return res;
+	string res = "Recovery of for-loops is " + p1;
+	return res;
 }
 
 /// \class OptionInline
@@ -272,22 +272,22 @@ string OptionForLoops::apply(Architecture *glb,const string &p1,const string &p2
 string OptionInline::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  Funcdata *infd = glb->symboltab->getGlobalScope()->queryFunction( p1 );
-  if (infd == (Funcdata *)0)
-    throw RecovError("Unknown function name: "+p1);
-  bool val;
-  if (p2.size()==0)
-    val = true;
-  else
-    val = (p2 == "true");
-  infd->getFuncProto().setInline(val);
-  string prop;
-  if (val)
-    prop = "true";
-  else
-    prop = "false";
-  string res = "Inline property for function "+p1+" = "+prop;
-  return res;
+	Funcdata *infd = glb->symboltab->getGlobalScope()->queryFunction( p1 );
+	if (infd == (Funcdata *)0)
+		throw RecovError("Unknown function name: "+p1);
+	bool val;
+	if (p2.size()==0)
+		val = true;
+	else
+		val = (p2 == "true");
+	infd->getFuncProto().setInline(val);
+	string prop;
+	if (val)
+		prop = "true";
+	else
+		prop = "false";
+	string res = "Inline property for function "+p1+" = "+prop;
+	return res;
 }
 
 /// \class OptionNoReturn
@@ -298,22 +298,22 @@ string OptionInline::apply(Architecture *glb,const string &p1,const string &p2,c
 string OptionNoReturn::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  Funcdata *infd = glb->symboltab->getGlobalScope()->queryFunction( p1 );
-  if (infd == (Funcdata *)0)
-    throw RecovError("Unknown function name: "+p1);
-  bool val;
-  if (p2.size()==0)
-    val = true;
-  else
-    val = (p2 == "true");
-  infd->getFuncProto().setNoReturn(val);
-  string prop;
-  if (val)
-    prop = "true";
-  else
-    prop = "false";
-  string res = "No return property for function "+p1+" = "+prop;
-  return res;
+	Funcdata *infd = glb->symboltab->getGlobalScope()->queryFunction( p1 );
+	if (infd == (Funcdata *)0)
+		throw RecovError("Unknown function name: "+p1);
+	bool val;
+	if (p2.size()==0)
+		val = true;
+	else
+		val = (p2 == "true");
+	infd->getFuncProto().setNoReturn(val);
+	string prop;
+	if (val)
+		prop = "true";
+	else
+		prop = "false";
+	string res = "No return property for function "+p1+" = "+prop;
+	return res;
 }
 
 /// \class OptionStructAlign
@@ -323,14 +323,14 @@ string OptionNoReturn::apply(Architecture *glb,const string &p1,const string &p2
 string OptionStructAlign::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  int4 val  = -1;
-  istringstream s(p1);
-  s >> dec >> val;
-  if (val == -1)
-    throw ParseError("Missing alignment value");
+	int4 val  = -1;
+	istringstream s(p1);
+	s >> dec >> val;
+	if (val == -1)
+		throw ParseError("Missing alignment value");
 
-  glb->types->setStructAlign(val);
-  return "Structure alignment set";
+	glb->types->setStructAlign(val);
+	return "Structure alignment set";
 }
 
 /// \class OptionWarning
@@ -341,19 +341,19 @@ string OptionStructAlign::apply(Architecture *glb,const string &p1,const string 
 string OptionWarning::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if (p1.size()==0)
-    throw ParseError("No action/rule specified");
-  bool val;
-  if (p2.size()==0)
-    val = true;
-  else
-    val = onOrOff(p2);
-  bool res = glb->allacts.getCurrent()->setWarning(val,p1);
-  if (!res)
-    throw RecovError("Bad action/rule specifier: "+p1);
-  string prop;
-  prop = val ? "on" : "off";
-  return "Warnings for "+p1+" turned "+prop;
+	if (p1.size()==0)
+		throw ParseError("No action/rule specified");
+	bool val;
+	if (p2.size()==0)
+		val = true;
+	else
+		val = onOrOff(p2);
+	bool res = glb->allacts.getCurrent()->setWarning(val,p1);
+	if (!res)
+		throw RecovError("Bad action/rule specifier: "+p1);
+	string prop;
+	prop = val ? "on" : "off";
+	return "Warnings for "+p1+" turned "+prop;
 }
 
 /// \class OptionNullPrinting
@@ -361,14 +361,14 @@ string OptionWarning::apply(Architecture *glb,const string &p1,const string &p2,
 string OptionNullPrinting::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
-  if (glb->print->getName() != "c-language")
-    return "Only c-language accepts the null printing option";
-  PrintC *lng = (PrintC *)glb->print;
-  lng->setNULLPrinting(val);
-  string prop;
-  prop = val ? "on" : "off";
-  return "Null printing turned "+prop;
+	bool val = onOrOff(p1);
+	if (glb->print->getName() != "c-language")
+		return "Only c-language accepts the null printing option";
+	PrintC *lng = (PrintC *)glb->print;
+	lng->setNULLPrinting(val);
+	string prop;
+	prop = val ? "on" : "off";
+	return "Null printing turned "+prop;
 }
 
 /// \class OptionInPlaceOps
@@ -376,14 +376,14 @@ string OptionNullPrinting::apply(Architecture *glb,const string &p1,const string
 string OptionInPlaceOps::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
-  if (glb->print->getName() != "c-language")
-    return "Can only set inplace operators for C language";
-  PrintC *lng = (PrintC *)glb->print;
-  lng->setInplaceOps(val);
-  string prop;
-  prop = val ? "on" : "off";
-  return "Inplace operators turned "+prop;
+	bool val = onOrOff(p1);
+	if (glb->print->getName() != "c-language")
+		return "Can only set inplace operators for C language";
+	PrintC *lng = (PrintC *)glb->print;
+	lng->setInplaceOps(val);
+	string prop;
+	prop = val ? "on" : "off";
+	return "Inplace operators turned "+prop;
 }
 
 /// \class OptionConventionPrinting
@@ -391,14 +391,14 @@ string OptionInPlaceOps::apply(Architecture *glb,const string &p1,const string &
 string OptionConventionPrinting::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
-  if (glb->print->getName() != "c-language")
-    return "Can only set convention printing for C language";
-  PrintC *lng = (PrintC *)glb->print;
-  lng->setConvention(val);
-  string prop;
-  prop = val ? "on" : "off";
-  return "Convention printing turned "+prop;
+	bool val = onOrOff(p1);
+	if (glb->print->getName() != "c-language")
+		return "Can only set convention printing for C language";
+	PrintC *lng = (PrintC *)glb->print;
+	lng->setConvention(val);
+	string prop;
+	prop = val ? "on" : "off";
+	return "Convention printing turned "+prop;
 }
 
 /// \class OptionNoCastPrinting
@@ -406,14 +406,14 @@ string OptionConventionPrinting::apply(Architecture *glb,const string &p1,const 
 string OptionNoCastPrinting::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
-  PrintC *lng = dynamic_cast<PrintC *>(glb->print);
-  if (lng == (PrintC *)0)
-    return "Can only set no cast printing for C language";
-  lng->setNoCastPrinting(val);
-  string prop;
-  prop = val ? "on" : "off";
-  return "No cast printing turned "+prop;
+	bool val = onOrOff(p1);
+	PrintC *lng = dynamic_cast<PrintC *>(glb->print);
+	if (lng == (PrintC *)0)
+		return "Can only set no cast printing for C language";
+	lng->setNoCastPrinting(val);
+	string prop;
+	prop = val ? "on" : "off";
+	return "No cast printing turned "+prop;
 }
 
 /// \class OptionHideExtensions
@@ -421,14 +421,14 @@ string OptionNoCastPrinting::apply(Architecture *glb,const string &p1,const stri
 string OptionHideExtensions::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
-  PrintC *lng = dynamic_cast<PrintC *>(glb->print);
-  if (lng == (PrintC *)0)
-    return "Can only toggle extension hiding for C language";
-  lng->setHideImpliedExts(val);
-  string prop;
-  prop = val ? "on" : "off";
-  return "Implied extension hiding turned "+prop;
+	bool val = onOrOff(p1);
+	PrintC *lng = dynamic_cast<PrintC *>(glb->print);
+	if (lng == (PrintC *)0)
+		return "Can only toggle extension hiding for C language";
+	lng->setHideImpliedExts(val);
+	string prop;
+	prop = val ? "on" : "off";
+	return "Implied extension hiding turned "+prop;
 }
 
 /// \class OptionMaxLineWidth
@@ -439,14 +439,14 @@ string OptionHideExtensions::apply(Architecture *glb,const string &p1,const stri
 string OptionMaxLineWidth::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  istringstream s(p1);
-  s.unsetf(ios::dec | ios::hex | ios::oct);
-  int4 val = -1;
-  s >> val;
-  if (val==-1)
-    throw ParseError("Must specify integer linewidth");
-  glb->print->setMaxLineSize(val);
-  return "Maximum line width set to "+p1;
+	istringstream s(p1);
+	s.unsetf(ios::dec | ios::hex | ios::oct);
+	int4 val = -1;
+	s >> val;
+	if (val==-1)
+		throw ParseError("Must specify integer linewidth");
+	glb->print->setMaxLineSize(val);
+	return "Maximum line width set to "+p1;
 }
 
 /// \class OptionIndentIncrement
@@ -456,14 +456,14 @@ string OptionMaxLineWidth::apply(Architecture *glb,const string &p1,const string
 string OptionIndentIncrement::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  istringstream s(p1);
-  s.unsetf(ios::dec | ios::hex | ios::oct);
-  int4 val = -1;
-  s >> val;
-  if (val==-1)
-    throw ParseError("Must specify integer increment");
-  glb->print->setIndentIncrement(val);
-  return "Characters per indent level set to "+p1;
+	istringstream s(p1);
+	s.unsetf(ios::dec | ios::hex | ios::oct);
+	int4 val = -1;
+	s >> val;
+	if (val==-1)
+		throw ParseError("Must specify integer increment");
+	glb->print->setIndentIncrement(val);
+	return "Characters per indent level set to "+p1;
 }
 
 /// \class OptionCommentIndent
@@ -474,14 +474,14 @@ string OptionIndentIncrement::apply(Architecture *glb,const string &p1,const str
 string OptionCommentIndent::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  istringstream s(p1);
-  s.unsetf(ios::dec | ios::hex | ios::oct);
-  int4 val = -1;
-  s >> val;
-  if (val==-1)
-    throw ParseError("Must specify integer comment indent");
-  glb->print->setLineCommentIndent(val);
-  return "Comment indent set to "+p1;
+	istringstream s(p1);
+	s.unsetf(ios::dec | ios::hex | ios::oct);
+	int4 val = -1;
+	s >> val;
+	if (val==-1)
+		throw ParseError("Must specify integer comment indent");
+	glb->print->setLineCommentIndent(val);
+	return "Comment indent set to "+p1;
 }
 
 /// \class OptionCommentStyle
@@ -491,8 +491,8 @@ string OptionCommentIndent::apply(Architecture *glb,const string &p1,const strin
 string OptionCommentStyle::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  glb->print->setCommentStyle(p1);
-  return "Comment style set to "+p1;
+	glb->print->setCommentStyle(p1);
+	return "Comment style set to "+p1;
 }
 
 /// \class OptionCommentHeader
@@ -503,17 +503,17 @@ string OptionCommentStyle::apply(Architecture *glb,const string &p1,const string
 string OptionCommentHeader::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool toggle = onOrOff(p2);
-  uint4 flags = glb->print->getHeaderComment();
-  uint4 val = Comment::encodeCommentType(p1);
-  if (toggle)
-    flags |= val;
-  else
-    flags &= ~val;
-  glb->print->setHeaderComment(flags);
-  string prop;
-  prop = toggle ? "on" : "off";
-  return "Header comment type "+p1+" turned "+prop;
+	bool toggle = onOrOff(p2);
+	uint4 flags = glb->print->getHeaderComment();
+	uint4 val = Comment::encodeCommentType(p1);
+	if (toggle)
+		flags |= val;
+	else
+		flags &= ~val;
+	glb->print->setHeaderComment(flags);
+	string prop;
+	prop = toggle ? "on" : "off";
+	return "Header comment type "+p1+" turned "+prop;
 }
 
 /// \class OptionCommentInstruction
@@ -524,17 +524,17 @@ string OptionCommentHeader::apply(Architecture *glb,const string &p1,const strin
 string OptionCommentInstruction::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool toggle = onOrOff(p2);
-  uint4 flags = glb->print->getInstructionComment();
-  uint4 val = Comment::encodeCommentType(p1);
-  if (toggle)
-    flags |= val;
-  else
-    flags &= ~val;
-  glb->print->setInstructionComment(flags);
-  string prop;
-  prop = toggle ? "on" : "off";
-  return "Instruction comment type "+p1+" turned "+prop;
+	bool toggle = onOrOff(p2);
+	uint4 flags = glb->print->getInstructionComment();
+	uint4 val = Comment::encodeCommentType(p1);
+	if (toggle)
+		flags |= val;
+	else
+		flags &= ~val;
+	glb->print->setInstructionComment(flags);
+	string prop;
+	prop = toggle ? "on" : "off";
+	return "Instruction comment type "+p1+" turned "+prop;
 }
 
 /// \class OptionIntegerFormat
@@ -544,8 +544,8 @@ string OptionCommentInstruction::apply(Architecture *glb,const string &p1,const 
 string OptionIntegerFormat::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  glb->print->setIntegerFormat(p1);
-  return "Integer format set to "+p1;
+	glb->print->setIntegerFormat(p1);
+	return "Integer format set to "+p1;
 }
 
 /// \class OptionSetAction
@@ -558,16 +558,16 @@ string OptionIntegerFormat::apply(Architecture *glb,const string &p1,const strin
 string OptionSetAction::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if (p1.size()==0)
-    throw ParseError("Must specify preexisting action");
+	if (p1.size()==0)
+		throw ParseError("Must specify preexisting action");
 
-  if (p2.size() != 0) {
-    glb->allacts.cloneGroup(p1,p2);
-    glb->allacts.setCurrent(p2);
-    return "Created "+p2+" by cloning "+p1+" and made it current";
-  }
-  glb->allacts.setCurrent(p1);
-  return "Set current action to "+p1;
+	if (p2.size() != 0) {
+		glb->allacts.cloneGroup(p1,p2);
+		glb->allacts.setCurrent(p2);
+		return "Created "+p2+" by cloning "+p1+" and made it current";
+	}
+	glb->allacts.setCurrent(p1);
+	return "Set current action to "+p1;
 }
 
 /// \class OptionCurrentAction
@@ -581,24 +581,24 @@ string OptionSetAction::apply(Architecture *glb,const string &p1,const string &p
 string OptionCurrentAction::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if ((p1.size()==0)||(p2.size()==0))
-    throw ParseError("Must specify subaction, on/off");
-  bool val;
-  string res = "Toggled ";
+	if ((p1.size()==0)||(p2.size()==0))
+		throw ParseError("Must specify subaction, on/off");
+	bool val;
+	string res = "Toggled ";
 
-  if (p3.size() != 0) {
-    glb->allacts.setCurrent(p1);
-    val = onOrOff(p3);
-    glb->allacts.toggleAction(p1,p2,val);
-    res += p2 + " in action "+p1;
-  }
-  else {
-    val = onOrOff(p2);
-    glb->allacts.toggleAction(glb->allacts.getCurrentName(),p1,val);
-    res += p1 + " in action "+glb->allacts.getCurrentName();
-  }
+	if (p3.size() != 0) {
+		glb->allacts.setCurrent(p1);
+		val = onOrOff(p3);
+		glb->allacts.toggleAction(p1,p2,val);
+		res += p2 + " in action "+p1;
+	}
+	else {
+		val = onOrOff(p2);
+		glb->allacts.toggleAction(glb->allacts.getCurrentName(),p1,val);
+		res += p1 + " in action "+glb->allacts.getCurrentName();
+	}
 
-  return res;
+	return res;
 }
 
 /// \class OptionAllowContextSet
@@ -608,13 +608,13 @@ string OptionCurrentAction::apply(Architecture *glb,const string &p1,const strin
 string OptionAllowContextSet::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string prop = val ? "on" : "off";
-  string res = "Toggled allowcontextset to "+prop;
-  glb->translate->allowContextSet(val);
+	string prop = val ? "on" : "off";
+	string res = "Toggled allowcontextset to "+prop;
+	glb->translate->allowContextSet(val);
 
-  return res;
+	return res;
 }
 
 /// \class OptionIgnoreUnimplemented
@@ -625,19 +625,19 @@ string OptionAllowContextSet::apply(Architecture *glb,const string &p1,const str
 string OptionIgnoreUnimplemented::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string res;
-  if (val) {
-    res = "Unimplemented instructions are now ignored (treated as nop)";
-    glb->flowoptions |= FlowInfo::ignore_unimplemented;
-  }
-  else {
-    res = "Unimplemented instructions now generate warnings";
-    glb->flowoptions &= ~((uint4)FlowInfo::ignore_unimplemented);
-  }
+	string res;
+	if (val) {
+		res = "Unimplemented instructions are now ignored (treated as nop)";
+		glb->flowoptions |= FlowInfo::ignore_unimplemented;
+	}
+	else {
+		res = "Unimplemented instructions now generate warnings";
+		glb->flowoptions &= ~((uint4)FlowInfo::ignore_unimplemented);
+	}
 
-  return res;
+	return res;
 }
 
 /// \class OptionErrorUnimplemented
@@ -648,19 +648,19 @@ string OptionIgnoreUnimplemented::apply(Architecture *glb,const string &p1,const
 string OptionErrorUnimplemented::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string res;
-  if (val) {
-    res = "Unimplemented instructions are now a fatal error";
-    glb->flowoptions |= FlowInfo::error_unimplemented;
-  }
-  else {
-    res = "Unimplemented instructions now NOT a fatal error";
-    glb->flowoptions &= ~((uint4)FlowInfo::error_unimplemented);
-  }
+	string res;
+	if (val) {
+		res = "Unimplemented instructions are now a fatal error";
+		glb->flowoptions |= FlowInfo::error_unimplemented;
+	}
+	else {
+		res = "Unimplemented instructions now NOT a fatal error";
+		glb->flowoptions &= ~((uint4)FlowInfo::error_unimplemented);
+	}
 
-  return res;
+	return res;
 }
 
 /// \class OptionErrorReinterpreted
@@ -671,19 +671,19 @@ string OptionErrorUnimplemented::apply(Architecture *glb,const string &p1,const 
 string OptionErrorReinterpreted::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string res;
-  if (val) {
-    res = "Instruction reinterpretation is now a fatal error";
-    glb->flowoptions |= FlowInfo::error_reinterpreted;
-  }
-  else {
-    res = "Instruction reinterpretation is now NOT a fatal error";
-    glb->flowoptions &= ~((uint4)FlowInfo::error_reinterpreted);
-  }
+	string res;
+	if (val) {
+		res = "Instruction reinterpretation is now a fatal error";
+		glb->flowoptions |= FlowInfo::error_reinterpreted;
+	}
+	else {
+		res = "Instruction reinterpretation is now NOT a fatal error";
+		glb->flowoptions &= ~((uint4)FlowInfo::error_reinterpreted);
+	}
 
-  return res;
+	return res;
 }
 /// \class OptionErrorTooManyInstructions
 /// \brief Toggle whether too many instructions in one function body is considered a fatal error.
@@ -694,19 +694,19 @@ string OptionErrorReinterpreted::apply(Architecture *glb,const string &p1,const 
 string OptionErrorTooManyInstructions::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string res;
-  if (val) {
-    res = "Too many instructions are now a fatal error";
-    glb->flowoptions |= FlowInfo::error_toomanyinstructions;
-  }
-  else {
-    res = "Too many instructions are now NOT a fatal error";
-    glb->flowoptions &= ~((uint4)FlowInfo::error_toomanyinstructions);
-  }
+	string res;
+	if (val) {
+		res = "Too many instructions are now a fatal error";
+		glb->flowoptions |= FlowInfo::error_toomanyinstructions;
+	}
+	else {
+		res = "Too many instructions are now NOT a fatal error";
+		glb->flowoptions &= ~((uint4)FlowInfo::error_toomanyinstructions);
+	}
 
-  return res;
+	return res;
 }
 
 /// \class OptionProtoEval
@@ -719,21 +719,21 @@ string OptionErrorTooManyInstructions::apply(Architecture *glb,const string &p1,
 string OptionProtoEval::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  ProtoModel *model = (ProtoModel *)0;
-  
-  if (p1.size()==0)
-    throw ParseError("Must specify prototype model");
+	ProtoModel *model = (ProtoModel *)0;
+	
+	if (p1.size()==0)
+		throw ParseError("Must specify prototype model");
 
-  if (p1 == "default")
-    model = glb->defaultfp;
-  else {
-    model = glb->protoModels[p1];
-    if (model == (ProtoModel *)0)
-      throw ParseError("Unknown prototype model: "+p1);
-  }
-  string res = "Set current evaluation to " + p1;
-  glb->evalfp_current = model;
-  return res;
+	if (p1 == "default")
+		model = glb->defaultfp;
+	else {
+		model = glb->protoModels[p1];
+		if (model == (ProtoModel *)0)
+			throw ParseError("Unknown prototype model: "+p1);
+	}
+	string res = "Set current evaluation to " + p1;
+	glb->evalfp_current = model;
+	return res;
 }
 
 /// \class OptionSetLanguage
@@ -743,11 +743,11 @@ string OptionProtoEval::apply(Architecture *glb,const string &p1,const string &p
 string OptionSetLanguage::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  string res;
+	string res;
 
-  glb->setPrintLanguage(p1);
-  res = "Decompiler produces "+p1;
-  return res;
+	glb->setPrintLanguage(p1);
+	res = "Decompiler produces "+p1;
+	return res;
 }
 
 /// \class OptionJumpLoad
@@ -758,18 +758,18 @@ string OptionSetLanguage::apply(Architecture *glb,const string &p1,const string 
 string OptionJumpLoad::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  bool val = onOrOff(p1);
+	bool val = onOrOff(p1);
 
-  string res;
-  if (val) {
-    res = "Jumptable analysis will record loads required to calculate jump address";
-    glb->flowoptions |= FlowInfo::record_jumploads;
-  }
-  else {
-    res = "Jumptable analysis will NOT record loads";
-    glb->flowoptions &= ~((uint4)FlowInfo::record_jumploads);
-  }
-  return res;
+	string res;
+	if (val) {
+		res = "Jumptable analysis will record loads required to calculate jump address";
+		glb->flowoptions |= FlowInfo::record_jumploads;
+	}
+	else {
+		res = "Jumptable analysis will NOT record loads";
+		glb->flowoptions &= ~((uint4)FlowInfo::record_jumploads);
+	}
+	return res;
 }
 
 /// \class OptionToggleRule
@@ -780,31 +780,31 @@ string OptionJumpLoad::apply(Architecture *glb,const string &p1,const string &p2
 string OptionToggleRule::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if (p1.size() == 0)
-    throw ParseError("Must specify rule path");
-  if (p2.size() == 0)
-    throw ParseError("Must specify on/off");
-  bool val = onOrOff(p2);
+	if (p1.size() == 0)
+		throw ParseError("Must specify rule path");
+	if (p2.size() == 0)
+		throw ParseError("Must specify on/off");
+	bool val = onOrOff(p2);
 
-  Action *root = glb->allacts.getCurrent();
-  if (root == (Action *)0)
-    throw LowlevelError("Missing current action");
-  string res;
-  if (!val) {
-    if (root->disableRule(p1))
-      res = "Successfully disabled";
-    else
-      res = "Failed to disable";
-    res += " rule";
-  }
-  else {
-    if (root->enableRule(p1))
-      res = "Successfully enabled";
-    else
-      res = "Failed to enable";
-    res += " rule";
-  }
-  return res;
+	Action *root = glb->allacts.getCurrent();
+	if (root == (Action *)0)
+		throw LowlevelError("Missing current action");
+	string res;
+	if (!val) {
+		if (root->disableRule(p1))
+			res = "Successfully disabled";
+		else
+			res = "Failed to disable";
+		res += " rule";
+	}
+	else {
+		if (root->enableRule(p1))
+			res = "Successfully enabled";
+		else
+			res = "Failed to enable";
+		res += " rule";
+	}
+	return res;
 }
 
 /// \class OptionAliasBlock
@@ -820,22 +820,22 @@ string OptionToggleRule::apply(Architecture *glb,const string &p1,const string &
 string OptionAliasBlock::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if (p1.size() == 0)
-    throw ParseError("Must specify alias block level");
-  int4 oldVal = glb->alias_block_level;
-  if (p1 == "none")
-    glb->alias_block_level = 0;
-  else if (p1 == "struct")
-    glb->alias_block_level = 1;
-  else if (p1 == "array")
-    glb->alias_block_level = 2;		// The default. Let structs and arrays block aliases
-  else if (p1 == "all")
-    glb->alias_block_level = 3;
-  else
-    throw ParseError("Unknown alias block level: "+p1);
-  if (oldVal == glb->alias_block_level)
-    return "Alias block level unchanged";
-  return "Alias block level set to " + p1;
+	if (p1.size() == 0)
+		throw ParseError("Must specify alias block level");
+	int4 oldVal = glb->alias_block_level;
+	if (p1 == "none")
+		glb->alias_block_level = 0;
+	else if (p1 == "struct")
+		glb->alias_block_level = 1;
+	else if (p1 == "array")
+		glb->alias_block_level = 2;         // The default. Let structs and arrays block aliases
+	else if (p1 == "all")
+		glb->alias_block_level = 3;
+	else
+		throw ParseError("Unknown alias block level: "+p1);
+	if (oldVal == glb->alias_block_level)
+		return "Alias block level unchanged";
+	return "Alias block level set to " + p1;
 }
 
 /// \class OptionMaxInstruction
@@ -845,17 +845,17 @@ string OptionAliasBlock::apply(Architecture *glb,const string &p1,const string &
 string OptionMaxInstruction::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  if (p1.size() == 0)
-    throw ParseError("Must specify number of instructions");
+	if (p1.size() == 0)
+		throw ParseError("Must specify number of instructions");
 
-  int4 newMax = -1;
-  istringstream s1(p1);
-  s1.unsetf(ios::dec | ios::hex | ios::oct); // Let user specify base
-  s1 >> newMax;
-  if (newMax < 0)
-    throw ParseError("Bad maxinstruction parameter");
-  glb->max_instructions = newMax;
-  return "Maximum instructions per function set";
+	int4 newMax = -1;
+	istringstream s1(p1);
+	s1.unsetf(ios::dec | ios::hex | ios::oct); // Let user specify base
+	s1 >> newMax;
+	if (newMax < 0)
+		throw ParseError("Bad maxinstruction parameter");
+	glb->max_instructions = newMax;
+	return "Maximum instructions per function set";
 }
 
 /// \class OptionNamespaceStrategy
@@ -865,15 +865,15 @@ string OptionMaxInstruction::apply(Architecture *glb,const string &p1,const stri
 string OptionNamespaceStrategy::apply(Architecture *glb,const string &p1,const string &p2,const string &p3) const
 
 {
-  PrintLanguage::namespace_strategy strategy;
-  if (p1 == "minimal")
-    strategy = PrintLanguage::MINIMAL_NAMESPACES;
-  else if (p1 == "all")
-    strategy = PrintLanguage::ALL_NAMESPACES;
-  else if (p1 == "none")
-    strategy = PrintLanguage::NO_NAMESPACES;
-  else
-    throw ParseError("Must specify a valid strategy");
-  glb->print->setNamespaceStrategy(strategy);
-  return "Namespace strategy set";
+	PrintLanguage::namespace_strategy strategy;
+	if (p1 == "minimal")
+		strategy = PrintLanguage::MINIMAL_NAMESPACES;
+	else if (p1 == "all")
+		strategy = PrintLanguage::ALL_NAMESPACES;
+	else if (p1 == "none")
+		strategy = PrintLanguage::NO_NAMESPACES;
+	else
+		throw ParseError("Must specify a valid strategy");
+	glb->print->setNamespaceStrategy(strategy);
+	return "Namespace strategy set";
 }

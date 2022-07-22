@@ -22,13 +22,13 @@
 void BlockVarnode::set(Varnode *v)
 
 {
-  vn = v;
-  const PcodeOp *op = vn->getDef();
+	vn = v;
+	const PcodeOp *op = vn->getDef();
 
-  if (op == (const PcodeOp *)0)
-    index = 0;
-  else
-    index = op->getParent()->getIndex();
+	if (op == (const PcodeOp *)0)
+		index = 0;
+	else
+		index = op->getParent()->getIndex();
 }
 
 /// \brief Find the first Varnode defined in the BlockBasic of the given index
@@ -41,21 +41,21 @@ void BlockVarnode::set(Varnode *v)
 int4 BlockVarnode::findFront(int4 blocknum,const vector<BlockVarnode> &list)
 
 {
-  int4 min = 0;
-  int4 max = list.size()-1;
-  while(min < max) {
-    int4 cur = (min + max)/2;
-    int4 curblock = list[cur].getIndex();
-    if (curblock >= blocknum)
-      max = cur;
-    else
-      min = cur + 1;
-  }
-  if (min > max)
-    return -1;
-  if (list[min].getIndex() != blocknum)
-    return -1;
-  return min;
+	int4 min = 0;
+	int4 max = list.size()-1;
+	while(min < max) {
+		int4 cur = (min + max)/2;
+		int4 curblock = list[cur].getIndex();
+		if (curblock >= blocknum)
+			max = cur;
+		else
+			min = cur + 1;
+	}
+	if (min > max)
+		return -1;
+	if (list[min].getIndex() != blocknum)
+		return -1;
+	return min;
 }
 
 /// \brief Required tests to merge HighVariables that are not Cover related
@@ -72,47 +72,47 @@ int4 BlockVarnode::findFront(int4 blocknum,const vector<BlockVarnode> &list)
 bool Merge::mergeTestRequired(HighVariable *high_out,HighVariable *high_in)
 
 {
-  if (high_in == high_out) return true; // Already merged
+	if (high_in == high_out) return true; // Already merged
 
-  if (high_in->isTypeLock())	// If types are locked
-    if (high_out->isTypeLock())	// dont merge unless
-      if (high_in->getType() != high_out->getType()) return false; // both types are the same
+	if (high_in->isTypeLock())    // If types are locked
+		if (high_out->isTypeLock()) // dont merge unless
+			if (high_in->getType() != high_out->getType()) return false; // both types are the same
 
-  if (high_out->isAddrTied()) {	// Do not merge address tied input
-    if (high_in->isAddrTied()) {
-      if (high_in->getTiedVarnode()->getAddr() != high_out->getTiedVarnode()->getAddr())
-	return false;		// with an address tied output of different address
-    }
-  }
+	if (high_out->isAddrTied()) { // Do not merge address tied input
+		if (high_in->isAddrTied()) {
+			if (high_in->getTiedVarnode()->getAddr() != high_out->getTiedVarnode()->getAddr())
+				return false;           // with an address tied output of different address
+		}
+	}
 
-  if (high_in->isInput()) {
-				// Input and persist must be different vars
-				// as persists inherently have their own input
-    if (high_out->isPersist()) return false;
-				// If we don't prevent inputs and addrtieds from
-				// being merged.  Inputs can get merged with the
-				// internal parts of structures on the stack
-    if ((high_out->isAddrTied())&&(!high_in->isAddrTied())) return false;
-  }
-  else if (high_in->isExtraOut())
-    return false;
-  if (high_out->isInput()) {
-    if (high_in->isPersist()) return false;
-    if ((high_in->isAddrTied())&&(!high_out->isAddrTied())) return false;
-  }
-  else if (high_out->isExtraOut())
-    return false;
+	if (high_in->isInput()) {
+																// Input and persist must be different vars
+																// as persists inherently have their own input
+		if (high_out->isPersist()) return false;
+																// If we don't prevent inputs and addrtieds from
+																// being merged.  Inputs can get merged with the
+																// internal parts of structures on the stack
+		if ((high_out->isAddrTied())&&(!high_in->isAddrTied())) return false;
+	}
+	else if (high_in->isExtraOut())
+		return false;
+	if (high_out->isInput()) {
+		if (high_in->isPersist()) return false;
+		if ((high_in->isAddrTied())&&(!high_out->isAddrTied())) return false;
+	}
+	else if (high_out->isExtraOut())
+		return false;
 
-  Symbol *symbolIn = high_in->getSymbol();
-  Symbol *symbolOut = high_out->getSymbol();
-  if (symbolIn != (Symbol *) 0 && symbolOut != (Symbol *) 0) {
-    if (symbolIn != symbolOut)
-      return false;		// Map to different symbols
-    if (high_in->getSymbolOffset() != high_out->getSymbolOffset())
-      return false;			// Map to different parts of same symbol
-  }
+	Symbol *symbolIn = high_in->getSymbol();
+	Symbol *symbolOut = high_out->getSymbol();
+	if (symbolIn != (Symbol *) 0 && symbolOut != (Symbol *) 0) {
+		if (symbolIn != symbolOut)
+			return false;             // Map to different symbols
+		if (high_in->getSymbolOffset() != high_out->getSymbolOffset())
+			return false;                     // Map to different parts of same symbol
+	}
 
-  return true;
+	return true;
 }
 
 /// \brief Adjacency tests for merging Varnodes that are input or output to the same p-code op
@@ -125,35 +125,35 @@ bool Merge::mergeTestRequired(HighVariable *high_out,HighVariable *high_in)
 bool Merge::mergeTestAdjacent(HighVariable *high_out,HighVariable *high_in)
 
 {
-  if (!mergeTestRequired(high_out,high_in)) return false;
+	if (!mergeTestRequired(high_out,high_in)) return false;
 
-  if (high_in->isNameLock() && high_out->isNameLock())
-    return false;
+	if (high_in->isNameLock() && high_out->isNameLock())
+		return false;
 
-  // Make sure variables have the same type
-  if (high_out->getType() != high_in->getType())
-    return false;
-				// We want to isolate the use of illegal inputs
-				// as much as possible.  See we don't do any speculative
-				// merges with them, UNLESS the illegal input is only
-				// used indirectly
-  if (high_out->isInput()) {
-    Varnode *vn = high_out->getInputVarnode();
-    if (vn->isIllegalInput()&&(!vn->isIndirectOnly())) return false;
-  }
-  if (high_in->isInput()) {
-    Varnode *vn = high_in->getInputVarnode();
-    if (vn->isIllegalInput()&&(!vn->isIndirectOnly())) return false;
-  }
-  Symbol *symbol = high_in->getSymbol();
-  if (symbol != (Symbol *)0)
-    if (symbol->isIsolated())
-      return false;
-  symbol = high_out->getSymbol();
-  if (symbol != (Symbol *)0)
-    if (symbol->isIsolated())
-      return false;
-  return true;
+	// Make sure variables have the same type
+	if (high_out->getType() != high_in->getType())
+		return false;
+																// We want to isolate the use of illegal inputs
+																// as much as possible.  See we don't do any speculative
+																// merges with them, UNLESS the illegal input is only
+																// used indirectly
+	if (high_out->isInput()) {
+		Varnode *vn = high_out->getInputVarnode();
+		if (vn->isIllegalInput()&&(!vn->isIndirectOnly())) return false;
+	}
+	if (high_in->isInput()) {
+		Varnode *vn = high_in->getInputVarnode();
+		if (vn->isIllegalInput()&&(!vn->isIndirectOnly())) return false;
+	}
+	Symbol *symbol = high_in->getSymbol();
+	if (symbol != (Symbol *)0)
+		if (symbol->isIsolated())
+			return false;
+	symbol = high_out->getSymbol();
+	if (symbol != (Symbol *)0)
+		if (symbol->isIsolated())
+			return false;
+	return true;
 }
 
 /// \brief Speculative tests for merging HighVariables that are not Cover related
@@ -166,18 +166,18 @@ bool Merge::mergeTestAdjacent(HighVariable *high_out,HighVariable *high_in)
 bool Merge::mergeTestSpeculative(HighVariable *high_out,HighVariable *high_in)
 
 {
-  if (!mergeTestAdjacent(high_out,high_in)) return false;
+	if (!mergeTestAdjacent(high_out,high_in)) return false;
 
-  // Don't merge anything with a global speculatively
-  if (high_out->isPersist()) return false;
-  if (high_in->isPersist()) return false;
-  // Don't merge anything speculatively with input
-  if (high_out->isInput()) return false;
-  if (high_in->isInput()) return false;
-  // Don't merge anything speculatively with addrtied
-  if (high_out->isAddrTied()) return false;
-  if (high_in->isAddrTied()) return false;
-  return true;
+	// Don't merge anything with a global speculatively
+	if (high_out->isPersist()) return false;
+	if (high_in->isPersist()) return false;
+	// Don't merge anything speculatively with input
+	if (high_out->isInput()) return false;
+	if (high_in->isInput()) return false;
+	// Don't merge anything speculatively with addrtied
+	if (high_out->isAddrTied()) return false;
+	if (high_in->isAddrTied()) return false;
+	return true;
 }
 
 /// \brief A test if the given Varnode can ever be merged
@@ -189,11 +189,11 @@ bool Merge::mergeTestSpeculative(HighVariable *high_out,HighVariable *high_in)
 bool Merge::mergeTestBasic(Varnode *vn)
 
 {
-  if (vn == (Varnode *)0) return false;
-  if (!vn->hasCover()) return false;
-  if (vn->isImplied()) return false;
-  if (vn->isSpacebase()) return false;
-  return true;
+	if (vn == (Varnode *)0) return false;
+	if (!vn->hasCover()) return false;
+	if (vn->isImplied()) return false;
+	if (vn->isSpacebase()) return false;
+	return true;
 }
 
 /// \brief Speculatively merge all HighVariables in the given list as well as possible
@@ -205,23 +205,23 @@ bool Merge::mergeTestBasic(Varnode *vn)
 void Merge::mergeLinear(vector<HighVariable *> &highvec)
 
 {
-  vector<HighVariable *> highstack;
-  vector<HighVariable *>::iterator initer,outiter;
-  HighVariable *high;
+	vector<HighVariable *> highstack;
+	vector<HighVariable *>::iterator initer,outiter;
+	HighVariable *high;
 
-  if (highvec.size() <= 1) return;
-  for(initer=highvec.begin();initer!=highvec.end();++initer)
-    updateHigh(*initer);
-  sort(highvec.begin(),highvec.end(),compareHighByBlock);
-  for(initer=highvec.begin();initer!=highvec.end();++initer) {
-    high = *initer;
-    for(outiter=highstack.begin();outiter!=highstack.end();++outiter) {
-      if (mergeTestSpeculative(*outiter,high))
-	if (merge(*outiter,high,true)) break;
-    }
-    if (outiter==highstack.end())
-      highstack.push_back(high);
-  }
+	if (highvec.size() <= 1) return;
+	for(initer=highvec.begin();initer!=highvec.end();++initer)
+		updateHigh(*initer);
+	sort(highvec.begin(),highvec.end(),compareHighByBlock);
+	for(initer=highvec.begin();initer!=highvec.end();++initer) {
+		high = *initer;
+		for(outiter=highstack.begin();outiter!=highstack.end();++outiter) {
+			if (mergeTestSpeculative(*outiter,high))
+				if (merge(*outiter,high,true)) break;
+		}
+		if (outiter==highstack.end())
+			highstack.push_back(high);
+	}
 }
 
 /// \brief Force the merge of a ranges of Varnodes with the same size and storage address
@@ -234,25 +234,25 @@ void Merge::mergeLinear(vector<HighVariable *> &highvec)
 void Merge::mergeRangeMust(VarnodeLocSet::const_iterator startiter,VarnodeLocSet::const_iterator enditer)
 
 {
-  HighVariable *high;
-  Varnode *vn;
+	HighVariable *high;
+	Varnode *vn;
 
-  vn = *startiter++;
-  if (!mergeTestBasic(vn)) {
-    if (!vn->isSpacebase())
-      throw LowlevelError("Cannot force merge of range");
-  }
-  high = vn->getHigh();
-  for(;startiter!=enditer;++startiter) {
-    vn = *startiter;
-    if (vn->getHigh() == high) continue;
-    if (!mergeTestBasic(vn)) {
-      if (!vn->isSpacebase())
-	throw LowlevelError("Cannot force merge of range");
-    }
-    if (!merge(high,vn->getHigh(),false))
-      throw LowlevelError("Forced merge caused intersection");
-  }
+	vn = *startiter++;
+	if (!mergeTestBasic(vn)) {
+		if (!vn->isSpacebase())
+			throw LowlevelError("Cannot force merge of range");
+	}
+	high = vn->getHigh();
+	for(;startiter!=enditer;++startiter) {
+		vn = *startiter;
+		if (vn->getHigh() == high) continue;
+		if (!mergeTestBasic(vn)) {
+			if (!vn->isSpacebase())
+				throw LowlevelError("Cannot force merge of range");
+		}
+		if (!merge(high,vn->getHigh(),false))
+			throw LowlevelError("Forced merge caused intersection");
+	}
 }
 
 /// \brief Try to force merges of input to output for all p-code ops of a given type
@@ -265,27 +265,27 @@ void Merge::mergeRangeMust(VarnodeLocSet::const_iterator startiter,VarnodeLocSet
 void Merge::mergeOpcode(OpCode opc)
 
 {
-  BlockBasic *bl;
-  list<PcodeOp *>::iterator iter;
-  PcodeOp *op;
-  Varnode *vn1,*vn2;
-  const BlockGraph &bblocks(data.getBasicBlocks());
+	BlockBasic *bl;
+	list<PcodeOp *>::iterator iter;
+	PcodeOp *op;
+	Varnode *vn1,*vn2;
+	const BlockGraph &bblocks(data.getBasicBlocks());
 
-  for(int4 i=0;i<bblocks.getSize();++i) { // Do merges in linear block order
-    bl = (BlockBasic *) bblocks.getBlock(i);
-    for(iter=bl->beginOp();iter!=bl->endOp();++iter) {
-      op = *iter;
-      if (op->code() != opc) continue;
-      vn1 = op->getOut();
-      if (!mergeTestBasic(vn1)) continue;
-      for(int4 j=0;j<op->numInput();++j) {
-	vn2 = op->getIn(j);
-	if (!mergeTestBasic(vn2)) continue;
-	if (mergeTestRequired(vn1->getHigh(),vn2->getHigh()))
-	  merge(vn1->getHigh(),vn2->getHigh(),false);	// This is a required merge
-      }
-    }
-  }
+	for(int4 i=0;i<bblocks.getSize();++i) { // Do merges in linear block order
+		bl = (BlockBasic *) bblocks.getBlock(i);
+		for(iter=bl->beginOp();iter!=bl->endOp();++iter) {
+			op = *iter;
+			if (op->code() != opc) continue;
+			vn1 = op->getOut();
+			if (!mergeTestBasic(vn1)) continue;
+			for(int4 j=0;j<op->numInput();++j) {
+				vn2 = op->getIn(j);
+				if (!mergeTestBasic(vn2)) continue;
+				if (mergeTestRequired(vn1->getHigh(),vn2->getHigh()))
+					merge(vn1->getHigh(),vn2->getHigh(),false);   // This is a required merge
+			}
+		}
+	}
 }
 
 /// \brief Try to merge all HighVariables in the given range that have the same data-type
@@ -298,45 +298,45 @@ void Merge::mergeOpcode(OpCode opc)
 void Merge::mergeByDatatype(VarnodeLocSet::const_iterator startiter,VarnodeLocSet::const_iterator enditer)
 
 {
-  vector<HighVariable *> highvec;
-  list<HighVariable *> highlist;
+	vector<HighVariable *> highvec;
+	list<HighVariable *> highlist;
 
-  list<HighVariable *>::iterator hiter;
-  VarnodeLocSet::const_iterator iter;
-  Varnode *vn;
-  HighVariable *high;
-  Datatype *ct = (Datatype *)0;
+	list<HighVariable *>::iterator hiter;
+	VarnodeLocSet::const_iterator iter;
+	Varnode *vn;
+	HighVariable *high;
+	Datatype *ct = (Datatype *)0;
 
-  for(iter=startiter;iter!=enditer;++iter) { // Gather all the highs
-    vn = *iter;
-    if (vn->isFree()) continue;
-    high = (*iter)->getHigh();
-    if (high->isMark()) continue;	// dedup
-    if (!mergeTestBasic(vn)) continue;
-    high->setMark();
-    highlist.push_back(high);
-  }
-  for(hiter=highlist.begin();hiter!=highlist.end();++hiter)
-    (*hiter)->clearMark();
+	for(iter=startiter;iter!=enditer;++iter) { // Gather all the highs
+		vn = *iter;
+		if (vn->isFree()) continue;
+		high = (*iter)->getHigh();
+		if (high->isMark()) continue;       // dedup
+		if (!mergeTestBasic(vn)) continue;
+		high->setMark();
+		highlist.push_back(high);
+	}
+	for(hiter=highlist.begin();hiter!=highlist.end();++hiter)
+		(*hiter)->clearMark();
 
-  while(!highlist.empty()) {
-    highvec.clear();
-    hiter = highlist.begin();
-    high = *hiter;
-    ct = high->getType();
-    highvec.push_back(high);
-    highlist.erase(hiter++);
-    while(hiter != highlist.end()) {
-      high = *hiter;
-      if (ct == high->getType()) {	// Check for exact same type
-	highvec.push_back(high);
-	highlist.erase(hiter++);
-      }
-      else
-	++hiter;
-    }
-    mergeLinear(highvec);	// Try to merge all highs of the same type
-  }
+	while(!highlist.empty()) {
+		highvec.clear();
+		hiter = highlist.begin();
+		high = *hiter;
+		ct = high->getType();
+		highvec.push_back(high);
+		highlist.erase(hiter++);
+		while(hiter != highlist.end()) {
+			high = *hiter;
+			if (ct == high->getType()) {      // Check for exact same type
+				highvec.push_back(high);
+				highlist.erase(hiter++);
+			}
+			else
+				++hiter;
+		}
+		mergeLinear(highvec);       // Try to merge all highs of the same type
+	}
 }
 
 /// \brief Allocate COPY PcodeOp designed to trim an overextended Cover
@@ -350,13 +350,13 @@ void Merge::mergeByDatatype(VarnodeLocSet::const_iterator startiter,VarnodeLocSe
 PcodeOp *Merge::allocateCopyTrim(Varnode *inVn,Datatype *ct,const Address &addr)
 
 {
-  PcodeOp *copyOp = data.newOp(1,addr);
-  data.opSetOpcode(copyOp,CPUI_COPY);
-  Varnode *outVn = data.newUnique(inVn->getSize(),ct);
-  data.opSetOutput(copyOp,outVn);
-  data.opSetInput(copyOp,inVn,0);
-  copyTrims.push_back(copyOp);
-  return copyOp;
+	PcodeOp *copyOp = data.newOp(1,addr);
+	data.opSetOpcode(copyOp,CPUI_COPY);
+	Varnode *outVn = data.newUnique(inVn->getSize(),ct);
+	data.opSetOutput(copyOp,outVn);
+	data.opSetInput(copyOp,inVn,0);
+	copyTrims.push_back(copyOp);
+	return copyOp;
 }
 
 /// \brief Snip off set of \e read p-code ops for a given Varnode
@@ -369,42 +369,42 @@ PcodeOp *Merge::allocateCopyTrim(Varnode *inVn,Datatype *ct,const Address &addr)
 void Merge::snipReads(Varnode *vn,list<PcodeOp *> &markedop)
 
 {
-  if (markedop.empty()) return;
+	if (markedop.empty()) return;
 
-  PcodeOp *copyop,*op;
-  BlockBasic *bl;
-  Address pc;
-  int4 slot;
-  PcodeOp *afterop;
+	PcodeOp *copyop,*op;
+	BlockBasic *bl;
+	Address pc;
+	int4 slot;
+	PcodeOp *afterop;
 
-				// Figure out where copy is inserted
-  if (vn->isInput()) {
-    bl = (BlockBasic *) data.getBasicBlocks().getBlock(0);
-    pc = bl->getStart();
-    afterop = (PcodeOp *)0;
-  }
-  else {
-    bl = vn->getDef()->getParent();
-    pc = vn->getDef()->getAddr();
-    if (vn->getDef()->code() == CPUI_INDIRECT) // snip must come after OP CAUSING EFFECT
-				// Not the indirect op itself
-      afterop = PcodeOp::getOpFromConst(vn->getDef()->getIn(1)->getAddr());
-    else
-      afterop = vn->getDef();
-  }
-  copyop = allocateCopyTrim(vn, vn->getType(), pc);
-  if (afterop == (PcodeOp *)0)
-    data.opInsertBegin(copyop,bl);
-  else
-    data.opInsertAfter(copyop,afterop);
+																// Figure out where copy is inserted
+	if (vn->isInput()) {
+		bl = (BlockBasic *) data.getBasicBlocks().getBlock(0);
+		pc = bl->getStart();
+		afterop = (PcodeOp *)0;
+	}
+	else {
+		bl = vn->getDef()->getParent();
+		pc = vn->getDef()->getAddr();
+		if (vn->getDef()->code() == CPUI_INDIRECT) // snip must come after OP CAUSING EFFECT
+																// Not the indirect op itself
+			afterop = PcodeOp::getOpFromConst(vn->getDef()->getIn(1)->getAddr());
+		else
+			afterop = vn->getDef();
+	}
+	copyop = allocateCopyTrim(vn, vn->getType(), pc);
+	if (afterop == (PcodeOp *)0)
+		data.opInsertBegin(copyop,bl);
+	else
+		data.opInsertAfter(copyop,afterop);
 
-  list<PcodeOp *>::iterator iter;
-  for(iter=markedop.begin();iter!=markedop.end();++iter) {
-    op = *iter;
-    for(slot=0;slot<op->numInput();++slot)
-      if (op->getIn(slot)==vn) break; // Find the correct slot
-    data.opSetInput(op,copyop->getOut(),slot);
-  }
+	list<PcodeOp *>::iterator iter;
+	for(iter=markedop.begin();iter!=markedop.end();++iter) {
+		op = *iter;
+		for(slot=0;slot<op->numInput();++slot)
+			if (op->getIn(slot)==vn) break; // Find the correct slot
+		data.opSetInput(op,copyop->getOut(),slot);
+	}
 }
 
 /// \brief Eliminate intersections of given Varnode with other Varnodes in a list
@@ -417,72 +417,72 @@ void Merge::snipReads(Varnode *vn,list<PcodeOp *> &markedop)
 void Merge::eliminateIntersect(Varnode *vn,const vector<BlockVarnode> &blocksort)
 
 {
-  list<PcodeOp *> markedop;
-  list<PcodeOp *>::const_iterator oiter;
-  map<int4,CoverBlock>::const_iterator iter,enditer;
-  Varnode *vn2;
-  int4 boundtype;
-  bool insertop;
+	list<PcodeOp *> markedop;
+	list<PcodeOp *>::const_iterator oiter;
+	map<int4,CoverBlock>::const_iterator iter,enditer;
+	Varnode *vn2;
+	int4 boundtype;
+	bool insertop;
 
-  for(oiter=vn->beginDescend();oiter!=vn->endDescend();++oiter) {
-    insertop = false;
-    Cover single;
-    single.addDefPoint(vn);
-    PcodeOp *op = *oiter;
-    single.addRefPoint(op,vn); // Build range for a single read
-    iter = single.begin();
-    enditer = single.end();
-    while(iter != enditer) {
-      int4 blocknum = (*iter).first;
-      ++iter;
-      int4 slot = BlockVarnode::findFront(blocknum,blocksort);
-      if (slot == -1) continue;
-      while(slot < blocksort.size()) {
-	if (blocksort[slot].getIndex() != blocknum)
-	  break;
-	vn2 = blocksort[slot].getVarnode();
-	slot += 1;
-	if (vn2 == vn) continue;
-	boundtype = single.containVarnodeDef(vn2);
-	if (boundtype == 0) continue;
-	if (boundtype == 2) {	// We have to resolve things defined at same place
-	  if (vn2->getDef() == (PcodeOp *)0) {
-	    if (vn->getDef() == (PcodeOp *)0) {
-	      if (vn < vn2) continue; // Choose an arbitrary order if both are inputs
-	    }
-	    else
-	      continue;
-	  }
-	  else {
-	    if (vn->getDef() != (PcodeOp *)0) {
-	      if (vn2->getDef()->getSeqNum().getOrder() < vn->getDef()->getSeqNum().getOrder())
-		continue;
-	    }
-	  }
+	for(oiter=vn->beginDescend();oiter!=vn->endDescend();++oiter) {
+		insertop = false;
+		Cover single;
+		single.addDefPoint(vn);
+		PcodeOp *op = *oiter;
+		single.addRefPoint(op,vn); // Build range for a single read
+		iter = single.begin();
+		enditer = single.end();
+		while(iter != enditer) {
+			int4 blocknum = (*iter).first;
+			++iter;
+			int4 slot = BlockVarnode::findFront(blocknum,blocksort);
+			if (slot == -1) continue;
+			while(slot < blocksort.size()) {
+				if (blocksort[slot].getIndex() != blocknum)
+					break;
+				vn2 = blocksort[slot].getVarnode();
+				slot += 1;
+				if (vn2 == vn) continue;
+				boundtype = single.containVarnodeDef(vn2);
+				if (boundtype == 0) continue;
+				if (boundtype == 2) {   // We have to resolve things defined at same place
+					if (vn2->getDef() == (PcodeOp *)0) {
+						if (vn->getDef() == (PcodeOp *)0) {
+							if (vn < vn2) continue; // Choose an arbitrary order if both are inputs
+						}
+						else
+							continue;
+					}
+					else {
+						if (vn->getDef() != (PcodeOp *)0) {
+							if (vn2->getDef()->getSeqNum().getOrder() < vn->getDef()->getSeqNum().getOrder())
+								continue;
+						}
+					}
+				}
+				else if (boundtype == 3) { // intersection on the tail of the range
+					// For most operations if the READ and WRITE happen on the same op, there is really no cover
+					// intersection because the READ happens before the op and the WRITE happens after,  but
+					// if the WRITE is for an INDIRECT that is marking the READING (call) op, and the WRITE is to
+					// an address forced varnode, then because the write varnode must exist just before the op
+					// there really is an intersection.
+					if (!vn2->isAddrForce()) continue;
+					if (!vn2->isWritten()) continue;
+					PcodeOp *indop = vn2->getDef();
+					if (indop->code() != CPUI_INDIRECT) continue;
+					// The vn2 INDIRECT must be linked to the read op
+					if (op != PcodeOp::getOpFromConst(indop->getIn(1)->getAddr())) continue;
+					if (vn->copyShadow(indop->getIn(0))) continue; // If INDIRECT input shadows vn, don't consider as intersection
+				}
+				insertop = true;
+				break;                  // No need to continue iterating through varnodes in block
+			}
+			if (insertop) break;      // No need to continue iterating through blocks
+		}
+		if (insertop)
+			markedop.push_back(op);
 	}
-	else if (boundtype == 3) { // intersection on the tail of the range
-	  // For most operations if the READ and WRITE happen on the same op, there is really no cover
-	  // intersection because the READ happens before the op and the WRITE happens after,  but
-	  // if the WRITE is for an INDIRECT that is marking the READING (call) op, and the WRITE is to
-	  // an address forced varnode, then because the write varnode must exist just before the op
-	  // there really is an intersection.
-	  if (!vn2->isAddrForce()) continue;
-	  if (!vn2->isWritten()) continue;
-	  PcodeOp *indop = vn2->getDef();
-	  if (indop->code() != CPUI_INDIRECT) continue;
-	  // The vn2 INDIRECT must be linked to the read op
-	  if (op != PcodeOp::getOpFromConst(indop->getIn(1)->getAddr())) continue;
-	  if (vn->copyShadow(indop->getIn(0))) continue; // If INDIRECT input shadows vn, don't consider as intersection
-	}
-	insertop = true;
-	break;			// No need to continue iterating through varnodes in block
-      }
-      if (insertop) break;	// No need to continue iterating through blocks
-    }
-    if (insertop)
-      markedop.push_back(op);
-  }
-  snipReads(vn,markedop);
+	snipReads(vn,markedop);
 }
 
 /// \brief Make sure all Varnodes with the same storage address and size can be merged
@@ -495,23 +495,23 @@ void Merge::eliminateIntersect(Varnode *vn,const vector<BlockVarnode> &blocksort
 void Merge::unifyAddress(VarnodeLocSet::const_iterator startiter,VarnodeLocSet::const_iterator enditer)
 
 {
-  VarnodeLocSet::const_iterator iter;
-  Varnode *vn;
-  vector<Varnode *> isectlist;
-  vector<BlockVarnode> blocksort;
+	VarnodeLocSet::const_iterator iter;
+	Varnode *vn;
+	vector<Varnode *> isectlist;
+	vector<BlockVarnode> blocksort;
 
-  for(iter=startiter;iter!=enditer;++iter) {
-    vn = *iter;
-    isectlist.push_back(vn);
-  }
-  blocksort.resize(isectlist.size());
-  for(int4 i=0;i<isectlist.size();++i)
-    blocksort[i].set(isectlist[i]);
-  stable_sort(blocksort.begin(),blocksort.end());
-				// BEWARE, its possible that eliminate_intersect
-				// will insert new varnodes in the original range
-  for(int4 i=0;i<isectlist.size();++i)
-    eliminateIntersect(isectlist[i],blocksort);
+	for(iter=startiter;iter!=enditer;++iter) {
+		vn = *iter;
+		isectlist.push_back(vn);
+	}
+	blocksort.resize(isectlist.size());
+	for(int4 i=0;i<isectlist.size();++i)
+		blocksort[i].set(isectlist[i]);
+	stable_sort(blocksort.begin(),blocksort.end());
+																// BEWARE, its possible that eliminate_intersect
+																// will insert new varnodes in the original range
+	for(int4 i=0;i<isectlist.size();++i)
+		eliminateIntersect(isectlist[i],blocksort);
 }
 
 /// \brief Force the merge of \e address \e tried Varnodes
@@ -523,24 +523,24 @@ void Merge::unifyAddress(VarnodeLocSet::const_iterator startiter,VarnodeLocSet::
 void Merge::mergeAddrTied(void)
 
 {
-  bool addrtied;
-  VarnodeLocSet::const_iterator startiter,enditer,iter;
-  for(startiter=data.beginLoc();startiter!=data.endLoc();) {
-    addrtied = false;
-    enditer = data.endLoc((*startiter)->getSize(),(*startiter)->getAddr(),Varnode::written);
-    for(iter=startiter;iter!=enditer;++iter) {
-      if ((*iter)->isAddrTied()) {
-	addrtied = true;
-	break;
-      }
-    }
-    if (addrtied) {
-      unifyAddress(startiter,enditer); // unify_address may stick varnodes in our range
-      enditer = data.endLoc((*startiter)->getSize(),(*startiter)->getAddr(),Varnode::written);
-      mergeRangeMust(startiter,enditer);
-    }
-    startiter = data.endLoc((*startiter)->getSize(),(*startiter)->getAddr(),0);
-  }
+	bool addrtied;
+	VarnodeLocSet::const_iterator startiter,enditer,iter;
+	for(startiter=data.beginLoc();startiter!=data.endLoc();) {
+		addrtied = false;
+		enditer = data.endLoc((*startiter)->getSize(),(*startiter)->getAddr(),Varnode::written);
+		for(iter=startiter;iter!=enditer;++iter) {
+			if ((*iter)->isAddrTied()) {
+				addrtied = true;
+				break;
+			}
+		}
+		if (addrtied) {
+			unifyAddress(startiter,enditer); // unify_address may stick varnodes in our range
+			enditer = data.endLoc((*startiter)->getSize(),(*startiter)->getAddr(),Varnode::written);
+			mergeRangeMust(startiter,enditer);
+		}
+		startiter = data.endLoc((*startiter)->getSize(),(*startiter)->getAddr(),0);
+	}
 }
 
 /// \brief Trim the output HighVariable of the given PcodeOp so that its Cover is tiny
@@ -552,24 +552,24 @@ void Merge::mergeAddrTied(void)
 void Merge::trimOpOutput(PcodeOp *op)
 
 {
-  PcodeOp *copyop;
-  Varnode *uniq,*vn;
-  PcodeOp *afterop;
-  
-  if (op->code() == CPUI_INDIRECT)
-    afterop = PcodeOp::getOpFromConst(op->getIn(1)->getAddr()); // Insert copyop AFTER source of indirect
-  else
-    afterop = op;
-  vn = op->getOut();
-  uniq = data.newUnique(vn->getSize(),vn->getType());
-  copyop = data.newOp(1,op->getAddr());
-  data.opSetOutput(op,uniq);	// Output of op is now stubby uniq
-  data.opSetOpcode(copyop,CPUI_COPY);
-  data.opSetOutput(copyop,vn);	// Original output is bumped forward slightly
-  data.opSetInput(copyop,uniq,0);
-  data.opInsertAfter(copyop,afterop);
+	PcodeOp *copyop;
+	Varnode *uniq,*vn;
+	PcodeOp *afterop;
+	
+	if (op->code() == CPUI_INDIRECT)
+		afterop = PcodeOp::getOpFromConst(op->getIn(1)->getAddr()); // Insert copyop AFTER source of indirect
+	else
+		afterop = op;
+	vn = op->getOut();
+	uniq = data.newUnique(vn->getSize(),vn->getType());
+	copyop = data.newOp(1,op->getAddr());
+	data.opSetOutput(op,uniq);    // Output of op is now stubby uniq
+	data.opSetOpcode(copyop,CPUI_COPY);
+	data.opSetOutput(copyop,vn);  // Original output is bumped forward slightly
+	data.opSetInput(copyop,uniq,0);
+	data.opInsertAfter(copyop,afterop);
 }
-  
+	
 /// \brief Trim the input HighVariable of the given PcodeOp so that its Cover is tiny
 ///
 /// The given PcodeOp is assumed to force merging so that input and output Covers shouldn't
@@ -581,23 +581,23 @@ void Merge::trimOpOutput(PcodeOp *op)
 void Merge::trimOpInput(PcodeOp *op,int4 slot)
 
 {
-  PcodeOp *copyop;
-  Varnode *vn;
-  Address pc;
-  
-  if (op->code() == CPUI_MULTIEQUAL) {
-    BlockBasic *bb = (BlockBasic *)op->getParent()->getIn(slot);
-    pc = bb->getStop();
-  }
-  else
-    pc = op->getAddr();
-  vn = op->getIn(slot);
-  copyop = allocateCopyTrim(vn, vn->getType(), pc);
-  data.opSetInput(op,copyop->getOut(),slot);
-  if (op->code() == CPUI_MULTIEQUAL)
-    data.opInsertEnd(copyop,(BlockBasic *)op->getParent()->getIn(slot));
-  else
-    data.opInsertBefore(copyop,op);
+	PcodeOp *copyop;
+	Varnode *vn;
+	Address pc;
+	
+	if (op->code() == CPUI_MULTIEQUAL) {
+		BlockBasic *bb = (BlockBasic *)op->getParent()->getIn(slot);
+		pc = bb->getStop();
+	}
+	else
+		pc = op->getAddr();
+	vn = op->getIn(slot);
+	copyop = allocateCopyTrim(vn, vn->getType(), pc);
+	data.opSetInput(op,copyop->getOut(),slot);
+	if (op->code() == CPUI_MULTIEQUAL)
+		data.opInsertEnd(copyop,(BlockBasic *)op->getParent()->getIn(slot));
+	else
+		data.opInsertBefore(copyop,op);
 }
 
 /// \brief Force the merge of all input and output Varnodes for the given PcodeOp
@@ -608,56 +608,56 @@ void Merge::trimOpInput(PcodeOp *op,int4 slot)
 void Merge::mergeOp(PcodeOp *op)
 
 {
-  vector<HighVariable *> testlist;
-  HighVariable *high_out;
-  int4 i,nexttrim,max;
+	vector<HighVariable *> testlist;
+	HighVariable *high_out;
+	int4 i,nexttrim,max;
 
-  max = (op->code() == CPUI_INDIRECT) ? 1 : op->numInput();
-  high_out = op->getOut()->getHigh();
-				// First try to deal with non-cover related merge
-				// restrictions
-  for(i=0;i<max;++i) {
-    HighVariable *high_in = op->getIn(i)->getHigh();
-    if (!mergeTestRequired(high_out,high_in)) {
-      trimOpInput(op,i);
-      continue;
-    }
-    for(int4 j=0;j<i;++j)
-      if (!mergeTestRequired(op->getIn(j)->getHigh(),high_in)) {
-	trimOpInput(op,i);
-	break;
-      }
-  }
-				// Now test if a merge violates cover restrictions
-  mergeTest(high_out,testlist);
-  for(i=0;i<max;++i)
-    if (!mergeTest(op->getIn(i)->getHigh(),testlist)) break;
+	max = (op->code() == CPUI_INDIRECT) ? 1 : op->numInput();
+	high_out = op->getOut()->getHigh();
+																// First try to deal with non-cover related merge
+																// restrictions
+	for(i=0;i<max;++i) {
+		HighVariable *high_in = op->getIn(i)->getHigh();
+		if (!mergeTestRequired(high_out,high_in)) {
+			trimOpInput(op,i);
+			continue;
+		}
+		for(int4 j=0;j<i;++j)
+			if (!mergeTestRequired(op->getIn(j)->getHigh(),high_in)) {
+				trimOpInput(op,i);
+				break;
+			}
+	}
+																// Now test if a merge violates cover restrictions
+	mergeTest(high_out,testlist);
+	for(i=0;i<max;++i)
+		if (!mergeTest(op->getIn(i)->getHigh(),testlist)) break;
 
-  if (i != max) {		// If there are cover restrictions
-    nexttrim = 0;
-    while(nexttrim < max) {
-      trimOpInput(op,nexttrim); // Trim one of the branches
-      testlist.clear();
-				// Try the merge restriction test again
-      mergeTest(high_out,testlist);
-      for(i=0;i<max;++i)
-	if (!mergeTest(op->getIn(i)->getHigh(),testlist)) break;
-      if (i==max) break; // We successfully test merged everything
-      nexttrim += 1;
-    }
-    if (nexttrim == max)	// One last trim we can try
-      trimOpOutput(op);
-  }
+	if (i != max) {               // If there are cover restrictions
+		nexttrim = 0;
+		while(nexttrim < max) {
+			trimOpInput(op,nexttrim); // Trim one of the branches
+			testlist.clear();
+																// Try the merge restriction test again
+			mergeTest(high_out,testlist);
+			for(i=0;i<max;++i)
+				if (!mergeTest(op->getIn(i)->getHigh(),testlist)) break;
+			if (i==max) break; // We successfully test merged everything
+			nexttrim += 1;
+		}
+		if (nexttrim == max)        // One last trim we can try
+			trimOpOutput(op);
+	}
 
-  for(i=0;i<max;++i) {		// Try to merge everything for real now
-    if (!mergeTestRequired(op->getOut()->getHigh(),op->getIn(i)->getHigh()))
-      throw LowlevelError("Non-cover related merge restriction violated, despite trims");
-    if (!merge(op->getOut()->getHigh(),op->getIn(i)->getHigh(),false)) {
-      ostringstream errstr;
-      errstr << "Unable to force merge of op at " << op->getSeqNum();
-      throw LowlevelError(errstr.str());
-    }
-  }
+	for(i=0;i<max;++i) {          // Try to merge everything for real now
+		if (!mergeTestRequired(op->getOut()->getHigh(),op->getIn(i)->getHigh()))
+			throw LowlevelError("Non-cover related merge restriction violated, despite trims");
+		if (!merge(op->getOut()->getHigh(),op->getIn(i)->getHigh(),false)) {
+			ostringstream errstr;
+			errstr << "Unable to force merge of op at " << op->getSeqNum();
+			throw LowlevelError(errstr.str());
+		}
+	}
 }
 
 /// \brief Collect all instances of the given HighVariable whose Cover intersects a p-code op
@@ -670,12 +670,12 @@ void Merge::mergeOp(PcodeOp *op)
 void Merge::collectCovering(vector<Varnode *> &vlist,HighVariable *high,PcodeOp *op)
 
 {
-  int4 blk = op->getParent()->getIndex();
-  for(int4 i=0;i<high->numInstances();++i) {
-    Varnode *vn = high->getInstance(i);
-    if (vn->getCover()->getCoverBlock(blk).contain(op))
-      vlist.push_back(vn);
-  }
+	int4 blk = op->getParent()->getIndex();
+	for(int4 i=0;i<high->numInstances();++i) {
+		Varnode *vn = high->getInstance(i);
+		if (vn->getCover()->getCoverBlock(blk).contain(op))
+			vlist.push_back(vn);
+	}
 }
 
 /// \brief Check for for p-code op intersections that are correctable
@@ -688,31 +688,31 @@ void Merge::collectCovering(vector<Varnode *> &vlist,HighVariable *high,PcodeOp 
 /// \param op is the specific intersecting PcodeOp
 /// \return \b false if any instance in the list intersects the PcodeOp on the interior
 bool Merge::collectCorrectable(const vector<Varnode *> &vlist,list<PcodeOp *> &oplist,
-			       vector<int4> &slotlist,PcodeOp *op)
+															 vector<int4> &slotlist,PcodeOp *op)
 {
-  int4 blk = op->getParent()->getIndex();
-  vector<Varnode *>::const_iterator viter;
-  list<PcodeOp *>::const_iterator oiter;
-  Varnode *vn;
-  PcodeOp *edgeop;
-  int4 slot,bound;
-  uintm opuindex = CoverBlock::getUIndex(op);
+	int4 blk = op->getParent()->getIndex();
+	vector<Varnode *>::const_iterator viter;
+	list<PcodeOp *>::const_iterator oiter;
+	Varnode *vn;
+	PcodeOp *edgeop;
+	int4 slot,bound;
+	uintm opuindex = CoverBlock::getUIndex(op);
 
-  for(viter=vlist.begin();viter!=vlist.end();++viter) {
-    vn = *viter;
-    bound = vn->getCover()->getCoverBlock(blk).boundary(op);
-    if (bound == 0) return false;
-    if (bound == 2) continue;	// Not defined before op (intersects with write op)
-    for(oiter=vn->beginDescend();oiter!=vn->endDescend();++oiter) {
-      edgeop = *oiter;
-      if (CoverBlock::getUIndex(edgeop) == opuindex) { // Correctable
-	oplist.push_back(edgeop);
-	slot = edgeop->getSlot(vn);
-	slotlist.push_back(slot);
-      }
-    }
-  }
-  return true;
+	for(viter=vlist.begin();viter!=vlist.end();++viter) {
+		vn = *viter;
+		bound = vn->getCover()->getCoverBlock(blk).boundary(op);
+		if (bound == 0) return false;
+		if (bound == 2) continue;   // Not defined before op (intersects with write op)
+		for(oiter=vn->beginDescend();oiter!=vn->endDescend();++oiter) {
+			edgeop = *oiter;
+			if (CoverBlock::getUIndex(edgeop) == opuindex) { // Correctable
+				oplist.push_back(edgeop);
+				slot = edgeop->getSlot(vn);
+				slotlist.push_back(slot);
+			}
+		}
+	}
+	return true;
 }
 
 /// \brief Snip instances of the input of an INDIRECT op that interfere with its output
@@ -725,38 +725,38 @@ bool Merge::collectCorrectable(const vector<Varnode *> &vlist,list<PcodeOp *> &o
 void Merge::snipIndirect(PcodeOp *indop)
 
 {
-  PcodeOp *op = PcodeOp::getOpFromConst(indop->getIn(1)->getAddr()); // Indirect effect op
-  vector<Varnode *> problemvn;
-  list<PcodeOp *> correctable;
-  vector<int4> correctslot;
-				// Collect instances of output->high that are defined
-				// before (and right up to) op. These need to be snipped.
-  collectCovering(problemvn,indop->getOut()->getHigh(),op);
-  if (problemvn.empty()) return;
-				// Collect vn reads where the snip needs to be.
-				// If cover properly contains op, report an error.
-				// This should not be possible as that vn would have
-				// to intersect with indop->output, which it is merged with.
-  if (!collectCorrectable(problemvn,correctable,correctslot,op))
-    throw LowlevelError("Unable to force indirect merge");
+	PcodeOp *op = PcodeOp::getOpFromConst(indop->getIn(1)->getAddr()); // Indirect effect op
+	vector<Varnode *> problemvn;
+	list<PcodeOp *> correctable;
+	vector<int4> correctslot;
+																// Collect instances of output->high that are defined
+																// before (and right up to) op. These need to be snipped.
+	collectCovering(problemvn,indop->getOut()->getHigh(),op);
+	if (problemvn.empty()) return;
+																// Collect vn reads where the snip needs to be.
+																// If cover properly contains op, report an error.
+																// This should not be possible as that vn would have
+																// to intersect with indop->output, which it is merged with.
+	if (!collectCorrectable(problemvn,correctable,correctslot,op))
+		throw LowlevelError("Unable to force indirect merge");
 
-  if (correctable.empty()) return;
-  Varnode *refvn = correctable.front()->getIn(correctslot[0]);
-  PcodeOp *snipop,*insertop;
+	if (correctable.empty()) return;
+	Varnode *refvn = correctable.front()->getIn(correctslot[0]);
+	PcodeOp *snipop,*insertop;
 
-				// NOTE: the covers for any input to op which is
-				// an instance of the output high must
-				// all intersect so the varnodes must all be
-				// traceable via COPY to the same root
-  snipop = allocateCopyTrim(refvn, refvn->getType(), op->getAddr());
-  data.opInsertBefore(snipop,op);
-  list<PcodeOp *>::iterator oiter;
-  int4 i,slot;
-  for(oiter=correctable.begin(),i=0;i<correctslot.size();++oiter,++i) {
-    insertop = *oiter;
-    slot = correctslot[i];
-    data.opSetInput(insertop,snipop->getOut(),slot);
-  }
+																// NOTE: the covers for any input to op which is
+																// an instance of the output high must
+																// all intersect so the varnodes must all be
+																// traceable via COPY to the same root
+	snipop = allocateCopyTrim(refvn, refvn->getType(), op->getAddr());
+	data.opInsertBefore(snipop,op);
+	list<PcodeOp *>::iterator oiter;
+	int4 i,slot;
+	for(oiter=correctable.begin(),i=0;i<correctslot.size();++oiter,++i) {
+		insertop = *oiter;
+		slot = correctslot[i];
+		data.opSetInput(insertop,snipop->getOut(),slot);
+	}
 }
 
 /// \brief Force the merge of all input and output Varnodes to a given INDIRECT op
@@ -767,29 +767,29 @@ void Merge::snipIndirect(PcodeOp *indop)
 void Merge::mergeIndirect(PcodeOp *indop)
 
 {
-  Varnode *outvn = indop->getOut();
-  Varnode *invn0 = indop->getIn(0);
-  if (!outvn->isAddrForce()) {	// If the output is NOT address forced
-    mergeOp(indop);		// We can merge in the same way as a MULTIEQUAL
-    return;
-  }
+	Varnode *outvn = indop->getOut();
+	Varnode *invn0 = indop->getIn(0);
+	if (!outvn->isAddrForce()) {  // If the output is NOT address forced
+		mergeOp(indop);             // We can merge in the same way as a MULTIEQUAL
+		return;
+	}
 
-  if (mergeTestRequired(outvn->getHigh(),invn0->getHigh()))
-    if (merge(invn0->getHigh(),outvn->getHigh(),false)) return;
-  snipIndirect(indop);		// If we cannot merge, the only thing that can go
-				// wrong with an input trim, is if the output of
-				// indop is involved in the input to the op causing
-				// the indirect effect. So fix this
+	if (mergeTestRequired(outvn->getHigh(),invn0->getHigh()))
+		if (merge(invn0->getHigh(),outvn->getHigh(),false)) return;
+	snipIndirect(indop);          // If we cannot merge, the only thing that can go
+																// wrong with an input trim, is if the output of
+																// indop is involved in the input to the op causing
+																// the indirect effect. So fix this
 
-  PcodeOp *newop;
+	PcodeOp *newop;
 
-  newop = allocateCopyTrim(invn0, outvn->getType(), indop->getAddr());
-  data.opSetInput(indop,newop->getOut(),0);
-  data.opInsertBefore(newop,indop);
-  if (!mergeTestRequired(outvn->getHigh(),indop->getIn(0)->getHigh()) ||
-      (!merge(indop->getIn(0)->getHigh(),outvn->getHigh(),false))) // Try merge again
-    //  if (!merge(indop->Input(0)->High(),outvn->High()))
-    throw LowlevelError("Unable to merge address forced indirect");
+	newop = allocateCopyTrim(invn0, outvn->getType(), indop->getAddr());
+	data.opSetInput(indop,newop->getOut(),0);
+	data.opInsertBefore(newop,indop);
+	if (!mergeTestRequired(outvn->getHigh(),indop->getIn(0)->getHigh()) ||
+			(!merge(indop->getIn(0)->getHigh(),outvn->getHigh(),false))) // Try merge again
+		//  if (!merge(indop->Input(0)->High(),outvn->High()))
+		throw LowlevelError("Unable to merge address forced indirect");
 }
 
 /// \brief Force the merge of input and output Varnodes to MULTIEQUAL and INDIRECT ops
@@ -800,16 +800,16 @@ void Merge::mergeIndirect(PcodeOp *indop)
 void Merge::mergeMarker(void)
 
 {
-  PcodeOp *op;
-  list<PcodeOp *>::const_iterator iter;
-  for(iter=data.beginOpAlive();iter!=data.endOpAlive();++iter) {
-    op = *iter;
-    if ((!op->isMarker())||op->isIndirectCreation()) continue;
-    if (op->code() == CPUI_INDIRECT)
-      mergeIndirect(op);
-    else
-      mergeOp(op);
-  }
+	PcodeOp *op;
+	list<PcodeOp *>::const_iterator iter;
+	for(iter=data.beginOpAlive();iter!=data.endOpAlive();++iter) {
+		op = *iter;
+		if ((!op->isMarker())||op->isIndirectCreation()) continue;
+		if (op->code() == CPUI_INDIRECT)
+			mergeIndirect(op);
+		else
+			mergeOp(op);
+	}
 }
 
 /// \brief Merge together Varnodes mapped to SymbolEntrys from the same Symbol
@@ -819,58 +819,58 @@ void Merge::mergeMarker(void)
 void Merge::mergeMultiEntry(void)
 
 {
-  SymbolNameTree::const_iterator iter = data.getScopeLocal()->beginMultiEntry();
-  SymbolNameTree::const_iterator enditer = data.getScopeLocal()->endMultiEntry();
-  for(;iter!=enditer;++iter) {
-    vector<Varnode *> mergeList;
-    Symbol *symbol = *iter;
-    int4 numEntries = symbol->numEntries();
-    int4 mergeCount = 0;
-    int4 skipCount = 0;
-    int4 conflictCount = 0;
-    for(int4 i=0;i<numEntries;++i) {
-      int4 prevSize = mergeList.size();
-      SymbolEntry *entry = symbol->getMapEntry(i);
-      if (entry->getSize() != symbol->getType()->getSize())
-	continue;
-      data.findLinkedVarnodes(entry, mergeList);
-      if (mergeList.size() == prevSize)
-	skipCount += 1;		// Did not discover any Varnodes corresponding to a particular SymbolEntry
-    }
-    if (mergeList.empty()) continue;
-    HighVariable *high = mergeList[0]->getHigh();
-    updateHigh(high);
-    for(int4 i=0;i<mergeList.size();++i) {
-      HighVariable *newHigh = mergeList[i]->getHigh();
-      if (newHigh == high) continue;		// Varnodes already merged
-      updateHigh(newHigh);
-      if (!mergeTestRequired(high, newHigh)) {
-	symbol->setMergeProblems();
-	newHigh->setUnmerged();
-	conflictCount += 1;
-	continue;
-      }
-      if (!merge(high,newHigh,false)) {		// Attempt the merge
-	symbol->setMergeProblems();
-	newHigh->setUnmerged();
-	conflictCount += 1;
-	continue;
-      }
-      mergeCount += 1;
-    }
-    if (skipCount != 0 || conflictCount !=0) {
-      ostringstream s;
-      s << "Unable to";
-      if (mergeCount != 0)
-	s << " fully";
-      s << " merge symbol: " << symbol->getName();
-      if (skipCount > 0)
-	s << " -- Some instance varnodes not found.";
-      if (conflictCount > 0)
-	s << " -- Some merges are forbidden";
-      data.warningHeader(s.str());
-    }
-  }
+	SymbolNameTree::const_iterator iter = data.getScopeLocal()->beginMultiEntry();
+	SymbolNameTree::const_iterator enditer = data.getScopeLocal()->endMultiEntry();
+	for(;iter!=enditer;++iter) {
+		vector<Varnode *> mergeList;
+		Symbol *symbol = *iter;
+		int4 numEntries = symbol->numEntries();
+		int4 mergeCount = 0;
+		int4 skipCount = 0;
+		int4 conflictCount = 0;
+		for(int4 i=0;i<numEntries;++i) {
+			int4 prevSize = mergeList.size();
+			SymbolEntry *entry = symbol->getMapEntry(i);
+			if (entry->getSize() != symbol->getType()->getSize())
+				continue;
+			data.findLinkedVarnodes(entry, mergeList);
+			if (mergeList.size() == prevSize)
+				skipCount += 1;         // Did not discover any Varnodes corresponding to a particular SymbolEntry
+		}
+		if (mergeList.empty()) continue;
+		HighVariable *high = mergeList[0]->getHigh();
+		updateHigh(high);
+		for(int4 i=0;i<mergeList.size();++i) {
+			HighVariable *newHigh = mergeList[i]->getHigh();
+			if (newHigh == high) continue;            // Varnodes already merged
+			updateHigh(newHigh);
+			if (!mergeTestRequired(high, newHigh)) {
+				symbol->setMergeProblems();
+				newHigh->setUnmerged();
+				conflictCount += 1;
+				continue;
+			}
+			if (!merge(high,newHigh,false)) {         // Attempt the merge
+				symbol->setMergeProblems();
+				newHigh->setUnmerged();
+				conflictCount += 1;
+				continue;
+			}
+			mergeCount += 1;
+		}
+		if (skipCount != 0 || conflictCount !=0) {
+			ostringstream s;
+			s << "Unable to";
+			if (mergeCount != 0)
+				s << " fully";
+			s << " merge symbol: " << symbol->getName();
+			if (skipCount > 0)
+				s << " -- Some instance varnodes not found.";
+			if (conflictCount > 0)
+				s << " -- Some merges are forbidden";
+			data.warningHeader(s.str());
+		}
+	}
 }
 
 /// \brief Speculatively merge Varnodes that are input/output to the same p-code op
@@ -881,33 +881,33 @@ void Merge::mergeMultiEntry(void)
 void Merge::mergeAdjacent(void)
 
 {
-  list<PcodeOp *>::const_iterator oiter;
-  PcodeOp *op;
-  int4 i;
-  HighVariable *high_in,*high_out;
-  Varnode *vn1,*vn2;
-  const Datatype *ct;
+	list<PcodeOp *>::const_iterator oiter;
+	PcodeOp *op;
+	int4 i;
+	HighVariable *high_in,*high_out;
+	Varnode *vn1,*vn2;
+	const Datatype *ct;
 
-  for(oiter=data.beginOpAlive();oiter!=data.endOpAlive();++oiter) {
-    op = *oiter;
-    if (op->isCall()) continue;
-    vn1 = op->getOut();
-    if (!mergeTestBasic(vn1)) continue;
-    high_out = vn1->getHigh();
-    ct = op->outputTypeLocal();
-    for(i=0;i<op->numInput();++i) {
-      if (ct != op->inputTypeLocal(i)) continue; // Only merge if types should be the same
-      vn2 = op->getIn(i);
-      if (!mergeTestBasic(vn2)) continue;
-      if (vn1->getSize() != vn2->getSize()) continue;
-      if ((vn2->getDef()==(PcodeOp *)0)&&(!vn2->isInput())) continue;
-      high_in = vn2->getHigh();
-      if (!mergeTestAdjacent(high_out,high_in)) continue;
+	for(oiter=data.beginOpAlive();oiter!=data.endOpAlive();++oiter) {
+		op = *oiter;
+		if (op->isCall()) continue;
+		vn1 = op->getOut();
+		if (!mergeTestBasic(vn1)) continue;
+		high_out = vn1->getHigh();
+		ct = op->outputTypeLocal();
+		for(i=0;i<op->numInput();++i) {
+			if (ct != op->inputTypeLocal(i)) continue; // Only merge if types should be the same
+			vn2 = op->getIn(i);
+			if (!mergeTestBasic(vn2)) continue;
+			if (vn1->getSize() != vn2->getSize()) continue;
+			if ((vn2->getDef()==(PcodeOp *)0)&&(!vn2->isInput())) continue;
+			high_in = vn2->getHigh();
+			if (!mergeTestAdjacent(high_out,high_in)) continue;
 
-      if (!intersection(high_in,high_out)) // If no interval intersection
-	merge(high_out,high_in,true);
-    }
-  }
+			if (!intersection(high_in,high_out)) // If no interval intersection
+				merge(high_out,high_in,true);
+		}
+	}
 }
 
 /// \brief Find instance Varnodes that copied to from outside the given HighVariable
@@ -919,18 +919,18 @@ void Merge::mergeAdjacent(void)
 void Merge::findSingleCopy(HighVariable *high,vector<Varnode *> &singlelist)
 
 {
-  int4 i;
-  Varnode *vn;
-  PcodeOp *op;
+	int4 i;
+	Varnode *vn;
+	PcodeOp *op;
 
-  for(i=0;i<high->numInstances();++i) {
-    vn = high->getInstance(i);
-    if (!vn->isWritten()) continue;
-    op = vn->getDef();
-    if (op->code() != CPUI_COPY) continue; // vn must be defineed by copy
-    if (op->getIn(0)->getHigh() == high) continue;	// From something NOT in same high
-    singlelist.push_back(vn);
-  }
+	for(i=0;i<high->numInstances();++i) {
+		vn = high->getInstance(i);
+		if (!vn->isWritten()) continue;
+		op = vn->getDef();
+		if (op->code() != CPUI_COPY) continue; // vn must be defineed by copy
+		if (op->getIn(0)->getHigh() == high) continue;      // From something NOT in same high
+		singlelist.push_back(vn);
+	}
 }
 
 /// \brief Compare COPY ops first by Varnode input, then by block containing the op
@@ -943,15 +943,15 @@ void Merge::findSingleCopy(HighVariable *high,vector<Varnode *> &singlelist)
 bool Merge::compareCopyByInVarnode(PcodeOp *op1,PcodeOp *op2)
 
 {
-  Varnode *inVn1 = op1->getIn(0);
-  Varnode *inVn2 = op2->getIn(0);
-  if (inVn1 != inVn2)		// First compare by Varnode inputs
-    return (inVn1->getCreateIndex() < inVn2->getCreateIndex());
-  int4 index1 = op1->getParent()->getIndex();
-  int4 index2 = op2->getParent()->getIndex();
-  if (index1 != index2)
-    return (index1 < index2);
-  return (op1->getSeqNum().getOrder() < op2->getSeqNum().getOrder());
+	Varnode *inVn1 = op1->getIn(0);
+	Varnode *inVn2 = op2->getIn(0);
+	if (inVn1 != inVn2)           // First compare by Varnode inputs
+		return (inVn1->getCreateIndex() < inVn2->getCreateIndex());
+	int4 index1 = op1->getParent()->getIndex();
+	int4 index2 = op2->getParent()->getIndex();
+	if (index1 != index2)
+		return (index1 < index2);
+	return (op1->getSeqNum().getOrder() < op2->getSeqNum().getOrder());
 }
 
 /// \brief Hide \e shadow Varnodes related to the given HighVariable by consolidating COPY chains
@@ -968,33 +968,33 @@ bool Merge::compareCopyByInVarnode(PcodeOp *op1,PcodeOp *op2)
 bool Merge::hideShadows(HighVariable *high)
 
 {
-  vector<Varnode *> singlelist;
-  Varnode *vn1,*vn2;
-  int4 i,j;
-  bool res = false;
-  
-  findSingleCopy(high,singlelist); // Find all things copied into this high
-  if (singlelist.size() <= 1) return false;
-  for(i=0;i<singlelist.size()-1;++i) {
-    vn1 = singlelist[i];
-    if (vn1 == (Varnode *)0) continue;
-    for(j=i+1;j<singlelist.size();++j) {
-      vn2 = singlelist[j];
-      if (vn2 == (Varnode *)0) continue;
-      if (!vn1->copyShadow(vn2)) continue;
-      if (vn2->getCover()->containVarnodeDef(vn1)==1) {
-	data.opSetInput(vn1->getDef(),vn2,0);
-	res = true;
-	break;
-      }
-      else if (vn1->getCover()->containVarnodeDef(vn2)==1) {
-	data.opSetInput(vn2->getDef(),vn1,0);
-	singlelist[j] = (Varnode *)0;
-	res = true;
-      }
-    }
-  }
-  return res;
+	vector<Varnode *> singlelist;
+	Varnode *vn1,*vn2;
+	int4 i,j;
+	bool res = false;
+	
+	findSingleCopy(high,singlelist); // Find all things copied into this high
+	if (singlelist.size() <= 1) return false;
+	for(i=0;i<singlelist.size()-1;++i) {
+		vn1 = singlelist[i];
+		if (vn1 == (Varnode *)0) continue;
+		for(j=i+1;j<singlelist.size();++j) {
+			vn2 = singlelist[j];
+			if (vn2 == (Varnode *)0) continue;
+			if (!vn1->copyShadow(vn2)) continue;
+			if (vn2->getCover()->containVarnodeDef(vn1)==1) {
+				data.opSetInput(vn1->getDef(),vn2,0);
+				res = true;
+				break;
+			}
+			else if (vn1->getCover()->containVarnodeDef(vn2)==1) {
+				data.opSetInput(vn2->getDef(),vn1,0);
+				singlelist[j] = (Varnode *)0;
+				res = true;
+			}
+		}
+	}
+	return res;
 }
 
 /// \brief Check if the given PcodeOp COPYs are redundant
@@ -1010,27 +1010,27 @@ bool Merge::hideShadows(HighVariable *high)
 bool Merge::checkCopyPair(HighVariable *high,PcodeOp *domOp,PcodeOp *subOp)
 
 {
-  FlowBlock *domBlock = domOp->getParent();
-  FlowBlock *subBlock = subOp->getParent();
-  if (!domBlock->dominates(subBlock))
-    return false;
-  Cover range;
-  range.addDefPoint(domOp->getOut());
-  range.addRefPoint(subOp,subOp->getIn(0));
-  Varnode *inVn = domOp->getIn(0);
-  // Look for high Varnodes in the range
-  for(int4 i=0;i<high->numInstances();++i) {
-    Varnode *vn = high->getInstance(i);
-    if (!vn->isWritten()) continue;
-    PcodeOp *op = vn->getDef();
-    if (op->code() == CPUI_COPY) {		// If the write is not a COPY
-      if (op->getIn(0) == inVn) continue;	// from the same Varnode as domOp and subOp
-    }
-    if (range.contain(op, 1)) {			// and if write is contained in range between domOp and subOp
-      return false;				// it is intervening and subOp is not redundant
-    }
-  }
-  return true;
+	FlowBlock *domBlock = domOp->getParent();
+	FlowBlock *subBlock = subOp->getParent();
+	if (!domBlock->dominates(subBlock))
+		return false;
+	Cover range;
+	range.addDefPoint(domOp->getOut());
+	range.addRefPoint(subOp,subOp->getIn(0));
+	Varnode *inVn = domOp->getIn(0);
+	// Look for high Varnodes in the range
+	for(int4 i=0;i<high->numInstances();++i) {
+		Varnode *vn = high->getInstance(i);
+		if (!vn->isWritten()) continue;
+		PcodeOp *op = vn->getDef();
+		if (op->code() == CPUI_COPY) {              // If the write is not a COPY
+			if (op->getIn(0) == inVn) continue;       // from the same Varnode as domOp and subOp
+		}
+		if (range.contain(op, 1)) {                 // and if write is contained in range between domOp and subOp
+			return false;                             // it is intervening and subOp is not redundant
+		}
+	}
+	return true;
 }
 
 /// \brief Try to replace a set of COPYs from the same Varnode with a single dominant COPY
@@ -1049,82 +1049,82 @@ bool Merge::checkCopyPair(HighVariable *high,PcodeOp *domOp,PcodeOp *subOp)
 void Merge::buildDominantCopy(HighVariable *high,vector<PcodeOp *> &copy,int4 pos,int4 size)
 
 {
-  vector<FlowBlock *> blockSet;
-  for(int4 i=0;i<size;++i)
-    blockSet.push_back(copy[pos+i]->getParent());
-  BlockBasic *domBl = (BlockBasic *)FlowBlock::findCommonBlock(blockSet);
-  Varnode *rootVn = copy[pos]->getIn(0);
-  bool domCopyIsNew;
-  PcodeOp *domCopy;
-  Varnode *domVn;
-  if (domBl == copy[pos]->getParent()) {
-    domCopyIsNew = false;
-    domCopy = copy[pos];
-    domVn = domCopy->getOut();
-  }
-  else {
-    domCopyIsNew = true;
-    domCopy = data.newOp(1,domBl->getStop());
-    data.opSetOpcode(domCopy, CPUI_COPY);
-    domVn = data.newUnique(rootVn->getSize(), rootVn->getType());
-    data.opSetOutput(domCopy,domVn);
-    data.opSetInput(domCopy,rootVn,0);
-    data.opInsertEnd(domCopy, domBl);
-  }
-  // Cover created by removing all the COPYs from rootVn
-  Cover bCover;
-  for(int4 i=0;i<high->numInstances();++i) {
-    Varnode *vn = high->getInstance(i);
-    if (vn->isWritten()) {
-      PcodeOp *op = vn->getDef();
-      if (op->code() == CPUI_COPY) {
-	if (op->getIn(0)->copyShadow(rootVn)) continue;
-      }
-    }
-    bCover.merge(*vn->getCover());
-  }
+	vector<FlowBlock *> blockSet;
+	for(int4 i=0;i<size;++i)
+		blockSet.push_back(copy[pos+i]->getParent());
+	BlockBasic *domBl = (BlockBasic *)FlowBlock::findCommonBlock(blockSet);
+	Varnode *rootVn = copy[pos]->getIn(0);
+	bool domCopyIsNew;
+	PcodeOp *domCopy;
+	Varnode *domVn;
+	if (domBl == copy[pos]->getParent()) {
+		domCopyIsNew = false;
+		domCopy = copy[pos];
+		domVn = domCopy->getOut();
+	}
+	else {
+		domCopyIsNew = true;
+		domCopy = data.newOp(1,domBl->getStop());
+		data.opSetOpcode(domCopy, CPUI_COPY);
+		domVn = data.newUnique(rootVn->getSize(), rootVn->getType());
+		data.opSetOutput(domCopy,domVn);
+		data.opSetInput(domCopy,rootVn,0);
+		data.opInsertEnd(domCopy, domBl);
+	}
+	// Cover created by removing all the COPYs from rootVn
+	Cover bCover;
+	for(int4 i=0;i<high->numInstances();++i) {
+		Varnode *vn = high->getInstance(i);
+		if (vn->isWritten()) {
+			PcodeOp *op = vn->getDef();
+			if (op->code() == CPUI_COPY) {
+				if (op->getIn(0)->copyShadow(rootVn)) continue;
+			}
+		}
+		bCover.merge(*vn->getCover());
+	}
 
-  int4 count = size;
-  for(int4 i=0;i<size;++i) {
-    PcodeOp *op = copy[pos+i];
-    if (op == domCopy) continue;	// No intersections from domVn already proven
-    Varnode *outVn = op->getOut();
-    list<PcodeOp *>::const_iterator iter;
-    Cover aCover;
-    aCover.addDefPoint(domVn);
-    for(iter=outVn->beginDescend();iter!=outVn->endDescend();++iter)
-      aCover.addRefPoint(*iter, outVn);
-    if (bCover.intersect(aCover)>1) {
-      count -= 1;
-      op->setMark();
-    }
-  }
+	int4 count = size;
+	for(int4 i=0;i<size;++i) {
+		PcodeOp *op = copy[pos+i];
+		if (op == domCopy) continue;        // No intersections from domVn already proven
+		Varnode *outVn = op->getOut();
+		list<PcodeOp *>::const_iterator iter;
+		Cover aCover;
+		aCover.addDefPoint(domVn);
+		for(iter=outVn->beginDescend();iter!=outVn->endDescend();++iter)
+			aCover.addRefPoint(*iter, outVn);
+		if (bCover.intersect(aCover)>1) {
+			count -= 1;
+			op->setMark();
+		}
+	}
 
-  if (count <= 1) {	// Don't bother if we only replace one COPY with another
-    for (int4 i = 0; i < size; ++i)
-      copy[pos + i]->setMark();
-    count = 0;
-    if (domCopyIsNew) {
-      data.opDestroy(domCopy);
-    }
-  }
-  // Replace all non-intersecting COPYs with read of dominating Varnode
-  for(int4 i=0;i<size;++i) {
-    PcodeOp *op = copy[pos+i];
-    if (op->isMark())
-      op->clearMark();
-    else {
-      Varnode *outVn = op->getOut();
-      if (outVn != domVn) {
-	outVn->getHigh()->remove(outVn);
-	data.totalReplace(outVn, domVn);
-	data.opDestroy(op);
-      }
-    }
-  }
-  if (count > 0 && domCopyIsNew) {
-    high->merge(domVn->getHigh(),true);
-  }
+	if (count <= 1) {     // Don't bother if we only replace one COPY with another
+		for (int4 i = 0; i < size; ++i)
+			copy[pos + i]->setMark();
+		count = 0;
+		if (domCopyIsNew) {
+			data.opDestroy(domCopy);
+		}
+	}
+	// Replace all non-intersecting COPYs with read of dominating Varnode
+	for(int4 i=0;i<size;++i) {
+		PcodeOp *op = copy[pos+i];
+		if (op->isMark())
+			op->clearMark();
+		else {
+			Varnode *outVn = op->getOut();
+			if (outVn != domVn) {
+				outVn->getHigh()->remove(outVn);
+				data.totalReplace(outVn, domVn);
+				data.opDestroy(op);
+			}
+		}
+	}
+	if (count > 0 && domCopyIsNew) {
+		high->merge(domVn->getHigh(),true);
+	}
 }
 
 /// \brief Search for and mark redundant COPY ops into the given high as \e non-printing
@@ -1139,19 +1139,19 @@ void Merge::buildDominantCopy(HighVariable *high,vector<PcodeOp *> &copy,int4 po
 void Merge::markRedundantCopies(HighVariable *high,vector<PcodeOp *> &copy,int4 pos,int4 size)
 
 {
-  for (int4 i = size - 1; i > 0; --i) {
-    PcodeOp *subOp = copy[pos + i];
-    if (subOp->isDead()) continue;
-    for (int4 j = i - 1; j >= 0; --j) {
-      // Make sure earlier index provides dominant op
-      PcodeOp *domOp = copy[pos + j];
-      if (domOp->isDead()) continue;
-      if (checkCopyPair(high, domOp, subOp)) {
-	data.opMarkNonPrinting(subOp);
-	break;
-      }
-    }
-  }
+	for (int4 i = size - 1; i > 0; --i) {
+		PcodeOp *subOp = copy[pos + i];
+		if (subOp->isDead()) continue;
+		for (int4 j = i - 1; j >= 0; --j) {
+			// Make sure earlier index provides dominant op
+			PcodeOp *domOp = copy[pos + j];
+			if (domOp->isDead()) continue;
+			if (checkCopyPair(high, domOp, subOp)) {
+				data.opMarkNonPrinting(subOp);
+				break;
+			}
+		}
+	}
 }
 
 /// \brief Determine if given Varnode is shadowed by another Varnode in the same HighVariable
@@ -1161,17 +1161,17 @@ void Merge::markRedundantCopies(HighVariable *high,vector<PcodeOp *> &copy,int4 
 bool Merge::shadowedVarnode(const Varnode *vn)
 
 {
-  const Varnode *othervn;
-  const HighVariable *high = vn->getHigh();
-  int4 num,i;
+	const Varnode *othervn;
+	const HighVariable *high = vn->getHigh();
+	int4 num,i;
 
-  num = high->numInstances();
-  for(i=0;i<num;++i) {
-    othervn = high->getInstance(i);
-    if (othervn == vn) continue;
-    if (vn->getCover()->intersect(*othervn->getCover()) == 2) return true;
-  }
-  return false;
+	num = high->numInstances();
+	for(i=0;i<num;++i) {
+		othervn = high->getInstance(i);
+		if (othervn == vn) continue;
+		if (vn->getCover()->intersect(*othervn->getCover()) == 2) return true;
+	}
+	return false;
 }
 
 /// \brief  Find all the COPY ops into the given HighVariable
@@ -1185,17 +1185,17 @@ bool Merge::shadowedVarnode(const Varnode *vn)
 void Merge::findAllIntoCopies(HighVariable *high,vector<PcodeOp *> &copyIns,bool filterTemps)
 
 {
-  for(int4 i=0;i<high->numInstances();++i) {
-    Varnode *vn = high->getInstance(i);
-    if (!vn->isWritten()) continue;
-    PcodeOp *op = vn->getDef();
-    if (op->code() != CPUI_COPY) continue;
-    if (op->getIn(0)->getHigh() == high) continue;
-    if (filterTemps && op->getOut()->getSpace()->getType() != IPTR_INTERNAL) continue;
-    copyIns.push_back(op);
-  }
-  // Group COPYs based on the incoming Varnode then block order
-  sort(copyIns.begin(),copyIns.end(),compareCopyByInVarnode);
+	for(int4 i=0;i<high->numInstances();++i) {
+		Varnode *vn = high->getInstance(i);
+		if (!vn->isWritten()) continue;
+		PcodeOp *op = vn->getDef();
+		if (op->code() != CPUI_COPY) continue;
+		if (op->getIn(0)->getHigh() == high) continue;
+		if (filterTemps && op->getOut()->getSpace()->getType() != IPTR_INTERNAL) continue;
+		copyIns.push_back(op);
+	}
+	// Group COPYs based on the incoming Varnode then block order
+	sort(copyIns.begin(),copyIns.end(),compareCopyByInVarnode);
 }
 
 /// \brief Try to replace COPYs into the given HighVariable with a single dominant COPY
@@ -1206,24 +1206,24 @@ void Merge::findAllIntoCopies(HighVariable *high,vector<PcodeOp *> &copyIns,bool
 void Merge::processHighDominantCopy(HighVariable *high)
 
 {
-  vector<PcodeOp *> copyIns;
+	vector<PcodeOp *> copyIns;
 
-  findAllIntoCopies(high,copyIns,true);	// Get all COPYs into this with temporary output
-  if (copyIns.size() < 2) return;
-  int4 pos = 0;
-  while(pos < copyIns.size()) {
-    // Find a group of COPYs coming from the same Varnode
-    Varnode *inVn = copyIns[pos]->getIn(0);
-    int4 sz = 1;
-    while(pos + sz < copyIns.size()) {
-      Varnode *nextVn = copyIns[pos+sz]->getIn(0);
-      if (nextVn != inVn) break;
-      sz += 1;
-    }
-    if (sz > 1)		// If there is more than one COPY in a group
-      buildDominantCopy(high, copyIns, pos, sz);	// Try to construct a dominant COPY
-    pos += sz;
-  }
+	findAllIntoCopies(high,copyIns,true); // Get all COPYs into this with temporary output
+	if (copyIns.size() < 2) return;
+	int4 pos = 0;
+	while(pos < copyIns.size()) {
+		// Find a group of COPYs coming from the same Varnode
+		Varnode *inVn = copyIns[pos]->getIn(0);
+		int4 sz = 1;
+		while(pos + sz < copyIns.size()) {
+			Varnode *nextVn = copyIns[pos+sz]->getIn(0);
+			if (nextVn != inVn) break;
+			sz += 1;
+		}
+		if (sz > 1)         // If there is more than one COPY in a group
+			buildDominantCopy(high, copyIns, pos, sz);        // Try to construct a dominant COPY
+		pos += sz;
+	}
 }
 
 /// \brief Mark COPY ops into the given HighVariable that are redundant
@@ -1235,25 +1235,25 @@ void Merge::processHighDominantCopy(HighVariable *high)
 void Merge::processHighRedundantCopy(HighVariable *high)
 
 {
-  vector<PcodeOp *> copyIns;
+	vector<PcodeOp *> copyIns;
 
-  findAllIntoCopies(high,copyIns,false);
-  if (copyIns.size() < 2) return;
-  int4 pos = 0;
-  while(pos < copyIns.size()) {
-    // Find a group of COPYs coming from the same Varnode
-    Varnode *inVn = copyIns[pos]->getIn(0);
-    int4 sz = 1;
-    while(pos + sz < copyIns.size()) {
-      Varnode *nextVn = copyIns[pos+sz]->getIn(0);
-      if (nextVn != inVn) break;
-      sz += 1;
-    }
-    if (sz > 1) {	// If there is more than one COPY in a group
-      markRedundantCopies(high, copyIns, pos, sz);
-    }
-    pos += sz;
-  }
+	findAllIntoCopies(high,copyIns,false);
+	if (copyIns.size() < 2) return;
+	int4 pos = 0;
+	while(pos < copyIns.size()) {
+		// Find a group of COPYs coming from the same Varnode
+		Varnode *inVn = copyIns[pos]->getIn(0);
+		int4 sz = 1;
+		while(pos + sz < copyIns.size()) {
+			Varnode *nextVn = copyIns[pos+sz]->getIn(0);
+			if (nextVn != inVn) break;
+			sz += 1;
+		}
+		if (sz > 1) {       // If there is more than one COPY in a group
+			markRedundantCopies(high, copyIns, pos, sz);
+		}
+		pos += sz;
+	}
 }
 
 /// \brief Try to reduce/eliminate COPYs produced by the merge trimming process
@@ -1265,24 +1265,24 @@ void Merge::processHighRedundantCopy(HighVariable *high)
 void Merge::processCopyTrims(void)
 
 {
-  vector<HighVariable *> multiCopy;
+	vector<HighVariable *> multiCopy;
 
-  for(int4 i=0;i<copyTrims.size();++i) {
-    HighVariable *high = copyTrims[i]->getOut()->getHigh();
-    if (!high->hasCopyIn1()) {
-      multiCopy.push_back(high);
-      high->setCopyIn1();
-    }
-    else
-      high->setCopyIn2();
-  }
-  copyTrims.clear();
-  for(int4 i=0;i<multiCopy.size();++i) {
-    HighVariable *high = multiCopy[i];
-    if (high->hasCopyIn2())		// If the high has at least 2 COPYs into it
-      processHighDominantCopy(high);	// Try to replace with a dominant copy
-    high->clearCopyIns();
-  }
+	for(int4 i=0;i<copyTrims.size();++i) {
+		HighVariable *high = copyTrims[i]->getOut()->getHigh();
+		if (!high->hasCopyIn1()) {
+			multiCopy.push_back(high);
+			high->setCopyIn1();
+		}
+		else
+			high->setCopyIn2();
+	}
+	copyTrims.clear();
+	for(int4 i=0;i<multiCopy.size();++i) {
+		HighVariable *high = multiCopy[i];
+		if (high->hasCopyIn2())             // If the high has at least 2 COPYs into it
+			processHighDominantCopy(high);    // Try to replace with a dominant copy
+		high->clearCopyIns();
+	}
 }
 
 /// \brief Mark redundant/internal COPY PcodeOps
@@ -1294,73 +1294,73 @@ void Merge::processCopyTrims(void)
 void Merge::markInternalCopies(void)
 
 {
-  vector<HighVariable *> multiCopy;
-  list<PcodeOp *>::const_iterator iter;
-  PcodeOp *op;
-  HighVariable *h1,*h2,*h3;
-  Varnode *v1,*v2,*v3;
-  int4 val;
+	vector<HighVariable *> multiCopy;
+	list<PcodeOp *>::const_iterator iter;
+	PcodeOp *op;
+	HighVariable *h1,*h2,*h3;
+	Varnode *v1,*v2,*v3;
+	int4 val;
 
-  for(iter=data.beginOpAlive();iter!=data.endOpAlive();++iter) {
-    op = *iter;
-    switch(op->code()) {
-    case CPUI_COPY:
-      v1 = op->getOut();
-      h1 = v1->getHigh();
-      if (h1 == op->getIn(0)->getHigh()) {
-	data.opMarkNonPrinting(op);
-      }
-      else {	// COPY between different HighVariables
-	if (!h1->hasCopyIn1()) {	// If this is the first COPY we've seen for this high
-	  h1->setCopyIn1();		// Mark it
-	  multiCopy.push_back(h1);
+	for(iter=data.beginOpAlive();iter!=data.endOpAlive();++iter) {
+		op = *iter;
+		switch(op->code()) {
+		case CPUI_COPY:
+			v1 = op->getOut();
+			h1 = v1->getHigh();
+			if (h1 == op->getIn(0)->getHigh()) {
+				data.opMarkNonPrinting(op);
+			}
+			else {    // COPY between different HighVariables
+				if (!h1->hasCopyIn1()) {        // If this is the first COPY we've seen for this high
+					h1->setCopyIn1();             // Mark it
+					multiCopy.push_back(h1);
+				}
+				else
+					h1->setCopyIn2();             // This is at least the second COPY we've seen
+				if (v1->hasNoDescend()) {       // Don't print shadow assignments
+					if (shadowedVarnode(v1)) {
+						data.opMarkNonPrinting(op);
+					}
+				}
+			}
+			break;
+		case CPUI_PIECE:            // Check if output is built out of pieces of itself
+			h1 = op->getOut()->getHigh();
+			h2 = op->getIn(0)->getHigh();
+			h3 = op->getIn(1)->getHigh();
+			if (!h1->isAddrTied()) break;
+			if (!h2->isAddrTied()) break;
+			if (!h3->isAddrTied()) break;
+			v1 = h1->getTiedVarnode();
+			v2 = h2->getTiedVarnode();
+			v3 = h3->getTiedVarnode();
+			if (v3->overlap(*v1) != 0) break;
+			if (v2->overlap(*v1) != v3->getSize()) break;
+			data.opMarkNonPrinting(op);
+			break;
+		case CPUI_SUBPIECE:
+			h1 = op->getOut()->getHigh();
+			h2 = op->getIn(0)->getHigh();
+			if (!h1->isAddrTied()) break;
+			if (!h2->isAddrTied()) break;
+			v1 = h1->getTiedVarnode();
+			v2 = h2->getTiedVarnode();
+			val = op->getIn(1)->getOffset();
+			if (v1->overlap(*v2) != val) break;
+			data.opMarkNonPrinting(op);
+			break;
+		default:
+			break;
+		}
 	}
-	else
-	  h1->setCopyIn2();		// This is at least the second COPY we've seen
-	if (v1->hasNoDescend()) {	// Don't print shadow assignments
-	  if (shadowedVarnode(v1)) {
-	    data.opMarkNonPrinting(op);
-	  }
+	for(int4 i=0;i<multiCopy.size();++i) {
+		HighVariable *high = multiCopy[i];
+		if (high->hasCopyIn2())
+			data.getMerge().processHighRedundantCopy(high);
+		high->clearCopyIns();
 	}
-      }
-      break;
-    case CPUI_PIECE:		// Check if output is built out of pieces of itself
-      h1 = op->getOut()->getHigh();
-      h2 = op->getIn(0)->getHigh();
-      h3 = op->getIn(1)->getHigh();
-      if (!h1->isAddrTied()) break;
-      if (!h2->isAddrTied()) break;
-      if (!h3->isAddrTied()) break;
-      v1 = h1->getTiedVarnode();
-      v2 = h2->getTiedVarnode();
-      v3 = h3->getTiedVarnode();
-      if (v3->overlap(*v1) != 0) break;
-      if (v2->overlap(*v1) != v3->getSize()) break;
-      data.opMarkNonPrinting(op);
-      break;
-    case CPUI_SUBPIECE:
-      h1 = op->getOut()->getHigh();
-      h2 = op->getIn(0)->getHigh();
-      if (!h1->isAddrTied()) break;
-      if (!h2->isAddrTied()) break;
-      v1 = h1->getTiedVarnode();
-      v2 = h2->getTiedVarnode();
-      val = op->getIn(1)->getOffset();
-      if (v1->overlap(*v2) != val) break;
-      data.opMarkNonPrinting(op);
-      break;
-    default:
-      break;
-    }
-  }
-  for(int4 i=0;i<multiCopy.size();++i) {
-    HighVariable *high = multiCopy[i];
-    if (high->hasCopyIn2())
-      data.getMerge().processHighRedundantCopy(high);
-    high->clearCopyIns();
-  }
 #ifdef MERGEMULTI_DEBUG
-  verifyHighCovers();
+	verifyHighCovers();
 #endif
 }
 
@@ -1377,60 +1377,60 @@ void Merge::markInternalCopies(void)
 bool Merge::merge(HighVariable *high1,HighVariable *high2,bool isspeculative)
 
 {
-  if (high1 == high2) return true; // Already merged
-  if (intersection(high1,high2)) return false;
+	if (high1 == high2) return true; // Already merged
+	if (intersection(high1,high2)) return false;
 
-				// Translate any tests for high2 into tests for high1
-  vector<HighVariable *> yesinter;		// Highs that high2 intersects
-  vector<HighVariable *> nointer;		// Highs that high2 does not intersect
-  map<HighEdge,bool>::iterator iterfirst = highedgemap.lower_bound( HighEdge(high2,(HighVariable *)0) );
-  map<HighEdge,bool>::iterator iterlast = highedgemap.lower_bound( HighEdge(high2,(HighVariable *)~((uintp)0)) );
-  map<HighEdge,bool>::iterator iter;
+																// Translate any tests for high2 into tests for high1
+	vector<HighVariable *> yesinter;              // Highs that high2 intersects
+	vector<HighVariable *> nointer;               // Highs that high2 does not intersect
+	map<HighEdge,bool>::iterator iterfirst = highedgemap.lower_bound( HighEdge(high2,(HighVariable *)0) );
+	map<HighEdge,bool>::iterator iterlast = highedgemap.lower_bound( HighEdge(high2,(HighVariable *)~((uintp)0)) );
+	map<HighEdge,bool>::iterator iter;
 
-  for(iter=iterfirst;iter!=iterlast;++iter) {
-    HighVariable *b = (*iter).first.b; 
-    if (b == high1) continue;
-    if ((*iter).second)		// Save all high2's intersections
-      yesinter.push_back(b);	// as they are still valid for the merge
-    else {
-      nointer.push_back(b);
-      b->setMark();		// Mark that high2 did not intersect
-    }
-  }
-				// Do a purge of all high2's tests
-  if (iterfirst != iterlast) {	// Delete all the high2 tests
-    --iterlast;			// Move back 1 to prevent deleting under the iterator
-    for(iter=iterfirst;iter!=iterlast;++iter)
-      highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
-    highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
-    ++iterlast;			// Restore original range (with possibly new open endpoint)
-  
-    highedgemap.erase(iterfirst,iterlast);
-  }
+	for(iter=iterfirst;iter!=iterlast;++iter) {
+		HighVariable *b = (*iter).first.b; 
+		if (b == high1) continue;
+		if ((*iter).second)         // Save all high2's intersections
+			yesinter.push_back(b);    // as they are still valid for the merge
+		else {
+			nointer.push_back(b);
+			b->setMark();             // Mark that high2 did not intersect
+		}
+	}
+																// Do a purge of all high2's tests
+	if (iterfirst != iterlast) {  // Delete all the high2 tests
+		--iterlast;                 // Move back 1 to prevent deleting under the iterator
+		for(iter=iterfirst;iter!=iterlast;++iter)
+			highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
+		highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
+		++iterlast;                 // Restore original range (with possibly new open endpoint)
+	
+		highedgemap.erase(iterfirst,iterlast);
+	}
 
-  iter = highedgemap.lower_bound( HighEdge(high1,(HighVariable *)0) );
-  while((iter!=highedgemap.end())&&((*iter).first.a == high1)) {
-    if (!(*iter).second) {	// If test is intersection==false
-      if (!(*iter).first.b->isMark()) // and there was no test with high2
-	highedgemap.erase( iter++ ); // Delete the test
-      else
-	++iter;
-    }
-    else			// Keep any intersection==true tests
-      ++iter;
-  }
-  vector<HighVariable *>::iterator titer;
-  for(titer=nointer.begin();titer!=nointer.end();++titer)
-    (*titer)->clearMark();
-				// Reinsert high2's intersection==true tests for high1 now
-  for(titer=yesinter.begin();titer!=yesinter.end();++titer) {
-    highedgemap[ HighEdge(high1,*titer) ] = true;
-    highedgemap[ HighEdge(*titer,high1) ] = true;
-  }
-  high1->merge(high2,isspeculative);		// Do the actual merge
-  high1->updateCover();
+	iter = highedgemap.lower_bound( HighEdge(high1,(HighVariable *)0) );
+	while((iter!=highedgemap.end())&&((*iter).first.a == high1)) {
+		if (!(*iter).second) {      // If test is intersection==false
+			if (!(*iter).first.b->isMark()) // and there was no test with high2
+				highedgemap.erase( iter++ ); // Delete the test
+			else
+				++iter;
+		}
+		else                        // Keep any intersection==true tests
+			++iter;
+	}
+	vector<HighVariable *>::iterator titer;
+	for(titer=nointer.begin();titer!=nointer.end();++titer)
+		(*titer)->clearMark();
+																// Reinsert high2's intersection==true tests for high1 now
+	for(titer=yesinter.begin();titer!=yesinter.end();++titer) {
+		highedgemap[ HighEdge(high1,*titer) ] = true;
+		highedgemap[ HighEdge(*titer,high1) ] = true;
+	}
+	high1->merge(high2,isspeculative);            // Do the actual merge
+	high1->updateCover();
 
-  return true;
+	return true;
 }
 
 /// As manipulations are made, Cover information gets out of date. A \e dirty flag is used to
@@ -1441,13 +1441,13 @@ bool Merge::merge(HighVariable *high1,HighVariable *high2,bool isspeculative)
 bool Merge::updateHigh(HighVariable *a)
 
 {
-  if ((a->highflags&HighVariable::coverdirty)==0) return true;
+	if ((a->highflags&HighVariable::coverdirty)==0) return true;
 
-  for(int4 i=0;i<a->numInstances();++i)
-    a->getInstance(i)->updateCover();
-  a->updateCover();
-  purgeHigh(a);
-  return false;
+	for(int4 i=0;i<a->numInstances();++i)
+		a->getInstance(i)->updateCover();
+	a->updateCover();
+	purgeHigh(a);
+	return false;
 }
 
 /// All tests for pairs where either the first or second HighVariable matches the given one
@@ -1456,18 +1456,18 @@ bool Merge::updateHigh(HighVariable *a)
 void Merge::purgeHigh(HighVariable *high)
 
 {
-  map<HighEdge,bool>::iterator iterfirst = highedgemap.lower_bound( HighEdge(high,(HighVariable *)0) );
-  map<HighEdge,bool>::iterator iterlast = highedgemap.lower_bound( HighEdge(high,(HighVariable *)~((uintp)0)) );
+	map<HighEdge,bool>::iterator iterfirst = highedgemap.lower_bound( HighEdge(high,(HighVariable *)0) );
+	map<HighEdge,bool>::iterator iterlast = highedgemap.lower_bound( HighEdge(high,(HighVariable *)~((uintp)0)) );
 
-  if (iterfirst == iterlast) return;
-  --iterlast;			// Move back 1 to prevent deleting under the iterator
-  map<HighEdge,bool>::iterator iter;
-  for(iter=iterfirst;iter!=iterlast;++iter)
-    highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
-  highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
-  ++iterlast;			// Restore original range (with possibly new open endpoint)
-  
-  highedgemap.erase(iterfirst,iterlast);
+	if (iterfirst == iterlast) return;
+	--iterlast;                   // Move back 1 to prevent deleting under the iterator
+	map<HighEdge,bool>::iterator iter;
+	for(iter=iterfirst;iter!=iterlast;++iter)
+		highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
+	highedgemap.erase( HighEdge( (*iter).first.b, (*iter).first.a) );
+	++iterlast;                   // Restore original range (with possibly new open endpoint)
+	
+	highedgemap.erase(iterfirst,iterlast);
 }
 
 /// \brief Test the intersection of two HighVariables and cache the result
@@ -1479,30 +1479,30 @@ void Merge::purgeHigh(HighVariable *high)
 /// \param b is the second HighVariable
 /// \return \b true if the variables intersect
 bool Merge::intersection(HighVariable *a,HighVariable *b)
-  
+	
 {
-  if (a==b) return false;
-  bool ares = updateHigh(a);
-  bool bres = updateHigh(b);
-  if (ares && bres) {		// If neither high was dirty
-    map<HighEdge,bool>::iterator iter = highedgemap.find( HighEdge(a,b) );
-    if (iter != highedgemap.end()) // If previous test is present
-      return (*iter).second;	// Use it
-  }
+	if (a==b) return false;
+	bool ares = updateHigh(a);
+	bool bres = updateHigh(b);
+	if (ares && bres) {           // If neither high was dirty
+		map<HighEdge,bool>::iterator iter = highedgemap.find( HighEdge(a,b) );
+		if (iter != highedgemap.end()) // If previous test is present
+			return (*iter).second;    // Use it
+	}
 
-  bool res = false;
-  int4 blk;
-  vector<int4> blockisect;
-  a->wholecover.intersectList(blockisect,b->wholecover,2);
-  for(blk=0;blk<blockisect.size();++blk) {
-    if (blockIntersection(a,b,blockisect[blk])) {
-      res = true;
-      break;
-    }
-  }
-  highedgemap[ HighEdge(a,b) ] = res; // Cache the result
-  highedgemap[ HighEdge(b,a) ] = res;
-  return res;
+	bool res = false;
+	int4 blk;
+	vector<int4> blockisect;
+	a->wholecover.intersectList(blockisect,b->wholecover,2);
+	for(blk=0;blk<blockisect.size();++blk) {
+		if (blockIntersection(a,b,blockisect[blk])) {
+			res = true;
+			break;
+		}
+	}
+	highedgemap[ HighEdge(a,b) ] = res; // Cache the result
+	highedgemap[ HighEdge(b,a) ] = res;
+	return res;
 }
 
 /// \brief Test if two HighVariables intersect on a given BlockBasic
@@ -1515,24 +1515,24 @@ bool Merge::intersection(HighVariable *a,HighVariable *b)
 bool Merge::blockIntersection(HighVariable *a,HighVariable *b,int4 blk)
 
 {
-  vector<Varnode *> blist;
+	vector<Varnode *> blist;
 
-  for(int4 i=0;i<b->numInstances();++i) {
-    Varnode *vn = b->getInstance(i);
-    if (1<vn->getCover()->intersectByBlock(blk,a->wholecover))
-      blist.push_back(vn);
-  }
-  for(int4 i=0;i<a->numInstances();++i) {
-    Varnode *vn = a->getInstance(i);
-    if (2>vn->getCover()->intersectByBlock(blk,b->wholecover)) continue;
-    for(int4 j=0;j<blist.size();++j) {
-      Varnode *vn2 = blist[j];
-      if (1<vn2->getCover()->intersectByBlock(blk,*vn->getCover()))
-	if (!vn->copyShadow(vn2))
-	  return true;
-    }
-  }
-  return false;
+	for(int4 i=0;i<b->numInstances();++i) {
+		Varnode *vn = b->getInstance(i);
+		if (1<vn->getCover()->intersectByBlock(blk,a->wholecover))
+			blist.push_back(vn);
+	}
+	for(int4 i=0;i<a->numInstances();++i) {
+		Varnode *vn = a->getInstance(i);
+		if (2>vn->getCover()->intersectByBlock(blk,b->wholecover)) continue;
+		for(int4 j=0;j<blist.size();++j) {
+			Varnode *vn2 = blist[j];
+			if (1<vn2->getCover()->intersectByBlock(blk,*vn->getCover()))
+				if (!vn->copyShadow(vn2))
+					return true;
+		}
+	}
+	return false;
 }
 
 /// \brief Inflate the Cover of a given Varnode with a HighVariable
@@ -1546,13 +1546,13 @@ bool Merge::blockIntersection(HighVariable *a,HighVariable *b,int4 blk)
 void Merge::inflate(Varnode *a,HighVariable *high)
 
 {
-  updateHigh(a->getHigh());
-  updateHigh(high);
-  for(int4 i=0;i<high->numInstances();++i) {
-    Varnode *b = high->getInstance(i);
-    a->cover->merge(*b->cover);
-  }
-  a->getHigh()->coverDirty();
+	updateHigh(a->getHigh());
+	updateHigh(high);
+	for(int4 i=0;i<high->numInstances();++i) {
+		Varnode *b = high->getInstance(i);
+		a->cover->merge(*b->cover);
+	}
+	a->getHigh()->coverDirty();
 }
 
 /// \brief Test if we can inflate the Cover of the given Varnode without incurring intersections
@@ -1567,20 +1567,20 @@ void Merge::inflate(Varnode *a,HighVariable *high)
 bool Merge::inflateTest(Varnode *a,HighVariable *high)
 
 {
-  HighVariable *ahigh = a->getHigh();
-  bool res = false;
+	HighVariable *ahigh = a->getHigh();
+	bool res = false;
 
-  updateHigh(high);
+	updateHigh(high);
 
-  for(int4 i=0;i<ahigh->numInstances();++i) {
-    Varnode *b = ahigh->getInstance(i);
-    if (b->copyShadow(a)) continue;
-    if (2==b->getCover()->intersect( high->wholecover )) {
-      res = true;
-      break;
-    }
-  }
-  return res;
+	for(int4 i=0;i<ahigh->numInstances();++i) {
+		Varnode *b = ahigh->getInstance(i);
+		if (b->copyShadow(a)) continue;
+		if (2==b->getCover()->intersect( high->wholecover )) {
+			res = true;
+			break;
+		}
+	}
+	return res;
 }
 
 /// \brief Test for intersections between a given HighVariable and a list of other HighVariables
@@ -1594,15 +1594,15 @@ bool Merge::inflateTest(Varnode *a,HighVariable *high)
 bool Merge::mergeTest(HighVariable *high,vector<HighVariable *> &tmplist)
 
 {
-  if (!high->hasCover()) return false;
+	if (!high->hasCover()) return false;
 
-  for(int4 i=0;i<tmplist.size();++i) {
-    HighVariable *a = tmplist[i];
-    if (intersection(a,high))
-      return false;
-  }
-  tmplist.push_back(high);
-  return true;
+	for(int4 i=0;i<tmplist.size();++i) {
+		HighVariable *a = tmplist[i];
+		if (intersection(a,high))
+			return false;
+	}
+	tmplist.push_back(high);
+	return true;
 }
 
 #ifdef MERGEMULTI_DEBUG
@@ -1613,18 +1613,18 @@ bool Merge::mergeTest(HighVariable *high,vector<HighVariable *> &tmplist)
 void Merge::verifyHighCovers(void)
 
 {
-  VarnodeLocSet::const_iterator iter,enditer;
+	VarnodeLocSet::const_iterator iter,enditer;
 
-  enditer = data.endLoc();
-  for(iter=data.beginLoc();iter!=enditer;++iter) {
-    Varnode *vn = *iter;
-    if (vn->hasCover()) {
-      HighVariable *high = vn->getHigh();
-      if (!high->hasCopyIn1()) {
-	high->setCopyIn1();
-	high->verifyCover();
-      }
-    }
-  }
+	enditer = data.endLoc();
+	for(iter=data.beginLoc();iter!=enditer;++iter) {
+		Varnode *vn = *iter;
+		if (vn->hasCover()) {
+			HighVariable *high = vn->getHigh();
+			if (!high->hasCopyIn1()) {
+				high->setCopyIn1();
+				high->verifyCover();
+			}
+		}
+	}
 }
 #endif

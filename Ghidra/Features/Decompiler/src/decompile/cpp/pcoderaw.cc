@@ -22,24 +22,24 @@
 void VarnodeData::restoreXml(const Element *el,const AddrSpaceManager *manage)
 
 {
-  space = (AddrSpace *)0;
-  size = 0;
-  int4 num = el->getNumAttributes();
-  for(int4 i=0;i<num;++i) {
-    if (el->getAttributeName(i)=="space") {
-      space = manage->getSpaceByName(el->getAttributeValue(i));
-      if (space == (AddrSpace *)0)
-	throw LowlevelError("Unknown space name: "+el->getAttributeValue(i));
-      offset = space->restoreXmlAttributes(el,size);
-      return;
-    }
-    else if (el->getAttributeName(i)=="name") {
-      const Translate *trans = manage->getDefaultCodeSpace()->getTrans();
-      const VarnodeData &point(trans->getRegister(el->getAttributeValue(i)));
-      *this = point;
-      return;
-    }
-  }
+	space = (AddrSpace *)0;
+	size = 0;
+	int4 num = el->getNumAttributes();
+	for(int4 i=0;i<num;++i) {
+		if (el->getAttributeName(i)=="space") {
+			space = manage->getSpaceByName(el->getAttributeValue(i));
+			if (space == (AddrSpace *)0)
+				throw LowlevelError("Unknown space name: "+el->getAttributeValue(i));
+			offset = space->restoreXmlAttributes(el,size);
+			return;
+		}
+		else if (el->getAttributeName(i)=="name") {
+			const Translate *trans = manage->getDefaultCodeSpace()->getTrans();
+			const VarnodeData &point(trans->getRegister(el->getAttributeValue(i)));
+			*this = point;
+			return;
+		}
+	}
 }
 
 /// Return \b true, if \b this, as an address range, contains the other address range
@@ -48,8 +48,8 @@ void VarnodeData::restoreXml(const Element *el,const AddrSpaceManager *manage)
 bool VarnodeData::contains(const VarnodeData &op2) const
 
 {
-  if (space != op2.space) return false;
-  if (op2.offset < offset) return false;
-  if ((offset + (size-1)) < (op2.offset + (op2.size-1))) return false;
-  return true;
+	if (space != op2.space) return false;
+	if (op2.offset < offset) return false;
+	if ((offset + (size-1)) < (op2.offset + (op2.size-1))) return false;
+	return true;
 }

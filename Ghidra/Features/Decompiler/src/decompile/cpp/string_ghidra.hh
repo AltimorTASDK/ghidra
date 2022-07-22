@@ -28,12 +28,12 @@
 /// class stores it for final presentation.  Escaping the UTF8 string is left up
 /// to the PrintLanguage.
 class GhidraStringManager : public StringManager {
-  ArchitectureGhidra *glb;		///< The ghidra client interface
-  uint1 *testBuffer;			///< Temporary storage for storing bytes from client
+	ArchitectureGhidra *glb;              ///< The ghidra client interface
+	uint1 *testBuffer;                    ///< Temporary storage for storing bytes from client
 public:
-  GhidraStringManager(ArchitectureGhidra *g,int4 max);	///< Constructor
-  virtual ~GhidraStringManager(void);
-  virtual const vector<uint1> &getStringData(const Address &addr,Datatype *charType,bool &isTrunc);
+	GhidraStringManager(ArchitectureGhidra *g,int4 max);  ///< Constructor
+	virtual ~GhidraStringManager(void);
+	virtual const vector<uint1> &getStringData(const Address &addr,Datatype *charType,bool &isTrunc);
 };
 
 #endif

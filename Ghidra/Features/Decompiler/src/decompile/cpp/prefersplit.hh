@@ -18,53 +18,53 @@
 #define __PREFERSPLIT__
 
 #include "varnode.hh"
-class Funcdata;			// Forward declaration
+class Funcdata;                 // Forward declaration
 
 struct PreferSplitRecord {
-  VarnodeData storage;
-  int4 splitoffset;		// Number of initial bytes (in address order) to split into first piece
-  bool operator<(const PreferSplitRecord &op2) const;
+	VarnodeData storage;
+	int4 splitoffset;             // Number of initial bytes (in address order) to split into first piece
+	bool operator<(const PreferSplitRecord &op2) const;
 };
 
 class PreferSplitManager {
-  class SplitInstance {
-    friend class PreferSplitManager;
-    int4 splitoffset;
-    Varnode *vn;
-    Varnode *hi;	// Most significant piece
-    Varnode *lo;	// Least significant piece
-  public:
-    SplitInstance(Varnode *v,int4 off) { vn = v; splitoffset = off; hi = (Varnode *)0; lo = (Varnode *)0; }
-  };
-  Funcdata *data;
-  const vector<PreferSplitRecord> *records;
-  vector<PcodeOp *> tempsplits; // Copies of temporaries that need additional splitting
-  void fillinInstance(SplitInstance *inst,bool bigendian,bool sethi,bool setlo);
-  void createCopyOps(SplitInstance *ininst,SplitInstance *outinst,PcodeOp *op,bool istemp);
-  bool testDefiningCopy(SplitInstance *inst,PcodeOp *def,bool &istemp);
-  void splitDefiningCopy(SplitInstance *inst,PcodeOp *def,bool istemp);
-  bool testReadingCopy(SplitInstance *inst,PcodeOp *readop,bool &istemp);
-  void splitReadingCopy(SplitInstance *inst,PcodeOp *readop,bool istemp);
-  bool testZext(SplitInstance *inst,PcodeOp *op);
-  void splitZext(SplitInstance *inst,PcodeOp *op);
-  bool testPiece(SplitInstance *inst,PcodeOp *op);
-  void splitPiece(SplitInstance *inst,PcodeOp *op);
-  bool testSubpiece(SplitInstance *inst,PcodeOp *op);
-  void splitSubpiece(SplitInstance *inst,PcodeOp *op);
-  bool testLoad(SplitInstance *inst,PcodeOp *op);
-  void splitLoad(SplitInstance *inst,PcodeOp *op);
-  bool testStore(SplitInstance *inst,PcodeOp *op);
-  void splitStore(SplitInstance *inst,PcodeOp *op);
-  bool splitVarnode(SplitInstance *inst);
-  void splitRecord(const PreferSplitRecord &rec);
-  bool testTemporary(SplitInstance *inst);
-  void splitTemporary(SplitInstance *inst);
+	class SplitInstance {
+		friend class PreferSplitManager;
+		int4 splitoffset;
+		Varnode *vn;
+		Varnode *hi;        // Most significant piece
+		Varnode *lo;        // Least significant piece
+	public:
+		SplitInstance(Varnode *v,int4 off) { vn = v; splitoffset = off; hi = (Varnode *)0; lo = (Varnode *)0; }
+	};
+	Funcdata *data;
+	const vector<PreferSplitRecord> *records;
+	vector<PcodeOp *> tempsplits; // Copies of temporaries that need additional splitting
+	void fillinInstance(SplitInstance *inst,bool bigendian,bool sethi,bool setlo);
+	void createCopyOps(SplitInstance *ininst,SplitInstance *outinst,PcodeOp *op,bool istemp);
+	bool testDefiningCopy(SplitInstance *inst,PcodeOp *def,bool &istemp);
+	void splitDefiningCopy(SplitInstance *inst,PcodeOp *def,bool istemp);
+	bool testReadingCopy(SplitInstance *inst,PcodeOp *readop,bool &istemp);
+	void splitReadingCopy(SplitInstance *inst,PcodeOp *readop,bool istemp);
+	bool testZext(SplitInstance *inst,PcodeOp *op);
+	void splitZext(SplitInstance *inst,PcodeOp *op);
+	bool testPiece(SplitInstance *inst,PcodeOp *op);
+	void splitPiece(SplitInstance *inst,PcodeOp *op);
+	bool testSubpiece(SplitInstance *inst,PcodeOp *op);
+	void splitSubpiece(SplitInstance *inst,PcodeOp *op);
+	bool testLoad(SplitInstance *inst,PcodeOp *op);
+	void splitLoad(SplitInstance *inst,PcodeOp *op);
+	bool testStore(SplitInstance *inst,PcodeOp *op);
+	void splitStore(SplitInstance *inst,PcodeOp *op);
+	bool splitVarnode(SplitInstance *inst);
+	void splitRecord(const PreferSplitRecord &rec);
+	bool testTemporary(SplitInstance *inst);
+	void splitTemporary(SplitInstance *inst);
 public:
-  void init(Funcdata *fd,const vector<PreferSplitRecord> *rec);
-  const PreferSplitRecord *findRecord(Varnode *vn) const;
-  static void initialize(vector<PreferSplitRecord> &records);
-  void split(void);
-  void splitAdditional(void);
+	void init(Funcdata *fd,const vector<PreferSplitRecord> *rec);
+	const PreferSplitRecord *findRecord(Varnode *vn) const;
+	static void initialize(vector<PreferSplitRecord> &records);
+	void split(void);
+	void splitAdditional(void);
 };
 
 #endif

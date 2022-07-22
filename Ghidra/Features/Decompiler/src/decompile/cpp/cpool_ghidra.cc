@@ -18,49 +18,49 @@
 ConstantPoolGhidra::ConstantPoolGhidra(ArchitectureGhidra *g)
 
 {
-  ghidra = g;
+	ghidra = g;
 }
 
 CPoolRecord *ConstantPoolGhidra::createRecord(const vector<uintb> &refs)
 
 {
-  throw LowlevelError("Cannot access constant pool with this method");
+	throw LowlevelError("Cannot access constant pool with this method");
 }
 
 const CPoolRecord *ConstantPoolGhidra::getRecord(const vector<uintb> &refs) const
 
 {
-  const CPoolRecord *rec = cache.getRecord(refs);
-  if (rec == (const CPoolRecord *)0) {
-    Document *doc;
-    try {
-      doc = ghidra->getCPoolRef(refs);
-    }
-    catch(JavaError &err) {
-      throw LowlevelError("Error fetching constant pool record: " + err.explain);
-    }
-    catch(XmlError &err) {
-      throw LowlevelError("Error in constant pool record xml: "+err.explain);
-    }
-    if (doc == (Document *)0) {
-      ostringstream s;
-      s << "Could not retrieve constant pool record for reference: 0x" << refs[0];
-      throw LowlevelError(s.str());
-    }
-    rec = cache.restoreXmlRecord(refs,doc->getRoot(),*ghidra->types);
-    delete doc;
-  }
-  return rec;
+	const CPoolRecord *rec = cache.getRecord(refs);
+	if (rec == (const CPoolRecord *)0) {
+		Document *doc;
+		try {
+			doc = ghidra->getCPoolRef(refs);
+		}
+		catch(JavaError &err) {
+			throw LowlevelError("Error fetching constant pool record: " + err.explain);
+		}
+		catch(XmlError &err) {
+			throw LowlevelError("Error in constant pool record xml: "+err.explain);
+		}
+		if (doc == (Document *)0) {
+			ostringstream s;
+			s << "Could not retrieve constant pool record for reference: 0x" << refs[0];
+			throw LowlevelError(s.str());
+		}
+		rec = cache.restoreXmlRecord(refs,doc->getRoot(),*ghidra->types);
+		delete doc;
+	}
+	return rec;
 }
 
 void ConstantPoolGhidra::saveXml(ostream &s) const
 
 {
-  throw LowlevelError("Cannot access constant pool with this method");
+	throw LowlevelError("Cannot access constant pool with this method");
 }
 
 void ConstantPoolGhidra::restoreXml(const Element *el,TypeFactory &typegrp)
 
 {
-  throw LowlevelError("Cannot access constant pool with this method");
+	throw LowlevelError("Cannot access constant pool with this method");
 }

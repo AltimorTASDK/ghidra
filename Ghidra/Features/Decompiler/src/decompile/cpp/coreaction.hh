@@ -31,70 +31,70 @@
 /// \brief Gather raw p-code for a function.
 class ActionStart : public Action {
 public:
-  ActionStart(const string &g) : Action(0,"start",g) {}		///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionStart(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) {
-    data.startProcessing(); return 0; }
+	ActionStart(const string &g) : Action(0,"start",g) {}         ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionStart(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) {
+		data.startProcessing(); return 0; }
 };
 
 /// \brief Do any post-processing after decompilation
 class ActionStop : public Action {
 public:
-  ActionStop(const string &g) : Action(0,"stop",g) {}		///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionStop(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) {
-    data.stopProcessing(); return 0; }
+	ActionStop(const string &g) : Action(0,"stop",g) {}           ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionStop(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) {
+		data.stopProcessing(); return 0; }
 };
 
 /// \brief Start clean up after main transform phase
 class ActionStartCleanUp : public Action {
 public:
-  ActionStartCleanUp(const string &g) : Action(0,"startcleanup",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionStartCleanUp(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) {
-    data.startCleanUp(); return 0; }
+	ActionStartCleanUp(const string &g) : Action(0,"startcleanup",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionStartCleanUp(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) {
+		data.startCleanUp(); return 0; }
 };
 
 /// \brief Allow type recovery to start happening
 class ActionStartTypes : public Action {
 public:
-  ActionStartTypes(const string &g) : Action(0,"starttypes",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionStartTypes(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) {
-    if (data.startTypeRecovery()) count+=1;
-    return 0;
-  }
+	ActionStartTypes(const string &g) : Action(0,"starttypes",g) {}       ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionStartTypes(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) {
+		if (data.startTypeRecovery()) count+=1;
+		return 0;
+	}
 };
 
 /// \brief Analyze change to the stack pointer across sub-function calls.
 class ActionStackPtrFlow : public Action {
-  AddrSpace *stackspace;		///< Stack space associated with stack-pointer register
-  bool analysis_finished;		///< True if analysis already performed
-  static void analyzeExtraPop(Funcdata &data,AddrSpace *stackspace,int4 spcbase);
-  static bool isStackRelative(Varnode *spcbasein,Varnode *vn,uintb &constval);
-  static bool adjustLoad(Funcdata &data,PcodeOp *loadop,PcodeOp *storeop);
-  static int4 repair(Funcdata &data,AddrSpace *id,Varnode *spcbasein,PcodeOp *loadop,uintb constz);
-  static int4 checkClog(Funcdata &data,AddrSpace *id,int4 spcbase);
+	AddrSpace *stackspace;                ///< Stack space associated with stack-pointer register
+	bool analysis_finished;               ///< True if analysis already performed
+	static void analyzeExtraPop(Funcdata &data,AddrSpace *stackspace,int4 spcbase);
+	static bool isStackRelative(Varnode *spcbasein,Varnode *vn,uintb &constval);
+	static bool adjustLoad(Funcdata &data,PcodeOp *loadop,PcodeOp *storeop);
+	static int4 repair(Funcdata &data,AddrSpace *id,Varnode *spcbasein,PcodeOp *loadop,uintb constz);
+	static int4 checkClog(Funcdata &data,AddrSpace *id,int4 spcbase);
 public:
-  ActionStackPtrFlow(const string &g,AddrSpace *ss) : Action(0,"stackptrflow",g) { stackspace = ss; }	///<Constructor
-  virtual void reset(Funcdata &data) { analysis_finished = false; }
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionStackPtrFlow(getGroup(),stackspace);
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionStackPtrFlow(const string &g,AddrSpace *ss) : Action(0,"stackptrflow",g) { stackspace = ss; }   ///<Constructor
+	virtual void reset(Funcdata &data) { analysis_finished = false; }
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionStackPtrFlow(getGroup(),stackspace);
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Find Varnodes with a vectorized lane scheme and attempt to split the lanes
@@ -104,47 +104,47 @@ public:
 /// if a particular lane scheme makes sense in terms of the function's data-flow, and then
 /// rewrites the data-flow so that the lanes become explicit Varnodes.
 class ActionLaneDivide : public Action {
-  void collectLaneSizes(Varnode *vn,const LanedRegister &allowedLanes,LanedRegister &checkLanes);
-  bool processVarnode(Funcdata &data,Varnode *vn,const LanedRegister &lanedRegister,int4 mode);
+	void collectLaneSizes(Varnode *vn,const LanedRegister &allowedLanes,LanedRegister &checkLanes);
+	bool processVarnode(Funcdata &data,Varnode *vn,const LanedRegister &lanedRegister,int4 mode);
 public:
-  ActionLaneDivide(const string &g) : Action(rule_onceperfunc,"lanedivide",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionLaneDivide(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionLaneDivide(const string &g) : Action(rule_onceperfunc,"lanedivide",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionLaneDivide(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Make sure pointers into segmented spaces have the correct form.
 ///
 /// Convert user-defined ops defined as segment p-code ops by a cspec tag into the internal CPUI_SEGMENTOP
 class ActionSegmentize : public Action {
-  int4 localcount;			///< Number of times this Action has been performed on the function
+	int4 localcount;                      ///< Number of times this Action has been performed on the function
 public:
-  ActionSegmentize(const string &g) : Action(0,"segmentize",g) {}	///< Constructor
-  virtual void reset(Funcdata &data) { localcount = 0; }
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionSegmentize(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionSegmentize(const string &g) : Action(0,"segmentize",g) {}       ///< Constructor
+	virtual void reset(Funcdata &data) { localcount = 0; }
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionSegmentize(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Apply any overridden forced gotos
 class ActionForceGoto : public Action {
 public:
-  ActionForceGoto(const string &g) : Action(0,"forcegoto",g) {}		///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionForceGoto(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionForceGoto(const string &g) : Action(0,"forcegoto",g) {}         ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionForceGoto(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 // \brief Perform common subexpression elimination
 // class ActionCse : public Action {
 // public:
-//   ActionCse(const string &g) : Action(0,"cse",g) {}			///< Constructor
+//   ActionCse(const string &g) : Action(0,"cse",g) {}                  ///< Constructor
 //   virtual Action *clone(const ActionGroupList &grouplist) const {
 //     if (!grouplist.contains(getGroup())) return (Action *)0;
 //     return new ActionCse(getGroup());
@@ -154,55 +154,55 @@ public:
 
 /// \brief Perform Common Sub-expression Elimination on CPUI_MULTIEQUAL ops
 class ActionMultiCse : public Action {
-  static bool preferredOutput(Varnode *out1,Varnode *out2);	///< Which of two outputs is preferred
-  static PcodeOp *findMatch(BlockBasic *bl,PcodeOp *target,Varnode *in);	///< Find match to CPUI_MULTIEQUAL
-  bool processBlock(Funcdata &data,BlockBasic *bl);		///< Search a block for equivalent CPUI_MULTIEQUAL
+	static bool preferredOutput(Varnode *out1,Varnode *out2);     ///< Which of two outputs is preferred
+	static PcodeOp *findMatch(BlockBasic *bl,PcodeOp *target,Varnode *in);        ///< Find match to CPUI_MULTIEQUAL
+	bool processBlock(Funcdata &data,BlockBasic *bl);             ///< Search a block for equivalent CPUI_MULTIEQUAL
 public:
-  ActionMultiCse(const string &g) : Action(0,"multicse",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMultiCse(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionMultiCse(const string &g) : Action(0,"multicse",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMultiCse(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Check for one CPUI_MULTIEQUAL input set defining more than one Varnode
 class ActionShadowVar : public Action {
 public:
-  ActionShadowVar(const string &g) : Action(0,"shadowvar",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionShadowVar(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionShadowVar(const string &g) : Action(0,"shadowvar",g) {} ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionShadowVar(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Check for constants, with pointer type, that correspond to global symbols
 class ActionConstantPtr : public Action {
-  int4 localcount;		///< Number of passes made for this function
-  static AddrSpace *searchForLoadStore(Varnode *vn,PcodeOp *op);
-  static AddrSpace *selectInferSpace(Varnode *vn,PcodeOp *op,const vector<AddrSpace *> &spaceList);
-  static SymbolEntry *isPointer(AddrSpace *spc,Varnode *vn,PcodeOp *op,int4 slot,
-				Address &rampoint,uintb &fullEncoding,Funcdata &data);
+	int4 localcount;              ///< Number of passes made for this function
+	static AddrSpace *searchForLoadStore(Varnode *vn,PcodeOp *op);
+	static AddrSpace *selectInferSpace(Varnode *vn,PcodeOp *op,const vector<AddrSpace *> &spaceList);
+	static SymbolEntry *isPointer(AddrSpace *spc,Varnode *vn,PcodeOp *op,int4 slot,
+																Address &rampoint,uintb &fullEncoding,Funcdata &data);
 public:
-  ActionConstantPtr(const string &g) : Action(0,"constantptr",g) {}	///< Constructor
-  virtual void reset(Funcdata &data) { localcount = 0; }
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionConstantPtr(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionConstantPtr(const string &g) : Action(0,"constantptr",g) {}     ///< Constructor
+	virtual void reset(Funcdata &data) { localcount = 0; }
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionConstantPtr(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Eliminate locally constant indirect calls
 class ActionDeindirect : public Action {
 public:
-  ActionDeindirect(const string &g) : Action(0,"deindirect",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDeindirect(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDeindirect(const string &g) : Action(0,"deindirect",g) {}       ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDeindirect(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Transform based on Varnode properties, such as \e read-only and \e volatile
@@ -213,12 +213,12 @@ public:
 ///   - Varnodes whose values are not consumed are replaced with constant 0 Varnodes
 class ActionVarnodeProps : public Action {
 public:
-  ActionVarnodeProps(const string &g) : Action(0,"varnodeprops",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionVarnodeProps(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionVarnodeProps(const string &g) : Action(0,"varnodeprops",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionVarnodeProps(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Mark Varnodes built out of \e legal parameters
@@ -233,14 +233,14 @@ public:
 /// high-level addrtied variables that need to hold their value over ranges where they are not
 /// accessed directly. But propagation adds unnecessary clutter for normalization style analysis.
 class ActionDirectWrite : public Action {
-  bool propagateIndirect;			///< Propagate thru CPUI_INDIRECT ops
+	bool propagateIndirect;                       ///< Propagate thru CPUI_INDIRECT ops
 public:
-  ActionDirectWrite(const string &g,bool prop) : Action(0,"directwrite",g) { propagateIndirect=prop; }	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDirectWrite(getGroup(),propagateIndirect);
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDirectWrite(const string &g,bool prop) : Action(0,"directwrite",g) { propagateIndirect=prop; }  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDirectWrite(getGroup(),propagateIndirect);
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Search for input Varnodes that have been officially provided constant values.
@@ -250,46 +250,46 @@ public:
 /// user has provided a constant value for.
 class ActionConstbase : public Action {
 public:
-  ActionConstbase(const string &g) : Action(0,"constbase",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionConstbase(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionConstbase(const string &g) : Action(0,"constbase",g) {} ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionConstbase(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Mark Varnode objects that hold stack-pointer values and set-up special data-type
 class ActionSpacebase : public Action {
 public:
-  ActionSpacebase(const string &g) : Action(0,"spacebase",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionSpacebase(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) {
-    data.spacebase(); return 0; }
+	ActionSpacebase(const string &g) : Action(0,"spacebase",g) {} ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionSpacebase(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) {
+		data.spacebase(); return 0; }
 };
 
 /// \brief Build Static Single Assignment (SSA) representation for function
 class ActionHeritage : public Action {
 public:
-  ActionHeritage(const string &g) : Action(0,"heritage",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionHeritage(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.opHeritage(); return 0; }
+	ActionHeritage(const string &g) : Action(0,"heritage",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionHeritage(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.opHeritage(); return 0; }
 };
 
 /// \brief Calculate the non-zero mask property on all Varnode objects.
 class ActionNonzeroMask : public Action {
 public:
-  ActionNonzeroMask(const string &g) : Action(0,"nonzeromask",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionNonzeroMask(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.calcNZMask(); return 0; }
+	ActionNonzeroMask(const string &g) : Action(0,"nonzeromask",g) {}     ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionNonzeroMask(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.calcNZMask(); return 0; }
 };
 
 /// \brief Fill-in CPUI_CAST p-code ops as required by the casting strategy
@@ -310,97 +310,97 @@ public:
 /// input. In this case, it casts to the necessary pointer type
 /// immediately.
 class ActionSetCasts : public Action {
-  static bool testStructOffset0(Varnode *vn,Datatype *ct,CastStrategy *castStrategy);
-  static bool isOpIdentical(Datatype *ct1,Datatype *ct2);
-  static int4 castOutput(PcodeOp *op,Funcdata &data,CastStrategy *castStrategy);
-  static int4 castInput(PcodeOp *op,int4 slot,Funcdata &data,CastStrategy *castStrategy);
+	static bool testStructOffset0(Varnode *vn,Datatype *ct,CastStrategy *castStrategy);
+	static bool isOpIdentical(Datatype *ct1,Datatype *ct2);
+	static int4 castOutput(PcodeOp *op,Funcdata &data,CastStrategy *castStrategy);
+	static int4 castInput(PcodeOp *op,int4 slot,Funcdata &data,CastStrategy *castStrategy);
 public:
-  ActionSetCasts(const string &g) : Action(rule_onceperfunc,"setcasts",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionSetCasts(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionSetCasts(const string &g) : Action(rule_onceperfunc,"setcasts",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionSetCasts(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Assign initial high-level HighVariable objects to each Varnode
 class ActionAssignHigh : public Action {
 public:
-  ActionAssignHigh(const string &g) : Action(rule_onceperfunc,"assignhigh",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionAssignHigh(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.setHighLevel(); return 0; }
+	ActionAssignHigh(const string &g) : Action(rule_onceperfunc,"assignhigh",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionAssignHigh(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.setHighLevel(); return 0; }
 };
 
 /// \brief Mark illegal Varnode inputs used only in CPUI_INDIRECT ops
 class ActionMarkIndirectOnly : public Action {
 public:
-  ActionMarkIndirectOnly(const string &g) : Action(rule_onceperfunc, "markindirectonly",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMarkIndirectOnly(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) {
-    data.markIndirectOnly(); return 0; }
+	ActionMarkIndirectOnly(const string &g) : Action(rule_onceperfunc, "markindirectonly",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMarkIndirectOnly(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) {
+		data.markIndirectOnly(); return 0; }
 };
 
 /// \brief Make \e required Varnode merges as dictated by CPUI_MULTIEQUAL, CPUI_INDIRECT, and \e addrtied property
 class ActionMergeRequired : public Action {
 public:
-  ActionMergeRequired(const string &g) : Action(rule_onceperfunc,"mergerequired",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMergeRequired(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { 
-    data.getMerge().mergeAddrTied(); data.getMerge().mergeMarker(); return 0; }
+	ActionMergeRequired(const string &g) : Action(rule_onceperfunc,"mergerequired",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMergeRequired(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { 
+		data.getMerge().mergeAddrTied(); data.getMerge().mergeMarker(); return 0; }
 };
 
 /// \brief Try to merge an op's input Varnode to its output, if they are at the same storage location.
 class ActionMergeAdjacent : public Action {
 public:
-  ActionMergeAdjacent(const string &g) : Action(rule_onceperfunc,"mergeadjacent",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMergeAdjacent(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.getMerge().mergeAdjacent(); return 0; }
+	ActionMergeAdjacent(const string &g) : Action(rule_onceperfunc,"mergeadjacent",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMergeAdjacent(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.getMerge().mergeAdjacent(); return 0; }
 };
 
 /// \brief Try to merge the input and output Varnodes of a CPUI_COPY op
 class ActionMergeCopy : public Action {
 public:
-  ActionMergeCopy(const string &g) : Action(rule_onceperfunc,"mergecopy",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMergeCopy(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.getMerge().mergeOpcode(CPUI_COPY); return 0; }
+	ActionMergeCopy(const string &g) : Action(rule_onceperfunc,"mergecopy",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMergeCopy(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.getMerge().mergeOpcode(CPUI_COPY); return 0; }
 };
 
 /// \brief Try to merge Varnodes specified by Symbols with multiple SymbolEntrys
 class ActionMergeMultiEntry : public Action {
 public:
-  ActionMergeMultiEntry(const string &g) : Action(rule_onceperfunc,"mergemultientry",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMergeMultiEntry(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.getMerge().mergeMultiEntry(); return 0; }
+	ActionMergeMultiEntry(const string &g) : Action(rule_onceperfunc,"mergemultientry",g) {}      ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMergeMultiEntry(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.getMerge().mergeMultiEntry(); return 0; }
 };
 
 /// \brief Try to merge Varnodes of the same type (if they don't hold different values at the same time)
 class ActionMergeType : public Action {
 public:
-  ActionMergeType(const string &g) : Action(rule_onceperfunc,"mergetype",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMergeType(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { 
-    data.getMerge().mergeByDatatype(data.beginLoc(),data.endLoc()); return 0; }
+	ActionMergeType(const string &g) : Action(rule_onceperfunc,"mergetype",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMergeType(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { 
+		data.getMerge().mergeByDatatype(data.beginLoc(),data.endLoc()); return 0; }
 };
 
 /// \brief Find \b explicit Varnodes: Varnodes that have an explicit token representing them in the output
@@ -413,110 +413,110 @@ public:
 /// in the final output.  Basically, if there is symbol information associated, the possibility
 /// of aliasing, or if there are too many reads of a Varnode, it should be considered explicit.
 class ActionMarkExplicit : public Action {
-  /// This class holds a single entry in a stack used to traverse Varnode expressions
-  struct OpStackElement {
-    Varnode *vn;		///< The Varnode at this particular point in the path
-    int4 slot;			///< The slot of the first input Varnode to traverse in this subexpression
-    int4 slotback;		///< The slot(+1) of the last input Varnode to traverse in this subexpression
-    OpStackElement(Varnode *v);	///< Constructor
-  };
-  static int4 baseExplicit(Varnode *vn,int4 maxref);	///< Make initial determination if a Varnode should be \e explicit
-  static int4 multipleInteraction(vector<Varnode *> &multlist);	///< Find multiple descendant chains
-  static void processMultiplier(Varnode *vn,int4 max);	///< For a given multi-descendant Varnode, decide if it should be explicit
-  static void checkNewToConstructor(Funcdata &data,Varnode *vn);	///< Set special properties on output of CPUI_NEW
+	/// This class holds a single entry in a stack used to traverse Varnode expressions
+	struct OpStackElement {
+		Varnode *vn;                ///< The Varnode at this particular point in the path
+		int4 slot;                  ///< The slot of the first input Varnode to traverse in this subexpression
+		int4 slotback;              ///< The slot(+1) of the last input Varnode to traverse in this subexpression
+		OpStackElement(Varnode *v); ///< Constructor
+	};
+	static int4 baseExplicit(Varnode *vn,int4 maxref);    ///< Make initial determination if a Varnode should be \e explicit
+	static int4 multipleInteraction(vector<Varnode *> &multlist); ///< Find multiple descendant chains
+	static void processMultiplier(Varnode *vn,int4 max);  ///< For a given multi-descendant Varnode, decide if it should be explicit
+	static void checkNewToConstructor(Funcdata &data,Varnode *vn);        ///< Set special properties on output of CPUI_NEW
 public:
-  ActionMarkExplicit(const string &g) : Action(rule_onceperfunc,"markexplicit",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMarkExplicit(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionMarkExplicit(const string &g) : Action(rule_onceperfunc,"markexplicit",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMarkExplicit(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Mark all the \e implied Varnode objects, which will have no explicit token in the output
 class ActionMarkImplied : public Action {
-  /// This class holds a single entry in a stack used to forward traverse Varnode expressions
-  struct DescTreeElement {
-    Varnode *vn;				///< The Varnode at this particular point in the path
-    list<PcodeOp *>::const_iterator desciter;	///< The current edge being traversed
-    DescTreeElement(Varnode *v) {
-      vn = v; desciter = v->beginDescend(); }	///< Constructor
-  };
-  static bool isPossibleAliasStep(Varnode *vn1,Varnode *vn2);	///< Check for additive relationship
-  static bool isPossibleAlias(Varnode *vn1,Varnode *vn2,int4 depth);	///< Check for possible duplicate value
-  static bool checkImpliedCover(Funcdata &data,Varnode *vn);	///< Check for cover violation if Varnode is implied
+	/// This class holds a single entry in a stack used to forward traverse Varnode expressions
+	struct DescTreeElement {
+		Varnode *vn;                                ///< The Varnode at this particular point in the path
+		list<PcodeOp *>::const_iterator desciter;   ///< The current edge being traversed
+		DescTreeElement(Varnode *v) {
+			vn = v; desciter = v->beginDescend(); }   ///< Constructor
+	};
+	static bool isPossibleAliasStep(Varnode *vn1,Varnode *vn2);   ///< Check for additive relationship
+	static bool isPossibleAlias(Varnode *vn1,Varnode *vn2,int4 depth);    ///< Check for possible duplicate value
+	static bool checkImpliedCover(Funcdata &data,Varnode *vn);    ///< Check for cover violation if Varnode is implied
 public:
-  ActionMarkImplied(const string &g) : Action(rule_onceperfunc,"markimplied",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMarkImplied(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionMarkImplied(const string &g) : Action(rule_onceperfunc,"markimplied",g) {}      ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMarkImplied(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Choose names for all high-level variables (HighVariables)
 class ActionNameVars : public Action {
-  /// This class is a record in a database used to store and lookup potential names
-  struct OpRecommend {
-    Datatype *ct;		///< The data-type associated with a name
-    string namerec;		///< A possible name for a variable
-  };
-  static void makeRec(ProtoParameter *param,Varnode *vn,map<HighVariable *,OpRecommend> &recmap);
-  static void lookForBadJumpTables(Funcdata &data);	///< Mark the switch variable for bad jump-tables
-  static void lookForFuncParamNames(Funcdata &data,const vector<Varnode *> &varlist);
-  static void linkSpacebaseSymbol(Varnode *vn,Funcdata &data,vector<Varnode *> &namerec);
-  static void linkSymbols(Funcdata &data,vector<Varnode *> &namerec);
+	/// This class is a record in a database used to store and lookup potential names
+	struct OpRecommend {
+		Datatype *ct;               ///< The data-type associated with a name
+		string namerec;             ///< A possible name for a variable
+	};
+	static void makeRec(ProtoParameter *param,Varnode *vn,map<HighVariable *,OpRecommend> &recmap);
+	static void lookForBadJumpTables(Funcdata &data);     ///< Mark the switch variable for bad jump-tables
+	static void lookForFuncParamNames(Funcdata &data,const vector<Varnode *> &varlist);
+	static void linkSpacebaseSymbol(Varnode *vn,Funcdata &data,vector<Varnode *> &namerec);
+	static void linkSymbols(Funcdata &data,vector<Varnode *> &namerec);
 public:
-  ActionNameVars(const string &g) : Action(rule_onceperfunc,"namevars",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionNameVars(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionNameVars(const string &g) : Action(rule_onceperfunc,"namevars",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionNameVars(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Remove unreachable blocks
 class ActionUnreachable : public Action {
 public:
-  ActionUnreachable(const string &g) : Action(0,"unreachable",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionUnreachable(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionUnreachable(const string &g) : Action(0,"unreachable",g) {}     ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionUnreachable(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Remove blocks that do nothing
 class ActionDoNothing : public Action {
 public:
-  ActionDoNothing(const string &g) : Action(rule_repeatapply,"donothing",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDoNothing(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDoNothing(const string &g) : Action(rule_repeatapply,"donothing",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDoNothing(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Get rid of \b redundant branches: duplicate edges between the same input and output block
 class ActionRedundBranch : public Action {
 public:
-  ActionRedundBranch(const string &g) : Action(0,"redundbranch",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionRedundBranch(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionRedundBranch(const string &g) : Action(0,"redundbranch",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionRedundBranch(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Remove conditional branches if the condition is constant
 class ActionDeterminedBranch : public Action {
 public:
-  ActionDeterminedBranch(const string &g) : Action(0,"determinedbranch",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDeterminedBranch(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDeterminedBranch(const string &g) : Action(0,"determinedbranch",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDeterminedBranch(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Dead code removal.  Eliminate \e dead p-code ops
@@ -538,32 +538,32 @@ public:
 /// the particular op being passed through can transform the
 /// "bit usage" vector of the output to obtain the input.
 class ActionDeadCode : public Action {
-  static void pushConsumed(uintb val,Varnode *vn,vector<Varnode *> &worklist);
-  static void propagateConsumed(vector<Varnode *> &worklist);
-  static bool neverConsumed(Varnode *vn,Funcdata &data);
-  static void markConsumedParameters(FuncCallSpecs *fc,vector<Varnode *> &worklist);
-  static uintb gatherConsumedReturn(Funcdata &data);
-  static bool isEventualConstant(Varnode *vn,int4 addCount,int4 loadCount);
-  static bool lastChanceLoad(Funcdata &data,vector<Varnode *> &worklist);
+	static void pushConsumed(uintb val,Varnode *vn,vector<Varnode *> &worklist);
+	static void propagateConsumed(vector<Varnode *> &worklist);
+	static bool neverConsumed(Varnode *vn,Funcdata &data);
+	static void markConsumedParameters(FuncCallSpecs *fc,vector<Varnode *> &worklist);
+	static uintb gatherConsumedReturn(Funcdata &data);
+	static bool isEventualConstant(Varnode *vn,int4 addCount,int4 loadCount);
+	static bool lastChanceLoad(Funcdata &data,vector<Varnode *> &worklist);
 public:
-  ActionDeadCode(const string &g) : Action(0,"deadcode",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDeadCode(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDeadCode(const string &g) : Action(0,"deadcode",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDeadCode(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Propagate conditional constants
 class ActionConditionalConst : public Action {
 public:
-  ActionConditionalConst(const string &g) : Action(0,"condconst",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionConditionalConst(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
-  void propagateConstant(Varnode *varVn,Varnode *constVn,FlowBlock *constBlock,Funcdata &data);
+	ActionConditionalConst(const string &g) : Action(0,"condconst",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionConditionalConst(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
+	void propagateConstant(Varnode *varVn,Varnode *constVn,FlowBlock *constBlock,Funcdata &data);
 };
 
 /// \brief Normalize jump-table construction.
@@ -572,12 +572,12 @@ public:
 /// the \b switch action. The case labels are also calculated based on the normalization.
 class ActionSwitchNorm : public Action {
 public:
-  ActionSwitchNorm(const string &g) : Action(0,"switchnorm",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionSwitchNorm(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionSwitchNorm(const string &g) : Action(0,"switchnorm",g) {}       ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionSwitchNorm(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Prepare function prototypes for "normalize" simplification.
@@ -593,12 +593,12 @@ public:
 /// Similarly there should be no lock on the output and no lock on the prototype model
 class ActionNormalizeSetup : public Action {
 public:
-  ActionNormalizeSetup(const string &g) : Action(rule_onceperfunc,"normalizesetup",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionNormalizeSetup(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionNormalizeSetup(const string &g) : Action(rule_onceperfunc,"normalizesetup",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionNormalizeSetup(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Lay down locked input and output data-type information.
@@ -608,13 +608,13 @@ public:
 /// Initialize output recovery process.
 class ActionPrototypeTypes: public Action {
 public:
-  void extendInput(Funcdata &data,Varnode *invn,ProtoParameter *param,BlockBasic *topbl);
-  ActionPrototypeTypes(const string &g) : Action(rule_onceperfunc,"prototypetypes",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionPrototypeTypes(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	void extendInput(Funcdata &data,Varnode *invn,ProtoParameter *param,BlockBasic *topbl);
+	ActionPrototypeTypes(const string &g) : Action(rule_onceperfunc,"prototypetypes",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionPrototypeTypes(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Find a prototype for each sub-function
@@ -624,12 +624,12 @@ public:
 /// \e uponreturn injection, the p-code is injected at this time.
 class ActionDefaultParams : public Action {
 public:
-  ActionDefaultParams(const string &g) : Action(rule_onceperfunc,"defaultparams",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDefaultParams(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDefaultParams(const string &g) : Action(rule_onceperfunc,"defaultparams",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDefaultParams(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Define formal link between stack-pointer values before and after sub-function calls.
@@ -640,14 +640,14 @@ public:
 /// a CPUI_COPY or CPUI_ADD. If it is unknown, a CPUI_INDIRECT will be inserted that gets
 /// filled in by ActionStackPtrFlow.
 class ActionExtraPopSetup : public Action {
-  AddrSpace *stackspace;		///< The stack space to analyze
+	AddrSpace *stackspace;                ///< The stack space to analyze
 public:
-  ActionExtraPopSetup(const string &g,AddrSpace *ss) : Action(rule_onceperfunc,"extrapopsetup",g) { stackspace = ss; }	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionExtraPopSetup(getGroup(),stackspace);
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionExtraPopSetup(const string &g,AddrSpace *ss) : Action(rule_onceperfunc,"extrapopsetup",g) { stackspace = ss; }  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionExtraPopSetup(getGroup(),stackspace);
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Prepare for data-flow analysis of function parameters
@@ -656,16 +656,16 @@ public:
 /// Varnodes to match the parameters. If not known, prepare the sub-function for
 /// the parameter recovery process.
 class ActionFuncLink : public Action {
-  friend class ActionFuncLinkOutOnly;
-  static void funcLinkInput(FuncCallSpecs *fc,Funcdata &data);
-  static void funcLinkOutput(FuncCallSpecs *fc,Funcdata &data);
+	friend class ActionFuncLinkOutOnly;
+	static void funcLinkInput(FuncCallSpecs *fc,Funcdata &data);
+	static void funcLinkOutput(FuncCallSpecs *fc,Funcdata &data);
 public:
-  ActionFuncLink(const string &g) : Action(rule_onceperfunc,"funclink",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionFuncLink(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionFuncLink(const string &g) : Action(rule_onceperfunc,"funclink",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionFuncLink(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Prepare for data-flow analysis of function parameters, when recovery isn't required.
@@ -678,12 +678,12 @@ public:
 /// don't care about the function inputs.
 class ActionFuncLinkOutOnly : public Action {
 public:
-  ActionFuncLinkOutOnly(const string &g) : Action(rule_onceperfunc,"funclink_outonly",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionFuncLinkOutOnly(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionFuncLinkOutOnly(const string &g) : Action(rule_onceperfunc,"funclink_outonly",g) {}     ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionFuncLinkOutOnly(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Deal with situations that look like double precision parameters
@@ -695,12 +695,12 @@ public:
 ///         sure the pieces are properly labeled.
 class ActionParamDouble : public Action {
 public:
-  ActionParamDouble(const string &g) : Action(0, "paramdouble",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionParamDouble(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionParamDouble(const string &g) : Action(0, "paramdouble",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionParamDouble(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Determine active parameters to sub-functions
@@ -713,12 +713,12 @@ public:
 /// but \b before any simplification or copy propagation has been performed.
 class ActionActiveParam : public Action {
 public:
-  ActionActiveParam(const string &g) : Action( 0, "activeparam",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionActiveParam(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionActiveParam(const string &g) : Action( 0, "activeparam",g) {}   ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionActiveParam(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Determine which sub-functions have active output Varnodes
@@ -726,18 +726,18 @@ public:
 /// This is analogous to ActionActiveParam but for sub-function return values.
 class ActionActiveReturn : public Action {
 public:
-  ActionActiveReturn(const string &g) : Action( 0, "activereturn",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionActiveReturn(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionActiveReturn(const string &g) : Action( 0, "activereturn",g) {} ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionActiveReturn(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 // \brief If there are any sub-function calls with \e paramshifts, add the shifted parameters.
 // class ActionParamShiftStart : public Action {
 // public:
-//   ActionParamShiftStart(const string &g) : Action( rule_onceperfunc, "paramshiftstart",g) {}	///< Constructor
+//   ActionParamShiftStart(const string &g) : Action( rule_onceperfunc, "paramshiftstart",g) {} ///< Constructor
 //   virtual Action *clone(const ActionGroupList &grouplist) const {
 //     if (!grouplist.contains(getGroup())) return (Action *)0;
 //     return new ActionParamShiftStart(getGroup());
@@ -749,7 +749,7 @@ public:
 // class ActionParamShiftStop : public Action {
 //   bool paramshiftsleft;
 // public:
-//   ActionParamShiftStop(const string &g) : Action( 0, "paramshiftstop",g) {}	///< Constructor
+//   ActionParamShiftStop(const string &g) : Action( 0, "paramshiftstop",g) {}  ///< Constructor
 //   virtual void reset(Funcdata &data) { paramshiftsleft = true; }
 //   virtual Action *clone(const ActionGroupList &grouplist) const {
 //     if (!grouplist.contains(getGroup())) return (Action *)0;
@@ -760,14 +760,14 @@ public:
 
 /// \brief Determine data-flow holding the \e return \e value of the function.
 class ActionReturnRecovery : public Action {
-  static void buildReturnOutput(ParamActive *active,PcodeOp *retop,Funcdata &data);
+	static void buildReturnOutput(ParamActive *active,PcodeOp *retop,Funcdata &data);
 public:
-  ActionReturnRecovery(const string &g) : Action( 0, "returnrecovery",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionReturnRecovery(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionReturnRecovery(const string &g) : Action( 0, "returnrecovery",g) {}     ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionReturnRecovery(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Restrict possible range of local variables
@@ -776,12 +776,12 @@ public:
 /// so that they cannot be treated as local variables.
 class ActionRestrictLocal : public Action {
 public:
-  ActionRestrictLocal(const string &g) : Action(0,"restrictlocal",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionRestrictLocal(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionRestrictLocal(const string &g) : Action(0,"restrictlocal",g) {} ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionRestrictLocal(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Get rid of registers with trash values.
@@ -797,30 +797,30 @@ public:
 /// incoming ECX, none of subfunctions alias the stack location where ECX was stored.  This
 /// allows the spurious references to the register to be removed.
 class ActionLikelyTrash : public Action {
-  static uint4 countMarks(PcodeOp *op);
-  static bool traceTrash(Varnode *vn,vector<PcodeOp *> &indlist);
+	static uint4 countMarks(PcodeOp *op);
+	static bool traceTrash(Varnode *vn,vector<PcodeOp *> &indlist);
 public:
-  ActionLikelyTrash(const string &g) : Action(0,"likelytrash",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionLikelyTrash(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionLikelyTrash(const string &g) : Action(0,"likelytrash",g) {}     ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionLikelyTrash(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Create symbols that map out the local stack-frame for the function.
 ///
 /// This produces on intermediate view of symbols on the stack.
 class ActionRestructureVarnode : public Action {
-  int4 numpass;			///< Number of passes performed for this function
+	int4 numpass;                 ///< Number of passes performed for this function
 public:
-  ActionRestructureVarnode(const string &g) : Action(0,"restructure_varnode",g) {}	///< Constructor
-  virtual void reset(Funcdata &data) { numpass = 0; }
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionRestructureVarnode(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionRestructureVarnode(const string &g) : Action(0,"restructure_varnode",g) {}      ///< Constructor
+	virtual void reset(Funcdata &data) { numpass = 0; }
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionRestructureVarnode(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Create symbols that map out the local stack-frame for the function.
@@ -828,23 +828,23 @@ public:
 /// This produces the final set of symbols on the stack.
 class ActionRestructureHigh : public Action {
 public:
-  ActionRestructureHigh(const string &g) : Action(0,"restructure_high",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionRestructureHigh(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionRestructureHigh(const string &g) : Action(0,"restructure_high",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionRestructureHigh(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Create symbols for any discovered global variables in the function.
 class ActionMapGlobals : public Action {
 public:
-  ActionMapGlobals(const string &g) : Action(rule_onceperfunc,"mapglobals",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionMapGlobals(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.mapGlobals(); return 0; }
+	ActionMapGlobals(const string &g) : Action(rule_onceperfunc,"mapglobals",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionMapGlobals(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.mapGlobals(); return 0; }
 };
 
 /// \brief Calculate the prototype for the function.
@@ -853,23 +853,23 @@ public:
 /// to determine a prototype based on the prototype model.
 class ActionInputPrototype : public Action {
 public:
-  ActionInputPrototype(const string &g) : Action(rule_onceperfunc,"inputprototype",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionInputPrototype(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionInputPrototype(const string &g) : Action(rule_onceperfunc,"inputprototype",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionInputPrototype(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Set the (already) recovered output data-type as a formal part of the prototype
 class ActionOutputPrototype : public Action {
 public:
-  ActionOutputPrototype(const string &g) : Action(rule_onceperfunc,"outputprototype",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionOutputPrototype(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionOutputPrototype(const string &g) : Action(rule_onceperfunc,"outputprototype",g) {}      ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionOutputPrototype(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Adjust improperly justified parameters
@@ -879,12 +879,12 @@ public:
 /// full input
 class ActionUnjustifiedParams : public Action {
 public:
-  ActionUnjustifiedParams(const string &g) : Action(0,"unjustparams",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionUnjustifiedParams(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionUnjustifiedParams(const string &g) : Action(0,"unjustparams",g) {}      ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionUnjustifiedParams(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Infer and propagate data-types.
@@ -921,28 +921,28 @@ public:
 /// reached and then aborts additional propagation so that decompiling can terminate.
 class ActionInferTypes : public Action {
 #ifdef TYPEPROP_DEBUG
-  static void propagationDebug(Architecture *glb,Varnode *vn,const Datatype *newtype,PcodeOp *op,int4 slot,Varnode *ptralias);
+	static void propagationDebug(Architecture *glb,Varnode *vn,const Datatype *newtype,PcodeOp *op,int4 slot,Varnode *ptralias);
 #endif
-  int4 localcount;					///< Number of passes performed for this function
-  static void buildLocaltypes(Funcdata &data);		///< Assign initial data-type based on local info
-  static bool writeBack(Funcdata &data);		///< Commit the final propagated data-types to Varnodes
-  static int4 propagateAddPointer(uintb &off,PcodeOp *op,int4 slot,int4 sz);	///< Test if edge is pointer plus a constant
-  static Datatype *propagateAddIn2Out(TypeFactory *typegrp,PcodeOp *op,int4 inslot);
-  static bool propagateGoodEdge(PcodeOp *op,int4 inslot,int4 outslot,Varnode *invn);
-  static bool propagateTypeEdge(TypeFactory *typegrp,PcodeOp *op,int4 inslot,int4 outslot);
-  static void propagateOneType(TypeFactory *typegrp,Varnode *vn);
-  static void propagateRef(Funcdata &data,Varnode *vn,const Address &addr);
-  static void propagateSpacebaseRef(Funcdata &data,Varnode *spcvn);
-  static PcodeOp *canonicalReturnOp(Funcdata &data);
-  static void propagateAcrossReturns(Funcdata &data);
+	int4 localcount;                                      ///< Number of passes performed for this function
+	static void buildLocaltypes(Funcdata &data);          ///< Assign initial data-type based on local info
+	static bool writeBack(Funcdata &data);                ///< Commit the final propagated data-types to Varnodes
+	static int4 propagateAddPointer(uintb &off,PcodeOp *op,int4 slot,int4 sz);    ///< Test if edge is pointer plus a constant
+	static Datatype *propagateAddIn2Out(TypeFactory *typegrp,PcodeOp *op,int4 inslot);
+	static bool propagateGoodEdge(PcodeOp *op,int4 inslot,int4 outslot,Varnode *invn);
+	static bool propagateTypeEdge(TypeFactory *typegrp,PcodeOp *op,int4 inslot,int4 outslot);
+	static void propagateOneType(TypeFactory *typegrp,Varnode *vn);
+	static void propagateRef(Funcdata &data,Varnode *vn,const Address &addr);
+	static void propagateSpacebaseRef(Funcdata &data,Varnode *spcvn);
+	static PcodeOp *canonicalReturnOp(Funcdata &data);
+	static void propagateAcrossReturns(Funcdata &data);
 public:
-  ActionInferTypes(const string &g) : Action(0,"infertypes",g) {}	///< Constructor
-  virtual void reset(Funcdata &data) { localcount = 0; }
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionInferTypes(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionInferTypes(const string &g) : Action(0,"infertypes",g) {}       ///< Constructor
+	virtual void reset(Funcdata &data) { localcount = 0; }
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionInferTypes(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Locate \e shadow Varnodes and adjust them so they are hidden
@@ -954,67 +954,67 @@ public:
 /// alters the defining op of the shadow so that the duplicate statement doesn't print.
 class ActionHideShadow : public Action {
 public:
-  ActionHideShadow(const string &g) : Action(rule_onceperfunc,"hideshadow",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionHideShadow(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionHideShadow(const string &g) : Action(rule_onceperfunc,"hideshadow",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionHideShadow(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Replace COPYs from the same source with a single dominant COPY
 class ActionDominantCopy : public Action {
 public:
-  ActionDominantCopy(const string &g) : Action(rule_onceperfunc,"dominantcopy",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDominantCopy(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.getMerge().processCopyTrims(); return 0; }
+	ActionDominantCopy(const string &g) : Action(rule_onceperfunc,"dominantcopy",g) {}    ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDominantCopy(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.getMerge().processCopyTrims(); return 0; }
 };
 
 /// \brief Mark COPY operations between Varnodes representing the object as \e non-printing
 class ActionCopyMarker : public Action {
 public:
-  ActionCopyMarker(const string &g) : Action(rule_onceperfunc,"copymarker",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionCopyMarker(getGroup());
-  }
-  virtual int4 apply(Funcdata &data) { data.getMerge().markInternalCopies(); return 0; }
+	ActionCopyMarker(const string &g) : Action(rule_onceperfunc,"copymarker",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionCopyMarker(getGroup());
+	}
+	virtual int4 apply(Funcdata &data) { data.getMerge().markInternalCopies(); return 0; }
 };
 
 /// \brief Attach \e dynamically mapped symbols to Varnodes in time for data-type propagation
 class ActionDynamicMapping : public Action {
 public:
-  ActionDynamicMapping(const string &g) : Action(0,"dynamicmapping",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDynamicMapping(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDynamicMapping(const string &g) : Action(0,"dynamicmapping",g) {}       ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDynamicMapping(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Make final attachments of \e dynamically mapped symbols to Varnodes
 class ActionDynamicSymbols : public Action {
 public:
-  ActionDynamicSymbols(const string &g) : Action(rule_onceperfunc,"dynamicsymbols",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionDynamicSymbols(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionDynamicSymbols(const string &g) : Action(rule_onceperfunc,"dynamicsymbols",g) {}        ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionDynamicSymbols(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Add warnings for prototypes that aren't modeled properly
 class ActionPrototypeWarnings : public Action {
 public:
-  ActionPrototypeWarnings(const string &g) : Action(rule_onceperfunc,"prototypewarnings",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionPrototypeWarnings(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionPrototypeWarnings(const string &g) : Action(rule_onceperfunc,"prototypewarnings",g) {}  ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionPrototypeWarnings(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief A class that holds a data-type traversal state during type propagation
@@ -1023,28 +1023,28 @@ public:
 /// data-type might propagate through.
 class PropagationState {
 public:
-  Varnode *vn;					///< The root Varnode
-  list<PcodeOp *>::const_iterator iter;		///< Iterator to current descendant being enumerated
-  PcodeOp *op;					///< The current descendant or the defining PcodeOp
-  int4 inslot;					///< Slot holding Varnode for descendant PcodeOp
-  int4 slot;					///< Current edge relative to current PcodeOp
-  PropagationState(Varnode *v);			///< Constructor
-  void step(void);				///< Advance to the next propagation edge
-  bool valid(void) const { return (op != (PcodeOp *)0); }	///< Return \b true if there are edges left to iterate
+	Varnode *vn;                                  ///< The root Varnode
+	list<PcodeOp *>::const_iterator iter;         ///< Iterator to current descendant being enumerated
+	PcodeOp *op;                                  ///< The current descendant or the defining PcodeOp
+	int4 inslot;                                  ///< Slot holding Varnode for descendant PcodeOp
+	int4 slot;                                    ///< Current edge relative to current PcodeOp
+	PropagationState(Varnode *v);                 ///< Constructor
+	void step(void);                              ///< Advance to the next propagation edge
+	bool valid(void) const { return (op != (PcodeOp *)0); }       ///< Return \b true if there are edges left to iterate
 };
 
 /// Class representing a \e term in an additive expression
 class PcodeOpEdge {
-  PcodeOp *op;			///< Lone descendant reading the term
-  int4 slot;			///< The input slot of the term
-  Varnode *vn;			///< The term Varnode
-  PcodeOp *mult;		///< The (optional) multiplier being applied to the term
+	PcodeOp *op;                  ///< Lone descendant reading the term
+	int4 slot;                    ///< The input slot of the term
+	Varnode *vn;                  ///< The term Varnode
+	PcodeOp *mult;                ///< The (optional) multiplier being applied to the term
 public:
-  PcodeOpEdge(PcodeOp *o,int4 s,PcodeOp *m) { op = o; slot = s; vn = op->getIn(slot); mult=m; }	///< Constructor
-  PcodeOp *getMultiplier(void) const { return mult; }	///< Get the multiplier PcodeOp
-  PcodeOp *getOp(void) const { return op; }		///< Get the component PcodeOp adding in the term
-  int4 getSlot(void) const { return slot; }		///< Get the slot reading the term
-  Varnode *getVarnode(void) const { return vn; }	///< Get the Varnode term
+	PcodeOpEdge(PcodeOp *o,int4 s,PcodeOp *m) { op = o; slot = s; vn = op->getIn(slot); mult=m; } ///< Constructor
+	PcodeOp *getMultiplier(void) const { return mult; }   ///< Get the multiplier PcodeOp
+	PcodeOp *getOp(void) const { return op; }             ///< Get the component PcodeOp adding in the term
+	int4 getSlot(void) const { return slot; }             ///< Get the slot reading the term
+	Varnode *getVarnode(void) const { return vn; }        ///< Get the Varnode term
 };
 
 /// \brief A class for ordering Varnode terms in an additive expression.
@@ -1053,16 +1053,16 @@ public:
 /// Varnode \e terms, this class collects all the terms then allows
 /// sorting of the terms to facilitate constant collapse and factoring simplifications.
 class TermOrder {
-  PcodeOp *root;			///< The final PcodeOp in the expression
-  vector<PcodeOpEdge> terms;		///< Collected terms
-  vector<PcodeOpEdge *> sorter;		///< An array of references to terms for quick sorting
-  static bool additiveCompare(const PcodeOpEdge *op1,const PcodeOpEdge *op2);
+	PcodeOp *root;                        ///< The final PcodeOp in the expression
+	vector<PcodeOpEdge> terms;            ///< Collected terms
+	vector<PcodeOpEdge *> sorter;         ///< An array of references to terms for quick sorting
+	static bool additiveCompare(const PcodeOpEdge *op1,const PcodeOpEdge *op2);
 public:
-  TermOrder(PcodeOp *rt) { root = rt; }	///< Construct given root PcodeOp
-  int4 getSize(void) const { return terms.size(); }	///< Get the number of terms in the expression
-  void collect(void);			///< Collect all the terms in the expression
-  void sortTerms(void);			///< Sort the terms using additiveCompare()
-  const vector<PcodeOpEdge *> &getSort(void) { return sorter; }	///< Get the sorted list of references
+	TermOrder(PcodeOp *rt) { root = rt; } ///< Construct given root PcodeOp
+	int4 getSize(void) const { return terms.size(); }     ///< Get the number of terms in the expression
+	void collect(void);                   ///< Collect all the terms in the expression
+	void sortTerms(void);                 ///< Sort the terms using additiveCompare()
+	const vector<PcodeOpEdge *> &getSort(void) { return sorter; } ///< Get the sorted list of references
 };
 
 /// \brief A comparison operator for ordering terms in a sum
@@ -1073,6 +1073,6 @@ public:
 /// \param op2 is the second term
 /// \return \b true if the first term is less than the second
 inline bool TermOrder::additiveCompare(const PcodeOpEdge *op1,const PcodeOpEdge *op2) {
-    return (-1 == op1->getVarnode()->termOrder(op2->getVarnode())); }
+		return (-1 == op1->getVarnode()->termOrder(op2->getVarnode())); }
 
 #endif

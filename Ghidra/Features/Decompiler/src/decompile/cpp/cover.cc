@@ -27,23 +27,23 @@ const CoverBlock Cover::emptyBlock;
 uintm CoverBlock::getUIndex(const PcodeOp *op)
 
 {
-  uintp switchval = (uintp)op;
-  switch(switchval) {
-  case 0:			// Special marker for very beginning of block
-    return (uintm)0;
-  case 1:			// Special marker for very end of block
-    return ~((uintm)0);
-  case 2:			// Special marker for input
-    return (uintm)0;
-  }
-  if (op->isMarker()) {
-    if (op->code() == CPUI_MULTIEQUAL) // MULTIEQUALs are considered very beginning
-      return (uintm)0;
-    else if (op->code() == CPUI_INDIRECT) // INDIRECTs are considered to be at
-				// the location of the op they are indirect for
-      return PcodeOp::getOpFromConst(op->getIn(1)->getAddr())->getSeqNum().getOrder();
-  }
-  return op->getSeqNum().getOrder();
+	uintp switchval = (uintp)op;
+	switch(switchval) {
+	case 0:                       // Special marker for very beginning of block
+		return (uintm)0;
+	case 1:                       // Special marker for very end of block
+		return ~((uintm)0);
+	case 2:                       // Special marker for input
+		return (uintm)0;
+	}
+	if (op->isMarker()) {
+		if (op->code() == CPUI_MULTIEQUAL) // MULTIEQUALs are considered very beginning
+			return (uintm)0;
+		else if (op->code() == CPUI_INDIRECT) // INDIRECTs are considered to be at
+																// the location of the op they are indirect for
+			return PcodeOp::getOpFromConst(op->getIn(1)->getAddr())->getSeqNum().getOrder();
+	}
+	return op->getSeqNum().getOrder();
 }
 
 /// Characterize the intersection of \b this range with another CoverBlock.
@@ -57,46 +57,46 @@ uintm CoverBlock::getUIndex(const PcodeOp *op)
 int4 CoverBlock::intersect(const CoverBlock &op2) const
 
 {
-  uintm ustart,ustop;
-  uintm u2start,u2stop;
+	uintm ustart,ustop;
+	uintm u2start,u2stop;
 
-  if (empty()) return 0;
-  if (op2.empty()) return 0;
+	if (empty()) return 0;
+	if (op2.empty()) return 0;
 
-  ustart = getUIndex(start);
-  ustop = getUIndex(stop);
-  u2start = getUIndex(op2.start);
-  u2stop = getUIndex(op2.stop);
-  if (ustart <= ustop) {
-    if (u2start <= u2stop) { // We are both one piece
-      if ((ustop<=u2start)||(u2stop<=ustart)) {
-	if ((ustart==u2stop)||(ustop==u2start))
-	  return 1;		// Boundary intersection
-	else
-	  return 0;		// No intersection
-      }
-    }
-    else {			// They are two-piece, we are one-piece
-      if ((ustart>=u2stop)&&(ustop<=u2start)) {
-	if ((ustart==u2stop)||(ustop==u2start))
-	  return 1;
-	else
-	  return 0;
-      }
-    }
-  }
-  else {
-    if (u2start <= u2stop) { // They are one piece, we are two-piece
-      if ((u2start>=ustop)&&(u2stop<=ustart)) {
-	if ((u2start==ustop)||(u2stop==ustart))
-	  return 1;
-	else
-	  return 0;
-      }
-    }
-    // If both are two-pieces, then the intersection must be an interval
-  }
-  return 2;			// Interval intersection
+	ustart = getUIndex(start);
+	ustop = getUIndex(stop);
+	u2start = getUIndex(op2.start);
+	u2stop = getUIndex(op2.stop);
+	if (ustart <= ustop) {
+		if (u2start <= u2stop) { // We are both one piece
+			if ((ustop<=u2start)||(u2stop<=ustart)) {
+				if ((ustart==u2stop)||(ustop==u2start))
+					return 1;             // Boundary intersection
+				else
+					return 0;             // No intersection
+			}
+		}
+		else {                      // They are two-piece, we are one-piece
+			if ((ustart>=u2stop)&&(ustop<=u2start)) {
+				if ((ustart==u2stop)||(ustop==u2start))
+					return 1;
+				else
+					return 0;
+			}
+		}
+	}
+	else {
+		if (u2start <= u2stop) { // They are one piece, we are two-piece
+			if ((u2start>=ustop)&&(u2stop<=ustart)) {
+				if ((u2start==ustop)||(u2stop==ustart))
+					return 1;
+				else
+					return 0;
+			}
+		}
+		// If both are two-pieces, then the intersection must be an interval
+	}
+	return 2;                     // Interval intersection
 }
 
 /// If the given PcodeOp or boundary point is contained in \b this range, return true.
@@ -105,16 +105,16 @@ int4 CoverBlock::intersect(const CoverBlock &op2) const
 bool CoverBlock::contain(const PcodeOp *point) const
 
 {
-  uintm ustart,ustop,upoint;
+	uintm ustart,ustop,upoint;
 
-  if (empty()) return false;
-  upoint = getUIndex(point);
-  ustart = getUIndex(start);
-  ustop = getUIndex(stop);
+	if (empty()) return false;
+	upoint = getUIndex(point);
+	ustart = getUIndex(start);
+	ustop = getUIndex(stop);
 
-  if (ustart<=ustop)
-    return ((upoint>=ustart)&&(upoint<=ustop));
-  return ((upoint<=ustop)||(upoint>=ustart));
+	if (ustart<=ustop)
+		return ((upoint>=ustart)&&(upoint<=ustop));
+	return ((upoint<=ustop)||(upoint>=ustart));
 }
 
 /// Return:
@@ -127,16 +127,16 @@ bool CoverBlock::contain(const PcodeOp *point) const
 int4 CoverBlock::boundary(const PcodeOp *point) const
 
 {
-  uintm val;
+	uintm val;
 
-  if (empty()) return 0;
-  val = getUIndex(point);
-  if (getUIndex(start)==val) {
-    if (start!=(const PcodeOp *)0)
-      return 2;
-  }
-  if (getUIndex(stop)==val) return 1;
-  return 0;
+	if (empty()) return 0;
+	val = getUIndex(point);
+	if (getUIndex(start)==val) {
+		if (start!=(const PcodeOp *)0)
+			return 2;
+	}
+	if (getUIndex(stop)==val) return 1;
+	return 0;
 }
 
 /// Compute the union of \b this with the other given CoverBlock,
@@ -145,40 +145,40 @@ int4 CoverBlock::boundary(const PcodeOp *point) const
 void CoverBlock::merge(const CoverBlock &op2)
 
 {
-  bool internal1,internal2,internal3,internal4;
-  uintm ustart,u2start;
+	bool internal1,internal2,internal3,internal4;
+	uintm ustart,u2start;
 
-  if (op2.empty()) return;	// Nothing to merge in
-  if (empty()) {
-    start = op2.start;
-    stop = op2.stop;
-    return;
-  }
-  ustart = getUIndex(start);
-  u2start = getUIndex(op2.start);
-				// Is start contained in op2
-  internal4 = ((ustart==(uintm)0)&&(op2.stop==(const PcodeOp *)1));
-  internal1 = internal4 || op2.contain(start);
-				// Is op2.start contained in this
-  internal3 = ((u2start==0)&&(stop==(const PcodeOp *)1));
-  internal2 = internal3 || contain(op2.start);
+	if (op2.empty()) return;      // Nothing to merge in
+	if (empty()) {
+		start = op2.start;
+		stop = op2.stop;
+		return;
+	}
+	ustart = getUIndex(start);
+	u2start = getUIndex(op2.start);
+																// Is start contained in op2
+	internal4 = ((ustart==(uintm)0)&&(op2.stop==(const PcodeOp *)1));
+	internal1 = internal4 || op2.contain(start);
+																// Is op2.start contained in this
+	internal3 = ((u2start==0)&&(stop==(const PcodeOp *)1));
+	internal2 = internal3 || contain(op2.start);
 
-  if (internal1&&internal2)
-    if ((ustart!=u2start)|| internal3 || internal4) { // Covered entire block
-      setAll();
-      return;
-    }
-  if (internal1)
-    start = op2.start;		// Pick non-internal start
-  else if ((!internal1)&&(!internal2)) { // Disjoint intervals
-    if (ustart < u2start)	// Pick earliest start
-      stop = op2.stop;		// then take other stop
-    else
-      start = op2.start;
-    return;
-  }
-  if (internal3 || op2.contain(stop)) // Pick non-internal stop
-    stop = op2.stop;
+	if (internal1&&internal2)
+		if ((ustart!=u2start)|| internal3 || internal4) { // Covered entire block
+			setAll();
+			return;
+		}
+	if (internal1)
+		start = op2.start;          // Pick non-internal start
+	else if ((!internal1)&&(!internal2)) { // Disjoint intervals
+		if (ustart < u2start)       // Pick earliest start
+			stop = op2.stop;          // then take other stop
+		else
+			start = op2.start;
+		return;
+	}
+	if (internal3 || op2.contain(stop)) // Pick non-internal stop
+		stop = op2.stop;
 }
 
 /// Print a description of the covered range of ops in this block
@@ -186,30 +186,30 @@ void CoverBlock::merge(const CoverBlock &op2)
 void CoverBlock::print(ostream &s) const
 
 {
-  uintm ustart,ustop;
+	uintm ustart,ustop;
 
-  if (empty()) {
-    s << "empty";
-    return;
-  }
+	if (empty()) {
+		s << "empty";
+		return;
+	}
 
-  ustart = getUIndex(start);
-  ustop = getUIndex(stop);
-  if (ustart==(uintm)0)
-    s << "begin";
-  else if (ustart==~((uintm)0))
-    s << "end";
-  else
-    s << start->getSeqNum();
+	ustart = getUIndex(start);
+	ustop = getUIndex(stop);
+	if (ustart==(uintm)0)
+		s << "begin";
+	else if (ustart==~((uintm)0))
+		s << "end";
+	else
+		s << start->getSeqNum();
 
-  s << '-';
+	s << '-';
 
-  if (ustop==(uintm)0)
-    s << "begin";
-  else if (ustop==~((uintm)0))
-    s << "end";
-  else
-    s << stop->getSeqNum();
+	if (ustop==(uintm)0)
+		s << "begin";
+	else if (ustop==~((uintm)0))
+		s << "end";
+	else
+		s << stop->getSeqNum();
 }
 
 /// Compare \b this with another Cover by comparing just
@@ -221,27 +221,27 @@ void CoverBlock::print(ostream &s) const
 int4 Cover::compareTo(const Cover &op2) const
 
 {
-  int4 a,b;
+	int4 a,b;
 
-  map<int4,CoverBlock>::const_iterator iter;
-  iter = cover.begin();
-  if (iter==cover.end())
-    a = 1000000;
-  else
-    a = (*iter).first;
-  iter = op2.cover.begin();
-  if (iter==op2.cover.end())
-    b = 1000000;
-  else
-    b = (*iter).first;
+	map<int4,CoverBlock>::const_iterator iter;
+	iter = cover.begin();
+	if (iter==cover.end())
+		a = 1000000;
+	else
+		a = (*iter).first;
+	iter = op2.cover.begin();
+	if (iter==op2.cover.end())
+		b = 1000000;
+	else
+		b = (*iter).first;
 
-  if ( a < b ) {
-	return -1;
-  }
-  else if ( a == b ) {
-	return 0;
-  }
-  return 1;
+	if ( a < b ) {
+				return -1;
+	}
+	else if ( a == b ) {
+				return 0;
+	}
+	return 1;
 }
 
 /// Return a representative CoverBlock describing how much of the given block
@@ -251,10 +251,10 @@ int4 Cover::compareTo(const Cover &op2) const
 const CoverBlock &Cover::getCoverBlock(int4 i) const
 
 {
-  map<int4,CoverBlock>::const_iterator iter = cover.find(i);
-  if (iter == cover.end())
-    return emptyBlock;
-  return (*iter).second;
+	map<int4,CoverBlock>::const_iterator iter = cover.find(i);
+	if (iter == cover.end())
+		return emptyBlock;
+	return (*iter).second;
 }
 
 /// Return
@@ -267,31 +267,31 @@ const CoverBlock &Cover::getCoverBlock(int4 i) const
 int4 Cover::intersect(const Cover &op2) const
 
 {
-  map<int4,CoverBlock>::const_iterator iter,iter2;
-  int4 res,newres;
+	map<int4,CoverBlock>::const_iterator iter,iter2;
+	int4 res,newres;
 
-  res = 0;
-  iter = cover.begin();
-  iter2 = op2.cover.begin();
+	res = 0;
+	iter = cover.begin();
+	iter2 = op2.cover.begin();
 
-  for(;;) {
-    if (iter == cover.end()) return res;
-    if (iter2 == op2.cover.end()) return res;
+	for(;;) {
+		if (iter == cover.end()) return res;
+		if (iter2 == op2.cover.end()) return res;
 
-    if ((*iter).first < (*iter2).first)
-      ++iter;
-    else if ((*iter).first > (*iter2).first)
-      ++iter2;
-    else {
-      newres = (*iter).second.intersect((*iter2).second);
-      if (newres == 2) return 2;
-      if (newres == 1)
-	res = 1;		// At least a point intersection
-      ++iter;
-      ++iter2;
-    }
-  }
-  return res;
+		if ((*iter).first < (*iter2).first)
+			++iter;
+		else if ((*iter).first > (*iter2).first)
+			++iter2;
+		else {
+			newres = (*iter).second.intersect((*iter2).second);
+			if (newres == 2) return 2;
+			if (newres == 1)
+				res = 1;                // At least a point intersection
+			++iter;
+			++iter2;
+		}
+	}
+	return res;
 }
 
 /// \brief Generate a list of blocks that intersect
@@ -305,30 +305,30 @@ int4 Cover::intersect(const Cover &op2) const
 void Cover::intersectList(vector<int4> &listout,const Cover &op2,int4 level) const
 
 {
-  map<int4,CoverBlock>::const_iterator iter,iter2;
-  int4 val;
+	map<int4,CoverBlock>::const_iterator iter,iter2;
+	int4 val;
 
-  listout.clear();
+	listout.clear();
 
-  iter = cover.begin();
-  iter2 = op2.cover.begin();
+	iter = cover.begin();
+	iter2 = op2.cover.begin();
 
-  for(;;) {
-    if (iter == cover.end()) return;
-    if (iter2 == op2.cover.end()) return;
+	for(;;) {
+		if (iter == cover.end()) return;
+		if (iter2 == op2.cover.end()) return;
 
-    if ((*iter).first < (*iter2).first)
-      ++iter;
-    else if ((*iter).first > (*iter2).first)
-      ++iter2;
-    else {
-      val = (*iter).second.intersect((*iter2).second);
-      if (val >= level)
-	listout.push_back((*iter).first);
-      ++iter;
-      ++iter2;
-    }
-  }
+		if ((*iter).first < (*iter2).first)
+			++iter;
+		else if ((*iter).first > (*iter2).first)
+			++iter2;
+		else {
+			val = (*iter).second.intersect((*iter2).second);
+			if (val >= level)
+				listout.push_back((*iter).first);
+			++iter;
+			++iter2;
+		}
+	}
 }
 
 /// Looking only at the given block, Return
@@ -342,17 +342,17 @@ void Cover::intersectList(vector<int4> &listout,const Cover &op2,int4 level) con
 int4 Cover::intersectByBlock(int4 blk,const Cover &op2) const
 
 {
-  map<int4,CoverBlock>::const_iterator iter;
+	map<int4,CoverBlock>::const_iterator iter;
 
-  iter = cover.find(blk);
-  if (iter == cover.end()) return 0;
-  
-  map<int4,CoverBlock>::const_iterator iter2;
+	iter = cover.find(blk);
+	if (iter == cover.end()) return 0;
+	
+	map<int4,CoverBlock>::const_iterator iter2;
 
-  iter2 = op2.cover.find(blk);
-  if (iter2 == op2.cover.end()) return 0;
+	iter2 = op2.cover.find(blk);
+	if (iter2 == op2.cover.end()) return 0;
 
-  return (*iter).second.intersect((*iter2).second);
+	return (*iter).second.intersect((*iter2).second);
 }
 
 /// \brief Does \b this contain the given PcodeOp
@@ -363,15 +363,15 @@ int4 Cover::intersectByBlock(int4 blk,const Cover &op2) const
 bool Cover::contain(const PcodeOp *op,int4 max) const
 
 {
-  map<int4,CoverBlock>::const_iterator iter;
+	map<int4,CoverBlock>::const_iterator iter;
 
-  iter = cover.find(op->getParent()->getIndex());
-  if (iter == cover.end()) return false;
-  if ((*iter).second.contain(op)) {
-    if (max==1) return true;
-    if (0==(*iter).second.boundary(op)) return true;
-  }
-  return false;
+	iter = cover.find(op->getParent()->getIndex());
+	if (iter == cover.end()) return false;
+	if ((*iter).second.contain(op)) {
+		if (max==1) return true;
+		if (0==(*iter).second.boundary(op)) return true;
+	}
+	return false;
 }
 
 /// \brief Check the definition of a Varnode for containment
@@ -391,34 +391,34 @@ bool Cover::contain(const PcodeOp *op,int4 max) const
 int4 Cover::containVarnodeDef(const Varnode *vn) const
 
 {
-  const PcodeOp *op = vn->getDef();
-  int4 blk;
+	const PcodeOp *op = vn->getDef();
+	int4 blk;
 
-  if (op == (const PcodeOp *)0) {
-    op = (const PcodeOp *)2;
-    blk = 0;
-  }
-  else
-    blk = op->getParent()->getIndex();
-  map<int4,CoverBlock>::const_iterator iter = cover.find(blk);
-  if (iter == cover.end()) return 0;
-  if ((*iter).second.contain(op)) {
-    int4 boundtype = (*iter).second.boundary(op);
-    if (boundtype == 0) return 1;
-    if (boundtype == 2) return 2;
-    return 3;
-  }
-  return 0;
+	if (op == (const PcodeOp *)0) {
+		op = (const PcodeOp *)2;
+		blk = 0;
+	}
+	else
+		blk = op->getParent()->getIndex();
+	map<int4,CoverBlock>::const_iterator iter = cover.find(blk);
+	if (iter == cover.end()) return 0;
+	if ((*iter).second.contain(op)) {
+		int4 boundtype = (*iter).second.boundary(op);
+		if (boundtype == 0) return 1;
+		if (boundtype == 2) return 2;
+		return 3;
+	}
+	return 0;
 }
 
 /// \param op2 is the other Cover
 void Cover::merge(const Cover &op2)
 
 {
-  map<int4,CoverBlock>::const_iterator iter;
+	map<int4,CoverBlock>::const_iterator iter;
 
-  for(iter=op2.cover.begin();iter!=op2.cover.end();++iter)
-    cover[(*iter).first].merge((*iter).second);
+	for(iter=op2.cover.begin();iter!=op2.cover.end();++iter)
+		cover[(*iter).first].merge((*iter).second);
 }
 
 /// The cover is set to all p-code ops between the point where
@@ -427,11 +427,11 @@ void Cover::merge(const Cover &op2)
 void Cover::rebuild(const Varnode *vn)
 
 {
-  list<PcodeOp *>::const_iterator iter;
+	list<PcodeOp *>::const_iterator iter;
 
-  addDefPoint(vn);
-  for(iter=vn->beginDescend();iter!=vn->endDescend();++iter)
-    addRefPoint(*iter,vn);
+	addDefPoint(vn);
+	for(iter=vn->beginDescend();iter!=vn->endDescend();++iter)
+		addRefPoint(*iter,vn);
 }
 
 /// Any previous cover is removed. Calling this with an
@@ -440,21 +440,21 @@ void Cover::rebuild(const Varnode *vn)
 void Cover::addDefPoint(const Varnode *vn)
 
 {
-  const PcodeOp *def;
+	const PcodeOp *def;
 
-  cover.clear();
+	cover.clear();
 
-  def = vn->getDef();
-  if (def != (const PcodeOp *)0) {
-    CoverBlock &block( cover[def->getParent()->getIndex() ] );
-    block.setBegin(def);	// Set the point topology
-    block.setEnd(def);
-  }
-  else if (vn->isInput()) {
-    CoverBlock &block( cover[0] );
-    block.setBegin( (const PcodeOp *)2 ); // Special mark for input
-    block.setEnd( (const PcodeOp *)2 );
-  }
+	def = vn->getDef();
+	if (def != (const PcodeOp *)0) {
+		CoverBlock &block( cover[def->getParent()->getIndex() ] );
+		block.setBegin(def);        // Set the point topology
+		block.setEnd(def);
+	}
+	else if (vn->isInput()) {
+		CoverBlock &block( cover[0] );
+		block.setBegin( (const PcodeOp *)2 ); // Special mark for input
+		block.setEnd( (const PcodeOp *)2 );
+	}
 }
 
 /// Add to \b this Cover recursively, starting at bottom of the given block
@@ -463,37 +463,37 @@ void Cover::addDefPoint(const Varnode *vn)
 void Cover::addRefRecurse(const FlowBlock *bl)
 
 {
-  int4 j;
-  uintm ustart,ustop;
+	int4 j;
+	uintm ustart,ustop;
 
-  CoverBlock &block(cover[bl->getIndex()]);
-  if (block.empty()) {
-    block.setAll();		// No cover encountered, fill in entire block
-    //    if (bl->InSize()==0)
-    //      throw LowlevelError("Ref point is not in flow of defpoint");
-    for(j=0;j<bl->sizeIn();++j)	// Recurse to all blocks that fall into bl
-      addRefRecurse(bl->getIn(j));
-  }
-  else {
-    const PcodeOp *op = block.getStop();
-    ustart = CoverBlock::getUIndex(block.getStart());
-    ustop = CoverBlock::getUIndex(op);
-    if ((ustop != ~((uintm)0))&&( ustop >= ustart))
-      block.setEnd((const PcodeOp *)1); // Fill in to the bottom
-
-
-    if ((ustop==(uintm)0)&&(block.getStart() == (const PcodeOp *)0)) {
-      if ((op != (const PcodeOp *)0)&&(op->code()==CPUI_MULTIEQUAL)) {
-				// This block contains only an infinitesimal tip
-				// of cover through one branch of a MULTIEQUAL
-				// we still need to traverse through branches
-	for(j=0;j<bl->sizeIn();++j)
-	  addRefRecurse(bl->getIn(j));
-      }
-    }
+	CoverBlock &block(cover[bl->getIndex()]);
+	if (block.empty()) {
+		block.setAll();             // No cover encountered, fill in entire block
+		//    if (bl->InSize()==0)
+		//      throw LowlevelError("Ref point is not in flow of defpoint");
+		for(j=0;j<bl->sizeIn();++j) // Recurse to all blocks that fall into bl
+			addRefRecurse(bl->getIn(j));
+	}
+	else {
+		const PcodeOp *op = block.getStop();
+		ustart = CoverBlock::getUIndex(block.getStart());
+		ustop = CoverBlock::getUIndex(op);
+		if ((ustop != ~((uintm)0))&&( ustop >= ustart))
+			block.setEnd((const PcodeOp *)1); // Fill in to the bottom
 
 
-  }
+		if ((ustop==(uintm)0)&&(block.getStart() == (const PcodeOp *)0)) {
+			if ((op != (const PcodeOp *)0)&&(op->code()==CPUI_MULTIEQUAL)) {
+																// This block contains only an infinitesimal tip
+																// of cover through one branch of a MULTIEQUAL
+																// we still need to traverse through branches
+				for(j=0;j<bl->sizeIn();++j)
+					addRefRecurse(bl->getIn(j));
+			}
+		}
+
+
+	}
 }
 
 /// Given a Varnode being read and the PcodeOp which reads it,
@@ -504,61 +504,61 @@ void Cover::addRefRecurse(const FlowBlock *bl)
 void Cover::addRefPoint(const PcodeOp *ref,const Varnode *vn)
 
 {
-  int4 j;
-  const FlowBlock *bl;
-  uintm ustop;
+	int4 j;
+	const FlowBlock *bl;
+	uintm ustop;
 
-  bl = ref->getParent();
-  CoverBlock &block(cover[bl->getIndex()]);
-  if (block.empty()) {
-    block.setEnd(ref);
-  }
-  else {
-    if (block.contain(ref)) {
-       if (ref->code() != CPUI_MULTIEQUAL) return;
-				// Even if MULTIEQUAL ref is contained
-				// we may be adding new cover because we are
-				// looking at a different branch. So don't return
-    }
-    else {
-      const PcodeOp *op = block.getStop();
-      const PcodeOp *startop = block.getStart();
-      block.setEnd(ref);		// Otherwise update endpoint
-      ustop = CoverBlock::getUIndex(block.getStop());
-      if (ustop >= CoverBlock::getUIndex(startop)) {
-	if ((op!=(const PcodeOp *)0)&&(op!=(const PcodeOp *)2)&&
-	    (op->code()==CPUI_MULTIEQUAL)&&(startop==(const PcodeOp *)0)) {
-				// This block contains only an infinitesimal tip
-				// of cover through one branch of a MULTIEQUAL
-				// we still need to traverse through branches
-	  for(j=0;j<bl->sizeIn();++j)
-	    addRefRecurse(bl->getIn(j));
+	bl = ref->getParent();
+	CoverBlock &block(cover[bl->getIndex()]);
+	if (block.empty()) {
+		block.setEnd(ref);
 	}
-	return;
-      }
-    }
-  }
-  //  if (bl->InSize()==0)
-  //    throw LowlevelError("Ref point is not in flow of defpoint");
-  if (ref->code() == CPUI_MULTIEQUAL) {
-    for(j=0;j<ref->numInput();++j)
-      if (ref->getIn(j)==vn)
-	addRefRecurse(bl->getIn(j));
-  }
-  else
-    for(j=0;j<bl->sizeIn();++j)
-      addRefRecurse(bl->getIn(j));
+	else {
+		if (block.contain(ref)) {
+			 if (ref->code() != CPUI_MULTIEQUAL) return;
+																// Even if MULTIEQUAL ref is contained
+																// we may be adding new cover because we are
+																// looking at a different branch. So don't return
+		}
+		else {
+			const PcodeOp *op = block.getStop();
+			const PcodeOp *startop = block.getStart();
+			block.setEnd(ref);                // Otherwise update endpoint
+			ustop = CoverBlock::getUIndex(block.getStop());
+			if (ustop >= CoverBlock::getUIndex(startop)) {
+				if ((op!=(const PcodeOp *)0)&&(op!=(const PcodeOp *)2)&&
+						(op->code()==CPUI_MULTIEQUAL)&&(startop==(const PcodeOp *)0)) {
+																// This block contains only an infinitesimal tip
+																// of cover through one branch of a MULTIEQUAL
+																// we still need to traverse through branches
+					for(j=0;j<bl->sizeIn();++j)
+						addRefRecurse(bl->getIn(j));
+				}
+				return;
+			}
+		}
+	}
+	//  if (bl->InSize()==0)
+	//    throw LowlevelError("Ref point is not in flow of defpoint");
+	if (ref->code() == CPUI_MULTIEQUAL) {
+		for(j=0;j<ref->numInput();++j)
+			if (ref->getIn(j)==vn)
+				addRefRecurse(bl->getIn(j));
+	}
+	else
+		for(j=0;j<bl->sizeIn();++j)
+			addRefRecurse(bl->getIn(j));
 }
 
 /// \param s is the output stream
 void Cover::print(ostream &s) const
 
 {
-  map<int4,CoverBlock>::const_iterator iter;
+	map<int4,CoverBlock>::const_iterator iter;
 
-  for(iter=cover.begin();iter!=cover.end();++iter) {
-    s << dec << (*iter).first << ": ";
-    (*iter).second.print(s);
-    s << endl;
-  }
+	for(iter=cover.begin();iter!=cover.end();++iter) {
+		s << dec << (*iter).first << ": ";
+		(*iter).second.print(s);
+		s << endl;
+	}
 }

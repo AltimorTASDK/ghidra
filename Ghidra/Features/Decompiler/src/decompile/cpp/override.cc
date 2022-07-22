@@ -19,17 +19,17 @@
 void Override::clear(void)
 
 {
-  map<Address,FuncProto *>::iterator iter;
+	map<Address,FuncProto *>::iterator iter;
 
-  for(iter=protoover.begin();iter!=protoover.end();++iter)
-    delete (*iter).second;
+	for(iter=protoover.begin();iter!=protoover.end();++iter)
+		delete (*iter).second;
 
-  forcegoto.clear();
-  deadcodedelay.clear();
-  indirectover.clear();
-  protoover.clear();
-  multistagejump.clear();
-  flowoverride.clear();
+	forcegoto.clear();
+	deadcodedelay.clear();
+	indirectover.clear();
+	protoover.clear();
+	multistagejump.clear();
+	flowoverride.clear();
 }
 
 /// \brief Generate \e warning message related to a dead code delay
@@ -41,9 +41,9 @@ void Override::clear(void)
 string Override::generateDeadcodeDelayMessage(int4 index,Architecture *glb)
 
 {
-  AddrSpace *spc = glb->getSpace(index);
-  string res = "Restarted to delay deadcode elimination for space: " + spc->getName();
-  return res;
+	AddrSpace *spc = glb->getSpace(index);
+	string res = "Restarted to delay deadcode elimination for space: " + spc->getName();
+	return res;
 }
 
 /// \brief Force a specific branch instruction to be an unstructured \e goto
@@ -56,7 +56,7 @@ string Override::generateDeadcodeDelayMessage(int4 index,Architecture *glb)
 void Override::insertForceGoto(const Address &targetpc,const Address &destpc)
 
 {
-  forcegoto[targetpc] = destpc;
+	forcegoto[targetpc] = destpc;
 }
 
 /// \brief Override the number of passes that are executed before \e dead-code elimination starts
@@ -69,10 +69,10 @@ void Override::insertForceGoto(const Address &targetpc,const Address &destpc)
 void Override::insertDeadcodeDelay(AddrSpace *spc,int4 delay)
 
 {
-  while(deadcodedelay.size() <= spc->getIndex())
-    deadcodedelay.push_back(-1);
+	while(deadcodedelay.size() <= spc->getIndex())
+		deadcodedelay.push_back(-1);
 
-  deadcodedelay[spc->getIndex()] = delay;
+	deadcodedelay[spc->getIndex()] = delay;
 }
 
 /// \brief Check if a delay override is already installed for an address space
@@ -82,12 +82,12 @@ void Override::insertDeadcodeDelay(AddrSpace *spc,int4 delay)
 bool Override::hasDeadcodeDelay(AddrSpace *spc) const
 
 {
-  int4 index = spc->getIndex();
-  if (index >= deadcodedelay.size())
-    return false;
-  int4 val = deadcodedelay[index];
-  if (val == -1) return false;
-  return (val != spc->getDeadcodeDelay());
+	int4 index = spc->getIndex();
+	if (index >= deadcodedelay.size())
+		return false;
+	int4 val = deadcodedelay[index];
+	if (val == -1) return false;
+	return (val != spc->getDeadcodeDelay());
 }
 
 /// \brief Override an indirect call turning it into a direct call
@@ -99,7 +99,7 @@ bool Override::hasDeadcodeDelay(AddrSpace *spc) const
 void Override::insertIndirectOverride(const Address &callpoint,const Address &directcall)
 
 {
-  indirectover[callpoint] = directcall;
+	indirectover[callpoint] = directcall;
 }
 
 /// \brief Override the assumed function prototype at a specific call site
@@ -111,14 +111,14 @@ void Override::insertIndirectOverride(const Address &callpoint,const Address &di
 void Override::insertProtoOverride(const Address &callpoint,FuncProto *p)
 
 {
-  map<Address,FuncProto *>::iterator iter;
+	map<Address,FuncProto *>::iterator iter;
 
-  iter = protoover.find(callpoint);
-  if (iter != protoover.end())	// Check for pre-existing override
-    delete (*iter).second;	// and delete it
+	iter = protoover.find(callpoint);
+	if (iter != protoover.end())  // Check for pre-existing override
+		delete (*iter).second;      // and delete it
 
-  p->setOverride(true);		// Mark this as an override
-  protoover[callpoint] = p;	// Take ownership of the object
+	p->setOverride(true);         // Mark this as an override
+	protoover[callpoint] = p;     // Take ownership of the object
 }
 
 /// \brief Flag an indirect jump for multistage analysis
@@ -127,7 +127,7 @@ void Override::insertProtoOverride(const Address &callpoint,FuncProto *p)
 void Override::insertMultistageJump(const Address &addr)
 
 {
-  multistagejump.push_back(addr);
+	multistagejump.push_back(addr);
 }
 
 /// \brief Mark a branch instruction with a different flow type
@@ -138,7 +138,7 @@ void Override::insertMultistageJump(const Address &addr)
 void Override::insertFlowOverride(const Address &addr,uint4 type)
 
 {
-  flowoverride[addr] = type;
+	flowoverride[addr] = type;
 }
 
 /// \brief Look for and apply a function prototype override
@@ -150,12 +150,12 @@ void Override::insertFlowOverride(const Address &addr,uint4 type)
 void Override::applyPrototype(Funcdata &data,FuncCallSpecs &fspecs) const
 
 {
-  if (!protoover.empty()) {
-    map<Address,FuncProto *>::const_iterator iter = protoover.find(fspecs.getOp()->getAddr());
-    if (iter != protoover.end()) {
-      fspecs.copy(*(*iter).second);
-    }
-  }
+	if (!protoover.empty()) {
+		map<Address,FuncProto *>::const_iterator iter = protoover.find(fspecs.getOp()->getAddr());
+		if (iter != protoover.end()) {
+			fspecs.copy(*(*iter).second);
+		}
+	}
 }
 
 /// \brief Look for and apply destination overrides of indirect calls
@@ -167,11 +167,11 @@ void Override::applyPrototype(Funcdata &data,FuncCallSpecs &fspecs) const
 void Override::applyIndirect(Funcdata &data,FuncCallSpecs &fspecs) const
 
 {
-  if (!indirectover.empty()) {
-    map<Address,Address>::const_iterator iter = indirectover.find(fspecs.getOp()->getAddr());
-    if (iter != indirectover.end())
-      fspecs.setAddress( (*iter).second );
-  }
+	if (!indirectover.empty()) {
+		map<Address,Address>::const_iterator iter = indirectover.find(fspecs.getOp()->getAddr());
+		if (iter != indirectover.end())
+			fspecs.setAddress( (*iter).second );
+	}
 }
 
 /// \brief Check for a multistage marker for a specific indirect jump
@@ -181,11 +181,11 @@ void Override::applyIndirect(Funcdata &data,FuncCallSpecs &fspecs) const
 bool Override::queryMultistageJumptable(const Address &addr) const
 
 {
-  for(int4 i=0;i<multistagejump.size();++i) {
-    if (multistagejump[i] == addr)
-      return true;
-  }
-  return false;
+	for(int4 i=0;i<multistagejump.size();++i) {
+		if (multistagejump[i] == addr)
+			return true;
+	}
+	return false;
 }
 
 /// \brief Push all the force-goto overrides into the function
@@ -194,10 +194,10 @@ bool Override::queryMultistageJumptable(const Address &addr) const
 void Override::applyForceGoto(Funcdata &data) const
 
 {
-  map<Address,Address>::const_iterator iter;
+	map<Address,Address>::const_iterator iter;
 
-  for(iter=forcegoto.begin();iter!=forcegoto.end();++iter)
-    data.forceGoto((*iter).first,(*iter).second);
+	for(iter=forcegoto.begin();iter!=forcegoto.end();++iter)
+		data.forceGoto((*iter).first,(*iter).second);
 }
 
 /// \brief Apply any dead-code delay overrides
@@ -207,13 +207,13 @@ void Override::applyForceGoto(Funcdata &data) const
 void Override::applyDeadCodeDelay(Funcdata &data) const
 
 {
-  Architecture *glb = data.getArch();
-  for(int4 i=0;i<deadcodedelay.size();++i) {
-    int4 delay = deadcodedelay[i];
-    if (delay < 0) continue;
-    AddrSpace *spc = glb->getSpace(i);
-    data.setDeadCodeDelay(spc,delay);
-  }
+	Architecture *glb = data.getArch();
+	for(int4 i=0;i<deadcodedelay.size();++i) {
+		int4 delay = deadcodedelay[i];
+		if (delay < 0) continue;
+		AddrSpace *spc = glb->getSpace(i);
+		data.setDeadCodeDelay(spc,delay);
+	}
 }
 
 /// \brief Return the particular flow override at a given address
@@ -223,11 +223,11 @@ void Override::applyDeadCodeDelay(Funcdata &data) const
 uint4 Override::getFlowOverride(const Address &addr) const
 
 {
-  map<Address,uint4>::const_iterator iter;
-  iter = flowoverride.find(addr);
-  if (iter == flowoverride.end())
-    return Override::NONE;
-  return (*iter).second;
+	map<Address,uint4>::const_iterator iter;
+	iter = flowoverride.find(addr);
+	if (iter == flowoverride.end())
+		return Override::NONE;
+	return (*iter).second;
 }
 
 /// \brief Dump a description of the overrides to stream
@@ -238,27 +238,27 @@ uint4 Override::getFlowOverride(const Address &addr) const
 void Override::printRaw(ostream &s,Architecture *glb) const
 
 {
-  map<Address,Address>::const_iterator iter;
+	map<Address,Address>::const_iterator iter;
 
-  for(iter=forcegoto.begin();iter!=forcegoto.end();++iter)
-    s << "force goto at " << (*iter).first << " jumping to " << (*iter).second << endl;
+	for(iter=forcegoto.begin();iter!=forcegoto.end();++iter)
+		s << "force goto at " << (*iter).first << " jumping to " << (*iter).second << endl;
 
-  for(int4 i=0;i<deadcodedelay.size();++i) {
-    if (deadcodedelay[i] < 0) continue;
-    AddrSpace *spc = glb->getSpace(i);
-    s << "dead code delay on " << spc->getName() << " set to " << dec << deadcodedelay[i] << endl;
-  }
+	for(int4 i=0;i<deadcodedelay.size();++i) {
+		if (deadcodedelay[i] < 0) continue;
+		AddrSpace *spc = glb->getSpace(i);
+		s << "dead code delay on " << spc->getName() << " set to " << dec << deadcodedelay[i] << endl;
+	}
 
-  for(iter=indirectover.begin();iter!=indirectover.end();++iter)
-    s << "override indirect at " << (*iter).first << " to call directly to " << (*iter).second << endl;
+	for(iter=indirectover.begin();iter!=indirectover.end();++iter)
+		s << "override indirect at " << (*iter).first << " to call directly to " << (*iter).second << endl;
 
-  map<Address,FuncProto *>::const_iterator fiter;
+	map<Address,FuncProto *>::const_iterator fiter;
 
-  for(fiter=protoover.begin();fiter!=protoover.end();++fiter) {
-    s << "override prototype at " << (*fiter).first << " to ";
-    (*fiter).second->printRaw("func",s);
-    s << endl;
-  }
+	for(fiter=protoover.begin();fiter!=protoover.end();++fiter) {
+		s << "override prototype at " << (*fiter).first << " to ";
+		(*fiter).second->printRaw("func",s);
+		s << endl;
+	}
 }
 
 /// \brief Create warning messages that describe current overrides
@@ -269,11 +269,11 @@ void Override::printRaw(ostream &s,Architecture *glb) const
 void Override::generateOverrideMessages(vector<string> &messagelist,Architecture *glb) const
 
 {
-  // Generate deadcode delay messages
-  for(int4 i=0;i<deadcodedelay.size();++i) {
-    if (deadcodedelay[i] >= 0)
-      messagelist.push_back( generateDeadcodeDelayMessage(i,glb));
-  }
+	// Generate deadcode delay messages
+	for(int4 i=0;i<deadcodedelay.size();++i) {
+		if (deadcodedelay[i] >= 0)
+			messagelist.push_back( generateDeadcodeDelayMessage(i,glb));
+	}
 }
 
 /// \brief Write the override commands to an XML stream
@@ -284,61 +284,61 @@ void Override::generateOverrideMessages(vector<string> &messagelist,Architecture
 void Override::saveXml(ostream &s,Architecture *glb) const
 
 {
-  if (forcegoto.empty() && deadcodedelay.empty() && indirectover.empty() && protoover.empty() &&
-      multistagejump.empty() && flowoverride.empty())
-    return;
-  s << "<override>\n";
+	if (forcegoto.empty() && deadcodedelay.empty() && indirectover.empty() && protoover.empty() &&
+			multistagejump.empty() && flowoverride.empty())
+		return;
+	s << "<override>\n";
 
-  map<Address,Address>::const_iterator iter;
+	map<Address,Address>::const_iterator iter;
 
-  for(iter=forcegoto.begin();iter!=forcegoto.end();++iter) {
-    s << "<forcegoto>";
-    (*iter).first.saveXml(s);
-    (*iter).second.saveXml(s);
-    s << "</forcegoto>\n";
-  }
+	for(iter=forcegoto.begin();iter!=forcegoto.end();++iter) {
+		s << "<forcegoto>";
+		(*iter).first.saveXml(s);
+		(*iter).second.saveXml(s);
+		s << "</forcegoto>\n";
+	}
 
-  for(int4 i=0;i<deadcodedelay.size();++i) {
-    if (deadcodedelay[i] < 0) continue;
-    AddrSpace *spc = glb->getSpace(i);
-    s << "<deadcodedelay";
-    a_v(s,"space",spc->getName());
-    a_v_i(s,"delay",deadcodedelay[i]);
-    s << "/>\n";
-  }
+	for(int4 i=0;i<deadcodedelay.size();++i) {
+		if (deadcodedelay[i] < 0) continue;
+		AddrSpace *spc = glb->getSpace(i);
+		s << "<deadcodedelay";
+		a_v(s,"space",spc->getName());
+		a_v_i(s,"delay",deadcodedelay[i]);
+		s << "/>\n";
+	}
 
-  for(iter=indirectover.begin();iter!=indirectover.end();++iter) {
-    s << "<indirectoverride>";
-    (*iter).first.saveXml(s);
-    (*iter).second.saveXml(s);
-    s << "</indirectoverride>\n";
-  }
+	for(iter=indirectover.begin();iter!=indirectover.end();++iter) {
+		s << "<indirectoverride>";
+		(*iter).first.saveXml(s);
+		(*iter).second.saveXml(s);
+		s << "</indirectoverride>\n";
+	}
 
-  map<Address,FuncProto *>::const_iterator fiter;
+	map<Address,FuncProto *>::const_iterator fiter;
 
-  for(fiter=protoover.begin();fiter!=protoover.end();++fiter) {
-    s << "<protooverride>";
-    (*fiter).first.saveXml(s);
-    (*fiter).second->saveXml(s);
-    s << "</protooverride>\n";
-  }
+	for(fiter=protoover.begin();fiter!=protoover.end();++fiter) {
+		s << "<protooverride>";
+		(*fiter).first.saveXml(s);
+		(*fiter).second->saveXml(s);
+		s << "</protooverride>\n";
+	}
 
-  for(int4 i=0;i<multistagejump.size();++i) {
-    s << "<multistagejump>";
-    multistagejump[i].saveXml(s);
-    s << "</multistagejump>";
-  }
+	for(int4 i=0;i<multistagejump.size();++i) {
+		s << "<multistagejump>";
+		multistagejump[i].saveXml(s);
+		s << "</multistagejump>";
+	}
 
-  map<Address,uint4>::const_iterator titer;
-  for(titer=flowoverride.begin();titer!=flowoverride.end();++titer) {
-    s << "<flow";
-    a_v(s,"type",typeToString( (*titer).second ));
-    s << ">";
-    (*titer).first.saveXml(s);
-    s << "</flow>\n";
-  }
+	map<Address,uint4>::const_iterator titer;
+	for(titer=flowoverride.begin();titer!=flowoverride.end();++titer) {
+		s << "<flow";
+		a_v(s,"type",typeToString( (*titer).second ));
+		s << ">";
+		(*titer).first.saveXml(s);
+		s << "</flow>\n";
+	}
 
-  s << "</override>\n";
+	s << "</override>\n";
 
 }
 
@@ -349,67 +349,67 @@ void Override::saveXml(ostream &s,Architecture *glb) const
 void Override::restoreXml(const Element *el,Architecture *glb)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    const Element *subel = *iter;
+	for(iter=list.begin();iter!=list.end();++iter) {
+		const Element *subel = *iter;
 
-    if (subel->getName() == "indirectoverride") {
-      const List &list2(subel->getChildren());
-      List::const_iterator iter2 = list2.begin();
-      Address callpoint = Address::restoreXml(*iter2,glb);
-      ++iter2;
-      Address directcall = Address::restoreXml(*iter2,glb);
-      insertIndirectOverride(callpoint,directcall);
-    }
-    else if (subel->getName() == "protooverride") {
-      const List &list2(subel->getChildren());
-      List::const_iterator iter2 = list2.begin();
-      Address callpoint = Address::restoreXml(*iter2,glb);
-      ++iter2;
-      FuncProto *fp = new FuncProto();
-      fp->setInternal(glb->defaultfp,glb->types->getTypeVoid());
-      fp->restoreXml(*iter2,glb);
-      insertProtoOverride(callpoint,fp);
-    }
-    else if (subel->getName() == "forcegoto") {
-      const List &list2(subel->getChildren());
-      List::const_iterator iter2 = list2.begin();
-      Address targetpc = Address::restoreXml(*iter2,glb);
-      ++iter2;
-      Address destpc = Address::restoreXml(*iter2,glb);
-      insertForceGoto(targetpc,destpc);
-    }
-    else if (subel->getName() == "deadcodedelay") {
-      int4 delay = -1;
-      istringstream s(subel->getAttributeValue("delay"));
-      s.unsetf(ios::dec | ios::hex | ios::oct);
-      s >> delay;
-      AddrSpace *spc = glb->getSpaceByName( subel->getAttributeValue("space"));
-      if ((spc == (AddrSpace *)0)||(delay < 0))
-	throw LowlevelError("Bad deadcodedelay tag");
-      insertDeadcodeDelay(spc,delay);
-    }
-    else if (subel->getName() == "multistagejump") {
-      const Element *tmpel = subel->getChildren().front();
-      Address callpoint = Address::restoreXml(tmpel,glb);
-      insertMultistageJump(callpoint);
-    }
-    else if (subel->getName() == "multistagejump") {
-      const Element *tmpel = subel->getChildren().front();
-      Address callpoint = Address::restoreXml(tmpel,glb);
-      insertMultistageJump(callpoint);
-    }
-    else if (subel->getName() == "flow") {
-      uint4 type = stringToType(subel->getAttributeValue("type"));
-      const Element *tmpel = subel->getChildren().front();
-      Address addr = Address::restoreXml(tmpel,glb);
-      if ((type == Override::NONE)||(addr.isInvalid()))
-	throw LowlevelError("Bad flowoverride tag");
-      insertFlowOverride(addr,type);
-    }
-  }
+		if (subel->getName() == "indirectoverride") {
+			const List &list2(subel->getChildren());
+			List::const_iterator iter2 = list2.begin();
+			Address callpoint = Address::restoreXml(*iter2,glb);
+			++iter2;
+			Address directcall = Address::restoreXml(*iter2,glb);
+			insertIndirectOverride(callpoint,directcall);
+		}
+		else if (subel->getName() == "protooverride") {
+			const List &list2(subel->getChildren());
+			List::const_iterator iter2 = list2.begin();
+			Address callpoint = Address::restoreXml(*iter2,glb);
+			++iter2;
+			FuncProto *fp = new FuncProto();
+			fp->setInternal(glb->defaultfp,glb->types->getTypeVoid());
+			fp->restoreXml(*iter2,glb);
+			insertProtoOverride(callpoint,fp);
+		}
+		else if (subel->getName() == "forcegoto") {
+			const List &list2(subel->getChildren());
+			List::const_iterator iter2 = list2.begin();
+			Address targetpc = Address::restoreXml(*iter2,glb);
+			++iter2;
+			Address destpc = Address::restoreXml(*iter2,glb);
+			insertForceGoto(targetpc,destpc);
+		}
+		else if (subel->getName() == "deadcodedelay") {
+			int4 delay = -1;
+			istringstream s(subel->getAttributeValue("delay"));
+			s.unsetf(ios::dec | ios::hex | ios::oct);
+			s >> delay;
+			AddrSpace *spc = glb->getSpaceByName( subel->getAttributeValue("space"));
+			if ((spc == (AddrSpace *)0)||(delay < 0))
+				throw LowlevelError("Bad deadcodedelay tag");
+			insertDeadcodeDelay(spc,delay);
+		}
+		else if (subel->getName() == "multistagejump") {
+			const Element *tmpel = subel->getChildren().front();
+			Address callpoint = Address::restoreXml(tmpel,glb);
+			insertMultistageJump(callpoint);
+		}
+		else if (subel->getName() == "multistagejump") {
+			const Element *tmpel = subel->getChildren().front();
+			Address callpoint = Address::restoreXml(tmpel,glb);
+			insertMultistageJump(callpoint);
+		}
+		else if (subel->getName() == "flow") {
+			uint4 type = stringToType(subel->getAttributeValue("type"));
+			const Element *tmpel = subel->getChildren().front();
+			Address addr = Address::restoreXml(tmpel,glb);
+			if ((type == Override::NONE)||(addr.isInvalid()))
+				throw LowlevelError("Bad flowoverride tag");
+			insertFlowOverride(addr,type);
+		}
+	}
 
 }
 
@@ -418,15 +418,15 @@ void Override::restoreXml(const Element *el,Architecture *glb)
 string Override::typeToString(uint4 tp)
 
 {
-  if (tp == Override::BRANCH)
-    return "branch";
-  if (tp == Override::CALL)
-    return "call";
-  if (tp == Override::CALL_RETURN)
-    return "callreturn";
-  if (tp == Override::RETURN)
-    return "return";
-  return "none";
+	if (tp == Override::BRANCH)
+		return "branch";
+	if (tp == Override::CALL)
+		return "call";
+	if (tp == Override::CALL_RETURN)
+		return "callreturn";
+	if (tp == Override::RETURN)
+		return "return";
+	return "none";
 }
 
 /// \param nm is the override name
@@ -434,13 +434,13 @@ string Override::typeToString(uint4 tp)
 uint4 Override::stringToType(const string &nm)
 
 {
-  if (nm == "branch")
-    return Override::BRANCH;
-  else if (nm == "call")
-    return Override::CALL;
-  else if (nm == "callreturn")
-    return Override::CALL_RETURN;
-  else if (nm == "return")
-    return Override::RETURN;
-  return Override::NONE;
+	if (nm == "branch")
+		return Override::BRANCH;
+	else if (nm == "call")
+		return Override::CALL;
+	else if (nm == "callreturn")
+		return Override::CALL_RETURN;
+	else if (nm == "return")
+		return Override::RETURN;
+	return Override::NONE;
 }

@@ -26,12 +26,12 @@
 /// The singleton adds itself to the list of possible back-end languages for the decompiler
 /// and it acts as a factory for producing the PrintJava object for emitting java-language tokens.
 class PrintJavaCapability : public PrintLanguageCapability {
-  static PrintJavaCapability printJavaCapability;		///< The singleton instance
-  PrintJavaCapability(void);					///< Singleton constructor
-  PrintJavaCapability(const PrintJavaCapability &op2);		///< Not implemented
-  PrintJavaCapability &operator=(const PrintJavaCapability &op);	///< Not implemented
+	static PrintJavaCapability printJavaCapability;               ///< The singleton instance
+	PrintJavaCapability(void);                                    ///< Singleton constructor
+	PrintJavaCapability(const PrintJavaCapability &op2);          ///< Not implemented
+	PrintJavaCapability &operator=(const PrintJavaCapability &op);        ///< Not implemented
 public:
-  virtual PrintLanguage *buildLanguage(Architecture *glb);
+	virtual PrintLanguage *buildLanguage(Architecture *glb);
 };
 
 /// \brief The java-language token emitter
@@ -53,22 +53,22 @@ public:
 /// There are some adjustments to the printing of data-types and LOAD/STORE expressions
 /// to account for this mapping.
 class PrintJava : public PrintC {
-  static OpToken instanceof;				///< The \b instanceof keyword
-  static bool isArrayType(const Datatype *ct);		///< Does the given data-type reference a java array
-  static bool needZeroArray(const Varnode *vn);		///< Do we need '[0]' syntax.
-  void resetDefaultsPrintJava(void);			///< Set options that are specific to Java
-  virtual void printUnicode(ostream &s,int4 onechar) const;
+	static OpToken instanceof;                            ///< The \b instanceof keyword
+	static bool isArrayType(const Datatype *ct);          ///< Does the given data-type reference a java array
+	static bool needZeroArray(const Varnode *vn);         ///< Do we need '[0]' syntax.
+	void resetDefaultsPrintJava(void);                    ///< Set options that are specific to Java
+	virtual void printUnicode(ostream &s,int4 onechar) const;
 public:
-  PrintJava(Architecture *g,const string &nm="java-language");	///< Constructor
-  virtual void resetDefaults(void);
-  virtual void docFunction(const Funcdata *fd);
-  virtual void pushTypeStart(const Datatype *ct,bool noident);
-  virtual void pushTypeEnd(const Datatype *ct);
-  virtual bool doEmitWideCharPrefix(void) const { return false; }
-  virtual void adjustTypeOperators(void);
-  virtual void opLoad(const PcodeOp *op);
-  virtual void opStore(const PcodeOp *op);
-  virtual void opCallind(const PcodeOp *op);
-  virtual void opCpoolRefOp(const PcodeOp *op);
+	PrintJava(Architecture *g,const string &nm="java-language");  ///< Constructor
+	virtual void resetDefaults(void);
+	virtual void docFunction(const Funcdata *fd);
+	virtual void pushTypeStart(const Datatype *ct,bool noident);
+	virtual void pushTypeEnd(const Datatype *ct);
+	virtual bool doEmitWideCharPrefix(void) const { return false; }
+	virtual void adjustTypeOperators(void);
+	virtual void opLoad(const PcodeOp *op);
+	virtual void opStore(const PcodeOp *op);
+	virtual void opCallind(const PcodeOp *op);
+	virtual void opCpoolRefOp(const PcodeOp *op);
 };
 #endif

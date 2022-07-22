@@ -35,36 +35,36 @@ class Funcdata;
 /// function or not. Other properties can be assigned to a comment, to
 /// allow the user to specify the subset of all comments they want to display.
 class Comment {
-  friend class CommentDatabaseInternal;
-  uint4 type;			///< The properties associated with the comment
-  int4 uniq;			///< Sub-identifier for uniqueness
-  Address funcaddr;		///< Address of the function containing the comment
-  Address addr;			///< Address associated with the comment
-  string text;			///< The body of the comment
-  mutable bool emitted;		///< \b true if this comment has already been emitted
+	friend class CommentDatabaseInternal;
+	uint4 type;                   ///< The properties associated with the comment
+	int4 uniq;                    ///< Sub-identifier for uniqueness
+	Address funcaddr;             ///< Address of the function containing the comment
+	Address addr;                 ///< Address associated with the comment
+	string text;                  ///< The body of the comment
+	mutable bool emitted;         ///< \b true if this comment has already been emitted
 public:
-  /// \brief Possible properties associated with a comment
-  enum comment_type {
-    user1 = 1,			///< The first user defined property
-    user2 = 2,			///< The second user defined property
-    user3 = 4,			///< The third user defined property
-    header = 8,			///< The comment should be displayed in the function header
-    warning = 16,		///< The comment is auto-generated to alert the user
-    warningheader = 32		///< The comment is auto-generated and should be in the header
-  };
-  Comment(uint4 tp,const Address &fad,const Address &ad,int4 uq,const string &txt);	///< Constructor
-  Comment(void) {} 	///< Constructor for use with restoreXml
-  void setEmitted(bool val) const { emitted = val; }		///< Mark that \b this comment has been emitted
-  bool isEmitted(void) const { return emitted; }		///< Return \b true if \b this comment is already emitted
-  uint4 getType(void) const { return type; }			///< Get the properties associated with the comment
-  const Address &getFuncAddr(void) const { return funcaddr; }	///< Get the address of the function containing the comment
-  const Address &getAddr(void) const { return addr; }		///< Get the address to which the instruction is attached
-  int4 getUniq(void) const { return uniq; }			///< Get the sub-sorting index
-  const string &getText(void) const { return text; }		///< Get the body of the comment
-  void saveXml(ostream &s) const;				///< Save the comment to an XML stream
-  void restoreXml(const Element *el,const AddrSpaceManager *manage);	///< Restore the comment from XML
-  static uint4 encodeCommentType(const string &name);		///< Convert name string to comment property
-  static string decodeCommentType(uint4 val);			///< Convert comment property to string
+	/// \brief Possible properties associated with a comment
+	enum comment_type {
+		user1 = 1,                  ///< The first user defined property
+		user2 = 2,                  ///< The second user defined property
+		user3 = 4,                  ///< The third user defined property
+		header = 8,                 ///< The comment should be displayed in the function header
+		warning = 16,               ///< The comment is auto-generated to alert the user
+		warningheader = 32          ///< The comment is auto-generated and should be in the header
+	};
+	Comment(uint4 tp,const Address &fad,const Address &ad,int4 uq,const string &txt);     ///< Constructor
+	Comment(void) {}      ///< Constructor for use with restoreXml
+	void setEmitted(bool val) const { emitted = val; }            ///< Mark that \b this comment has been emitted
+	bool isEmitted(void) const { return emitted; }                ///< Return \b true if \b this comment is already emitted
+	uint4 getType(void) const { return type; }                    ///< Get the properties associated with the comment
+	const Address &getFuncAddr(void) const { return funcaddr; }   ///< Get the address of the function containing the comment
+	const Address &getAddr(void) const { return addr; }           ///< Get the address to which the instruction is attached
+	int4 getUniq(void) const { return uniq; }                     ///< Get the sub-sorting index
+	const string &getText(void) const { return text; }            ///< Get the body of the comment
+	void saveXml(ostream &s) const;                               ///< Save the comment to an XML stream
+	void restoreXml(const Element *el,const AddrSpaceManager *manage);    ///< Restore the comment from XML
+	static uint4 encodeCommentType(const string &name);           ///< Convert name string to comment property
+	static string decodeCommentType(uint4 val);                   ///< Convert comment property to string
 };
 
 /// \brief Compare two Comment pointers
@@ -72,10 +72,10 @@ public:
 /// Comments are ordered first by function, then address,
 /// then the sub-sort index.
 struct CommentOrder {
-  bool operator()(const Comment *a,const Comment *b) const;	///< Comparison operator
+	bool operator()(const Comment *a,const Comment *b) const;     ///< Comparison operator
 };
 
-typedef set<Comment *,CommentOrder> CommentSet;		///< A set of comments sorted by function and address
+typedef set<Comment *,CommentOrder> CommentSet;         ///< A set of comments sorted by function and address
 
 /// \brief An interface to a container of comments
 ///
@@ -85,66 +85,66 @@ typedef set<Comment *,CommentOrder> CommentSet;		///< A set of comments sorted b
 /// all Comment objects for a single function.
 class CommentDatabase {
 public:
-  CommentDatabase(void) {}		///< Constructor
-  virtual ~CommentDatabase(void) {}	///< Destructor
-  virtual void clear(void)=0;		///< Clear all comments from this container
+	CommentDatabase(void) {}              ///< Constructor
+	virtual ~CommentDatabase(void) {}     ///< Destructor
+	virtual void clear(void)=0;           ///< Clear all comments from this container
 
-  /// \brief Clear all comments matching (one of) the indicated types
-  ///
-  /// Clearing is restricted to comments belonging to a specific function and matching
-  /// at least one of the given properties
-  /// \param fad is the address of the owning function
-  /// \param tp is a set of one or more properties
-  virtual void clearType(const Address &fad,uint4 tp)=0;
+	/// \brief Clear all comments matching (one of) the indicated types
+	///
+	/// Clearing is restricted to comments belonging to a specific function and matching
+	/// at least one of the given properties
+	/// \param fad is the address of the owning function
+	/// \param tp is a set of one or more properties
+	virtual void clearType(const Address &fad,uint4 tp)=0;
 
-  /// \brief Add a new comment to the container
-  ///
-  /// \param tp is a set of properties to associate with the new comment (may be zero)
-  /// \param fad is the address of the function to which the comment belongs
-  /// \param ad is the address to which the comment is attached
-  /// \param txt is the body of the comment
-  virtual void addComment(uint4 tp,const Address &fad,
-			  const Address &ad,const string &txt)=0;
+	/// \brief Add a new comment to the container
+	///
+	/// \param tp is a set of properties to associate with the new comment (may be zero)
+	/// \param fad is the address of the function to which the comment belongs
+	/// \param ad is the address to which the comment is attached
+	/// \param txt is the body of the comment
+	virtual void addComment(uint4 tp,const Address &fad,
+													const Address &ad,const string &txt)=0;
 
-  /// \brief Add a new comment to the container, making sure there is no duplicate
-  ///
-  /// If there is already a comment at the same address with the same body, no
-  /// new comment is added.
-  /// \param tp is a set of properties to associate with the new comment (may be zero)
-  /// \param fad is the address of the function to which the comment belongs
-  /// \param ad is the address to which the comment is attached
-  /// \param txt is the body of the comment
-  /// \return \b true if a new Comment was created, \b false if there was a duplicate
-  virtual bool addCommentNoDuplicate(uint4 tp,const Address &fad,const Address &ad,const string &txt)=0;
+	/// \brief Add a new comment to the container, making sure there is no duplicate
+	///
+	/// If there is already a comment at the same address with the same body, no
+	/// new comment is added.
+	/// \param tp is a set of properties to associate with the new comment (may be zero)
+	/// \param fad is the address of the function to which the comment belongs
+	/// \param ad is the address to which the comment is attached
+	/// \param txt is the body of the comment
+	/// \return \b true if a new Comment was created, \b false if there was a duplicate
+	virtual bool addCommentNoDuplicate(uint4 tp,const Address &fad,const Address &ad,const string &txt)=0;
 
-  /// \brief Remove the given Comment object from the container
-  ///
-  /// \param com is the given Comment
-  virtual void deleteComment(Comment *com)=0;
+	/// \brief Remove the given Comment object from the container
+	///
+	/// \param com is the given Comment
+	virtual void deleteComment(Comment *com)=0;
 
-  /// \brief Get an iterator to the beginning of comments for a single function
-  ///
-  /// \param fad is the address of the function
-  /// \return the beginning iterator
-  virtual CommentSet::const_iterator beginComment(const Address &fad) const=0;
+	/// \brief Get an iterator to the beginning of comments for a single function
+	///
+	/// \param fad is the address of the function
+	/// \return the beginning iterator
+	virtual CommentSet::const_iterator beginComment(const Address &fad) const=0;
 
-  /// \brief Get an iterator to the ending of comments for a single function
-  ///
-  /// \param fad is the address of the function
-  /// \return the ending iterator
-  virtual CommentSet::const_iterator endComment(const Address &fad) const=0;
+	/// \brief Get an iterator to the ending of comments for a single function
+	///
+	/// \param fad is the address of the function
+	/// \return the ending iterator
+	virtual CommentSet::const_iterator endComment(const Address &fad) const=0;
 
-  /// \brief Save all comments in the container to an XML stream
-  ///
-  /// Writes a \<commentdb> tag, with \<comment> sub-tags for each Comment object.
-  /// \param s is the output stream
-  virtual void saveXml(ostream &s) const=0;
+	/// \brief Save all comments in the container to an XML stream
+	///
+	/// Writes a \<commentdb> tag, with \<comment> sub-tags for each Comment object.
+	/// \param s is the output stream
+	virtual void saveXml(ostream &s) const=0;
 
-  /// \brief Restore all comments from XML
-  ///
-  /// \param el is the root \<commentdb> element
-  /// \param manage is a manager for resolving address space references
-  virtual void restoreXml(const Element *el,const AddrSpaceManager *manage)=0;
+	/// \brief Restore all comments from XML
+	///
+	/// \param el is the root \<commentdb> element
+	/// \param manage is a manager for resolving address space references
+	virtual void restoreXml(const Element *el,const AddrSpaceManager *manage)=0;
 };
 
 
@@ -154,20 +154,20 @@ public:
 /// can be used as stand-alone database of comments, or it can act as a
 /// cache for some other container.
 class CommentDatabaseInternal : public CommentDatabase {
-  CommentSet commentset;			///< The sorted set of Comment objects
+	CommentSet commentset;                        ///< The sorted set of Comment objects
 public:
-  CommentDatabaseInternal(void);		///< Constructor
-  virtual ~CommentDatabaseInternal(void);
-  virtual void clear(void);
-  virtual void clearType(const Address &fad,uint4 tp);
-  virtual void addComment(uint4 tp,const Address &fad,
-			  const Address &ad,const string &txt);
-  virtual bool addCommentNoDuplicate(uint4 tp,const Address &fad,const Address &ad,const string &txt);
-  virtual void deleteComment(Comment *com);
-  virtual CommentSet::const_iterator beginComment(const Address &fad) const;
-  virtual CommentSet::const_iterator endComment(const Address &fad) const;
-  virtual void saveXml(ostream &s) const;
-  virtual void restoreXml(const Element *el,const AddrSpaceManager *manage);
+	CommentDatabaseInternal(void);                ///< Constructor
+	virtual ~CommentDatabaseInternal(void);
+	virtual void clear(void);
+	virtual void clearType(const Address &fad,uint4 tp);
+	virtual void addComment(uint4 tp,const Address &fad,
+													const Address &ad,const string &txt);
+	virtual bool addCommentNoDuplicate(uint4 tp,const Address &fad,const Address &ad,const string &txt);
+	virtual void deleteComment(Comment *com);
+	virtual CommentSet::const_iterator beginComment(const Address &fad) const;
+	virtual CommentSet::const_iterator endComment(const Address &fad) const;
+	virtual void saveXml(ostream &s) const;
+	virtual void restoreXml(const Element *el,const AddrSpaceManager *manage);
 };
 
 /// \brief A class for sorting comments into and within basic blocks
@@ -189,61 +189,61 @@ public:
 /// within the header.
 class CommentSorter {
 public:
-  enum {
-    header_basic = 0,		///< Basic header comments
-    header_unplaced = 1		///< Comment that can't be placed in code flow
-  };
+	enum {
+		header_basic = 0,           ///< Basic header comments
+		header_unplaced = 1         ///< Comment that can't be placed in code flow
+	};
 private:
-  /// \brief The sorting key for placing a Comment within a specific basic block
-  struct Subsort {
-    int4 index;			///< Either the basic block index or -1 for a function header
-    uint4 order;		///< The order index within the basic block
-    uint4 pos;			///< A final count to guarantee a unique sorting
+	/// \brief The sorting key for placing a Comment within a specific basic block
+	struct Subsort {
+		int4 index;                 ///< Either the basic block index or -1 for a function header
+		uint4 order;                ///< The order index within the basic block
+		uint4 pos;                  ///< A final count to guarantee a unique sorting
 
-    /// \brief Compare comments based on basic block, then position within the block
-    ///
-    /// \param op2 is the other key to compare with \b this
-    /// \return \b true if \b this gets ordered before the other key
-    bool operator<(const Subsort &op2) const {
-      if (index == op2.index) {
-	if (order == op2.order)
-	  return (pos < op2.pos);
-	return (order < op2.order);
-      }
-      return (index < op2.index);
-    }
+		/// \brief Compare comments based on basic block, then position within the block
+		///
+		/// \param op2 is the other key to compare with \b this
+		/// \return \b true if \b this gets ordered before the other key
+		bool operator<(const Subsort &op2) const {
+			if (index == op2.index) {
+				if (order == op2.order)
+					return (pos < op2.pos);
+				return (order < op2.order);
+			}
+			return (index < op2.index);
+		}
 
-    /// \brief Initialize a key for a header comment
-    ///
-    /// \param headerType can be either \b header_basic or \b header_unplaced
-    void setHeader(uint4 headerType) {
-      index = -1;		// -1 indicates a header comment
-      order = headerType;
-    }
+		/// \brief Initialize a key for a header comment
+		///
+		/// \param headerType can be either \b header_basic or \b header_unplaced
+		void setHeader(uint4 headerType) {
+			index = -1;               // -1 indicates a header comment
+			order = headerType;
+		}
 
-    /// \brief Initialize a key for a basic block position
-    ///
-    /// \param i is the index of the basic block
-    /// \param ord is the position within the block
-    void setBlock(int4 i,uint4 ord) {
-      index = i;
-      order = ord;
-    }
-  };
-  map<Subsort,Comment *> commmap;			///< Comments for the current function, sorted by block
-  mutable map<Subsort,Comment *>::const_iterator start;	///< Iterator to current comment being walked
-  map<Subsort,Comment *>::const_iterator stop;		///< Last comment in current set being walked
-  map<Subsort,Comment *>::const_iterator opstop;	///< Statement landmark within current set of comments
-  bool displayUnplacedComments;				///< True if unplaced comments should be displayed (in the header)
-  bool findPosition(Subsort &subsort,Comment *comm,const Funcdata *fd);	///< Establish sorting key for a Comment
+		/// \brief Initialize a key for a basic block position
+		///
+		/// \param i is the index of the basic block
+		/// \param ord is the position within the block
+		void setBlock(int4 i,uint4 ord) {
+			index = i;
+			order = ord;
+		}
+	};
+	map<Subsort,Comment *> commmap;                       ///< Comments for the current function, sorted by block
+	mutable map<Subsort,Comment *>::const_iterator start; ///< Iterator to current comment being walked
+	map<Subsort,Comment *>::const_iterator stop;          ///< Last comment in current set being walked
+	map<Subsort,Comment *>::const_iterator opstop;        ///< Statement landmark within current set of comments
+	bool displayUnplacedComments;                         ///< True if unplaced comments should be displayed (in the header)
+	bool findPosition(Subsort &subsort,Comment *comm,const Funcdata *fd); ///< Establish sorting key for a Comment
 public:
-  CommentSorter(void) { displayUnplacedComments = false; }	///< Constructor
-  void setupFunctionList(uint4 tp,const Funcdata *fd,const CommentDatabase &db,bool displayUnplaced);
-  void setupBlockList(const FlowBlock *bl);		///< Prepare to walk comments from a single basic block
-  void setupOpList(const PcodeOp *op);			///< Establish a p-code landmark within the current set of comments
-  void setupHeader(uint4 headerType);			///< Prepare to walk comments in the header
-  bool hasNext(void) const { return (start!=opstop); }	///< Return \b true if there are more comments to emit in the current set
-  Comment *getNext(void) const { Comment *res=(*start).second; ++start; return res; }	///< Advance to the next comment
+	CommentSorter(void) { displayUnplacedComments = false; }      ///< Constructor
+	void setupFunctionList(uint4 tp,const Funcdata *fd,const CommentDatabase &db,bool displayUnplaced);
+	void setupBlockList(const FlowBlock *bl);             ///< Prepare to walk comments from a single basic block
+	void setupOpList(const PcodeOp *op);                  ///< Establish a p-code landmark within the current set of comments
+	void setupHeader(uint4 headerType);                   ///< Prepare to walk comments in the header
+	bool hasNext(void) const { return (start!=opstop); }  ///< Return \b true if there are more comments to emit in the current set
+	Comment *getNext(void) const { Comment *res=(*start).second; ++start; return res; }   ///< Advance to the next comment
 };
 
 #endif

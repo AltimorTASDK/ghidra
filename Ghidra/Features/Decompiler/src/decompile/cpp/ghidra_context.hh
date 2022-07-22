@@ -29,47 +29,47 @@
 /// context variables will throw an exception. The low-level context is only needed by the
 /// Sleigh disassembly engine, which is being provided by the Ghidra client in this use case.
 class ContextGhidra : public ContextDatabase {
-  ArchitectureGhidra *glb;			///< Architecture and connection to the Ghidra client
-  mutable TrackedSet cache;			///< A cache of previously fetched tracked registers.
-  virtual ContextBitRange &getVariable(const string &nm) {
-    throw LowlevelError("getVariable should not be called for GHIDRA"); }
-  virtual const ContextBitRange &getVariable(const string &nm) const {
-    throw LowlevelError("getVariable should not be called for GHIDRA"); }
-  virtual void getRegionForSet(vector<uintm *> &res,const Address &addr1,const Address &addr2,int4 num,uintm mask) {
-    throw LowlevelError("getRegionForSet should not be called for GHIDRA"); }
-  virtual void getRegionToChangePoint(vector<uintm *> &res,const Address &addr,int4 num,uintm mask) {
-    throw LowlevelError("getRegionToChangePoint should not be called for GHIDRA"); }
-  virtual const uintm *getDefaultValue(void) const {
-    throw LowlevelError("getDefaultValue should not be called for GHIDRA"); }
-  virtual uintm *getDefaultValue(void) {
-    throw LowlevelError("getDefaultValue should not be called for GHIDRA"); }
+	ArchitectureGhidra *glb;                      ///< Architecture and connection to the Ghidra client
+	mutable TrackedSet cache;                     ///< A cache of previously fetched tracked registers.
+	virtual ContextBitRange &getVariable(const string &nm) {
+		throw LowlevelError("getVariable should not be called for GHIDRA"); }
+	virtual const ContextBitRange &getVariable(const string &nm) const {
+		throw LowlevelError("getVariable should not be called for GHIDRA"); }
+	virtual void getRegionForSet(vector<uintm *> &res,const Address &addr1,const Address &addr2,int4 num,uintm mask) {
+		throw LowlevelError("getRegionForSet should not be called for GHIDRA"); }
+	virtual void getRegionToChangePoint(vector<uintm *> &res,const Address &addr,int4 num,uintm mask) {
+		throw LowlevelError("getRegionToChangePoint should not be called for GHIDRA"); }
+	virtual const uintm *getDefaultValue(void) const {
+		throw LowlevelError("getDefaultValue should not be called for GHIDRA"); }
+	virtual uintm *getDefaultValue(void) {
+		throw LowlevelError("getDefaultValue should not be called for GHIDRA"); }
 public:
-  ContextGhidra(ArchitectureGhidra *g) { glb = g; }	///< Construct with a specific client
-  virtual ~ContextGhidra(void) {}
+	ContextGhidra(ArchitectureGhidra *g) { glb = g; }     ///< Construct with a specific client
+	virtual ~ContextGhidra(void) {}
 
-  // Routines that are actually implemented
-  virtual const TrackedSet &getTrackedSet(const Address &addr) const;
+	// Routines that are actually implemented
+	virtual const TrackedSet &getTrackedSet(const Address &addr) const;
 
-  // Ignored routines (taken care of by GHIDRA)
-  virtual void restoreXml(const Element *el,const AddrSpaceManager *manage) {}
-  virtual void restoreFromSpec(const Element *el,const AddrSpaceManager *manage) {}
+	// Ignored routines (taken care of by GHIDRA)
+	virtual void restoreXml(const Element *el,const AddrSpaceManager *manage) {}
+	virtual void restoreFromSpec(const Element *el,const AddrSpaceManager *manage) {}
 
-  // Unimplemented routines (should never be called)
-  virtual int getContextSize(void) const {
-    throw LowlevelError("getContextSize should not be called for GHIDRA"); }
-  virtual const uintm *getContext(const Address &addr) const {
-    throw LowlevelError("getContext should not be called for GHIDRA"); }
-  virtual const uintm *getContext(const Address &addr,uintb &first,uintb &last) const {
-    throw LowlevelError("getContext should not be called for GHIDRA"); }
-  virtual void registerVariable(const string &nm,int4 sbit,int4 ebit) {
-    throw LowlevelError("registerVariable should not be called for GHIDRA"); }
-  virtual void saveXml(ostream &s) const {
-    throw LowlevelError("context::saveXml should not be called for GHIDRA"); }
+	// Unimplemented routines (should never be called)
+	virtual int getContextSize(void) const {
+		throw LowlevelError("getContextSize should not be called for GHIDRA"); }
+	virtual const uintm *getContext(const Address &addr) const {
+		throw LowlevelError("getContext should not be called for GHIDRA"); }
+	virtual const uintm *getContext(const Address &addr,uintb &first,uintb &last) const {
+		throw LowlevelError("getContext should not be called for GHIDRA"); }
+	virtual void registerVariable(const string &nm,int4 sbit,int4 ebit) {
+		throw LowlevelError("registerVariable should not be called for GHIDRA"); }
+	virtual void saveXml(ostream &s) const {
+		throw LowlevelError("context::saveXml should not be called for GHIDRA"); }
 
-  virtual TrackedSet &createSet(const Address &addr1,const Address &addr2) {
-    throw LowlevelError("createSet should not be called for GHIDRA"); }
-  virtual TrackedSet &getTrackedDefault(void) {
-    throw LowlevelError("getTrackedDefault should not be called for GHIDRA"); }
+	virtual TrackedSet &createSet(const Address &addr1,const Address &addr2) {
+		throw LowlevelError("createSet should not be called for GHIDRA"); }
+	virtual TrackedSet &getTrackedDefault(void) {
+		throw LowlevelError("getTrackedDefault should not be called for GHIDRA"); }
 };
 
 #endif

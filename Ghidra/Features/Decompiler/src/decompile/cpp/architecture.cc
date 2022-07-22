@@ -33,7 +33,7 @@ const uint4 ArchitectureCapability::minorversion = 1;
 void ArchitectureCapability::initialize(void)
 
 {
-  thelist.push_back(this);
+	thelist.push_back(this);
 }
 
 /// Given a specific file, find an ArchitectureCapability that can handle it.
@@ -42,12 +42,12 @@ void ArchitectureCapability::initialize(void)
 ArchitectureCapability *ArchitectureCapability::findCapability(const string &filename)
 
 {
-  for(uint4 i=0;i<thelist.size();++i) {
-    ArchitectureCapability *capa = thelist[i];
-    if (capa->isFileMatch(filename))
-      return capa;
-  }
-  return (ArchitectureCapability *)0;
+	for(uint4 i=0;i<thelist.size();++i) {
+		ArchitectureCapability *capa = thelist[i];
+		if (capa->isFileMatch(filename))
+			return capa;
+	}
+	return (ArchitectureCapability *)0;
 }
 
 /// Given a parsed XML document, find an ArchitectureCapability that can handle it.
@@ -56,12 +56,12 @@ ArchitectureCapability *ArchitectureCapability::findCapability(const string &fil
 ArchitectureCapability *ArchitectureCapability::findCapability(Document *doc)
 
 {
-  for(uint4 i=0;i<thelist.size();++i) {
-    ArchitectureCapability *capa = thelist[i];
-    if (capa->isXmlMatch(doc))
-      return capa;
-  }
-  return (ArchitectureCapability *)0;
+	for(uint4 i=0;i<thelist.size();++i) {
+		ArchitectureCapability *capa = thelist[i];
+		if (capa->isXmlMatch(doc))
+			return capa;
+	}
+	return (ArchitectureCapability *)0;
 }
 
 /// Return the ArchitectureCapability object with the matching name
@@ -70,12 +70,12 @@ ArchitectureCapability *ArchitectureCapability::findCapability(Document *doc)
 ArchitectureCapability *ArchitectureCapability::getCapability(const string &name)
 
 {
-  for(int4 i=0;i<thelist.size();++i) {
-    ArchitectureCapability *res = thelist[i];
-    if (res->getName() == name)
-      return res;
-  }
-  return (ArchitectureCapability *)0;
+	for(int4 i=0;i<thelist.size();++i) {
+		ArchitectureCapability *res = thelist[i];
+		if (res->getName() == name)
+			return res;
+	}
+	return (ArchitectureCapability *)0;
 }
 
 /// Modify order that extensions are searched, to effect which gets a chance
@@ -84,15 +84,15 @@ ArchitectureCapability *ArchitectureCapability::getCapability(const string &name
 void ArchitectureCapability::sortCapabilities(void)
 
 {
-  uint4 i;
-  for(i=0;i<thelist.size();++i) {
-    if (thelist[i]->getName() == "raw") break;
-  }
-  if (i==thelist.size()) return;
-  ArchitectureCapability *capa = thelist[i];
-  for(uint4 j=i+1;j<thelist.size();++j)
-    thelist[j-1] = thelist[j];
-  thelist[ thelist.size()-1 ] = capa;
+	uint4 i;
+	for(i=0;i<thelist.size();++i) {
+		if (thelist[i]->getName() == "raw") break;
+	}
+	if (i==thelist.size()) return;
+	ArchitectureCapability *capa = thelist[i];
+	for(uint4 j=i+1;j<thelist.size();++j)
+		thelist[j-1] = thelist[j];
+	thelist[ thelist.size()-1 ] = capa;
 }
 
 /// Set most sub-components to null pointers. Provide reasonable defaults
@@ -100,80 +100,80 @@ void ArchitectureCapability::sortCapabilities(void)
 Architecture::Architecture(void)
 
 {
-  //  endian = -1;
-  resetDefaultsInternal();
-  min_funcsymbol_size = 1;
-  aggressive_ext_trim = false;
-  funcptr_align = 0;
-  defaultfp = (ProtoModel *)0;
-  defaultReturnAddr.space = (AddrSpace *)0;
-  evalfp_current = (ProtoModel *)0;
-  evalfp_called = (ProtoModel *)0;
-  types = (TypeFactory *)0;
-  translate = (Translate *)0;
-  loader = (LoadImage *)0;
-  pcodeinjectlib = (PcodeInjectLibrary *)0;
-  commentdb = (CommentDatabase *)0;
-  stringManager = (StringManager *)0;
-  cpool = (ConstantPool *)0;
-  symboltab = (Database *)0;
-  context = (ContextDatabase *)0;
-  print = PrintLanguageCapability::getDefault()->buildLanguage(this);
-  printlist.push_back(print);
-  options = new OptionDatabase(this);
-  loadersymbols_parsed = false;
+	//  endian = -1;
+	resetDefaultsInternal();
+	min_funcsymbol_size = 1;
+	aggressive_ext_trim = false;
+	funcptr_align = 0;
+	defaultfp = (ProtoModel *)0;
+	defaultReturnAddr.space = (AddrSpace *)0;
+	evalfp_current = (ProtoModel *)0;
+	evalfp_called = (ProtoModel *)0;
+	types = (TypeFactory *)0;
+	translate = (Translate *)0;
+	loader = (LoadImage *)0;
+	pcodeinjectlib = (PcodeInjectLibrary *)0;
+	commentdb = (CommentDatabase *)0;
+	stringManager = (StringManager *)0;
+	cpool = (ConstantPool *)0;
+	symboltab = (Database *)0;
+	context = (ContextDatabase *)0;
+	print = PrintLanguageCapability::getDefault()->buildLanguage(this);
+	printlist.push_back(print);
+	options = new OptionDatabase(this);
+	loadersymbols_parsed = false;
 #ifdef CPUI_STATISTICS
-  stats = new Statistics();
+	stats = new Statistics();
 #endif
 #ifdef OPACTION_DEBUG
-  debugstream = (ostream *)0;
+	debugstream = (ostream *)0;
 #endif
 }
 
 /// Release resources for all sub-components
 Architecture::~Architecture(void)
 
-{				// Delete anything that was allocated
-  vector<TypeOp *>::iterator iter;
-  TypeOp *t_op;
+{                               // Delete anything that was allocated
+	vector<TypeOp *>::iterator iter;
+	TypeOp *t_op;
 
-  for(iter=inst.begin();iter!=inst.end();++iter) {
-    t_op = *iter;
-    if (t_op != (TypeOp *)0)
-      delete t_op;
-  }
-  for(int4 i=0;i<extra_pool_rules.size();++i)
-    delete extra_pool_rules[i];
+	for(iter=inst.begin();iter!=inst.end();++iter) {
+		t_op = *iter;
+		if (t_op != (TypeOp *)0)
+			delete t_op;
+	}
+	for(int4 i=0;i<extra_pool_rules.size();++i)
+		delete extra_pool_rules[i];
 
-  if (symboltab != (Database *)0)
-    delete symboltab;
-  for(int4 i=0;i<(int4)printlist.size();++i)
-    delete printlist[i];
-  delete options;
+	if (symboltab != (Database *)0)
+		delete symboltab;
+	for(int4 i=0;i<(int4)printlist.size();++i)
+		delete printlist[i];
+	delete options;
 #ifdef CPUI_STATISTICS
-  delete stats;
+	delete stats;
 #endif
 
-  map<string,ProtoModel *>::const_iterator piter;
-  for(piter=protoModels.begin();piter!=protoModels.end();++piter)
-    delete (*piter).second;
+	map<string,ProtoModel *>::const_iterator piter;
+	for(piter=protoModels.begin();piter!=protoModels.end();++piter)
+		delete (*piter).second;
 
-  if (types != (TypeFactory *)0)
-    delete types;
-  if (translate != (Translate *)0)
-    delete translate;
-  if (loader != (LoadImage *)0)
-    delete loader;
-  if (pcodeinjectlib != (PcodeInjectLibrary *)0)
-    delete pcodeinjectlib;
-  if (commentdb != (CommentDatabase *)0)
-    delete commentdb;
-  if (stringManager != (StringManager *)0)
-    delete stringManager;
-  if (cpool != (ConstantPool *)0)
-    delete cpool;
-  if (context != (ContextDatabase *)0)
-    delete context;
+	if (types != (TypeFactory *)0)
+		delete types;
+	if (translate != (Translate *)0)
+		delete translate;
+	if (loader != (LoadImage *)0)
+		delete loader;
+	if (pcodeinjectlib != (PcodeInjectLibrary *)0)
+		delete pcodeinjectlib;
+	if (commentdb != (CommentDatabase *)0)
+		delete commentdb;
+	if (stringManager != (StringManager *)0)
+		delete stringManager;
+	if (cpool != (ConstantPool *)0)
+		delete cpool;
+	if (context != (ContextDatabase *)0)
+		delete context;
 }
 
 /// The Architecture maintains the set of prototype models that can
@@ -184,12 +184,12 @@ Architecture::~Architecture(void)
 ProtoModel *Architecture::getModel(const string &nm) const
 
 {
-  map<string,ProtoModel *>::const_iterator iter;
+	map<string,ProtoModel *>::const_iterator iter;
 
-  iter = protoModels.find(nm);
-  if (iter==protoModels.end())
-    throw LowlevelError("Prototype model does not exist: "+nm);
-  return (*iter).second;
+	iter = protoModels.find(nm);
+	if (iter==protoModels.end())
+		throw LowlevelError("Prototype model does not exist: "+nm);
+	return (*iter).second;
 }
 
 /// \param nm is the name of the model
@@ -197,10 +197,10 @@ ProtoModel *Architecture::getModel(const string &nm) const
 bool Architecture::hasModel(const string &nm) const
 
 { // Does this architecture have a prototype model of this name
-  map<string,ProtoModel *>::const_iterator iter;
+	map<string,ProtoModel *>::const_iterator iter;
 
-  iter = protoModels.find(nm);
-  return (iter != protoModels.end());
+	iter = protoModels.find(nm);
+	return (iter != protoModels.end());
 }
 
 /// Get the address space associated with the indicated
@@ -214,21 +214,21 @@ bool Architecture::hasModel(const string &nm) const
 AddrSpace *Architecture::getSpaceBySpacebase(const Address &loc,int4 size) const
 
 {
-  AddrSpace *id;
-  int4 sz = numSpaces();
-  for(int4 i=0;i<sz;++i) {
-    id = getSpace(i);
-    if (id == (AddrSpace *)0) continue;
-    int4 numspace = id->numSpacebase();
-    for(int4 j=0;j<numspace;++j) {
-      const VarnodeData &point(id->getSpacebase(j));
-      if (point.size != size) continue;
-      if (point.space != loc.getSpace()) continue;
-      if (point.offset != loc.getOffset()) continue;
-      return id;
-    }
-  }
-  throw LowlevelError("Unable to find entry for spacebase register");
+	AddrSpace *id;
+	int4 sz = numSpaces();
+	for(int4 i=0;i<sz;++i) {
+		id = getSpace(i);
+		if (id == (AddrSpace *)0) continue;
+		int4 numspace = id->numSpacebase();
+		for(int4 j=0;j<numspace;++j) {
+			const VarnodeData &point(id->getSpacebase(j));
+			if (point.size != size) continue;
+			if (point.space != loc.getSpace()) continue;
+			if (point.offset != loc.getOffset()) continue;
+			return id;
+		}
+	}
+	throw LowlevelError("Unable to find entry for spacebase register");
 }
 
 /// Look-up the laned register record associated with a specific storage location. Currently, the
@@ -240,19 +240,19 @@ AddrSpace *Architecture::getSpaceBySpacebase(const Address &loc,int4 size) const
 const LanedRegister *Architecture::getLanedRegister(const Address &loc,int4 size) const
 
 {
-  int4 min = 0;
-  int4 max = lanerecords.size() - 1;
-  while(min <= max) {
-    int4 mid = (min + max) / 2;
-    int4 sz = lanerecords[mid].getWholeSize();
-    if (sz < size)
-      min = mid + 1;
-    else if (size < sz)
-      max = mid - 1;
-    else
-      return &lanerecords[mid];
-  }
-  return (const LanedRegister *)0;
+	int4 min = 0;
+	int4 max = lanerecords.size() - 1;
+	while(min <= max) {
+		int4 mid = (min + max) / 2;
+		int4 sz = lanerecords[mid].getWholeSize();
+		if (sz < size)
+			min = mid + 1;
+		else if (size < sz)
+			max = mid - 1;
+		else
+			return &lanerecords[mid];
+	}
+	return (const LanedRegister *)0;
 }
 
 /// Return a size intended for comparison with a Varnode size to immediately determine if
@@ -262,9 +262,9 @@ const LanedRegister *Architecture::getLanedRegister(const Address &loc,int4 size
 int4 Architecture::getMinimumLanedRegisterSize(void) const
 
 {
-  if (lanerecords.empty())
-    return -1;
-  return lanerecords[0].getWholeSize();
+	if (lanerecords.empty())
+		return -1;
+	return lanerecords[0].getWholeSize();
 }
 
 /// The default model is used whenever an explicit model is not known
@@ -273,7 +273,7 @@ int4 Architecture::getMinimumLanedRegisterSize(void) const
 void Architecture::setDefaultModel(const string &nm)
 
 {
-  defaultfp = getModel(nm);
+	defaultfp = getModel(nm);
 }
 
 /// Throw out the syntax tree, (unlocked) symbols, comments, and other derived information
@@ -282,9 +282,9 @@ void Architecture::setDefaultModel(const string &nm)
 void Architecture::clearAnalysis(Funcdata *fd)
 
 {
-  fd->clear();			// Clear stuff internal to function
-  // Clear out any analysis generated comments
-  commentdb->clearType(fd->getAddress(),Comment::warning|Comment::warningheader);
+	fd->clear();                  // Clear stuff internal to function
+	// Clear out any analysis generated comments
+	commentdb->clearType(fd->getAddress(),Comment::warning|Comment::warningheader);
 }
 
 /// Symbols do not necessarily need to be available for the decompiler.
@@ -293,16 +293,16 @@ void Architecture::clearAnalysis(Funcdata *fd)
 void Architecture::readLoaderSymbols(const string &delim)
 
 {
-  if (loadersymbols_parsed) return; // already read
-  loader->openSymbols();
-  loadersymbols_parsed = true;
-  LoadImageFunc record;
-  while(loader->getNextSymbol(record)) {
-    string basename;
-    Scope *scope = symboltab->findCreateScopeFromSymbolName(record.name, delim, basename, (Scope *)0);
-    scope->addFunction(record.address,basename);
-  }
-  loader->closeSymbols();
+	if (loadersymbols_parsed) return; // already read
+	loader->openSymbols();
+	loadersymbols_parsed = true;
+	LoadImageFunc record;
+	while(loader->getNextSymbol(record)) {
+		string basename;
+		Scope *scope = symboltab->findCreateScopeFromSymbolName(record.name, delim, basename, (Scope *)0);
+		scope->addFunction(record.address,basename);
+	}
+	loader->closeSymbols();
 }
 
 /// For all registered p-code opcodes, return the corresponding OpBehavior object.
@@ -311,12 +311,12 @@ void Architecture::readLoaderSymbols(const string &delim)
 void Architecture::collectBehaviors(vector<OpBehavior *> &behave) const
 
 {
-  behave.resize(inst.size(), (OpBehavior *)0);
-  for(int4 i=0;i<inst.size();++i) {
-    TypeOp *op = inst[i];
-    if (op == (TypeOp *)0) continue;
-    behave[i] = op->getBehavior();
-  }
+	behave.resize(inst.size(), (OpBehavior *)0);
+	for(int4 i=0;i<inst.size();++i) {
+		TypeOp *op = inst[i];
+		if (op == (TypeOp *)0) continue;
+		behave[i] = op->getBehavior();
+	}
 }
 
 /// This method searches for a user-defined segment op registered
@@ -326,12 +326,12 @@ void Architecture::collectBehaviors(vector<OpBehavior *> &behave) const
 SegmentOp *Architecture::getSegmentOp(AddrSpace *spc) const
 
 {
-  if (spc->getIndex() >= userops.numSegmentOps()) return (SegmentOp *)0;
-  SegmentOp *segdef = userops.getSegmentOp(spc->getIndex());
-  if (segdef == (SegmentOp *)0) return (SegmentOp *)0;
-  if (segdef->getResolve().space != (AddrSpace *)0)
-    return segdef;
-  return (SegmentOp *)0;
+	if (spc->getIndex() >= userops.numSegmentOps()) return (SegmentOp *)0;
+	SegmentOp *segdef = userops.getSegmentOp(spc->getIndex());
+	if (segdef == (SegmentOp *)0) return (SegmentOp *)0;
+	if (segdef->getResolve().space != (AddrSpace *)0)
+		return segdef;
+	return (SegmentOp *)0;
 }
 
 /// Establish details of the prototype for a given function symbol
@@ -339,15 +339,15 @@ SegmentOp *Architecture::getSegmentOp(AddrSpace *spc) const
 void Architecture::setPrototype(const PrototypePieces &pieces)
 
 {
-  string basename;
-  Scope *scope = symboltab->resolveScopeFromSymbolName(pieces.name, "::", basename, (Scope *)0);
-  if (scope == (Scope *)0)
-    throw ParseError("Unknown namespace: " + pieces.name);
-  Funcdata *fd = scope->queryFunction( basename );
-  if (fd == (Funcdata *)0)
-    throw ParseError("Unknown function name: " + pieces.name);
+	string basename;
+	Scope *scope = symboltab->resolveScopeFromSymbolName(pieces.name, "::", basename, (Scope *)0);
+	if (scope == (Scope *)0)
+		throw ParseError("Unknown namespace: " + pieces.name);
+	Funcdata *fd = scope->queryFunction( basename );
+	if (fd == (Funcdata *)0)
+		throw ParseError("Unknown function name: " + pieces.name);
 
-  fd->getFuncProto().setPieces(pieces);
+	fd->getFuncProto().setPieces(pieces);
 }
 
 /// The decompiler supports one or more output languages (C, Java). This method
@@ -358,41 +358,41 @@ void Architecture::setPrototype(const PrototypePieces &pieces)
 void Architecture::setPrintLanguage(const string &nm)
 
 {
-  for(int4 i=0;i<(int4)printlist.size();++i) {
-    if (printlist[i]->getName() == nm) {
-      print = printlist[i];
-      print->adjustTypeOperators();
-      return;
-    }
-  }
-  PrintLanguageCapability *capa = PrintLanguageCapability::findCapability(nm);
-  if (capa == (PrintLanguageCapability *)0)
-    throw LowlevelError("Unknown print language: "+nm);
-  bool printxml = print->emitsXml(); // Copy settings for current print language
-  ostream *t = print->getOutputStream();
-  print = capa->buildLanguage(this);
-  print->setOutputStream(t);	// Restore settings from previous language
-  print->getCastStrategy()->setTypeFactory(types);
-  if (printxml)
-    print->setXML(true);
-  printlist.push_back(print);
-  print->adjustTypeOperators();
-  return;
+	for(int4 i=0;i<(int4)printlist.size();++i) {
+		if (printlist[i]->getName() == nm) {
+			print = printlist[i];
+			print->adjustTypeOperators();
+			return;
+		}
+	}
+	PrintLanguageCapability *capa = PrintLanguageCapability::findCapability(nm);
+	if (capa == (PrintLanguageCapability *)0)
+		throw LowlevelError("Unknown print language: "+nm);
+	bool printxml = print->emitsXml(); // Copy settings for current print language
+	ostream *t = print->getOutputStream();
+	print = capa->buildLanguage(this);
+	print->setOutputStream(t);    // Restore settings from previous language
+	print->getCastStrategy()->setTypeFactory(types);
+	if (printxml)
+		print->setXML(true);
+	printlist.push_back(print);
+	print->adjustTypeOperators();
+	return;
 }
 
 /// Set all IPTR_PROCESSOR and IPTR_SPACEBASE spaces to be global
 void Architecture::globalify(void)
 
 {
-  Scope *scope = symboltab->getGlobalScope();
-  int4 nm = numSpaces();
+	Scope *scope = symboltab->getGlobalScope();
+	int4 nm = numSpaces();
 
-  for(int4 i=0;i<nm;++i) {
-    AddrSpace *spc = getSpace(i);
-    if (spc == (AddrSpace *)0) continue;
-    if ((spc->getType() != IPTR_PROCESSOR)&&(spc->getType() != IPTR_SPACEBASE)) continue;
-    symboltab->addRange(scope,spc,(uintb)0,spc->getHighest());
-  }
+	for(int4 i=0;i<nm;++i) {
+		AddrSpace *spc = getSpace(i);
+		if (spc == (AddrSpace *)0) continue;
+		if ((spc->getType() != IPTR_PROCESSOR)&&(spc->getType() != IPTR_SPACEBASE)) continue;
+		symboltab->addRange(scope,spc,(uintb)0,spc->getHighest());
+	}
 }
 
 /// Insert a series of out-of-band flow overrides based on a \<flowoverridelist> tag.
@@ -400,20 +400,20 @@ void Architecture::globalify(void)
 void Architecture::restoreFlowOverride(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    const Element *subel = *iter;
-    const List &sublist(subel->getChildren());
-    List::const_iterator subiter = sublist.begin();
-    Address funcaddr = Address::restoreXml(*subiter,this);
-    ++subiter;
-    Address overaddr = Address::restoreXml(*subiter,this);
-    Funcdata *fd = symboltab->getGlobalScope()->queryFunction(funcaddr);
-    if (fd != (Funcdata *)0)
-      fd->getOverride().insertFlowOverride(overaddr,Override::stringToType(subel->getAttributeValue("type")));
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		const Element *subel = *iter;
+		const List &sublist(subel->getChildren());
+		List::const_iterator subiter = sublist.begin();
+		Address funcaddr = Address::restoreXml(*subiter,this);
+		++subiter;
+		Address overaddr = Address::restoreXml(*subiter,this);
+		Funcdata *fd = symboltab->getGlobalScope()->queryFunction(funcaddr);
+		if (fd != (Funcdata *)0)
+			fd->getOverride().insertFlowOverride(overaddr,Override::stringToType(subel->getAttributeValue("type")));
+	}
 }
 
 /// Write the current state of all types, symbols, functions, etc. an XML stream
@@ -421,17 +421,17 @@ void Architecture::restoreFlowOverride(const Element *el)
 void Architecture::saveXml(ostream &s) const
 
 {
-  s << "<save_state";
-  a_v_b(s,"loadersymbols",loadersymbols_parsed);
-  s << ">\n";
-  types->saveXml(s);
-  symboltab->saveXml(s);
-  context->saveXml(s);
-  commentdb->saveXml(s);
-  stringManager->saveXml(s);
-  if (!cpool->empty())
-    cpool->saveXml(s);
-  s << "</save_state>\n";
+	s << "<save_state";
+	a_v_b(s,"loadersymbols",loadersymbols_parsed);
+	s << ">\n";
+	types->saveXml(s);
+	symboltab->saveXml(s);
+	context->saveXml(s);
+	commentdb->saveXml(s);
+	stringManager->saveXml(s);
+	if (!cpool->empty())
+		cpool->saveXml(s);
+	s << "</save_state>\n";
 }
 
 /// Read in all the sub-component state from a \<save_state> XML tag
@@ -440,40 +440,40 @@ void Architecture::saveXml(ostream &s) const
 void Architecture::restoreXml(DocumentStorage &store)
 
 {
-  const Element *el = store.getTag("save_state");
-  if (el == (const Element *)0)
-    throw LowlevelError("Could not find save_state tag");
-  if (el->getNumAttributes() != 0)
-    loadersymbols_parsed = xml_readbool(el->getAttributeValue("loadersymbols"));
-  else
-    loadersymbols_parsed = false;
+	const Element *el = store.getTag("save_state");
+	if (el == (const Element *)0)
+		throw LowlevelError("Could not find save_state tag");
+	if (el->getNumAttributes() != 0)
+		loadersymbols_parsed = xml_readbool(el->getAttributeValue("loadersymbols"));
+	else
+		loadersymbols_parsed = false;
 
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    const Element *subel = *iter;
-    if (subel->getName() == "typegrp")
-      types->restoreXml(subel);
-    else if (subel->getName() == "db")
-      symboltab->restoreXml(subel);
-    else if (subel->getName() == "context_points")
-      context->restoreXml(subel,this);
-    else if (subel->getName() == "commentdb")
-      commentdb->restoreXml(subel,this);
-    else if (subel->getName() == "stringmanage")
-      stringManager->restoreXml(subel,this);
-    else if (subel->getName() == "constantpool")
-      cpool->restoreXml(subel,*types);
-    else if (subel->getName() == "optionslist")
-      options->restoreXml(subel);
-    else if (subel->getName() == "flowoverridelist")
-      restoreFlowOverride(subel);
-    else if (subel->getName() == "injectdebug")
-      pcodeinjectlib->restoreDebug(subel);
-    else
-      throw LowlevelError("XML error restoring architecture: " + subel->getName());
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		const Element *subel = *iter;
+		if (subel->getName() == "typegrp")
+			types->restoreXml(subel);
+		else if (subel->getName() == "db")
+			symboltab->restoreXml(subel);
+		else if (subel->getName() == "context_points")
+			context->restoreXml(subel,this);
+		else if (subel->getName() == "commentdb")
+			commentdb->restoreXml(subel,this);
+		else if (subel->getName() == "stringmanage")
+			stringManager->restoreXml(subel,this);
+		else if (subel->getName() == "constantpool")
+			cpool->restoreXml(subel,*types);
+		else if (subel->getName() == "optionslist")
+			options->restoreXml(subel);
+		else if (subel->getName() == "flowoverridelist")
+			restoreFlowOverride(subel);
+		else if (subel->getName() == "injectdebug")
+			pcodeinjectlib->restoreDebug(subel);
+		else
+			throw LowlevelError("XML error restoring architecture: " + subel->getName());
+	}
 }
 
 /// If no better name is available, this method can be used to generate
@@ -483,10 +483,10 @@ void Architecture::restoreXml(DocumentStorage &store)
 void Architecture::nameFunction(const Address &addr,string &name) const
 
 {
-  ostringstream defname;
-  defname << "func_";
-  addr.printRaw(defname);
-  name = defname.str();
+	ostringstream defname;
+	defname << "func_";
+	addr.printRaw(defname);
+	name = defname.str();
 }
 
 /// This process sets up a "register relative" space for this architecture
@@ -499,16 +499,16 @@ void Architecture::nameFunction(const Address &addr,string &name) const
 /// \param isreversejustified is \b true if small variables are justified opposite of endianness
 /// \param stackGrowth is \b true if a stack implemented in this space grows in the negative direction
 void Architecture::addSpacebase(AddrSpace *basespace,const string &nm,const VarnodeData &ptrdata,
-				int4 truncSize,bool isreversejustified,bool stackGrowth)
+																int4 truncSize,bool isreversejustified,bool stackGrowth)
 
 {
-  int4 ind = numSpaces();
-  
-  SpacebaseSpace *spc = new SpacebaseSpace(this,translate,nm,ind,truncSize,basespace,ptrdata.space->getDelay()+1);
-  if (isreversejustified)
-    setReverseJustified(spc);
-  insertSpace(spc);
-  addSpacebasePointer(spc,ptrdata,truncSize,stackGrowth);
+	int4 ind = numSpaces();
+	
+	SpacebaseSpace *spc = new SpacebaseSpace(this,translate,nm,ind,truncSize,basespace,ptrdata.space->getDelay()+1);
+	if (isreversejustified)
+		setReverseJustified(spc);
+	insertSpace(spc);
+	addSpacebasePointer(spc,ptrdata,truncSize,stackGrowth);
 }
 
 /// This routine is used by the initialization process to add
@@ -518,7 +518,7 @@ void Architecture::addSpacebase(AddrSpace *basespace,const string &nm,const Varn
 void Architecture::addNoHighPtr(const Range &rng)
 
 {
-  nohighptr.insertRange(rng.getSpace(),rng.getFirst(),rng.getLast());
+	nohighptr.insertRange(rng.getSpace(),rng.getFirst(),rng.getLast());
 }
 
 /// This builds the \e universal Action for function transformation
@@ -527,9 +527,9 @@ void Architecture::addNoHighPtr(const Range &rng)
 void Architecture::buildAction(DocumentStorage &store)
 
 {
-  parseExtraRules(store);	// Look for any additional rules
-  allacts.universalAction(this);
-  allacts.resetDefaults();
+	parseExtraRules(store);       // Look for any additional rules
+	allacts.universalAction(this);
+	allacts.resetDefaults();
 }
 
 /// This builds the database which holds the status registers setings and other
@@ -538,7 +538,7 @@ void Architecture::buildAction(DocumentStorage &store)
 void Architecture::buildContext(DocumentStorage &store)
 
 {
-  context = new ContextInternal();
+	context = new ContextInternal();
 }
 
 /// Create the database object, which currently doesn't not depend on any configuration
@@ -548,10 +548,10 @@ void Architecture::buildContext(DocumentStorage &store)
 Scope *Architecture::buildDatabase(DocumentStorage &store)
 
 {
-  symboltab = new Database(this,true);
-  Scope *globscope = new ScopeInternal(0,"",this);
-  symboltab->attachScope(globscope,(Scope *)0);
-  return globscope;
+	symboltab = new Database(this,true);
+	Scope *globscope = new ScopeInternal(0,"",this);
+	symboltab->attachScope(globscope,(Scope *)0);
+	return globscope;
 }
 
 /// This builds the TypeFactory object specific to this architecture and
@@ -561,36 +561,36 @@ Scope *Architecture::buildDatabase(DocumentStorage &store)
 void Architecture::buildTypegrp(DocumentStorage &store)
 
 {
-  const Element *el = store.getTag("coretypes");
-  types = new TypeFactory(this); // Initialize the object
-  if (el != (const Element *)0)
-    types->restoreXmlCoreTypes(el);
-  else {
-    // Put in the core types
-    types->setCoreType("void",1,TYPE_VOID,false);
-    types->setCoreType("bool",1,TYPE_BOOL,false);
-    types->setCoreType("uint1",1,TYPE_UINT,false);
-    types->setCoreType("uint2",2,TYPE_UINT,false);
-    types->setCoreType("uint4",4,TYPE_UINT,false);
-    types->setCoreType("uint8",8,TYPE_UINT,false);
-    types->setCoreType("int1",1,TYPE_INT,false);
-    types->setCoreType("int2",2,TYPE_INT,false);
-    types->setCoreType("int4",4,TYPE_INT,false);
-    types->setCoreType("int8",8,TYPE_INT,false);
-    types->setCoreType("float4",4,TYPE_FLOAT,false);
-    types->setCoreType("float8",8,TYPE_FLOAT,false);
-    types->setCoreType("float10",10,TYPE_FLOAT,false);
-    types->setCoreType("float16",16,TYPE_FLOAT,false);
-    types->setCoreType("xunknown1",1,TYPE_UNKNOWN,false);
-    types->setCoreType("xunknown2",2,TYPE_UNKNOWN,false);
-    types->setCoreType("xunknown4",4,TYPE_UNKNOWN,false);
-    types->setCoreType("xunknown8",8,TYPE_UNKNOWN,false);
-    types->setCoreType("code",1,TYPE_CODE,false);
-    types->setCoreType("char",1,TYPE_INT,true);
-    types->setCoreType("wchar2",2,TYPE_INT,true);
-    types->setCoreType("wchar4",4,TYPE_INT,true);
-    types->cacheCoreTypes();
-  }
+	const Element *el = store.getTag("coretypes");
+	types = new TypeFactory(this); // Initialize the object
+	if (el != (const Element *)0)
+		types->restoreXmlCoreTypes(el);
+	else {
+		// Put in the core types
+		types->setCoreType("void",1,TYPE_VOID,false);
+		types->setCoreType("bool",1,TYPE_BOOL,false);
+		types->setCoreType("uint1",1,TYPE_UINT,false);
+		types->setCoreType("uint2",2,TYPE_UINT,false);
+		types->setCoreType("uint4",4,TYPE_UINT,false);
+		types->setCoreType("uint8",8,TYPE_UINT,false);
+		types->setCoreType("int1",1,TYPE_INT,false);
+		types->setCoreType("int2",2,TYPE_INT,false);
+		types->setCoreType("int4",4,TYPE_INT,false);
+		types->setCoreType("int8",8,TYPE_INT,false);
+		types->setCoreType("float4",4,TYPE_FLOAT,false);
+		types->setCoreType("float8",8,TYPE_FLOAT,false);
+		types->setCoreType("float10",10,TYPE_FLOAT,false);
+		types->setCoreType("float16",16,TYPE_FLOAT,false);
+		types->setCoreType("xunknown1",1,TYPE_UNKNOWN,false);
+		types->setCoreType("xunknown2",2,TYPE_UNKNOWN,false);
+		types->setCoreType("xunknown4",4,TYPE_UNKNOWN,false);
+		types->setCoreType("xunknown8",8,TYPE_UNKNOWN,false);
+		types->setCoreType("code",1,TYPE_CODE,false);
+		types->setCoreType("char",1,TYPE_INT,true);
+		types->setCoreType("wchar2",2,TYPE_INT,true);
+		types->setCoreType("wchar4",4,TYPE_INT,true);
+		types->cacheCoreTypes();
+	}
 }
 
 /// Build the container that holds comments for executable in this Architecture.
@@ -598,7 +598,7 @@ void Architecture::buildTypegrp(DocumentStorage &store)
 void Architecture::buildCommentDB(DocumentStorage &store)
 
 {
-  commentdb = new CommentDatabaseInternal();
+	commentdb = new CommentDatabaseInternal();
 }
 
 /// Build container that holds decoded strings
@@ -606,7 +606,7 @@ void Architecture::buildCommentDB(DocumentStorage &store)
 void Architecture::buildStringManager(DocumentStorage &store)
 
 {
-  stringManager = new StringManagerUnicode(this,2048);
+	stringManager = new StringManagerUnicode(this,2048);
 }
 
 /// Some processor models (Java byte-code) need a database of constants.
@@ -615,7 +615,7 @@ void Architecture::buildStringManager(DocumentStorage &store)
 void Architecture::buildConstantPool(DocumentStorage &store)
 
 {
-  cpool = new ConstantPoolInternal();
+	cpool = new ConstantPoolInternal();
 }
 
 /// This registers the OpBehavior objects for all known p-code OpCodes.
@@ -624,13 +624,13 @@ void Architecture::buildConstantPool(DocumentStorage &store)
 void Architecture::buildInstructions(DocumentStorage &store)
 
 {
-  TypeOp::registerInstructions(inst,types,translate);
+	TypeOp::registerInstructions(inst,types,translate);
 }
 
 void Architecture::postSpecFile(void)
 
 {
-  cacheAddrSpaceProperties();
+	cacheAddrSpaceProperties();
 }
 
 /// Once the processor is known, the Translate object can be built and
@@ -639,23 +639,23 @@ void Architecture::postSpecFile(void)
 void Architecture::restoreFromSpec(DocumentStorage &store)
 
 {
-  Translate *newtrans = buildTranslator(store); // Once language is described we can build translator
-  newtrans->initialize(store);
-  translate = newtrans;
-  modifySpaces(newtrans);	// Give architecture chance to modify spaces, before copying
-  copySpaces(newtrans);
-  insertSpace( new FspecSpace(this,translate,numSpaces()));
-  insertSpace( new IopSpace(this,translate,numSpaces()));
-  insertSpace( new JoinSpace(this,translate,numSpaces()));
-  userops.initialize(this);
-  if (translate->getAlignment() <= 8)
-    min_funcsymbol_size = translate->getAlignment();
-  pcodeinjectlib = buildPcodeInjectLibrary();
-  parseProcessorConfig(store);
-  newtrans->setDefaultFloatFormats(); // If no explicit formats registered, put in defaults
-  parseCompilerConfig(store);
-  // Action stuff will go here
-  buildAction(store);
+	Translate *newtrans = buildTranslator(store); // Once language is described we can build translator
+	newtrans->initialize(store);
+	translate = newtrans;
+	modifySpaces(newtrans);       // Give architecture chance to modify spaces, before copying
+	copySpaces(newtrans);
+	insertSpace( new FspecSpace(this,translate,numSpaces()));
+	insertSpace( new IopSpace(this,translate,numSpaces()));
+	insertSpace( new JoinSpace(this,translate,numSpaces()));
+	userops.initialize(this);
+	if (translate->getAlignment() <= 8)
+		min_funcsymbol_size = translate->getAlignment();
+	pcodeinjectlib = buildPcodeInjectLibrary();
+	parseProcessorConfig(store);
+	newtrans->setDefaultFloatFormats(); // If no explicit formats registered, put in defaults
+	parseCompilerConfig(store);
+	// Action stuff will go here
+	buildAction(store);
 }
 
 /// If any address space supports near pointers and segment operators,
@@ -663,13 +663,13 @@ void Architecture::restoreFromSpec(DocumentStorage &store)
 void Architecture::initializeSegments(void)
 
 {
-  int4 sz = userops.numSegmentOps();
-  for(int4 i=0;i<sz;++i) {
-    SegmentOp *sop = userops.getSegmentOp(i);
-    if (sop == (SegmentOp *)0) continue;
-    SegmentedResolver *rsolv = new SegmentedResolver(this,sop->getSpace(),sop);
-    insertResolver(sop->getSpace(),rsolv);
-  }
+	int4 sz = userops.numSegmentOps();
+	for(int4 i=0;i<sz;++i) {
+		SegmentOp *sop = userops.getSegmentOp(i);
+		if (sop == (SegmentOp *)0) continue;
+		SegmentedResolver *rsolv = new SegmentedResolver(this,sop->getSpace(),sop);
+		insertResolver(sop->getSpace(),rsolv);
+	}
 }
 
 /// Determine the minimum pointer size for the space and whether or not there are near pointers.
@@ -680,39 +680,39 @@ void Architecture::initializeSegments(void)
 void Architecture::cacheAddrSpaceProperties(void)
 
 {
-  vector<AddrSpace *> copyList = inferPtrSpaces;
-  copyList.push_back(getDefaultCodeSpace());	// Make sure the default code space is present
-  copyList.push_back(getDefaultDataSpace());	// Make sure the default data space is present
-  inferPtrSpaces.clear();
-  sort(copyList.begin(),copyList.end(),AddrSpace::compareByIndex);
-  AddrSpace *lastSpace = (AddrSpace *)0;
-  for(int4 i=0;i<copyList.size();++i) {
-    AddrSpace *spc = copyList[i];
-    if (spc == lastSpace) continue;
-    lastSpace = spc;
-    if (spc->getDelay() == 0) continue;		// Don't put in a register space
-    if (spc->getType() == IPTR_SPACEBASE) continue;
-    if (spc->isOtherSpace()) continue;
-    if (spc->isOverlay()) continue;
-    inferPtrSpaces.push_back(spc);
-  }
+	vector<AddrSpace *> copyList = inferPtrSpaces;
+	copyList.push_back(getDefaultCodeSpace());    // Make sure the default code space is present
+	copyList.push_back(getDefaultDataSpace());    // Make sure the default data space is present
+	inferPtrSpaces.clear();
+	sort(copyList.begin(),copyList.end(),AddrSpace::compareByIndex);
+	AddrSpace *lastSpace = (AddrSpace *)0;
+	for(int4 i=0;i<copyList.size();++i) {
+		AddrSpace *spc = copyList[i];
+		if (spc == lastSpace) continue;
+		lastSpace = spc;
+		if (spc->getDelay() == 0) continue;         // Don't put in a register space
+		if (spc->getType() == IPTR_SPACEBASE) continue;
+		if (spc->isOtherSpace()) continue;
+		if (spc->isOverlay()) continue;
+		inferPtrSpaces.push_back(spc);
+	}
 
-  int4 defPos = -1;
-  for(int4 i=0;i<inferPtrSpaces.size();++i) {
-    AddrSpace *spc = inferPtrSpaces[i];
-    if (spc == getDefaultDataSpace())		// Make the default for inferring pointers the data space
-      defPos = i;
-    SegmentOp *segOp = getSegmentOp(spc);
-    if (segOp != (SegmentOp *)0) {
-      int4 val = segOp->getInnerSize();
-      markNearPointers(spc, val);
-    }
-  }
-  if (defPos > 0) {		// Make sure the default space comes first
-    AddrSpace *tmp = inferPtrSpaces[0];
-    inferPtrSpaces[0] = inferPtrSpaces[defPos];
-    inferPtrSpaces[defPos] = tmp;
-  }
+	int4 defPos = -1;
+	for(int4 i=0;i<inferPtrSpaces.size();++i) {
+		AddrSpace *spc = inferPtrSpaces[i];
+		if (spc == getDefaultDataSpace())           // Make the default for inferring pointers the data space
+			defPos = i;
+		SegmentOp *segOp = getSegmentOp(spc);
+		if (segOp != (SegmentOp *)0) {
+			int4 val = segOp->getInnerSize();
+			markNearPointers(spc, val);
+		}
+	}
+	if (defPos > 0) {             // Make sure the default space comes first
+		AddrSpace *tmp = inferPtrSpaces[0];
+		inferPtrSpaces[0] = inferPtrSpaces[defPos];
+		inferPtrSpaces[defPos] = tmp;
+	}
 }
 
 /// Recover information out of a \<rule> tag and build the new Rule object.
@@ -720,27 +720,27 @@ void Architecture::cacheAddrSpaceProperties(void)
 void Architecture::parseDynamicRule(const Element *el)
 
 {
-  string rulename,groupname,enabled;
-  for(int4 i=0;i<el->getNumAttributes();++i) {
-    if (el->getAttributeName(i) == "name")
-      rulename = el->getAttributeValue(i);
-    else if (el->getAttributeName(i) == "group")
-      groupname = el->getAttributeValue(i);
-    else if (el->getAttributeName(i) == "enable")
-      enabled = el->getAttributeValue(i);
-    else
-      throw LowlevelError("Dynamic rule tag contains unknown attribute: "+el->getAttributeName(i));
-  }
-  if (rulename.size()==0)
-    throw LowlevelError("Dynamic rule has no name");
-  if (groupname.size()==0)
-    throw LowlevelError("Dynamic rule has no group");
-  if (enabled == "false") return;
+	string rulename,groupname,enabled;
+	for(int4 i=0;i<el->getNumAttributes();++i) {
+		if (el->getAttributeName(i) == "name")
+			rulename = el->getAttributeValue(i);
+		else if (el->getAttributeName(i) == "group")
+			groupname = el->getAttributeValue(i);
+		else if (el->getAttributeName(i) == "enable")
+			enabled = el->getAttributeValue(i);
+		else
+			throw LowlevelError("Dynamic rule tag contains unknown attribute: "+el->getAttributeName(i));
+	}
+	if (rulename.size()==0)
+		throw LowlevelError("Dynamic rule has no name");
+	if (groupname.size()==0)
+		throw LowlevelError("Dynamic rule has no group");
+	if (enabled == "false") return;
 #ifdef CPUI_RULECOMPILE
-  Rule *dynrule = RuleGeneric::build(rulename,groupname,el->getContent());
-  extra_pool_rules.push_back(dynrule);
+	Rule *dynrule = RuleGeneric::build(rulename,groupname,el->getContent());
+	extra_pool_rules.push_back(dynrule);
 #else
-  throw LowlevelError("Dynamic rules have not been enabled for this decompiler");
+	throw LowlevelError("Dynamic rules have not been enabled for this decompiler");
 #endif
 }
 
@@ -750,23 +750,23 @@ void Architecture::parseDynamicRule(const Element *el)
 ProtoModel *Architecture::parseProto(const Element *el)
 
 {
-  ProtoModel *res;
-  if (el->getName() == "prototype")
-    res = new ProtoModel(this);
-  else if (el->getName() == "resolveprototype")
-    res = new ProtoModelMerged(this);
-  else
-    throw LowlevelError("Expecting <prototype> or <resolveprototype> tag");
+	ProtoModel *res;
+	if (el->getName() == "prototype")
+		res = new ProtoModel(this);
+	else if (el->getName() == "resolveprototype")
+		res = new ProtoModelMerged(this);
+	else
+		throw LowlevelError("Expecting <prototype> or <resolveprototype> tag");
 
-  res->restoreXml(el);
-  
-  ProtoModel *other = protoModels[res->getName()];
-  if (other != (ProtoModel *)0) {
-    delete res;
-    throw LowlevelError("Duplicate ProtoModel name: "+res->getName());
-  }
-  protoModels[res->getName()] = res;
-  return res;
+	res->restoreXml(el);
+	
+	ProtoModel *other = protoModels[res->getName()];
+	if (other != (ProtoModel *)0) {
+		delete res;
+		throw LowlevelError("Duplicate ProtoModel name: "+res->getName());
+	}
+	protoModels[res->getName()] = res;
+	return res;
 }
 
 /// This supports the \<eval_called_prototype> and \<eval_current_prototype> tag.
@@ -776,20 +776,20 @@ ProtoModel *Architecture::parseProto(const Element *el)
 void Architecture::parseProtoEval(const Element *el)
 
 {
-  ProtoModel *res = protoModels[ el->getAttributeValue("name") ];
-  if (res == (ProtoModel *)0)
-    throw LowlevelError("Unknown prototype model name: "+el->getAttributeValue("name"));
+	ProtoModel *res = protoModels[ el->getAttributeValue("name") ];
+	if (res == (ProtoModel *)0)
+		throw LowlevelError("Unknown prototype model name: "+el->getAttributeValue("name"));
 
-  if (el->getName() == "eval_called_prototype") {
-    if (evalfp_called != (ProtoModel *)0)
-      throw LowlevelError("Duplicate <eval_called_prototype> tag");
-    evalfp_called = res;
-  }
-  else {
-    if (evalfp_current != (ProtoModel *)0)
-      throw LowlevelError("Duplicate <eval_current_prototype> tag");
-    evalfp_current = res;
-  }
+	if (el->getName() == "eval_called_prototype") {
+		if (evalfp_called != (ProtoModel *)0)
+			throw LowlevelError("Duplicate <eval_called_prototype> tag");
+		evalfp_called = res;
+	}
+	else {
+		if (evalfp_current != (ProtoModel *)0)
+			throw LowlevelError("Duplicate <eval_current_prototype> tag");
+		evalfp_current = res;
+	}
 }
 
 /// There should be exactly one \<default_proto> tag that specifies what the
@@ -799,14 +799,14 @@ void Architecture::parseProtoEval(const Element *el)
 void Architecture::parseDefaultProto(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    if (defaultfp != (ProtoModel *)0)
-      throw LowlevelError("More than one default prototype model");
-    defaultfp = parseProto(*iter);
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		if (defaultfp != (ProtoModel *)0)
+			throw LowlevelError("More than one default prototype model");
+		defaultfp = parseProto(*iter);
+	}
 }
 
 /// This handles the \<global> tag adding an address space (or part of the space)
@@ -815,45 +815,45 @@ void Architecture::parseDefaultProto(const Element *el)
 void Architecture::parseGlobal(const Element *el)
 
 {
-  Scope *scope = symboltab->getGlobalScope();
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	Scope *scope = symboltab->getGlobalScope();
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    Range range;
-    range.restoreXml(*iter,this);
-    AddrSpace *spc = range.getSpace();
-    inferPtrSpaces.push_back(spc);
-    symboltab->addRange(scope,spc,range.getFirst(),range.getLast());
-    if (range.getSpace()->isOverlayBase()) { // If the address space is overlayed
-      // We need to duplicate the range being marked as global into the overlay space(s)
-      int4 num = numSpaces();
-      for(int4 i=0;i<num;++i) {
-        OverlaySpace *ospc = (OverlaySpace *)getSpace(i);
-        if (ospc == (AddrSpace *)0 || !ospc->isOverlay()) continue;
-        if (ospc->getBaseSpace() != range.getSpace()) continue;
-        symboltab->addRange(scope,ospc,range.getFirst(),range.getLast());
-      }
-    }
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		Range range;
+		range.restoreXml(*iter,this);
+		AddrSpace *spc = range.getSpace();
+		inferPtrSpaces.push_back(spc);
+		symboltab->addRange(scope,spc,range.getFirst(),range.getLast());
+		if (range.getSpace()->isOverlayBase()) { // If the address space is overlayed
+			// We need to duplicate the range being marked as global into the overlay space(s)
+			int4 num = numSpaces();
+			for(int4 i=0;i<num;++i) {
+				OverlaySpace *ospc = (OverlaySpace *)getSpace(i);
+				if (ospc == (AddrSpace *)0 || !ospc->isOverlay()) continue;
+				if (ospc->getBaseSpace() != range.getSpace()) continue;
+				symboltab->addRange(scope,ospc,range.getFirst(),range.getLast());
+			}
+		}
+	}
 }
 
 //explictly add the OTHER space and any overlays to the global scope
 void Architecture::addOtherSpace(void)
 
 {
-  Scope *scope = symboltab->getGlobalScope();
-  AddrSpace *otherSpace = getSpaceByName(OtherSpace::NAME);
-  symboltab->addRange(scope,otherSpace,0,otherSpace->getHighest());
-  if (otherSpace->isOverlayBase()) {
-    int4 num = numSpaces();
-    for(int4 i=0;i<num;++i){
-      AddrSpace *ospc = getSpace(i);
-      if (!ospc->isOverlay()) continue;
-      if (((OverlaySpace *)ospc)->getBaseSpace() != otherSpace) continue;
-      symboltab->addRange(scope,ospc,0,otherSpace->getHighest());
-    }
-  }
+	Scope *scope = symboltab->getGlobalScope();
+	AddrSpace *otherSpace = getSpaceByName(OtherSpace::NAME);
+	symboltab->addRange(scope,otherSpace,0,otherSpace->getHighest());
+	if (otherSpace->isOverlayBase()) {
+		int4 num = numSpaces();
+		for(int4 i=0;i<num;++i){
+			AddrSpace *ospc = getSpace(i);
+			if (!ospc->isOverlay()) continue;
+			if (((OverlaySpace *)ospc)->getBaseSpace() != otherSpace) continue;
+			symboltab->addRange(scope,ospc,0,otherSpace->getHighest());
+		}
+	}
 }
 
 /// This applies info from a \<readonly> tag marking a specific region
@@ -862,14 +862,14 @@ void Architecture::addOtherSpace(void)
 void Architecture::parseReadOnly(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
-  
-  for(iter=list.begin();iter!=list.end();++iter) {
-    Range range;
-    range.restoreXml(*iter,this);
-    symboltab->setPropertyRange(Varnode::readonly,range);
-  }
+	const List &list(el->getChildren());
+	List::const_iterator iter;
+	
+	for(iter=list.begin();iter!=list.end();++iter) {
+		Range range;
+		range.restoreXml(*iter,this);
+		symboltab->setPropertyRange(Varnode::readonly,range);
+	}
 }
 
 /// This applies info from a \<volatile> tag marking specific regions
@@ -878,15 +878,15 @@ void Architecture::parseReadOnly(const Element *el)
 void Architecture::parseVolatile(const Element *el)
 
 {
-  userops.parseVolatile(el,this);
-  const List &list(el->getChildren());
-  List::const_iterator iter;
-  
-  for(iter=list.begin();iter!=list.end();++iter) {
-    Range range;
-    range.restoreXml(*iter,this); // Tag itself is range
-    symboltab->setPropertyRange(Varnode::volatil,range);
-  }
+	userops.parseVolatile(el,this);
+	const List &list(el->getChildren());
+	List::const_iterator iter;
+	
+	for(iter=list.begin();iter!=list.end();++iter) {
+		Range range;
+		range.restoreXml(*iter,this); // Tag itself is range
+		symboltab->setPropertyRange(Varnode::volatil,range);
+	}
 }
 
 /// This applies info from \<returnaddress> tag and sets the default
@@ -895,14 +895,14 @@ void Architecture::parseVolatile(const Element *el)
 void Architecture::parseReturnAddress(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  iter = list.begin();
-  if (iter == list.end()) return;
-  if (defaultReturnAddr.space != (AddrSpace *)0)
-    throw LowlevelError("Multiple <returnaddress> tags in .cspec");
-  defaultReturnAddr.restoreXml(*iter,this);
+	iter = list.begin();
+	if (iter == list.end()) return;
+	if (defaultReturnAddr.space != (AddrSpace *)0)
+		throw LowlevelError("Multiple <returnaddress> tags in .cspec");
+	defaultReturnAddr.restoreXml(*iter,this);
 }
 
 /// Apply information from an \<incidentalcopy> tag, which marks a set of addresses
@@ -911,15 +911,15 @@ void Architecture::parseReturnAddress(const Element *el)
 void Architecture::parseIncidentalCopy(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    VarnodeData vdata;
-    vdata.restoreXml(*iter,this);
-    Range range( vdata.space, vdata.offset, vdata.offset+vdata.size-1);
-    symboltab->setPropertyRange(Varnode::incidental_copy,range);
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		VarnodeData vdata;
+		vdata.restoreXml(*iter,this);
+		Range range( vdata.space, vdata.offset, vdata.offset+vdata.size-1);
+		symboltab->setPropertyRange(Varnode::incidental_copy,range);
+	}
 }
 
 /// Look for \<register> tags that have a \e vector_lane_size attribute.
@@ -928,24 +928,24 @@ void Architecture::parseIncidentalCopy(const Element *el)
 void Architecture::parseLaneSizes(const Element *el)
 
 {
-  vector<uint4> maskList;
-  const List &childList(el->getChildren());
-  List::const_iterator iter;
+	vector<uint4> maskList;
+	const List &childList(el->getChildren());
+	List::const_iterator iter;
 
-  LanedRegister lanedRegister;		// Only allocate once
-  for(iter=childList.begin();iter!=childList.end();++iter) {
-    if (lanedRegister.restoreXml(*iter, this)) {
-      int4 sizeIndex = lanedRegister.getWholeSize();
-      while (maskList.size() <= sizeIndex)
-	maskList.push_back(0);
-      maskList[sizeIndex] |= lanedRegister.getSizeBitMask();
-    }
-  }
-  lanerecords.clear();
-  for(int4 i=0;i<maskList.size();++i) {
-    if (maskList[i] == 0) continue;
-    lanerecords.push_back(LanedRegister(i,maskList[i]));
-  }
+	LanedRegister lanedRegister;          // Only allocate once
+	for(iter=childList.begin();iter!=childList.end();++iter) {
+		if (lanedRegister.restoreXml(*iter, this)) {
+			int4 sizeIndex = lanedRegister.getWholeSize();
+			while (maskList.size() <= sizeIndex)
+				maskList.push_back(0);
+			maskList[sizeIndex] |= lanedRegister.getSizeBitMask();
+		}
+	}
+	lanerecords.clear();
+	for(int4 i=0;i<maskList.size();++i) {
+		if (maskList[i] == 0) continue;
+		lanerecords.push_back(LanedRegister(i,maskList[i]));
+	}
 }
 
 /// Create a stack space and a stack-pointer register from this \<stackpointer> element
@@ -953,29 +953,29 @@ void Architecture::parseLaneSizes(const Element *el)
 void Architecture::parseStackPointer(const Element *el)
 
 {
-  AddrSpace *basespace = getSpaceByName(el->getAttributeValue("space"));
-  bool stackGrowth = true;		// Default stack growth is in negative direction
-  if (basespace == (AddrSpace *)0)
-    throw LowlevelError("Unknown space name: "+el->getAttributeValue("space"));
+	AddrSpace *basespace = getSpaceByName(el->getAttributeValue("space"));
+	bool stackGrowth = true;              // Default stack growth is in negative direction
+	if (basespace == (AddrSpace *)0)
+		throw LowlevelError("Unknown space name: "+el->getAttributeValue("space"));
 
-  bool isreversejustify = false;
-  int4 numattr = el->getNumAttributes();
-  for(int4 i=0;i<numattr;++i) {
-    const string &attr( el->getAttributeName(i) );
-    if (attr == "reversejustify")
-      isreversejustify = xml_readbool(el->getAttributeValue(i));
-    else if (attr == "growth")
-      stackGrowth = el->getAttributeValue(i) == "negative";
-  }
+	bool isreversejustify = false;
+	int4 numattr = el->getNumAttributes();
+	for(int4 i=0;i<numattr;++i) {
+		const string &attr( el->getAttributeName(i) );
+		if (attr == "reversejustify")
+			isreversejustify = xml_readbool(el->getAttributeValue(i));
+		else if (attr == "growth")
+			stackGrowth = el->getAttributeValue(i) == "negative";
+	}
 
-  VarnodeData point = translate->getRegister(el->getAttributeValue("register"));
-  // If creating a stackpointer to a truncated space, make sure to truncate the stackpointer
-  int4 truncSize = point.size;
-  if (basespace->isTruncated() && (point.size > basespace->getAddrSize())) {
-    truncSize = basespace->getAddrSize();
-  }
+	VarnodeData point = translate->getRegister(el->getAttributeValue("register"));
+	// If creating a stackpointer to a truncated space, make sure to truncate the stackpointer
+	int4 truncSize = point.size;
+	if (basespace->isTruncated() && (point.size > basespace->getAddrSize())) {
+		truncSize = basespace->getAddrSize();
+	}
 
-  addSpacebase(basespace,"stack",point,truncSize,isreversejustify,stackGrowth); // Create the "official" stackpointer
+	addSpacebase(basespace,"stack",point,truncSize,isreversejustify,stackGrowth); // Create the "official" stackpointer
 }
 
 /// Manually alter the dead-code delay for a specific address space,
@@ -984,31 +984,31 @@ void Architecture::parseStackPointer(const Element *el)
 void Architecture::parseDeadcodeDelay(const Element *el)
 
 {
-  AddrSpace *spc = getSpaceByName(el->getAttributeValue("space"));
-  if (spc == (AddrSpace *)0)
-    throw LowlevelError("Unknown space name: "+el->getAttributeValue("space"));
-  istringstream s(el->getAttributeValue("delay"));
-  s.unsetf(ios::dec | ios::hex | ios::oct);
-  int4 delay = -1;
-  s >> delay;
-  if (delay >= 0)
-    setDeadcodeDelay(spc,delay);
-  else
-    throw LowlevelError("Bad <deadcodedelay> tag");
+	AddrSpace *spc = getSpaceByName(el->getAttributeValue("space"));
+	if (spc == (AddrSpace *)0)
+		throw LowlevelError("Unknown space name: "+el->getAttributeValue("space"));
+	istringstream s(el->getAttributeValue("delay"));
+	s.unsetf(ios::dec | ios::hex | ios::oct);
+	int4 delay = -1;
+	s >> delay;
+	if (delay >= 0)
+		setDeadcodeDelay(spc,delay);
+	else
+		throw LowlevelError("Bad <deadcodedelay> tag");
 }
 
 /// Alter the range of addresses for which a pointer is allowed to be inferred.
 void Architecture::parseInferPtrBounds(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
-  for(iter=list.begin();iter!=list.end();++iter) {
-    const Element *subel = *iter;
-    Range range;
-    range.restoreXml(subel,this);
-    setInferPtrBounds(range);
-  }
+	const List &list(el->getChildren());
+	List::const_iterator iter;
+	for(iter=list.begin();iter!=list.end();++iter) {
+		const Element *subel = *iter;
+		Range range;
+		range.restoreXml(subel,this);
+		setInferPtrBounds(range);
+	}
 }
 
 /// Pull information from a \<funcptr> tag. Turn on alignment analysis of
@@ -1018,21 +1018,21 @@ void Architecture::parseInferPtrBounds(const Element *el)
 void Architecture::parseFuncPtrAlign(const Element *el)
 
 {
-  int4 align;
-  istringstream s(el->getAttributeValue("align"));
-  s.unsetf(ios::dec | ios::hex | ios::oct);
-  s >> align;
-  
-  if (align == 0) {
-    funcptr_align = 0;		// No alignment
-    return;
-  }
-  int4 bits = 0;
-  while((align&1)==0) {		// Find position of first 1 bit
-    bits += 1;
-    align >>= 1;
-  }
-  funcptr_align = bits;
+	int4 align;
+	istringstream s(el->getAttributeValue("align"));
+	s.unsetf(ios::dec | ios::hex | ios::oct);
+	s >> align;
+	
+	if (align == 0) {
+		funcptr_align = 0;          // No alignment
+		return;
+	}
+	int4 bits = 0;
+	while((align&1)==0) {         // Find position of first 1 bit
+		bits += 1;
+		align >>= 1;
+	}
+	funcptr_align = bits;
 }
 
 /// Designate a new index register and create a new address space associated with it,
@@ -1041,12 +1041,12 @@ void Architecture::parseFuncPtrAlign(const Element *el)
 void Architecture::parseSpacebase(const Element *el)
 
 {
-  const string &namestring(el->getAttributeValue("name"));
-  const VarnodeData &point(translate->getRegister(el->getAttributeValue("register")));
-  AddrSpace *basespace = getSpaceByName(el->getAttributeValue("space"));
-  if (basespace == (AddrSpace *)0)
-    throw LowlevelError("Unknown space name: "+el->getAttributeValue("space"));
-  addSpacebase(basespace,namestring,point,point.size,false,false);
+	const string &namestring(el->getAttributeValue("name"));
+	const VarnodeData &point(translate->getRegister(el->getAttributeValue("register")));
+	AddrSpace *basespace = getSpaceByName(el->getAttributeValue("space"));
+	if (basespace == (AddrSpace *)0)
+		throw LowlevelError("Unknown space name: "+el->getAttributeValue("space"));
+	addSpacebase(basespace,namestring,point,point.size,false,false);
 }
 
 /// Configure memory based on a \<nohighptr> tag. Mark specific address ranges
@@ -1055,14 +1055,14 @@ void Architecture::parseSpacebase(const Element *el)
 void Architecture::parseNoHighPtr(const Element *el)
 
 {
-  const List &list(el->getChildren());
-  List::const_iterator iter;
-  
-  for(iter=list.begin();iter!=list.end();++iter) { // Iterate over every range tag in the list
-    Range range;
-    range.restoreXml(*iter,this);
-    addNoHighPtr(range);
-  }
+	const List &list(el->getChildren());
+	List::const_iterator iter;
+	
+	for(iter=list.begin();iter!=list.end();++iter) { // Iterate over every range tag in the list
+		Range range;
+		range.restoreXml(*iter,this);
+		addNoHighPtr(range);
+	}
 }
 
 /// Configure registers based on a \<prefersplit> tag. Mark specific varnodes that
@@ -1071,18 +1071,18 @@ void Architecture::parseNoHighPtr(const Element *el)
 void Architecture::parsePreferSplit(const Element *el)
 
 {
-  string style = el->getAttributeValue("style");
-  if (style != "inhalf")
-    throw LowlevelError("Unknown prefersplit style: "+style);
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	string style = el->getAttributeValue("style");
+	if (style != "inhalf")
+		throw LowlevelError("Unknown prefersplit style: "+style);
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    splitrecords.emplace_back();
-    PreferSplitRecord &record( splitrecords.back() );
-    record.storage.restoreXml( *iter, this );
-    record.splitoffset = record.storage.size/2;
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		splitrecords.emplace_back();
+		PreferSplitRecord &record( splitrecords.back() );
+		record.storage.restoreXml( *iter, this );
+		record.splitoffset = record.storage.size/2;
+	}
 }
 
 /// Configure based on the \<aggressivetrim> tag, how aggressively the
@@ -1091,13 +1091,13 @@ void Architecture::parsePreferSplit(const Element *el)
 void Architecture::parseAggressiveTrim(const Element *el)
 
 {
-  int4 sz = el->getNumAttributes();
-  for(int4 i=0;i<sz;++i) {
-    const string &nm( el->getAttributeName(i) );
-    if (nm == "signext") {
-      aggressive_ext_trim = xml_readbool(el->getAttributeValue(i));
-    }
-  }
+	int4 sz = el->getNumAttributes();
+	for(int4 i=0;i<sz;++i) {
+		const string &nm( el->getAttributeName(i) );
+		if (nm == "signext") {
+			aggressive_ext_trim = xml_readbool(el->getAttributeValue(i));
+		}
+	}
 }
 
 /// This looks for the \<processor_spec> tag and and sets configuration
@@ -1106,52 +1106,52 @@ void Architecture::parseAggressiveTrim(const Element *el)
 void Architecture::parseProcessorConfig(DocumentStorage &store)
 
 {
-  const Element *el = store.getTag("processor_spec");
-  if (el == (const Element *)0)
-    throw LowlevelError("No processor configuration tag found");
-  const List &list(el->getChildren());
-  List::const_iterator iter;
-  
-  for(iter=list.begin();iter!=list.end();++iter) {
-    const string &elname( (*iter)->getName() );
-    if (elname == "programcounter") {
-    }
-    else if (elname == "volatile")
-      parseVolatile(*iter);
-    else if (elname == "incidentalcopy")
-      parseIncidentalCopy(*iter);
-    else if (elname == "context_data")
-      context->restoreFromSpec(*iter,this);
-    else if (elname == "jumpassist")
-      userops.parseJumpAssist(*iter, this);
-    else if (elname == "segmentop")
-      userops.parseSegmentOp(*iter,this);
-    else if (elname == "register_data") {
-      parseLaneSizes(*iter);
-    }
-    else if (elname == "data_space") {
-      const string &spaceName( (*iter)->getAttributeValue("space"));
-      AddrSpace *spc = getSpaceByName(spaceName);
-      if (spc == (AddrSpace *)0)
-        throw LowlevelError("Undefined space: "+spaceName);
-      setDefaultDataSpace(spc->getIndex());
-    }
-    else if (elname == "inferptrbounds") {
-      parseInferPtrBounds(*iter);
-    }
-    else if (elname == "segmented_address") {
-    }
-    else if (elname == "default_symbols") {
-    }
-    else if (elname == "default_memory_blocks") {
-    }
-    else if (elname == "address_shift_amount") {
-    }
-    else if (elname == "properties") {
-    }
-    else
-      throw LowlevelError("Unknown element in <processor_spec>: "+elname);
-  }
+	const Element *el = store.getTag("processor_spec");
+	if (el == (const Element *)0)
+		throw LowlevelError("No processor configuration tag found");
+	const List &list(el->getChildren());
+	List::const_iterator iter;
+	
+	for(iter=list.begin();iter!=list.end();++iter) {
+		const string &elname( (*iter)->getName() );
+		if (elname == "programcounter") {
+		}
+		else if (elname == "volatile")
+			parseVolatile(*iter);
+		else if (elname == "incidentalcopy")
+			parseIncidentalCopy(*iter);
+		else if (elname == "context_data")
+			context->restoreFromSpec(*iter,this);
+		else if (elname == "jumpassist")
+			userops.parseJumpAssist(*iter, this);
+		else if (elname == "segmentop")
+			userops.parseSegmentOp(*iter,this);
+		else if (elname == "register_data") {
+			parseLaneSizes(*iter);
+		}
+		else if (elname == "data_space") {
+			const string &spaceName( (*iter)->getAttributeValue("space"));
+			AddrSpace *spc = getSpaceByName(spaceName);
+			if (spc == (AddrSpace *)0)
+				throw LowlevelError("Undefined space: "+spaceName);
+			setDefaultDataSpace(spc->getIndex());
+		}
+		else if (elname == "inferptrbounds") {
+			parseInferPtrBounds(*iter);
+		}
+		else if (elname == "segmented_address") {
+		}
+		else if (elname == "default_symbols") {
+		}
+		else if (elname == "default_memory_blocks") {
+		}
+		else if (elname == "address_shift_amount") {
+		}
+		else if (elname == "properties") {
+		}
+		else
+			throw LowlevelError("Unknown element in <processor_spec>: "+elname);
+	}
 }
 
 /// This looks for the \<compiler_spec> tag and sets configuration parameters based on it.
@@ -1159,107 +1159,107 @@ void Architecture::parseProcessorConfig(DocumentStorage &store)
 void Architecture::parseCompilerConfig(DocumentStorage &store)
 
 {
-  vector<const Element *> globaltags;
-  const Element *el = store.getTag("compiler_spec");
-  if (el == (const Element *)0)
-    throw LowlevelError("No compiler configuration tag found");
-  const List &list(el->getChildren());
-  List::const_iterator iter;
+	vector<const Element *> globaltags;
+	const Element *el = store.getTag("compiler_spec");
+	if (el == (const Element *)0)
+		throw LowlevelError("No compiler configuration tag found");
+	const List &list(el->getChildren());
+	List::const_iterator iter;
 
-  for(iter=list.begin();iter!=list.end();++iter) {
-    const string &elname( (*iter)->getName() );
-    if (elname == "default_proto")
-      parseDefaultProto(*iter);
-    else if (elname == "prototype")
-      parseProto(*iter);
-    else if (elname == "stackpointer")
-      parseStackPointer(*iter);
-    else if (elname == "returnaddress")
-      parseReturnAddress(*iter);
-    else if (elname == "spacebase")
-      parseSpacebase(*iter);
-    else if (elname == "nohighptr")
-      parseNoHighPtr(*iter);
-    else if (elname == "prefersplit")
-      parsePreferSplit(*iter);
-    else if (elname == "aggressivetrim")
-      parseAggressiveTrim(*iter);
-    else if (elname == "data_organization")
-      types->parseDataOrganization(*iter);
-    else if (elname == "enum")
-      types->parseEnumConfig(*iter);
-    else if (elname == "global")
-      globaltags.push_back(*iter);
-    else if (elname == "segmentop")
-      userops.parseSegmentOp(*iter,this);
-    else if (elname == "readonly")
-      parseReadOnly(*iter);
-    else if (elname == "context_data")
-      context->restoreFromSpec(*iter,this);
-    else if (elname == "resolveprototype")
-      parseProto(*iter);
-    else if (elname == "eval_called_prototype")
-      parseProtoEval(*iter);
-    else if (elname == "eval_current_prototype")
-      parseProtoEval(*iter);
-    else if (elname == "callfixup") {
-      pcodeinjectlib->restoreXmlInject(archid+" : compiler spec", (*iter)->getAttributeValue("name"),
-				       InjectPayload::CALLFIXUP_TYPE, *iter);
-    }
-    else if (elname == "callotherfixup") {
-      userops.parseCallOtherFixup(*iter,this);
-    }
-    else if (elname == "funcptr")
-      parseFuncPtrAlign(*iter);
-    else if (elname == "deadcodedelay")
-      parseDeadcodeDelay(*iter);
-    else if (elname == "inferptrbounds")
-      parseInferPtrBounds(*iter);
-  }
+	for(iter=list.begin();iter!=list.end();++iter) {
+		const string &elname( (*iter)->getName() );
+		if (elname == "default_proto")
+			parseDefaultProto(*iter);
+		else if (elname == "prototype")
+			parseProto(*iter);
+		else if (elname == "stackpointer")
+			parseStackPointer(*iter);
+		else if (elname == "returnaddress")
+			parseReturnAddress(*iter);
+		else if (elname == "spacebase")
+			parseSpacebase(*iter);
+		else if (elname == "nohighptr")
+			parseNoHighPtr(*iter);
+		else if (elname == "prefersplit")
+			parsePreferSplit(*iter);
+		else if (elname == "aggressivetrim")
+			parseAggressiveTrim(*iter);
+		else if (elname == "data_organization")
+			types->parseDataOrganization(*iter);
+		else if (elname == "enum")
+			types->parseEnumConfig(*iter);
+		else if (elname == "global")
+			globaltags.push_back(*iter);
+		else if (elname == "segmentop")
+			userops.parseSegmentOp(*iter,this);
+		else if (elname == "readonly")
+			parseReadOnly(*iter);
+		else if (elname == "context_data")
+			context->restoreFromSpec(*iter,this);
+		else if (elname == "resolveprototype")
+			parseProto(*iter);
+		else if (elname == "eval_called_prototype")
+			parseProtoEval(*iter);
+		else if (elname == "eval_current_prototype")
+			parseProtoEval(*iter);
+		else if (elname == "callfixup") {
+			pcodeinjectlib->restoreXmlInject(archid+" : compiler spec", (*iter)->getAttributeValue("name"),
+																			 InjectPayload::CALLFIXUP_TYPE, *iter);
+		}
+		else if (elname == "callotherfixup") {
+			userops.parseCallOtherFixup(*iter,this);
+		}
+		else if (elname == "funcptr")
+			parseFuncPtrAlign(*iter);
+		else if (elname == "deadcodedelay")
+			parseDeadcodeDelay(*iter);
+		else if (elname == "inferptrbounds")
+			parseInferPtrBounds(*iter);
+	}
 
-  el = store.getTag("specextensions");		// Look for any user-defined configuration document
-  if (el != (const Element *)0) {
-    const List &userlist(el->getChildren());
-    for(iter=userlist.begin();iter!=userlist.end();++iter) {
-      const string &elname( (*iter)->getName() );
-      if (elname == "prototype")
-        parseProto(*iter);
-     else if (elname == "callfixup") {
-        pcodeinjectlib->restoreXmlInject(archid+" : compiler spec", (*iter)->getAttributeValue("name"),
-					 InjectPayload::CALLFIXUP_TYPE, *iter);
-      }
-      else if (elname == "callotherfixup") {
-        userops.parseCallOtherFixup(*iter,this);
-      }
-      else if (elname == "global")
-        globaltags.push_back(*iter);
-    }
-  }
+	el = store.getTag("specextensions");          // Look for any user-defined configuration document
+	if (el != (const Element *)0) {
+		const List &userlist(el->getChildren());
+		for(iter=userlist.begin();iter!=userlist.end();++iter) {
+			const string &elname( (*iter)->getName() );
+			if (elname == "prototype")
+				parseProto(*iter);
+		 else if (elname == "callfixup") {
+				pcodeinjectlib->restoreXmlInject(archid+" : compiler spec", (*iter)->getAttributeValue("name"),
+																				 InjectPayload::CALLFIXUP_TYPE, *iter);
+			}
+			else if (elname == "callotherfixup") {
+				userops.parseCallOtherFixup(*iter,this);
+			}
+			else if (elname == "global")
+				globaltags.push_back(*iter);
+		}
+	}
 
-  // <global> tags instantiate the base symbol table
-  // They need to know about all spaces, so it must come
-  // after parsing of <stackpointer> and <spacebase>
-  for(int4 i=0;i<globaltags.size();++i)
-    parseGlobal(globaltags[i]);
+	// <global> tags instantiate the base symbol table
+	// They need to know about all spaces, so it must come
+	// after parsing of <stackpointer> and <spacebase>
+	for(int4 i=0;i<globaltags.size();++i)
+		parseGlobal(globaltags[i]);
 
-  addOtherSpace();
-      
-  if (defaultfp == (ProtoModel *)0) {
-    if (protoModels.size() == 1)
-      defaultfp = (*protoModels.begin()).second;
-    else
-      throw LowlevelError("No default prototype specified");
-  }
-  // We must have a __thiscall calling convention
-  map<string,ProtoModel *>::iterator miter = protoModels.find("__thiscall");
-  if (miter == protoModels.end()) { // If __thiscall doesn't exist we clone it off of the default
-    ProtoModel *thismodel = new ProtoModel("__thiscall",*defaultfp);
-    protoModels["__thiscall"] = thismodel;
-  }
-  userops.setDefaults(this);
-  initializeSegments();
-  PreferSplitManager::initialize(splitrecords);
-  types->setupSizes();		// If no data_organization was registered, set up default values
+	addOtherSpace();
+			
+	if (defaultfp == (ProtoModel *)0) {
+		if (protoModels.size() == 1)
+			defaultfp = (*protoModels.begin()).second;
+		else
+			throw LowlevelError("No default prototype specified");
+	}
+	// We must have a __thiscall calling convention
+	map<string,ProtoModel *>::iterator miter = protoModels.find("__thiscall");
+	if (miter == protoModels.end()) { // If __thiscall doesn't exist we clone it off of the default
+		ProtoModel *thismodel = new ProtoModel("__thiscall",*defaultfp);
+		protoModels["__thiscall"] = thismodel;
+	}
+	userops.setDefaults(this);
+	initializeSegments();
+	PreferSplitManager::initialize(splitrecords);
+	types->setupSizes();          // If no data_organization was registered, set up default values
 }
 
 /// Look for the \<experimental_rules> tag and create any dynamic Rule objects it specifies.
@@ -1267,14 +1267,14 @@ void Architecture::parseCompilerConfig(DocumentStorage &store)
 void Architecture::parseExtraRules(DocumentStorage &store)
 
 {
-  const Element *expertag = store.getTag("experimental_rules");
-  if (expertag != (const Element *)0) {
-    const List &list(expertag->getChildren());
-    List::const_iterator iter;
-    
-    for(iter=list.begin();iter!=list.end();++iter)
-      parseDynamicRule( *iter );
-  }
+	const Element *expertag = store.getTag("experimental_rules");
+	if (expertag != (const Element *)0) {
+		const List &list(expertag->getChildren());
+		List::const_iterator iter;
+		
+		for(iter=list.begin();iter!=list.end();++iter)
+			parseDynamicRule( *iter );
+	}
 }
 
 /// The LoadImage may have access information about the executables
@@ -1283,15 +1283,15 @@ void Architecture::parseExtraRules(DocumentStorage &store)
 void Architecture::fillinReadOnlyFromLoader(void)
 
 {
-  RangeList rangelist;
-  loader->getReadonly(rangelist); // Get read only ranges
-  set<Range>::const_iterator iter,eiter;
-  iter = rangelist.begin();
-  eiter = rangelist.end();
-  while(iter != eiter) {
-    symboltab->setPropertyRange(Varnode::readonly,*iter);
-    ++iter;
-  }
+	RangeList rangelist;
+	loader->getReadonly(rangelist); // Get read only ranges
+	set<Range>::const_iterator iter,eiter;
+	iter = rangelist.begin();
+	eiter = rangelist.end();
+	while(iter != eiter) {
+		symboltab->setPropertyRange(Varnode::readonly,*iter);
+		++iter;
+	}
 }
 
 /// Create the LoadImage and load the executable to be analyzed.
@@ -1303,39 +1303,39 @@ void Architecture::fillinReadOnlyFromLoader(void)
 void Architecture::init(DocumentStorage &store)
 
 {
-  buildLoader(store);		// Loader is built first
-  resolveArchitecture();
-  buildSpecFile(store);
+	buildLoader(store);           // Loader is built first
+	resolveArchitecture();
+	buildSpecFile(store);
 
-  buildContext(store);
-  buildTypegrp(store);
-  buildCommentDB(store);
-  buildStringManager(store);
-  buildConstantPool(store);
-  buildDatabase(store);
+	buildContext(store);
+	buildTypegrp(store);
+	buildCommentDB(store);
+	buildStringManager(store);
+	buildConstantPool(store);
+	buildDatabase(store);
 
-  restoreFromSpec(store);
-  print->getCastStrategy()->setTypeFactory(types);
-  symboltab->adjustCaches();	// In case the specs created additional address spaces
-  postSpecFile();		// Let subclasses do things after translate is ready
+	restoreFromSpec(store);
+	print->getCastStrategy()->setTypeFactory(types);
+	symboltab->adjustCaches();    // In case the specs created additional address spaces
+	postSpecFile();               // Let subclasses do things after translate is ready
 
-  buildInstructions(store); // Must be called after translate is built
-  fillinReadOnlyFromLoader();
+	buildInstructions(store); // Must be called after translate is built
+	fillinReadOnlyFromLoader();
 }
 
 void Architecture::resetDefaultsInternal(void)
 
 {
-  trim_recurse_max = 5;
-  max_implied_ref = 2;		// 2 is best, in specific cases a higher number might be good
-  max_term_duplication = 2;	// 2 and 3 (4) are reasonable
-  max_basetype_size = 10;	// Needs to be 8 or bigger
-  flowoptions = FlowInfo::error_toomanyinstructions;
-  max_instructions = 100000;
-  infer_pointers = true;
-  analyze_for_loops = true;
-  readonlypropagate = false;
-  alias_block_level = 2;	// Block structs and arrays by default
+	trim_recurse_max = 5;
+	max_implied_ref = 2;          // 2 is best, in specific cases a higher number might be good
+	max_term_duplication = 2;     // 2 and 3 (4) are reasonable
+	max_basetype_size = 10;       // Needs to be 8 or bigger
+	flowoptions = FlowInfo::error_toomanyinstructions;
+	max_instructions = 100000;
+	infer_pointers = true;
+	analyze_for_loops = true;
+	readonlypropagate = false;
+	alias_block_level = 2;        // Block structs and arrays by default
 }
 
 /// Reset options that can be modified by the OptionDatabase. This includes
@@ -1343,42 +1343,42 @@ void Architecture::resetDefaultsInternal(void)
 void Architecture::resetDefaults(void)
 
 {
-  resetDefaultsInternal();
-  allacts.resetDefaults();
-  for(int4 i=0;i<printlist.size();++i)
-    printlist[i]->resetDefaults();
+	resetDefaultsInternal();
+	allacts.resetDefaults();
+	for(int4 i=0;i<printlist.size();++i)
+		printlist[i]->resetDefaults();
 }
 
 Address SegmentedResolver::resolve(uintb val,int4 sz,const Address &point,uintb &fullEncoding)
 
 {
-  int4 innersz = segop->getInnerSize();
-  if (sz >= 0 && sz <= innersz) { // If -sz- matches the inner size, consider the value a "near" pointer
-  // In this case the address offset is not fully specified
-  // we check if the rest is stored in a context variable
-  // (as with near pointers)
-    if (segop->getResolve().space != (AddrSpace *)0) {
-      uintb base = glb->context->getTrackedValue(segop->getResolve(),point);
-      fullEncoding = (base << 8 * innersz) + (val & calc_mask(innersz));
-      vector<uintb> seginput;
-      seginput.push_back(base);
-      seginput.push_back(val);
-      val = segop->execute(seginput);
-      return Address(spc,AddrSpace::addressToByte(val,spc->getWordSize()));
-    }
-  }
-  else { // For anything else, consider it a "far" pointer
-    fullEncoding = val;
-    int4 outersz = segop->getBaseSize();
-    uintb base = (val >> 8*innersz) & calc_mask(outersz);
-    val = val & calc_mask(innersz);
-    vector<uintb> seginput;
-    seginput.push_back(base);
-    seginput.push_back(val);
-    val = segop->execute(seginput);
-    return Address(spc,AddrSpace::addressToByte(val,spc->getWordSize()));
-  }
-  return Address();		// Return invalid address
+	int4 innersz = segop->getInnerSize();
+	if (sz >= 0 && sz <= innersz) { // If -sz- matches the inner size, consider the value a "near" pointer
+	// In this case the address offset is not fully specified
+	// we check if the rest is stored in a context variable
+	// (as with near pointers)
+		if (segop->getResolve().space != (AddrSpace *)0) {
+			uintb base = glb->context->getTrackedValue(segop->getResolve(),point);
+			fullEncoding = (base << 8 * innersz) + (val & calc_mask(innersz));
+			vector<uintb> seginput;
+			seginput.push_back(base);
+			seginput.push_back(val);
+			val = segop->execute(seginput);
+			return Address(spc,AddrSpace::addressToByte(val,spc->getWordSize()));
+		}
+	}
+	else { // For anything else, consider it a "far" pointer
+		fullEncoding = val;
+		int4 outersz = segop->getBaseSize();
+		uintb base = (val >> 8*innersz) & calc_mask(outersz);
+		val = val & calc_mask(innersz);
+		vector<uintb> seginput;
+		seginput.push_back(base);
+		seginput.push_back(val);
+		val = segop->execute(seginput);
+		return Address(spc,AddrSpace::addressToByte(val,spc->getWordSize()));
+	}
+	return Address();             // Return invalid address
 }
 
 #ifdef CPUI_STATISTICS
@@ -1386,13 +1386,13 @@ Address SegmentedResolver::resolve(uintb val,int4 sz,const Address &point,uintb 
 Statistics::Statistics(void)
 
 {
-  numfunc = 0;
+	numfunc = 0;
 //   numvar = 0;
 //   coversum = 0;
 //   coversumsq = 0;
-  castcount = 0;
-  lastcastcount = 0;
-  castcountsq = 0;
+	castcount = 0;
+	lastcastcount = 0;
+	castcountsq = 0;
 }
 
 Statistics::~Statistics(void)
@@ -1412,14 +1412,14 @@ Statistics::~Statistics(void)
 //     Cover *cover = vn->getCover();
 //     if (cover == (Cover *)0) continue;
 //     numvar += 1;
-    
+		
 //     int4 size = cover->getSize();
 //     int4 count = 0;
 //     for(int4 i=0;i<size;++i) {
 //       if (!cover->getCoverBlock(i).empty())
-// 	count += 1;
+//      count += 1;
 //     }
-//     coversum += count;		// Number of non-empty covers
+//     coversum += count;               // Number of non-empty covers
 //     coversumsq += ((uintb)count)*((uintb)count);
 //   }
 // }
@@ -1429,9 +1429,9 @@ Statistics::~Statistics(void)
 void Statistics::process_cast(const Funcdata &data)
 
 {
-  uintb perfunc = castcount - lastcastcount;
-  lastcastcount = castcount;
-  castcountsq += perfunc*perfunc;
+	uintb perfunc = castcount - lastcastcount;
+	lastcastcount = castcount;
+	castcountsq += perfunc*perfunc;
 }
 
 /// Gather various statistics for a single function and accumulate in global counts
@@ -1439,9 +1439,9 @@ void Statistics::process_cast(const Funcdata &data)
 void Statistics::process(const Funcdata &data)
 
 {
-  numfunc += 1;
-  //  process_cover(data);
-  process_cast(data);
+	numfunc += 1;
+	//  process_cover(data);
+	process_cast(data);
 }
 
 /// Complete calculations on running sums then print them to a stream
@@ -1449,25 +1449,25 @@ void Statistics::process(const Funcdata &data)
 void Statistics::printResults(ostream &s)
 
 {
-  s << "Number of functions: " << dec << numfunc << endl;
-  //  s << "Number of variables: " << dec << numvar << endl;
+	s << "Number of functions: " << dec << numfunc << endl;
+	//  s << "Number of variables: " << dec << numvar << endl;
 
-  //  double average = ((double)coversum)/numvar;
-  //  double variance = ((double)coversumsq)/numvar;
-  //  double stddev = sqrt(variance);
+	//  double average = ((double)coversum)/numvar;
+	//  double variance = ((double)coversumsq)/numvar;
+	//  double stddev = sqrt(variance);
 
-  //  s << "Average number of non-empty covers: " << average << endl;
-  //  s << "Standard deviation: " << stddev << endl;
+	//  s << "Average number of non-empty covers: " << average << endl;
+	//  s << "Standard deviation: " << stddev << endl;
 
-  double average = ((double)castcount)/numfunc;
-  double variance = ((double)castcountsq)/numfunc;
-  variance -= average*average;
-  double stddev = sqrt(variance);
+	double average = ((double)castcount)/numfunc;
+	double variance = ((double)castcountsq)/numfunc;
+	variance -= average*average;
+	double stddev = sqrt(variance);
 
-  s << "Total functions = " << dec << numfunc << endl;
-  s << "Total casts = " << dec << castcount << endl;
-  s << "Average casts per function = " << average << endl;
-  s << "        Standard deviation = " << stddev << endl;
+	s << "Total functions = " << dec << numfunc << endl;
+	s << "Total casts = " << dec << castcount << endl;
+	s << "Average casts per function = " << average << endl;
+	s << "        Standard deviation = " << stddev << endl;
 }
 
 #endif

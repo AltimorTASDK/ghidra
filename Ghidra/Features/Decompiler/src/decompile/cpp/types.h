@@ -43,7 +43,7 @@ typedef uintptr_t uintp;
 #else // other platforms (not compatible with g++ 4.8.5)
 class Endian {
 public:
-  static constexpr const union { int4 whole; int1 part[4]; } host = { 1 };
+	static constexpr const union { int4 whole; int1 part[4]; } host = { 1 };
 };
 #define HOST_ENDIAN Endian::host.part[3]
 #endif
@@ -66,21 +66,21 @@ public:
 #endif
 
 /*
-  Big integers: These are intended to be arbitrary precison integers. However
-                for efficiency, these are currently implemented as fixed precision.
-                So for coding purposes, these should be interpreted as fixed
-                precision integers that store as big a number as you would ever need.
+	Big integers: These are intended to be arbitrary precison integers. However
+								for efficiency, these are currently implemented as fixed precision.
+								So for coding purposes, these should be interpreted as fixed
+								precision integers that store as big a number as you would ever need.
 */
 
-typedef int8 intb;		/* This is a signed big integer */
-typedef uint8 uintb;		/* This is an unsigned big integer */
+typedef int8 intb;              /* This is a signed big integer */
+typedef uint8 uintb;            /* This is an unsigned big integer */
 
 /*
 
 Other compilation flags
 
 CPUI_DEBUG        --    This is the ONE debug switch that should be passed in
-                        from the compiler, all others are controlled below
+												from the compiler, all others are controlled below
 */
 
 #ifdef CPUI_DEBUG

@@ -25,21 +25,21 @@
 uintb MemoryBank::constructValue(const uint1 *ptr,int4 size,bool bigendian)
 
 { 
-  uintb res = 0;
+	uintb res = 0;
 
-  if (bigendian) {
-    for(int4 i=0;i<size;++i) {
-      res <<= 8;
-      res += (uintb) ptr[i];
-    }
-  }
-  else {
-    for(int4 i=size-1;i>=0;--i) {
-      res <<= 8;
-      res += (uintb) ptr[i];
-    }
-  }
-  return res;
+	if (bigendian) {
+		for(int4 i=0;i<size;++i) {
+			res <<= 8;
+			res += (uintb) ptr[i];
+		}
+	}
+	else {
+		for(int4 i=size-1;i>=0;--i) {
+			res <<= 8;
+			res += (uintb) ptr[i];
+		}
+	}
+	return res;
 }
 
 /// This is a static convenience routine for encoding bytes from a given value, depending on
@@ -51,18 +51,18 @@ uintb MemoryBank::constructValue(const uint1 *ptr,int4 size,bool bigendian)
 void MemoryBank::deconstructValue(uint1 *ptr,uintb val,int4 size,bool bigendian)
 
 {
-  if (bigendian) {
-    for(int4 i=size-1;i>=0;--i) {
-      ptr[i] = (uint1) (val & 0xff);
-      val >>= 8;
-    }
-  }
-  else {
-    for(int4 i=0;i<size;++i) {
-      ptr[i] = (uint1) (val & 0xff);
-      val >>= 8;
-    }
-  }
+	if (bigendian) {
+		for(int4 i=size-1;i>=0;--i) {
+			ptr[i] = (uint1) (val & 0xff);
+			val >>= 8;
+		}
+	}
+	else {
+		for(int4 i=0;i<size;++i) {
+			ptr[i] = (uint1) (val & 0xff);
+			val >>= 8;
+		}
+	}
 }
 
 /// A MemoryBank must be associated with a specific address space, have a preferred or natural
@@ -73,9 +73,9 @@ void MemoryBank::deconstructValue(uint1 *ptr,uintb val,int4 size,bool bigendian)
 MemoryBank::MemoryBank(AddrSpace *spc,int4 ws,int4 ps)
 
 {
-  space = spc;
-  wordsize = ws;
-  pagesize = ps;
+	space = spc;
+	wordsize = ws;
+	pagesize = ps;
 }
 
 /// This routine only retrieves data from a single \e page in the memory bank. Bytes need not
@@ -91,33 +91,33 @@ MemoryBank::MemoryBank(AddrSpace *spc,int4 ws,int4 ps)
 void MemoryBank::getPage(uintb addr,uint1 *res,int4 skip,int4 size) const
 
 { // Default implementation just iterates using find
-  // but could be optimized
-  uintb ptraddr = addr + skip;
-  uintb endaddr = ptraddr + size;
-  uintb startalign = ptraddr & ~((uintb)(wordsize-1));
-  uintb endalign = endaddr & ~((uintb)(wordsize-1));
-  if ((endaddr & ((uintb)(wordsize-1))) != 0)
-    endalign += wordsize;
+	// but could be optimized
+	uintb ptraddr = addr + skip;
+	uintb endaddr = ptraddr + size;
+	uintb startalign = ptraddr & ~((uintb)(wordsize-1));
+	uintb endalign = endaddr & ~((uintb)(wordsize-1));
+	if ((endaddr & ((uintb)(wordsize-1))) != 0)
+		endalign += wordsize;
 
-  uintb curval;
-  bool bswap = ((HOST_ENDIAN==1) != space->isBigEndian());
-  uint1 *ptr;
-  do {
-    curval = find(startalign);
-    if (bswap)
-      curval = byte_swap(curval,wordsize);
-    ptr = (uint1 *)&curval;
-    int4 sz = wordsize;
-    if (startalign < addr) {
-      ptr += (addr-startalign);
-      sz = wordsize - (addr-startalign);
-    }
-    if (startalign + wordsize > endaddr)
-      sz -= (startalign + wordsize -endaddr);
-    memcpy(res,ptr,sz);
-    res += sz;
-    startalign += wordsize;
-  } while(startalign != endalign);
+	uintb curval;
+	bool bswap = ((HOST_ENDIAN==1) != space->isBigEndian());
+	uint1 *ptr;
+	do {
+		curval = find(startalign);
+		if (bswap)
+			curval = byte_swap(curval,wordsize);
+		ptr = (uint1 *)&curval;
+		int4 sz = wordsize;
+		if (startalign < addr) {
+			ptr += (addr-startalign);
+			sz = wordsize - (addr-startalign);
+		}
+		if (startalign + wordsize > endaddr)
+			sz -= (startalign + wordsize -endaddr);
+		memcpy(res,ptr,sz);
+		res += sz;
+		startalign += wordsize;
+	} while(startalign != endalign);
 }
 
 /// This routine writes data only to a single \e page of the memory bank. Bytes need not be
@@ -132,40 +132,40 @@ void MemoryBank::getPage(uintb addr,uint1 *res,int4 skip,int4 size) const
 /// \param skip is the offset \e into \e the \e page where bytes will be written
 /// \param size is the number of bytes to be written
 void MemoryBank::setPage(uintb addr,const uint1 *val,int4 skip,int4 size)
-  
+	
 {  // Default implementation just iterates using insert
-   // but could be optimized
-  uintb ptraddr = addr + skip;
-  uintb endaddr = ptraddr + size;
-  uintb startalign = ptraddr & ~((uintb)(wordsize-1));
-  uintb endalign = endaddr & ~((uintb)(wordsize-1));
-  if ((endaddr & ((uintb)(wordsize-1))) != 0)
-    endalign += wordsize;
+	 // but could be optimized
+	uintb ptraddr = addr + skip;
+	uintb endaddr = ptraddr + size;
+	uintb startalign = ptraddr & ~((uintb)(wordsize-1));
+	uintb endalign = endaddr & ~((uintb)(wordsize-1));
+	if ((endaddr & ((uintb)(wordsize-1))) != 0)
+		endalign += wordsize;
 
-  uintb curval;
-  bool bswap = ((HOST_ENDIAN==1) != space->isBigEndian());
-  uint1 *ptr;
-  do {
-    ptr = (uint1 *)&curval;
-    int4 sz = wordsize;
-    if (startalign < addr) {
-      ptr += (addr-startalign);
-      sz = wordsize - (addr-startalign);
-    }
-    if (startalign + wordsize > endaddr)
-      sz -= (startalign + wordsize - endaddr);
-    if (sz != wordsize) {
-      curval = find(startalign); // Part of word is copied from underlying
-      memcpy(ptr,val,sz);	 // Rest is taken from -val-
-    }
-    else
-      curval = *((const uintb *)val); // -val- supplies entire word
-    if (bswap)
-      curval = byte_swap(curval,wordsize);
-    insert(startalign,curval);
-    val += sz;
-    startalign += wordsize;
-  } while(startalign != endalign);
+	uintb curval;
+	bool bswap = ((HOST_ENDIAN==1) != space->isBigEndian());
+	uint1 *ptr;
+	do {
+		ptr = (uint1 *)&curval;
+		int4 sz = wordsize;
+		if (startalign < addr) {
+			ptr += (addr-startalign);
+			sz = wordsize - (addr-startalign);
+		}
+		if (startalign + wordsize > endaddr)
+			sz -= (startalign + wordsize - endaddr);
+		if (sz != wordsize) {
+			curval = find(startalign); // Part of word is copied from underlying
+			memcpy(ptr,val,sz);        // Rest is taken from -val-
+		}
+		else
+			curval = *((const uintb *)val); // -val- supplies entire word
+		if (bswap)
+			curval = byte_swap(curval,wordsize);
+		insert(startalign,curval);
+		val += sz;
+		startalign += wordsize;
+	} while(startalign != endalign);
 }
 
 /// This routine is used to set a single value in the memory bank at an arbitrary address
@@ -180,64 +180,64 @@ void MemoryBank::setPage(uintb addr,const uint1 *val,int4 skip,int4 size)
 void MemoryBank::setValue(uintb offset,int4 size,uintb val)
 
 {
-  uintb alignmask = (uintb)(wordsize-1);
-  uintb ind = offset & (~alignmask);
-  int4 skip = offset & alignmask;
-  int4 size1 = wordsize-skip;
-  int4 size2;
-  int4 gap;
-  uintb val1,val2;
+	uintb alignmask = (uintb)(wordsize-1);
+	uintb ind = offset & (~alignmask);
+	int4 skip = offset & alignmask;
+	int4 size1 = wordsize-skip;
+	int4 size2;
+	int4 gap;
+	uintb val1,val2;
 
-  if (size > size1) {		// We have spill over
-    size2 = size - size1;
-    val1 = find(ind);
-    val2 = find(ind+wordsize);
-    gap = wordsize - size2;
-  }
-  else {
-    if (size == wordsize) {
-      insert(ind,val);
-      return;
-    }
-    val1 = find(ind);
-    val2 = 0;
-    gap = size1-size;
-    size1 = size;
-    size2 = 0;
-  }
+	if (size > size1) {           // We have spill over
+		size2 = size - size1;
+		val1 = find(ind);
+		val2 = find(ind+wordsize);
+		gap = wordsize - size2;
+	}
+	else {
+		if (size == wordsize) {
+			insert(ind,val);
+			return;
+		}
+		val1 = find(ind);
+		val2 = 0;
+		gap = size1-size;
+		size1 = size;
+		size2 = 0;
+	}
 
-  skip = skip * 8;		// Convert from byte skip to bit skip
-  gap = gap * 8;		// Convert from byte to bits
-  if (space->isBigEndian()) {
-    if (size2 == 0) {
-      val1 &= ~(calc_mask(size1)<<gap);
-      val1 |= val << gap;
-      insert(ind,val1);
-    }
-    else {
-      val1 &= (~((uintb)0)) << 8*size1;
-      val1 |= val >> 8*size2;
-      insert(ind,val1);
-      val2 &= (~((uintb)0)) >> 8*size2;
-      val2 |= val << gap;
-      insert(ind+wordsize,val2);
-    }
-  }
-  else {
-    if (size2 == 0) {
-      val1 &= ~(calc_mask(size1)<<skip);
-      val1 |= val << skip;
-      insert(ind,val1);
-    }
-    else {
-      val1 &= (~((uintb)0)) >> 8*size1;
-      val1 |= val << skip;
-      insert(ind,val1);
-      val2 &= (~((uintb)0)) << 8*size2;
-      val2 |= val >> 8*size1;
-      insert(ind+wordsize,val2);
-    }
-  }
+	skip = skip * 8;              // Convert from byte skip to bit skip
+	gap = gap * 8;                // Convert from byte to bits
+	if (space->isBigEndian()) {
+		if (size2 == 0) {
+			val1 &= ~(calc_mask(size1)<<gap);
+			val1 |= val << gap;
+			insert(ind,val1);
+		}
+		else {
+			val1 &= (~((uintb)0)) << 8*size1;
+			val1 |= val >> 8*size2;
+			insert(ind,val1);
+			val2 &= (~((uintb)0)) >> 8*size2;
+			val2 |= val << gap;
+			insert(ind+wordsize,val2);
+		}
+	}
+	else {
+		if (size2 == 0) {
+			val1 &= ~(calc_mask(size1)<<skip);
+			val1 |= val << skip;
+			insert(ind,val1);
+		}
+		else {
+			val1 &= (~((uintb)0)) >> 8*size1;
+			val1 |= val << skip;
+			insert(ind,val1);
+			val2 &= (~((uintb)0)) << 8*size2;
+			val2 |= val >> 8*size1;
+			insert(ind+wordsize,val2);
+		}
+	}
 }
 
 /// This routine gets the value from a range of bytes at an arbitrary address.
@@ -250,45 +250,45 @@ void MemoryBank::setValue(uintb offset,int4 size,uintb val)
 uintb MemoryBank::getValue(uintb offset,int4 size) const
 
 {
-  uintb res;
+	uintb res;
  
-  uintb alignmask = (uintb) (wordsize-1);
-  uintb ind = offset & (~alignmask);
-  int4 skip = offset & alignmask;
-  int4 size1 = wordsize-skip;
-  int4 size2;
-  int4 gap;
-  uintb val1,val2;
-  if (size > size1) {		// We have spill over
-    size2 = size - size1;
-    val1 = find(ind);
-    val2 = find(ind+wordsize);
-    gap = wordsize - size2;
-  }
-  else {
-    val1 = find(ind);
-    val2 = 0;
-    if (size == wordsize)
-      return val1;
-    gap = size1-size;
-    size1 = size;
-    size2 = 0;
-  }
+	uintb alignmask = (uintb) (wordsize-1);
+	uintb ind = offset & (~alignmask);
+	int4 skip = offset & alignmask;
+	int4 size1 = wordsize-skip;
+	int4 size2;
+	int4 gap;
+	uintb val1,val2;
+	if (size > size1) {           // We have spill over
+		size2 = size - size1;
+		val1 = find(ind);
+		val2 = find(ind+wordsize);
+		gap = wordsize - size2;
+	}
+	else {
+		val1 = find(ind);
+		val2 = 0;
+		if (size == wordsize)
+			return val1;
+		gap = size1-size;
+		size1 = size;
+		size2 = 0;
+	}
 
-  if (space->isBigEndian()) {
-    if (size2 == 0)
-      res = val1>>(8*gap);
-    else
-      res = (val1<<(8*size2)) | (val2 >> (8*gap));
-  }
-  else {
-    if (size2 == 0)
-      res = val1 >> (skip*8);
-    else
-      res = (val1>>(skip*8)) | (val2<<(size1*8) );
-  }
-  res &= (uintb)calc_mask(size);
-  return res;
+	if (space->isBigEndian()) {
+		if (size2 == 0)
+			res = val1>>(8*gap);
+		else
+			res = (val1<<(8*size2)) | (val2 >> (8*gap));
+	}
+	else {
+		if (size2 == 0)
+			res = val1 >> (skip*8);
+		else
+			res = (val1>>(skip*8)) | (val2<<(size1*8) );
+	}
+	res &= (uintb)calc_mask(size);
+	return res;
 }
 
 /// This the most general method for writing a sequence of bytes into the memory bank.
@@ -300,28 +300,28 @@ uintb MemoryBank::getValue(uintb offset,int4 size) const
 void MemoryBank::setChunk(uintb offset,int4 size,const uint1 *val)
 
 {
-  int4 cursize;
-  int4 count;
-  uintb pagemask = (uintb) (pagesize - 1);
-  uintb offalign;
-  int4 skip;
+	int4 cursize;
+	int4 count;
+	uintb pagemask = (uintb) (pagesize - 1);
+	uintb offalign;
+	int4 skip;
 
-  count = 0;
-  while(count < size) {
-    cursize = pagesize;
-    offalign = offset & ~pagemask;
-    skip = 0;
-    if (offalign != offset) {
-      skip = offset - offalign;
-      cursize -= skip;
-    }
-    if (size - count < cursize)
-      cursize = size - count;
-    setPage(offalign,val,skip,cursize);
-    count += cursize;
-    offset += cursize;
-    val += cursize;
-  }
+	count = 0;
+	while(count < size) {
+		cursize = pagesize;
+		offalign = offset & ~pagemask;
+		skip = 0;
+		if (offalign != offset) {
+			skip = offset - offalign;
+			cursize -= skip;
+		}
+		if (size - count < cursize)
+			cursize = size - count;
+		setPage(offalign,val,skip,cursize);
+		count += cursize;
+		offset += cursize;
+		val += cursize;
+	}
 }
 
 /// This is the most general method for reading a sequence of bytes from the memory bank.
@@ -333,27 +333,27 @@ void MemoryBank::setChunk(uintb offset,int4 size,const uint1 *val)
 void MemoryBank::getChunk(uintb offset,int4 size,uint1 *res) const
 
 {
-  int4 cursize,count;
-  uintb pagemask = (uintb) (pagesize-1);
-  uintb offalign;
-  int4 skip;
+	int4 cursize,count;
+	uintb pagemask = (uintb) (pagesize-1);
+	uintb offalign;
+	int4 skip;
 
-  count = 0;
-  while(count < size) {
-    cursize = pagesize;
-    offalign = offset & ~pagemask;
-    skip = 0;
-    if (offalign != offset) {
-      skip = offset-offalign;
-      cursize -= skip;
-    }
-    if (size - count < cursize)
-      cursize = size - count;
-    getPage(offalign,res,skip,cursize);
-    count += cursize;
-    offset += cursize;
-    res += cursize;
-  }
+	count = 0;
+	while(count < size) {
+		cursize = pagesize;
+		offalign = offset & ~pagemask;
+		skip = 0;
+		if (offalign != offset) {
+			skip = offset-offalign;
+			cursize -= skip;
+		}
+		if (size - count < cursize)
+			cursize = size - count;
+		getPage(offalign,res,skip,cursize);
+		count += cursize;
+		offset += cursize;
+		res += cursize;
+	}
 }
 
 /// Find an aligned word from the bank.  First an attempt is made to fetch the data from the
@@ -363,19 +363,19 @@ void MemoryBank::getChunk(uintb offset,int4 size,uint1 *res) const
 uintb MemoryImage::find(uintb addr) const
 
 { // Assume that -addr- is word aligned
-  uintb res = 0;		// Make sure all bytes start as 0, as load may not fill all bytes
-  AddrSpace *spc = getSpace();
-  try {
-    uint1 *ptr = (uint1 *)&res;
-    ptr += (HOST_ENDIAN==1) ? (sizeof(uintb) - getWordSize()) : 0;
-    loader->loadFill(ptr,getWordSize(),Address(spc,addr));
-  } catch(DataUnavailError &err) {
-    // Pages not mapped in the load image, are assumed to be zero
-    res = 0;
-  }
-  if ((HOST_ENDIAN==1) != spc->isBigEndian())
-    res = byte_swap(res,getWordSize());
-  return res;
+	uintb res = 0;                // Make sure all bytes start as 0, as load may not fill all bytes
+	AddrSpace *spc = getSpace();
+	try {
+		uint1 *ptr = (uint1 *)&res;
+		ptr += (HOST_ENDIAN==1) ? (sizeof(uintb) - getWordSize()) : 0;
+		loader->loadFill(ptr,getWordSize(),Address(spc,addr));
+	} catch(DataUnavailError &err) {
+		// Pages not mapped in the load image, are assumed to be zero
+		res = 0;
+	}
+	if ((HOST_ENDIAN==1) != spc->isBigEndian())
+		res = byte_swap(res,getWordSize());
+	return res;
 }
 
 /// Retrieve an aligned page from the bank.  First an attempt is made to retrieve the
@@ -384,16 +384,16 @@ uintb MemoryImage::find(uintb addr) const
 void MemoryImage::getPage(uintb addr,uint1 *res,int4 skip,int4 size) const
 
 {  // Assume that -addr- is page aligned
-  AddrSpace *spc = getSpace();
+	AddrSpace *spc = getSpace();
 
-  try {
-    loader->loadFill(res,size,Address(spc,addr+skip));
-  }
-  catch(DataUnavailError &err) {
-    // Pages not mapped in the load image, are assumed to be zero
-    for(int4 i=0;i<size;++i)
-      res[i] = 0;
-  }
+	try {
+		loader->loadFill(res,size,Address(spc,addr+skip));
+	}
+	catch(DataUnavailError &err) {
+		// Pages not mapped in the load image, are assumed to be zero
+		for(int4 i=0;i<size;++i)
+			res[i] = 0;
+	}
 }
 
 /// A MemoryImage needs everything a basic memory bank needs and is needs to know
@@ -403,9 +403,9 @@ void MemoryImage::getPage(uintb addr,uint1 *res,int4 skip,int4 size) const
 /// \param ps is the number of bytes in a page (must be power of 2)
 /// \param ld is the underlying LoadImage
 MemoryImage::MemoryImage(AddrSpace *spc,int4 ws,int4 ps,LoadImage *ld)
-  : MemoryBank(spc,ws,ps)
+	: MemoryBank(spc,ws,ps)
 {
-  loader = ld;
+	loader = ld;
 }
 
 /// This derived method looks for a previously cached page of the underlying memory bank.
@@ -417,27 +417,27 @@ MemoryImage::MemoryImage(AddrSpace *spc,int4 ws,int4 ps,LoadImage *ld)
 void MemoryPageOverlay::insert(uintb addr,uintb val)
 
 {
-  uintb pageaddr = addr & ~((uintb)(getPageSize()-1));
-  map<uintb,uint1 *>::iterator iter;
+	uintb pageaddr = addr & ~((uintb)(getPageSize()-1));
+	map<uintb,uint1 *>::iterator iter;
 
-  uint1 *pageptr;
+	uint1 *pageptr;
 
-  iter = page.find(pageaddr);
-  if (iter != page.end())
-    pageptr = (*iter).second;
-  else {
-    pageptr = new uint1[getPageSize()];
-    page[pageaddr] = pageptr;
-    if (underlie == (MemoryBank *)0) {
-      for(int4 i=0;i<getPageSize();++i)
-	pageptr[i] = 0;
-    }
-    else
-      underlie->getPage(pageaddr,pageptr,0,getPageSize());
-  }
-  
-  uintb pageoffset = addr & ((uintb)(getPageSize()-1));
-  deconstructValue(pageptr + pageoffset,val,getWordSize(),getSpace()->isBigEndian());
+	iter = page.find(pageaddr);
+	if (iter != page.end())
+		pageptr = (*iter).second;
+	else {
+		pageptr = new uint1[getPageSize()];
+		page[pageaddr] = pageptr;
+		if (underlie == (MemoryBank *)0) {
+			for(int4 i=0;i<getPageSize();++i)
+				pageptr[i] = 0;
+		}
+		else
+			underlie->getPage(pageaddr,pageptr,0,getPageSize());
+	}
+	
+	uintb pageoffset = addr & ((uintb)(getPageSize()-1));
+	deconstructValue(pageptr + pageoffset,val,getWordSize(),getSpace()->isBigEndian());
 }
 
 /// This derived method first looks for the aligned word in the mapped pages. If the
@@ -448,20 +448,20 @@ void MemoryPageOverlay::insert(uintb addr,uintb val)
 uintb MemoryPageOverlay::find(uintb addr) const
 
 {
-  uintb pageaddr = addr & ~((uintb)(getPageSize()-1));
-  map<uintb,uint1 *>::const_iterator iter;
+	uintb pageaddr = addr & ~((uintb)(getPageSize()-1));
+	map<uintb,uint1 *>::const_iterator iter;
 
-  iter = page.find(pageaddr);
-  if (iter == page.end()) {
-    if (underlie == (MemoryBank *)0)
-      return (uintb)0;
-    return underlie->find(addr);
-  }
+	iter = page.find(pageaddr);
+	if (iter == page.end()) {
+		if (underlie == (MemoryBank *)0)
+			return (uintb)0;
+		return underlie->find(addr);
+	}
 
-  const uint1 *pageptr = (*iter).second;
+	const uint1 *pageptr = (*iter).second;
 
-  uintb pageoffset = addr & ((uintb)(getPageSize()-1));
-  return constructValue(pageptr+pageoffset,getWordSize(),getSpace()->isBigEndian());
+	uintb pageoffset = addr & ((uintb)(getPageSize()-1));
+	return constructValue(pageptr+pageoffset,getWordSize(),getSpace()->isBigEndian());
 }
 
 /// The desired page is looked for in the page cache.  If it doesn't exist, the
@@ -474,20 +474,20 @@ uintb MemoryPageOverlay::find(uintb addr) const
 void MemoryPageOverlay::getPage(uintb addr,uint1 *res,int4 skip,int4 size) const
 
 {
-  map<uintb,uint1 *>::const_iterator iter;
+	map<uintb,uint1 *>::const_iterator iter;
 
-  iter = page.find(addr);
-  if (iter == page.end()) {
-    if (underlie == (MemoryBank *)0) {
-      for(int4 i=0;i<size;++i)
-	res[i] = 0;
-      return;
-    }
-    underlie->getPage(addr,res,skip,size);
-    return;
-  }
-  const uint1 *pageptr = (*iter).second;
-  memcpy(res,pageptr+skip,size);
+	iter = page.find(addr);
+	if (iter == page.end()) {
+		if (underlie == (MemoryBank *)0) {
+			for(int4 i=0;i<size;++i)
+				res[i] = 0;
+			return;
+		}
+		underlie->getPage(addr,res,skip,size);
+		return;
+	}
+	const uint1 *pageptr = (*iter).second;
+	memcpy(res,pageptr+skip,size);
 }
 
 /// First, a cached version of the desired page is searched for via its address. If it doesn't
@@ -500,26 +500,26 @@ void MemoryPageOverlay::getPage(uintb addr,uint1 *res,int4 skip,int4 size) const
 void MemoryPageOverlay::setPage(uintb addr,const uint1 *val,int4 skip,int4 size)
 
 {
-  map<uintb,uint1 *>::iterator iter;
-  uint1 *pageptr;
+	map<uintb,uint1 *>::iterator iter;
+	uint1 *pageptr;
 
-  iter = page.find(addr);
-  if (iter == page.end()) {
-    pageptr = new uint1[getPageSize()];
-    page[addr] = pageptr;
-    if (size != getPageSize()) {
-      if (underlie == (MemoryBank *)0) {
-	for(int4 i=0;i<getPageSize();++i)
-	  pageptr[i] = 0;
-      }
-      else
-	underlie->getPage(addr,pageptr,0,getPageSize());
-    }
-  }
-  else
-    pageptr = (*iter).second;
+	iter = page.find(addr);
+	if (iter == page.end()) {
+		pageptr = new uint1[getPageSize()];
+		page[addr] = pageptr;
+		if (size != getPageSize()) {
+			if (underlie == (MemoryBank *)0) {
+				for(int4 i=0;i<getPageSize();++i)
+					pageptr[i] = 0;
+			}
+			else
+				underlie->getPage(addr,pageptr,0,getPageSize());
+		}
+	}
+	else
+		pageptr = (*iter).second;
 
-  memcpy(pageptr+skip,val,size);
+	memcpy(pageptr+skip,val,size);
 }
 
 /// A page overlay memory bank needs all the parameters for a generic memory bank
@@ -529,18 +529,18 @@ void MemoryPageOverlay::setPage(uintb addr,const uint1 *val,int4 skip,int4 size)
 /// \param ps is the number of bytes in a page (must be power of 2)
 /// \param ul is the underlying MemoryBank
 MemoryPageOverlay::MemoryPageOverlay(AddrSpace *spc,int4 ws,int4 ps,MemoryBank *ul)
-  : MemoryBank(spc,ws,ps)
+	: MemoryBank(spc,ws,ps)
 {
-  underlie = ul;
+	underlie = ul;
 }
 
 MemoryPageOverlay::~MemoryPageOverlay(void)
 
 {
-  map<uintb,uint1 *>::iterator iter;
+	map<uintb,uint1 *>::iterator iter;
 
-  for(iter=page.begin();iter!=page.end();++iter)
-    delete [] (*iter).second;
+	for(iter=page.begin();iter!=page.end();++iter)
+		delete [] (*iter).second;
 }
 
 /// Write the value into the hashtable, using \b addr as a key.
@@ -549,21 +549,21 @@ MemoryPageOverlay::~MemoryPageOverlay(void)
 void MemoryHashOverlay::insert(uintb addr,uintb val)
 
 {
-  int4 size = address.size();
-  uintb offset = (addr>>alignshift) % size;
-  for(int4 i=0;i<size;++i) {
-    if (address[offset] == addr) { // Address has been seen before
-      value[offset] = val;	   // Replace old value
-      return;
-    }
-    else if (address[offset] == (uintb)0xBADBEEF) { // Address not seen before
-      address[offset] = addr;			    // Claim this hash slot
-      value[offset] = val;			    // Set value
-      return;
-    }
-    offset = (offset + collideskip) % size;
-  }
-  throw LowlevelError("Memory state hash_table is full");
+	int4 size = address.size();
+	uintb offset = (addr>>alignshift) % size;
+	for(int4 i=0;i<size;++i) {
+		if (address[offset] == addr) { // Address has been seen before
+			value[offset] = val;         // Replace old value
+			return;
+		}
+		else if (address[offset] == (uintb)0xBADBEEF) { // Address not seen before
+			address[offset] = addr;                       // Claim this hash slot
+			value[offset] = val;                          // Set value
+			return;
+		}
+		offset = (offset + collideskip) % size;
+	}
+	throw LowlevelError("Memory state hash_table is full");
 }
 
 /// First search for an entry in the hashtable using \b addr as a key.  If there is no
@@ -573,20 +573,20 @@ void MemoryHashOverlay::insert(uintb addr,uintb val)
 uintb MemoryHashOverlay::find(uintb addr) const
 
 { // Find address in hash-table, or return find from underlying memory
-  int4 size = address.size();
-  uintb offset = (addr>>alignshift) % size;
-  for(int4 i=0;i<size;++i) {
-    if (address[offset] == addr) // Address has been seen before
-      return value[offset];
-    else if (address[offset] == 0xBADBEEF) // Address not seen before
-      break;
-    offset = (offset + collideskip) % size;
-  }
+	int4 size = address.size();
+	uintb offset = (addr>>alignshift) % size;
+	for(int4 i=0;i<size;++i) {
+		if (address[offset] == addr) // Address has been seen before
+			return value[offset];
+		else if (address[offset] == 0xBADBEEF) // Address not seen before
+			break;
+		offset = (offset + collideskip) % size;
+	}
 
-  // We didn't find the address in the hashtable
-  if (underlie == (MemoryBank *)0)
-    return (uintb)0;
-  return underlie->find(addr);
+	// We didn't find the address in the hashtable
+	if (underlie == (MemoryBank *)0)
+		return (uintb)0;
+	return underlie->find(addr);
 }
 
 /// A MemoryBank implemented as a hash table needs everything associated with a generic
@@ -598,17 +598,17 @@ uintb MemoryHashOverlay::find(uintb addr) const
 /// \param hashsize is the maximum number of entries in the hashtable
 /// \param ul is the underlying memory bank being overlayed
 MemoryHashOverlay::MemoryHashOverlay(AddrSpace *spc,int4 ws,int4 ps,int4 hashsize,MemoryBank *ul)
-  : MemoryBank(spc,ws,ps), address(hashsize,0xBADBEEF), value(hashsize,0)
+	: MemoryBank(spc,ws,ps), address(hashsize,0xBADBEEF), value(hashsize,0)
 {
-  underlie = ul;
-  collideskip = 1023;
+	underlie = ul;
+	collideskip = 1023;
 
-  uint4 tmp = ws - 1;
-  alignshift = 0;
-  while(tmp != 0) {
-    alignshift += 1;
-    tmp >>= 1;
-  }
+	uint4 tmp = ws - 1;
+	alignshift = 0;
+	while(tmp != 0) {
+		alignshift += 1;
+		tmp >>= 1;
+	}
 }
 
 /// MemoryBanks associated with specific address spaces must be registers with this MemoryState
@@ -618,13 +618,13 @@ MemoryHashOverlay::MemoryHashOverlay(AddrSpace *spc,int4 ws,int4 ps,int4 hashsiz
 void MemoryState::setMemoryBank(MemoryBank *bank)
 
 {
-  AddrSpace *spc = bank->getSpace();
-  int4 index = spc->getIndex();
+	AddrSpace *spc = bank->getSpace();
+	int4 index = spc->getIndex();
 
-  while(index >= memspace.size())
-    memspace.push_back((MemoryBank *)0);
+	while(index >= memspace.size())
+		memspace.push_back((MemoryBank *)0);
 
-  memspace[index] = bank;
+	memspace[index] = bank;
 }
 
 /// Any MemoryBank that has been registered with this MemoryState can be retrieved via this
@@ -634,10 +634,10 @@ void MemoryState::setMemoryBank(MemoryBank *bank)
 MemoryBank *MemoryState::getMemoryBank(AddrSpace *spc) const
 
 {
-  int4 index = spc->getIndex();
-  if (index >= memspace.size())
-    return (MemoryBank *)0;
-  return memspace[index];
+	int4 index = spc->getIndex();
+	if (index >= memspace.size())
+		return (MemoryBank *)0;
+	return memspace[index];
 }
 
 /// This is the main interface for writing values to the MemoryState.
@@ -650,10 +650,10 @@ MemoryBank *MemoryState::getMemoryBank(AddrSpace *spc) const
 void MemoryState::setValue(AddrSpace *spc,uintb off,int4 size,uintb cval)
 
 {
-  MemoryBank *mspace = getMemoryBank(spc);
-  if (mspace == (MemoryBank *)0)
-    throw LowlevelError("Setting value for unmapped memory space: "+spc->getName());
-  mspace->setValue(off,size,cval);
+	MemoryBank *mspace = getMemoryBank(spc);
+	if (mspace == (MemoryBank *)0)
+		throw LowlevelError("Setting value for unmapped memory space: "+spc->getName());
+	mspace->setValue(off,size,cval);
 }
 
 /// This is the main interface for reading values from the MemoryState.
@@ -666,11 +666,11 @@ void MemoryState::setValue(AddrSpace *spc,uintb off,int4 size,uintb cval)
 uintb MemoryState::getValue(AddrSpace *spc,uintb off,int4 size) const
 
 {
-  if (spc->getType() == IPTR_CONSTANT) return off;
-  MemoryBank *mspace = getMemoryBank(spc);
-  if (mspace == (MemoryBank *)0)
-    throw LowlevelError("Getting value from unmapped memory space: "+spc->getName());
-  return mspace->getValue(off,size);
+	if (spc->getType() == IPTR_CONSTANT) return off;
+	MemoryBank *mspace = getMemoryBank(spc);
+	if (mspace == (MemoryBank *)0)
+		throw LowlevelError("Getting value from unmapped memory space: "+spc->getName());
+	return mspace->getValue(off,size);
 }
 
 /// This is a convenience method for setting registers by name.
@@ -682,8 +682,8 @@ uintb MemoryState::getValue(AddrSpace *spc,uintb off,int4 size) const
 void MemoryState::setValue(const string &nm,uintb cval)
 
 { // Set a "register" value
-  const VarnodeData &vdata( trans->getRegister(nm) );
-  setValue(vdata.space,vdata.offset,vdata.size,cval);
+	const VarnodeData &vdata( trans->getRegister(nm) );
+	setValue(vdata.space,vdata.offset,vdata.size,cval);
 }
 
 /// This is a convenience method for reading registers by name.
@@ -695,8 +695,8 @@ void MemoryState::setValue(const string &nm,uintb cval)
 uintb MemoryState::getValue(const string &nm) const
 
 { // Get a "register" value
-  const VarnodeData &vdata( trans->getRegister(nm) );
-  return getValue(vdata.space,vdata.offset,vdata.size);
+	const VarnodeData &vdata( trans->getRegister(nm) );
+	return getValue(vdata.space,vdata.offset,vdata.size);
 }
 
 /// This is the main interface for reading a range of bytes from the MemorySate.
@@ -710,10 +710,10 @@ uintb MemoryState::getValue(const string &nm) const
 void MemoryState::getChunk(uint1 *res,AddrSpace *spc,uintb off,int4 size) const
 
 {
-  MemoryBank *mspace = getMemoryBank(spc);
-  if (mspace == (MemoryBank *)0)
-    throw LowlevelError("Getting chunk from unmapped memory space: "+spc->getName());
-  mspace->getChunk(off,size,res);
+	MemoryBank *mspace = getMemoryBank(spc);
+	if (mspace == (MemoryBank *)0)
+		throw LowlevelError("Getting chunk from unmapped memory space: "+spc->getName());
+	mspace->getChunk(off,size,res);
 }
 
 /// This is the main interface for setting values for a range of bytes in the MemoryState.
@@ -727,9 +727,9 @@ void MemoryState::getChunk(uint1 *res,AddrSpace *spc,uintb off,int4 size) const
 void MemoryState::setChunk(const uint1 *val,AddrSpace *spc,uintb off,int4 size)
 
 {
-  MemoryBank *mspace = getMemoryBank(spc);
-  if (mspace == (MemoryBank *)0)
-    throw LowlevelError("Setting chunk of unmapped memory space: "+spc->getName());
-  mspace->setChunk(off,size,val);
+	MemoryBank *mspace = getMemoryBank(spc);
+	if (mspace == (MemoryBank *)0)
+		throw LowlevelError("Setting chunk of unmapped memory space: "+spc->getName());
+	mspace->setChunk(off,size,val);
 }
 

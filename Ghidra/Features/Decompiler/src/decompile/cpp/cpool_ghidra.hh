@@ -29,16 +29,16 @@
 /// methods are disabled.  The clear() method only releases the local cache,
 /// no records on the Ghidra client are affected.
 class ConstantPoolGhidra : public ConstantPool {
-  ArchitectureGhidra *ghidra;			///< The connection with the Ghidra client
-  mutable ConstantPoolInternal cache;		///< The local cache of previouly queried CPoolRecord objects
-  virtual CPoolRecord *createRecord(const vector<uintb> &refs);
+	ArchitectureGhidra *ghidra;                   ///< The connection with the Ghidra client
+	mutable ConstantPoolInternal cache;           ///< The local cache of previouly queried CPoolRecord objects
+	virtual CPoolRecord *createRecord(const vector<uintb> &refs);
 public:
-  ConstantPoolGhidra(ArchitectureGhidra *g);	///< Constructor
-  virtual const CPoolRecord *getRecord(const vector<uintb> &refs) const;
-  virtual bool empty(void) const { return false; }
-  virtual void clear(void) { cache.clear(); }
-  virtual void saveXml(ostream &s) const;
-  virtual void restoreXml(const Element *el,TypeFactory &typegrp);
+	ConstantPoolGhidra(ArchitectureGhidra *g);    ///< Constructor
+	virtual const CPoolRecord *getRecord(const vector<uintb> &refs) const;
+	virtual bool empty(void) const { return false; }
+	virtual void clear(void) { cache.clear(); }
+	virtual void saveXml(ostream &s) const;
+	virtual void restoreXml(const Element *el,TypeFactory &typegrp);
 };
 
 #endif

@@ -37,12 +37,12 @@ class GhidraCommand;
 /// a command from the stream and dispatching to the correct GhidraCommand object.
 class GhidraCapability : public CapabilityPoint {
 protected:
-  static map<string,GhidraCommand *> commandmap;	///< The central map from \e name to Ghidra command
-  string name;						///< Identifier for capability and associated commands
+	static map<string,GhidraCommand *> commandmap;        ///< The central map from \e name to Ghidra command
+	string name;                                          ///< Identifier for capability and associated commands
 public:
-  const string &getName(void) const { return name; }	///< Get the capability name
-  static int4 readCommand(istream &sin,ostream &out);	///< Dispatch a Ghidra command
-  static void shutDown(void);				///< Release all GhidraCommand resources
+	const string &getName(void) const { return name; }    ///< Get the capability name
+	static int4 readCommand(istream &sin,ostream &out);   ///< Dispatch a Ghidra command
+	static void shutDown(void);                           ///< Release all GhidraCommand resources
 };
 
 /// \brief The core decompiler commands capability
@@ -50,12 +50,12 @@ public:
 /// This class is instantiated as a singleton and registers all the basic
 /// decompiler commands that the Ghidra client can issue.
 class GhidraDecompCapability : public GhidraCapability {
-  static GhidraDecompCapability ghidraDecompCapability;		///< Singleton instance
-  GhidraDecompCapability(void) { name = "decomp"; }		///< Construct the singleton
-  GhidraDecompCapability(const GhidraDecompCapability &op2);	///< Not implemented
-  GhidraDecompCapability &operator=(const GhidraDecompCapability &op2);	///< Not implemented
+	static GhidraDecompCapability ghidraDecompCapability;         ///< Singleton instance
+	GhidraDecompCapability(void) { name = "decomp"; }             ///< Construct the singleton
+	GhidraDecompCapability(const GhidraDecompCapability &op2);    ///< Not implemented
+	GhidraDecompCapability &operator=(const GhidraDecompCapability &op2); ///< Not implemented
 public:
-  virtual void initialize(void);
+	virtual void initialize(void);
 };
 
 /// \brief Base class for a \e command to the decompiler as issued by a Ghidra client.
@@ -70,24 +70,24 @@ public:
 /// and sendResult() will send back any accumulated warning/error messages.
 class GhidraCommand {
 protected:
-  istream &sin;				///< The input stream from the Ghidra client
-  ostream &sout;			///< The output stream to the Ghidra client
-  ArchitectureGhidra *ghidra;		///< The Architecture on which to perform the command
-  int4 status;				///< Meta-command to system (0=wait for next command, 1=terminate process)
-  virtual void loadParameters(void);	///< Read parameters directing command execution
-  virtual void sendResult(void);	///< Send results of the command (if any) back to the Ghidra client
+	istream &sin;                         ///< The input stream from the Ghidra client
+	ostream &sout;                        ///< The output stream to the Ghidra client
+	ArchitectureGhidra *ghidra;           ///< The Architecture on which to perform the command
+	int4 status;                          ///< Meta-command to system (0=wait for next command, 1=terminate process)
+	virtual void loadParameters(void);    ///< Read parameters directing command execution
+	virtual void sendResult(void);        ///< Send results of the command (if any) back to the Ghidra client
 public:
-  GhidraCommand(void) : sin(cin),sout(cout) {
-    ghidra = (ArchitectureGhidra *)0; 
-  }					///< Construct given i/o streams
-  virtual ~GhidraCommand(void) {}	///< Destructor
+	GhidraCommand(void) : sin(cin),sout(cout) {
+		ghidra = (ArchitectureGhidra *)0; 
+	}                                     ///< Construct given i/o streams
+	virtual ~GhidraCommand(void) {}       ///< Destructor
 
-  /// \brief Perform the action of the command
-  ///
-  /// Configuration is assumed to have happened, and \b this object can immediately begin
-  /// examining and manipulating data under the active Architecture object to perform the command.
-  virtual void rawAction(void)=0;
-  int4 doit(void);			///< Configure and execute the command, then send back results
+	/// \brief Perform the action of the command
+	///
+	/// Configuration is assumed to have happened, and \b this object can immediately begin
+	/// examining and manipulating data under the active Architecture object to perform the command.
+	virtual void rawAction(void)=0;
+	int4 doit(void);                      ///< Configure and execute the command, then send back results
 };
 
 /// \brief Command to \b register a new Program (executable) with the decompiler
@@ -100,15 +100,15 @@ public:
 ///   - The stripped down \<sleigh> tag describing address spaces for the program
 ///   - The \<coretypes> tag describing the built-in datatypes for the program
 class RegisterProgram : public GhidraCommand {
-  string pspec;				///< Processor specification to configure with
-  string cspec;				///< Compiler specification to configure with
-  string tspec;				///< Configuration (address-spaces) for the Translate object
-  string corespec;			///< A description of core data-types for the TypeFactory object
-  virtual void loadParameters(void);
-  virtual void sendResult(void);
+	string pspec;                         ///< Processor specification to configure with
+	string cspec;                         ///< Compiler specification to configure with
+	string tspec;                         ///< Configuration (address-spaces) for the Translate object
+	string corespec;                      ///< A description of core data-types for the TypeFactory object
+	virtual void loadParameters(void);
+	virtual void sendResult(void);
 public:
-  int4 archid;				///< Resulting id of the program to send back
-  virtual void rawAction(void);
+	int4 archid;                          ///< Resulting id of the program to send back
+	virtual void rawAction(void);
 };
 
 /// \brief Command to \b release all resources associated with a Program (executable) in the decompiler
@@ -117,12 +117,12 @@ public:
 /// associated with the program.  A \e termination meta-command is issued for this process.
 /// The command expects a single string parameter encoding the id of the program.
 class DeregisterProgram : public GhidraCommand {
-  int4 inid;				///< The id of the Architecture being terminated
-  virtual void loadParameters(void);
-  virtual void sendResult(void);
+	int4 inid;                            ///< The id of the Architecture being terminated
+	virtual void loadParameters(void);
+	virtual void sendResult(void);
 public:
-  int4 res;				///< The meta-command being issued to send back
-  virtual void rawAction(void);
+	int4 res;                             ///< The meta-command being issued to send back
+	virtual void rawAction(void);
 };
 
 /// \brief Command to \b flush all symbols associated with a Program (executable)
@@ -133,10 +133,10 @@ public:
 /// (re)fetch any symbols as needed.
 /// The command expects a single string parameter encoding the id of the program to flush.
 class FlushNative : public GhidraCommand {
-  virtual void sendResult(void);
+	virtual void sendResult(void);
 public:
-  int4 res;				///< Success status returned to the client (0=success)
-  virtual void rawAction(void);
+	int4 res;                             ///< Success status returned to the client (0=success)
+	virtual void rawAction(void);
 };
 
 /// \brief Command to \b decompile a specific function.
@@ -150,10 +150,10 @@ public:
 /// the Architecture object. XML Documents containing source code results, data-flow and
 /// control-flow structures, symbol information, etc., are sent back to the client.
 class DecompileAt : public GhidraCommand {
-  Address addr;				///< The entry point address of the function to decompile
-  virtual void loadParameters(void);
+	Address addr;                         ///< The entry point address of the function to decompile
+	virtual void loadParameters(void);
 public:
-  virtual void rawAction(void);
+	virtual void rawAction(void);
 };
 
 /// \brief Command to \b structure a control-flow graph.
@@ -168,10 +168,10 @@ public:
 /// of a program in which we assume the control-flow graph lives.  The second is
 /// the XML description of the control-flow.
 class StructureGraph : public GhidraCommand {
-  BlockGraph ingraph;				///< The control-flow graph to structure
-  virtual void loadParameters(void);
+	BlockGraph ingraph;                           ///< The control-flow graph to structure
+	virtual void loadParameters(void);
 public:
-  virtual void rawAction(void);
+	virtual void rawAction(void);
 };
 
 /// \brief Command to \b set the \e root Action used by the decompiler or \b toggle output components.
@@ -201,13 +201,13 @@ public:
 /// The command returns a single character message, 't' or 'f', indicating whether the
 /// action succeeded.
 class SetAction : public GhidraCommand {
-  string actionstring;			///< The \e root Action to switch to
-  string printstring;			///< The \e printing output configuration to toggle
-  virtual void loadParameters(void);
-  virtual void sendResult(void);
+	string actionstring;                  ///< The \e root Action to switch to
+	string printstring;                   ///< The \e printing output configuration to toggle
+	virtual void loadParameters(void);
+	virtual void sendResult(void);
 public:
-  bool res;				///< Set to \b true if the configuration action was successful
-  virtual void rawAction(void);
+	bool res;                             ///< Set to \b true if the configuration action was successful
+	virtual void rawAction(void);
 };
 
 /// \brief Command to \b toggle \b options within the decompiler
@@ -220,14 +220,14 @@ public:
 /// The command returns a single character message, 't' or 'f', indicating whether the
 /// configuration succeeded.
 class SetOptions : public GhidraCommand {
-  Document *doc;			///< The XML option document
-  virtual void loadParameters(void);
-  virtual void sendResult(void);
+	Document *doc;                        ///< The XML option document
+	virtual void loadParameters(void);
+	virtual void sendResult(void);
 public:
-  SetOptions(void);
-  virtual ~SetOptions(void);
-  bool res;				///< Set to \b true if the option change succeeded
-  virtual void rawAction(void);
+	SetOptions(void);
+	virtual ~SetOptions(void);
+	bool res;                             ///< Set to \b true if the option change succeeded
+	virtual void rawAction(void);
 };
 
 #ifdef __REMOTE_SOCKET__

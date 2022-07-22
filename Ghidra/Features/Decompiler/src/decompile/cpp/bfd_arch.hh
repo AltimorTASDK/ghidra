@@ -22,26 +22,26 @@
 
 /// \brief Extension point for building a GNU BFD capable Architecture
 class BfdArchitectureCapability : public ArchitectureCapability {
-  static BfdArchitectureCapability bfdArchitectureCapability;		///< The singleton instance
-  BfdArchitectureCapability(void);					///< Singleton constructor
-  BfdArchitectureCapability(const BfdArchitectureCapability &op2);	///< Not implemented
-  BfdArchitectureCapability &operator=(const BfdArchitectureCapability &op2);	///< Not implemented
+	static BfdArchitectureCapability bfdArchitectureCapability;           ///< The singleton instance
+	BfdArchitectureCapability(void);                                      ///< Singleton constructor
+	BfdArchitectureCapability(const BfdArchitectureCapability &op2);      ///< Not implemented
+	BfdArchitectureCapability &operator=(const BfdArchitectureCapability &op2);   ///< Not implemented
 public:
-  virtual ~BfdArchitectureCapability(void);
-  virtual Architecture *buildArchitecture(const string &filename,const string &target,ostream *estream);
-  virtual bool isFileMatch(const string &filename) const;
-  virtual bool isXmlMatch(Document *doc) const;
+	virtual ~BfdArchitectureCapability(void);
+	virtual Architecture *buildArchitecture(const string &filename,const string &target,ostream *estream);
+	virtual bool isFileMatch(const string &filename) const;
+	virtual bool isXmlMatch(Document *doc) const;
 };
 
 /// \brief Architecture that reads executable files using GNU BFD libraries
 class BfdArchitecture : public SleighArchitecture {
-  long adjustvma;					///< How much to adjust the virtual memory address
-  virtual void buildLoader(DocumentStorage &store);
-  virtual void resolveArchitecture(void);
-  virtual void postSpecFile(void);
+	long adjustvma;                                       ///< How much to adjust the virtual memory address
+	virtual void buildLoader(DocumentStorage &store);
+	virtual void resolveArchitecture(void);
+	virtual void postSpecFile(void);
 public:
-  virtual void saveXml(ostream &s) const;
-  virtual void restoreXml(DocumentStorage &store);
-  BfdArchitecture(const string &fname,const string &targ,ostream *estream);	///< Constructor
-  virtual ~BfdArchitecture(void) {}
+	virtual void saveXml(ostream &s) const;
+	virtual void restoreXml(DocumentStorage &store);
+	BfdArchitecture(const string &fname,const string &targ,ostream *estream);     ///< Constructor
+	virtual ~BfdArchitecture(void) {}
 };

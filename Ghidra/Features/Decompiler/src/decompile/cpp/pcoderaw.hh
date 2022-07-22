@@ -31,21 +31,21 @@
 /// for the data that doesn't have the cached attributes and
 /// the dataflow links of the Varnode within its syntax tree.
 struct VarnodeData {
-  AddrSpace *space;		///< The address space
-  uintb offset;			///< The offset within the space
-  uint4 size;                   ///< The number of bytes in the location
-  bool operator<(const VarnodeData &op2) const;  ///< An ordering for VarnodeData
-  bool operator==(const VarnodeData &op2) const; ///< Compare for equality
-  bool operator!=(const VarnodeData &op2) const; ///< Compare for inequality
+	AddrSpace *space;             ///< The address space
+	uintb offset;                 ///< The offset within the space
+	uint4 size;                   ///< The number of bytes in the location
+	bool operator<(const VarnodeData &op2) const;  ///< An ordering for VarnodeData
+	bool operator==(const VarnodeData &op2) const; ///< Compare for equality
+	bool operator!=(const VarnodeData &op2) const; ///< Compare for inequality
 
-  /// Get the location of the varnode as an address
-  Address getAddr(void) const;
+	/// Get the location of the varnode as an address
+	Address getAddr(void) const;
 
-  /// Recover this object from an XML tag
-  void restoreXml(const Element *el,const AddrSpaceManager *manage);
+	/// Recover this object from an XML tag
+	void restoreXml(const Element *el,const AddrSpaceManager *manage);
 
-  /// Does \b this container another given VarnodeData
-  bool contains(const VarnodeData &op2) const;
+	/// Does \b this container another given VarnodeData
+	bool contains(const VarnodeData &op2) const;
 };
 
 /// VarnodeData can be sorted in terms of the space its in
@@ -54,9 +54,9 @@ struct VarnodeData {
 /// \param op2 is the object being compared to
 /// \return true if \e this is less than \e op2
 inline bool VarnodeData::operator<(const VarnodeData &op2) const {
-  if (space != op2.space) return (space->getIndex() < op2.space->getIndex());
-  if (offset != op2.offset) return (offset < op2.offset);
-  return (size > op2.size);	// BIG sizes come first
+	if (space != op2.space) return (space->getIndex() < op2.space->getIndex());
+	if (offset != op2.offset) return (offset < op2.offset);
+	return (size > op2.size);     // BIG sizes come first
 }
 
 /// Compare VarnodeData for equality. The space, offset, and size
@@ -64,9 +64,9 @@ inline bool VarnodeData::operator<(const VarnodeData &op2) const {
 /// \param op2 is the object being compared to
 /// \return true if \e this is equal to \e op2
 inline bool VarnodeData::operator==(const VarnodeData &op2) const {
-  if (space != op2.space) return false;
-  if (offset != op2.offset) return false;
-  return (size == op2.size);
+	if (space != op2.space) return false;
+	if (offset != op2.offset) return false;
+	return (size == op2.size);
 }
 
 /// Compare VarnodeData for inequality. If either the space,
@@ -74,16 +74,16 @@ inline bool VarnodeData::operator==(const VarnodeData &op2) const {
 /// \param op2 is the object being compared to
 /// \return true if \e this is not equal to \e op2
 inline bool VarnodeData::operator!=(const VarnodeData &op2) const {
-  if (space != op2.space) return true;
-  if (offset != op2.offset) return true;
-  return (size != op2.size);
+	if (space != op2.space) return true;
+	if (offset != op2.offset) return true;
+	return (size != op2.size);
 }
 
 /// This is a convenience function to construct a full Address from the
 /// VarnodeData's address space and offset
 /// \return the address of the varnode
 inline Address VarnodeData::getAddr(void) const {
-  return Address(space,offset);
+	return Address(space,offset);
 }
 
 /// \brief A low-level representation of a single pcode operation
@@ -92,23 +92,23 @@ inline Address VarnodeData::getAddr(void) const {
 /// An opcode, sequence number, optional output varnode
 /// and input varnodes
 class PcodeOpRaw {
-  OpBehavior *behave;		///< The opcode for this operation
-  SeqNum seq;	                ///< Identifying address and index of this operation
-  VarnodeData *out;		///< Output varnode triple
-  vector<VarnodeData *> in;	///< Raw varnode inputs to this op
+	OpBehavior *behave;           ///< The opcode for this operation
+	SeqNum seq;                   ///< Identifying address and index of this operation
+	VarnodeData *out;             ///< Output varnode triple
+	vector<VarnodeData *> in;     ///< Raw varnode inputs to this op
 public:
-  void setBehavior(OpBehavior *be); ///< Set the opcode for this op
-  OpBehavior *getBehavior(void) const; ///< Retrieve the behavior for this op
-  OpCode getOpcode(void) const;	///< Get the opcode for this op
-  void setSeqNum(const Address &a,uintm b); ///< Set the sequence number
-  const SeqNum &getSeqNum(void) const; ///< Retrieve the sequence number
-  const Address &getAddr(void) const; ///< Get address of this operation
-  void setOutput(VarnodeData *o); ///< Set the output varnode for this op
-  VarnodeData *getOutput(void) const; ///< Retrieve the output varnode for this op
-  void addInput(VarnodeData *i); ///< Add an additional input varnode to this op
-  void clearInputs(void);	///< Remove all input varnodes to this op
-  int4 numInput(void) const;	///< Get the number of input varnodes to this op
-  VarnodeData *getInput(int4 i) const; ///< Get the i-th input varnode for this op
+	void setBehavior(OpBehavior *be); ///< Set the opcode for this op
+	OpBehavior *getBehavior(void) const; ///< Retrieve the behavior for this op
+	OpCode getOpcode(void) const; ///< Get the opcode for this op
+	void setSeqNum(const Address &a,uintm b); ///< Set the sequence number
+	const SeqNum &getSeqNum(void) const; ///< Retrieve the sequence number
+	const Address &getAddr(void) const; ///< Get address of this operation
+	void setOutput(VarnodeData *o); ///< Set the output varnode for this op
+	VarnodeData *getOutput(void) const; ///< Retrieve the output varnode for this op
+	void addInput(VarnodeData *i); ///< Add an additional input varnode to this op
+	void clearInputs(void);       ///< Remove all input varnodes to this op
+	int4 numInput(void) const;    ///< Get the number of input varnodes to this op
+	VarnodeData *getInput(int4 i) const; ///< Get the i-th input varnode for this op
 };
 
 /// The core behavior for this operation is controlled by an OpBehavior object
@@ -117,7 +117,7 @@ public:
 inline void PcodeOpRaw::setBehavior(OpBehavior *be)
 
 {
-  behave = be;
+	behave = be;
 }
 
 /// Get the underlying behavior object for this pcode operation.  From this
@@ -126,7 +126,7 @@ inline void PcodeOpRaw::setBehavior(OpBehavior *be)
 inline OpBehavior *PcodeOpRaw::getBehavior(void) const
 
 {
-  return behave;
+	return behave;
 }
 
 /// The possible types of pcode operations are enumerated by OpCode
@@ -135,7 +135,7 @@ inline OpBehavior *PcodeOpRaw::getBehavior(void) const
 inline OpCode PcodeOpRaw::getOpcode(void) const
 
 {
-  return behave->getOpcode();
+	return behave->getOpcode();
 }
 
 /// Every pcode operation has a \b sequence \b number
@@ -147,7 +147,7 @@ inline OpCode PcodeOpRaw::getOpcode(void) const
 inline void PcodeOpRaw::setSeqNum(const Address &a,uintm b)
 
 {
-  seq = SeqNum(a,b);
+	seq = SeqNum(a,b);
 }
 
 /// Every pcode operation has a \b sequence \b number which associates
@@ -157,7 +157,7 @@ inline void PcodeOpRaw::setSeqNum(const Address &a,uintm b)
 inline const SeqNum &PcodeOpRaw::getSeqNum(void) const
 
 {
-  return seq;
+	return seq;
 }
 
 /// This is a convenience function to get the address of the machine instruction
@@ -166,7 +166,7 @@ inline const SeqNum &PcodeOpRaw::getSeqNum(void) const
 inline const Address &PcodeOpRaw::getAddr(void) const
 
 {
-  return seq.getAddr();
+	return seq.getAddr();
 }
 
 /// Most pcode operations output to a varnode.  This routine sets what that varnode is.
@@ -174,7 +174,7 @@ inline const Address &PcodeOpRaw::getAddr(void) const
 inline void PcodeOpRaw::setOutput(VarnodeData *o)
 
 {
-  out = o;
+	out = o;
 }
 
 /// Most pcode operations have an output varnode. This routine retrieves that varnode.
@@ -182,7 +182,7 @@ inline void PcodeOpRaw::setOutput(VarnodeData *o)
 inline VarnodeData *PcodeOpRaw::getOutput(void) const
 
 {
-  return out;
+	return out;
 }
 
 /// A PcodeOpRaw is initially created with no input varnodes.  Inputs are added with this method.
@@ -191,7 +191,7 @@ inline VarnodeData *PcodeOpRaw::getOutput(void) const
 inline void PcodeOpRaw::addInput(VarnodeData *i)
 
 {
-  in.push_back(i);
+	in.push_back(i);
 }
 
 /// If the inputs to a pcode operation need to be changed, this routine clears the existing
@@ -199,14 +199,14 @@ inline void PcodeOpRaw::addInput(VarnodeData *i)
 inline void PcodeOpRaw::clearInputs(void)
 
 {
-  in.clear();
+	in.clear();
 }
 
 /// \return the number of inputs
 inline int4 PcodeOpRaw::numInput(void) const
 
 {
-  return in.size();
+	return in.size();
 }
 
 /// Input varnodes are indexed starting at 0.  This retrieves the input varnode by index.
@@ -217,7 +217,7 @@ inline int4 PcodeOpRaw::numInput(void) const
 inline VarnodeData *PcodeOpRaw::getInput(int4 i) const
 
 {
-  return in[i];
+	return in[i];
 }
 
 #endif

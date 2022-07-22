@@ -28,7 +28,7 @@
 void ArchitectureGhidra::segvHandler(int4 sig)
 
 {
-  exit(1);	// Just die - prevents OS from popping-up a dialog
+	exit(1);      // Just die - prevents OS from popping-up a dialog
 }
 
 /// All communications between the Ghidra client and the decompiler are surrounded
@@ -63,22 +63,22 @@ void ArchitectureGhidra::segvHandler(int4 sig)
 int4 ArchitectureGhidra::readToAnyBurst(istream &s)
 
 {
-  int4 c;
+	int4 c;
 
-  for(;;) {
-    do {
-      c = s.get();
-    } while(c>0);
-    while(c==0) {
-      c = s.get();
-    }
-    if (c==1) {
-      c = s.get();
-      return c;
-    }
-    if (c<0)			// If pipe closed, our parent process is probably dead
-      exit(1);			// So we exit to avoid a runaway process
-  }
+	for(;;) {
+		do {
+			c = s.get();
+		} while(c>0);
+		while(c==0) {
+			c = s.get();
+		}
+		if (c==1) {
+			c = s.get();
+			return c;
+		}
+		if (c<0)                    // If pipe closed, our parent process is probably dead
+			exit(1);                  // So we exit to avoid a runaway process
+	}
 }
 
 /// Read the string protocol start, a single character, then the protocol end.
@@ -88,25 +88,25 @@ int4 ArchitectureGhidra::readToAnyBurst(istream &s)
 bool ArchitectureGhidra::readBoolStream(istream &s)
 
 {
-  int4 c;
-  bool res;
+	int4 c;
+	bool res;
 
-  int4 type = readToAnyBurst(s);
-  if (type != 14) throw JavaError("alignment","Expecting string");
-  c = s.get();
-  res = (c == 't');
-  c = s.get();
-  while(c==0) {
-    c = s.get();
-  }
-  if (c==1) {
-    c = s.get();
-    if (c == 15)
-      return res;
-  }
-  if (c<0)			// If pipe closed, our parent process is probably dead
-    exit(1);			// So we exit to avoid a runaway process
-  throw JavaError("alignment","Expecting string terminator");
+	int4 type = readToAnyBurst(s);
+	if (type != 14) throw JavaError("alignment","Expecting string");
+	c = s.get();
+	res = (c == 't');
+	c = s.get();
+	while(c==0) {
+		c = s.get();
+	}
+	if (c==1) {
+		c = s.get();
+		if (c == 15)
+			return res;
+	}
+	if (c<0)                      // If pipe closed, our parent process is probably dead
+		exit(1);                    // So we exit to avoid a runaway process
+	throw JavaError("alignment","Expecting string terminator");
 }
 
 /// Characters are read up to the next protocol marked and placed into a string.
@@ -117,25 +117,25 @@ bool ArchitectureGhidra::readBoolStream(istream &s)
 void ArchitectureGhidra::readStringStream(istream &s,string &res)
 
 {
-  int4 c;
+	int4 c;
 
-  int4 type = readToAnyBurst(s);
-  if (type != 14) throw JavaError("alignment","Expecting string");
-  c = s.get();
-  while(c > 0) {
-    res += (char)c;
-    c = s.get();
-  }
-  while(c==0) {
-    c = s.get();
-  }
-  if (c==1) {
-    c = s.get();
-    if (c == 15) return;
-  }
-  if (c<0)			// If pipe closed, our parent process is probably dead
-    exit(1);			// So we exit to avoid a runaway process
-  throw JavaError("alignment","Expecting string terminator");
+	int4 type = readToAnyBurst(s);
+	if (type != 14) throw JavaError("alignment","Expecting string");
+	c = s.get();
+	while(c > 0) {
+		res += (char)c;
+		c = s.get();
+	}
+	while(c==0) {
+		c = s.get();
+	}
+	if (c==1) {
+		c = s.get();
+		if (c == 15) return;
+	}
+	if (c<0)                      // If pipe closed, our parent process is probably dead
+		exit(1);                    // So we exit to avoid a runaway process
+	throw JavaError("alignment","Expecting string terminator");
 }
 
 /// The method expects to see protocol markers indicating a string from the client,
@@ -145,17 +145,17 @@ void ArchitectureGhidra::readStringStream(istream &s,string &res)
 Document *ArchitectureGhidra::readXMLStream(istream &s)
 
 {
-  int4 type = readToAnyBurst(s);
-  if (type==14) {
-    Document *doc = xml_tree(s);
-    type = readToAnyBurst(s);
-    if (type!=15)
-      throw JavaError("alignment","Expecting XML string end");
-    return doc;
-  }
-  if ((type&1)==1)
-    return (Document *)0;
-  throw JavaError("alignment","Expecting string or end of query response");
+	int4 type = readToAnyBurst(s);
+	if (type==14) {
+		Document *doc = xml_tree(s);
+		type = readToAnyBurst(s);
+		if (type!=15)
+			throw JavaError("alignment","Expecting XML string end");
+		return doc;
+	}
+	if ((type&1)==1)
+		return (Document *)0;
+	throw JavaError("alignment","Expecting string or end of query response");
 }
 
 /// The method expects to see protocol markers indicating a string from the client,
@@ -167,27 +167,27 @@ Document *ArchitectureGhidra::readXMLStream(istream &s)
 uint1 *ArchitectureGhidra::readPackedStream(istream &s)
 
 {
-  int4 type = readToAnyBurst(s);
-  if (type == 14) {
-    uint4 size = 0;
-    int4 c = s.get();
-    size ^= (c-0x20);
-    c = s.get();
-    size ^= ((c-0x20)<<6);
-    c = s.get();
-    size ^= ((c-0x20)<<12);
-    c = s.get();
-    size ^= ((c-0x20)<<18);
-    uint1 *res = new uint1[ size ];
-    s.read((char *)res,size);
-    type = readToAnyBurst(s);
-    if (type != 15)
-      throw JavaError("alignment","Expecting packed string end");
-    return res;
-  }
-  if ((type&1)==1)
-    return (uint1 *)0;
-  throw JavaError("alignment","Expecting string or end of query response");
+	int4 type = readToAnyBurst(s);
+	if (type == 14) {
+		uint4 size = 0;
+		int4 c = s.get();
+		size ^= (c-0x20);
+		c = s.get();
+		size ^= ((c-0x20)<<6);
+		c = s.get();
+		size ^= ((c-0x20)<<12);
+		c = s.get();
+		size ^= ((c-0x20)<<18);
+		uint1 *res = new uint1[ size ];
+		s.read((char *)res,size);
+		type = readToAnyBurst(s);
+		if (type != 15)
+			throw JavaError("alignment","Expecting packed string end");
+		return res;
+	}
+	if ((type&1)==1)
+		return (uint1 *)0;
+	throw JavaError("alignment","Expecting string or end of query response");
 }
 
 /// Write out a string with correct protocol markers
@@ -196,9 +196,9 @@ uint1 *ArchitectureGhidra::readPackedStream(istream &s)
 void ArchitectureGhidra::writeStringStream(ostream &s,const string &msg)
 
 {
-  s.write("\000\000\001\016",4);
-  s << msg;
-  s.write("\000\000\001\017",4);
+	s.write("\000\000\001\016",4);
+	s << msg;
+	s.write("\000\000\001\017",4);
 }
 
 /// Consume the query response header. If it indicates an exception,
@@ -207,16 +207,16 @@ void ArchitectureGhidra::writeStringStream(ostream &s,const string &msg)
 void ArchitectureGhidra::readToResponse(istream &s)
 
 {
-  int4 type = readToAnyBurst(s);
-  if (type==8) return;
-  if (type==10) {
-    string excepttype,message;
-    readStringStream(s,excepttype);
-    readStringStream(s,message);
-    type = readToAnyBurst(s);	// This should be the exception terminator
-    throw JavaError(excepttype,message);
-  }
-  throw JavaError("alignment","Expecting query response");
+	int4 type = readToAnyBurst(s);
+	if (type==8) return;
+	if (type==10) {
+		string excepttype,message;
+		readStringStream(s,excepttype);
+		readStringStream(s,message);
+		type = readToAnyBurst(s);   // This should be the exception terminator
+		throw JavaError(excepttype,message);
+	}
+	throw JavaError("alignment","Expecting query response");
 }
 
 /// Read the next protocol marker. If it does not indicate the end of
@@ -225,9 +225,9 @@ void ArchitectureGhidra::readToResponse(istream &s)
 void ArchitectureGhidra::readResponseEnd(istream &s)
 
 {
-  int4 type = readToAnyBurst(s);
-  if (type != 9)
-    throw JavaError("alignment","Expecting end of query response");
+	int4 type = readToAnyBurst(s);
+	if (type != 9)
+		throw JavaError("alignment","Expecting end of query response");
 }
 
 /// Read up to the beginning of a query response, check for an
@@ -237,11 +237,11 @@ void ArchitectureGhidra::readResponseEnd(istream &s)
 Document *ArchitectureGhidra::readXMLAll(istream &s)
 
 {
-  readToResponse(s);
-  Document *doc = readXMLStream(s);
-  if (doc != (Document *)0)
-    readResponseEnd(s);
-  return doc;
+	readToResponse(s);
+	Document *doc = readXMLStream(s);
+	if (doc != (Document *)0)
+		readResponseEnd(s);
+	return doc;
 }
 
 /// Read up to the beginning of a query response, check for an
@@ -251,11 +251,11 @@ Document *ArchitectureGhidra::readXMLAll(istream &s)
 uint1 *ArchitectureGhidra::readPackedAll(istream &s)
 
 {
-  readToResponse(s);
-  uint1 *doc = readPackedStream(s);
-  if (doc != (uint1 *)0)
-    readResponseEnd(s);
-  return doc;
+	readToResponse(s);
+	uint1 *doc = readPackedStream(s);
+	if (doc != (uint1 *)0)
+		readResponseEnd(s);
+	return doc;
 }
 
 /// \brief Send an exception message to the Ghidra client
@@ -268,133 +268,133 @@ uint1 *ArchitectureGhidra::readPackedAll(istream &s)
 void ArchitectureGhidra::passJavaException(ostream &s,const string &tp,const string &msg)
 
 {
-  s.write("\000\000\001\012",4);
-  writeStringStream(s,tp);
-  writeStringStream(s,msg);
-  s.write("\000\000\001\013",4);
+	s.write("\000\000\001\012",4);
+	writeStringStream(s,tp);
+	writeStringStream(s,msg);
+	s.write("\000\000\001\013",4);
 }
 
 void ArchitectureGhidra::buildSpecFile(DocumentStorage &store)
 
 { // Spec files are passed as XML strings from GHIDRA
-  istringstream pstream(pspecxml); // Convert string to stream
-  Document *doc = store.parseDocument(pstream); // parse stream
-  store.registerTag(doc->getRoot());
-  
-  istringstream cstream(cspecxml);
-  doc = store.parseDocument(cstream);
-  store.registerTag(doc->getRoot());
+	istringstream pstream(pspecxml); // Convert string to stream
+	Document *doc = store.parseDocument(pstream); // parse stream
+	store.registerTag(doc->getRoot());
+	
+	istringstream cstream(cspecxml);
+	doc = store.parseDocument(cstream);
+	store.registerTag(doc->getRoot());
 
-  istringstream tstream(tspecxml);
-  doc = store.parseDocument(tstream);
-  store.registerTag(doc->getRoot());
+	istringstream tstream(tspecxml);
+	doc = store.parseDocument(tstream);
+	store.registerTag(doc->getRoot());
 
-  istringstream corestream(corespecxml);
-  doc = store.parseDocument(corestream);
-  store.registerTag(doc->getRoot());
+	istringstream corestream(corespecxml);
+	doc = store.parseDocument(corestream);
+	store.registerTag(doc->getRoot());
 
-  pspecxml.clear();		// Strings aren't used again free memory
-  cspecxml.clear();
-  tspecxml.clear();
-  corespecxml.clear();
+	pspecxml.clear();             // Strings aren't used again free memory
+	cspecxml.clear();
+	tspecxml.clear();
+	corespecxml.clear();
 }
 
 void ArchitectureGhidra::postSpecFile(void)
 
 {
-  Architecture::postSpecFile();
-  ScopeGhidra *scopeGhidra = (ScopeGhidra *)symboltab->getGlobalScope();
-  scopeGhidra->lockDefaultProperties();
+	Architecture::postSpecFile();
+	ScopeGhidra *scopeGhidra = (ScopeGhidra *)symboltab->getGlobalScope();
+	scopeGhidra->lockDefaultProperties();
 }
 
 void ArchitectureGhidra::buildLoader(DocumentStorage &store)
 
 {
-  loader = new LoadImageGhidra(this);
+	loader = new LoadImageGhidra(this);
 }
 
 PcodeInjectLibrary *ArchitectureGhidra::buildPcodeInjectLibrary(void)
 
 {
-  return new PcodeInjectLibraryGhidra(this);
+	return new PcodeInjectLibraryGhidra(this);
 }
 
 Translate *ArchitectureGhidra::buildTranslator(DocumentStorage &store)
 
 {
-  return new GhidraTranslate(this);
+	return new GhidraTranslate(this);
 }
 
 Scope *ArchitectureGhidra::buildDatabase(DocumentStorage &store)
 
 {
-  symboltab = new Database(this,false);
-  Scope *globalscope = new ScopeGhidra(this);
-  symboltab->attachScope(globalscope,(Scope *)0);
-  return globalscope;
+	symboltab = new Database(this,false);
+	Scope *globalscope = new ScopeGhidra(this);
+	symboltab->attachScope(globalscope,(Scope *)0);
+	return globalscope;
 }
 
 void ArchitectureGhidra::buildTypegrp(DocumentStorage &store)
 
 {
-  const Element *el = store.getTag("coretypes");
-  types = new TypeFactoryGhidra(this);
-  if (el != (const Element *)0)
-    types->restoreXmlCoreTypes(el);
-  else {
-    // Put in the core types
-    types->setCoreType("void",1,TYPE_VOID,false);
-    types->setCoreType("bool",1,TYPE_BOOL,false);
-    types->setCoreType("byte",1,TYPE_UINT,false);
-    types->setCoreType("word",2,TYPE_UINT,false);
-    types->setCoreType("dword",4,TYPE_UINT,false);
-    types->setCoreType("qword",8,TYPE_UINT,false);
-    types->setCoreType("char",1,TYPE_INT,true);
-    types->setCoreType("sbyte",1,TYPE_INT,false);
-    types->setCoreType("sword",2,TYPE_INT,false);
-    types->setCoreType("sdword",4,TYPE_INT,false);
-    types->setCoreType("sqword",8,TYPE_INT,false);
-    types->setCoreType("float",4,TYPE_FLOAT,false);
-    types->setCoreType("float8",8,TYPE_FLOAT,false);
-    types->setCoreType("float16",16,TYPE_FLOAT,false);
-    types->setCoreType("undefined",1,TYPE_UNKNOWN,false);
-    types->setCoreType("undefined2",2,TYPE_UNKNOWN,false);
-    types->setCoreType("undefined4",4,TYPE_UNKNOWN,false);
-    types->setCoreType("undefined8",8,TYPE_UNKNOWN,false);
-    types->setCoreType("code",1,TYPE_CODE,false);
-    types->setCoreType("wchar",2,TYPE_INT,true);
-    types->cacheCoreTypes();
-  }
+	const Element *el = store.getTag("coretypes");
+	types = new TypeFactoryGhidra(this);
+	if (el != (const Element *)0)
+		types->restoreXmlCoreTypes(el);
+	else {
+		// Put in the core types
+		types->setCoreType("void",1,TYPE_VOID,false);
+		types->setCoreType("bool",1,TYPE_BOOL,false);
+		types->setCoreType("byte",1,TYPE_UINT,false);
+		types->setCoreType("word",2,TYPE_UINT,false);
+		types->setCoreType("dword",4,TYPE_UINT,false);
+		types->setCoreType("qword",8,TYPE_UINT,false);
+		types->setCoreType("char",1,TYPE_INT,true);
+		types->setCoreType("sbyte",1,TYPE_INT,false);
+		types->setCoreType("sword",2,TYPE_INT,false);
+		types->setCoreType("sdword",4,TYPE_INT,false);
+		types->setCoreType("sqword",8,TYPE_INT,false);
+		types->setCoreType("float",4,TYPE_FLOAT,false);
+		types->setCoreType("float8",8,TYPE_FLOAT,false);
+		types->setCoreType("float16",16,TYPE_FLOAT,false);
+		types->setCoreType("undefined",1,TYPE_UNKNOWN,false);
+		types->setCoreType("undefined2",2,TYPE_UNKNOWN,false);
+		types->setCoreType("undefined4",4,TYPE_UNKNOWN,false);
+		types->setCoreType("undefined8",8,TYPE_UNKNOWN,false);
+		types->setCoreType("code",1,TYPE_CODE,false);
+		types->setCoreType("wchar",2,TYPE_INT,true);
+		types->cacheCoreTypes();
+	}
 }
 
 void ArchitectureGhidra::buildCommentDB(DocumentStorage &store)
 
 {
-  commentdb = new CommentDatabaseGhidra(this);
+	commentdb = new CommentDatabaseGhidra(this);
 }
 
 void ArchitectureGhidra::buildStringManager(DocumentStorage &store)
 
 {
-  stringManager = new GhidraStringManager(this,2048);
+	stringManager = new GhidraStringManager(this,2048);
 }
 
 void ArchitectureGhidra::buildConstantPool(DocumentStorage &store)
 
 {
-  cpool = new ConstantPoolGhidra(this);
+	cpool = new ConstantPoolGhidra(this);
 }
 
 void ArchitectureGhidra::buildContext(DocumentStorage &store)
 
 {
-  context = new ContextGhidra(this);
+	context = new ContextGhidra(this);
 }
 
 void ArchitectureGhidra::resolveArchitecture(void)
 
 {
-  archid = "ghidra";
+	archid = "ghidra";
 }
 
 /// Ask the Ghidra client if it knows about a specific processor register.
@@ -405,13 +405,13 @@ void ArchitectureGhidra::resolveArchitecture(void)
 Document *ArchitectureGhidra::getRegister(const string &regname)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getRegister");
-  writeStringStream(sout,regname);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getRegister");
+	writeStringStream(sout,regname);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// Given a storage location and size, ask the Ghidra client if it knows of
@@ -422,20 +422,20 @@ Document *ArchitectureGhidra::getRegister(const string &regname)
 string ArchitectureGhidra::getRegisterName(const VarnodeData &vndata)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getRegisterName");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  Address addr(vndata.space,vndata.offset);
-  addr.saveXml(sout,vndata.size);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getRegisterName");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	Address addr(vndata.space,vndata.offset);
+	addr.saveXml(sout,vndata.size);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  readToResponse(sin);
-  string res;
-  readStringStream(sin,res);
-  readResponseEnd(sin);
-  return res;
+	readToResponse(sin);
+	string res;
+	readStringStream(sin,res);
+	readResponseEnd(sin);
+	return res;
 }
 
 /// The Ghidra client will return a description of registers that have
@@ -447,15 +447,15 @@ string ArchitectureGhidra::getRegisterName(const VarnodeData &vndata)
 Document *ArchitectureGhidra::getTrackedRegisters(const Address &addr)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getTrackedRegisters");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  addr.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getTrackedRegisters");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	addr.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// The first operand to a CALLOTHER op indicates the specific user-defined op.
@@ -465,19 +465,19 @@ Document *ArchitectureGhidra::getTrackedRegisters(const Address &addr)
 string ArchitectureGhidra::getUserOpName(int4 index)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getUserOpName");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << dec << index;
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getUserOpName");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << dec << index;
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  readToResponse(sin);
-  string res;
-  readStringStream(sin,res);
-  readResponseEnd(sin);
-  return res;
+	readToResponse(sin);
+	string res;
+	readStringStream(sin,res);
+	readResponseEnd(sin);
+	return res;
 }
 
 /// Get a description of all the p-code ops for the instruction
@@ -488,15 +488,15 @@ string ArchitectureGhidra::getUserOpName(int4 index)
 uint1 *ArchitectureGhidra::getPcodePacked(const Address &addr)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getPacked");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  addr.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getPacked");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	addr.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readPackedAll(sin);
+	return readPackedAll(sin);
 }
 
 /// The Ghidra client will return a \<symbol> tag, \<function> tag, or some
@@ -508,15 +508,15 @@ uint1 *ArchitectureGhidra::getPcodePacked(const Address &addr)
 Document *ArchitectureGhidra::getMappedSymbolsXML(const Address &addr)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getMappedSymbolsXML");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  addr.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getMappedSymbolsXML");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	addr.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// This asks the Ghidra client to resolve an \e external \e reference.
@@ -530,15 +530,15 @@ Document *ArchitectureGhidra::getMappedSymbolsXML(const Address &addr)
 Document *ArchitectureGhidra::getExternalRefXML(const Address &addr)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getExternalRefXML");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  addr.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getExternalRefXML");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	addr.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// Ask the Ghidra client to list all namespace elements between the global root
@@ -549,38 +549,38 @@ Document *ArchitectureGhidra::getExternalRefXML(const Address &addr)
 Document *ArchitectureGhidra::getNamespacePath(uint8 id)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getNamespacePath");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << hex << id;
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getNamespacePath");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << hex << id;
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 bool ArchitectureGhidra::isNameUsed(const string &nm,uint8 startId,uint8 stopId)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"isNameUsed");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << nm;
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << hex << startId;
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << hex << stopId;
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"isNameUsed");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << nm;
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << hex << startId;
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << hex << stopId;
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  readToResponse(sin);
-  bool res = readBoolStream(sin);
-  readResponseEnd(sin);
-  return res;
+	readToResponse(sin);
+	bool res = readBoolStream(sin);
+	readResponseEnd(sin);
+	return res;
 }
 
 /// Get the name of the primary symbol at the given address.
@@ -590,19 +590,19 @@ bool ArchitectureGhidra::isNameUsed(const string &nm,uint8 startId,uint8 stopId)
 string ArchitectureGhidra::getCodeLabel(const Address &addr)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getSymbol");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  addr.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getSymbol");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	addr.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  readToResponse(sin);
-  string res;
-  readStringStream(sin,res);
-  readResponseEnd(sin);
-  return res;
+	readToResponse(sin);
+	string res;
+	readStringStream(sin,res);
+	readResponseEnd(sin);
+	return res;
 }
 
 /// The Ghidra client should respond with a \<type> tag giving details
@@ -613,16 +613,16 @@ string ArchitectureGhidra::getCodeLabel(const Address &addr)
 Document *ArchitectureGhidra::getType(const string &name,uint8 id)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getType");
-  writeStringStream(sout,name);
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << dec << (int8)id;	// Pass as a signed integer
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getType");
+	writeStringStream(sout,name);
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << dec << (int8)id;      // Pass as a signed integer
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// Ask Ghidra client for all comments associated with one function.
@@ -635,18 +635,18 @@ Document *ArchitectureGhidra::getType(const string &name,uint8 id)
 Document *ArchitectureGhidra::getComments(const Address &fad,uint4 flags)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getComments");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  fad.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << dec << flags;
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getComments");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	fad.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << dec << flags;
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// The Ghidra client is queried for a range of bytes, which are returned
@@ -658,36 +658,36 @@ Document *ArchitectureGhidra::getComments(const Address &fad,uint4 flags)
 void ArchitectureGhidra::getBytes(uint1 *buf,int4 size,const Address &inaddr)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getBytes");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  inaddr.saveXml(sout,size);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getBytes");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	inaddr.saveXml(sout,size);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  readToResponse(sin);
-  int4 type = readToAnyBurst(sin);
-  if (type == 12) {
-    uint1 *dblbuf = new uint1[size * 2];
-    sin.read((char *)dblbuf,size*2);
-    for (int4 i=0; i < size; i++) {
-      buf[i] = ((dblbuf[i*2]-'A') << 4) | (dblbuf[i*2 + 1]-'A');
-    }
-    delete [] dblbuf;
-  }
-  else if ((type&1)==1) {
-    ostringstream errmsg;
-    errmsg << "GHIDRA has no data in the loadimage at " << inaddr.getShortcut();
-    inaddr.printRaw(errmsg);
-    throw DataUnavailError(errmsg.str());
-  }
-  else
-    throw JavaError("alignment","Expecting bytes or end of query response");
-  type = readToAnyBurst(sin);
-  if (type != 13)
-    throw JavaError("alignment","Expecting byte alignment end");
-  readResponseEnd(sin);
+	readToResponse(sin);
+	int4 type = readToAnyBurst(sin);
+	if (type == 12) {
+		uint1 *dblbuf = new uint1[size * 2];
+		sin.read((char *)dblbuf,size*2);
+		for (int4 i=0; i < size; i++) {
+			buf[i] = ((dblbuf[i*2]-'A') << 4) | (dblbuf[i*2 + 1]-'A');
+		}
+		delete [] dblbuf;
+	}
+	else if ((type&1)==1) {
+		ostringstream errmsg;
+		errmsg << "GHIDRA has no data in the loadimage at " << inaddr.getShortcut();
+		inaddr.printRaw(errmsg);
+		throw DataUnavailError(errmsg.str());
+	}
+	else
+		throw JavaError("alignment","Expecting bytes or end of query response");
+	type = readToAnyBurst(sin);
+	if (type != 13)
+		throw JavaError("alignment","Expecting byte alignment end");
+	readResponseEnd(sin);
 }
 
 /// \brief Get string data at a specific address
@@ -705,44 +705,44 @@ void ArchitectureGhidra::getBytes(uint1 *buf,int4 size,const Address &inaddr)
 void ArchitectureGhidra::getStringData(vector<uint1> &buffer,const Address &addr,Datatype *ct,int4 maxBytes,bool &isTrunc)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getString");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  addr.saveXml(sout,maxBytes);
-  sout.write("\000\000\001\017",4);
-  writeStringStream(sout,ct->getName());
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << dec << (int8)ct->getId();	// Pass as a signed integer
-  sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getString");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	addr.saveXml(sout,maxBytes);
+	sout.write("\000\000\001\017",4);
+	writeStringStream(sout,ct->getName());
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << dec << (int8)ct->getId();     // Pass as a signed integer
+	sout.write("\000\000\001\017",4);
 
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  readToResponse(sin);
-  int4 type = readToAnyBurst(sin);
-  if (type == 12) {
-    int4 c = sin.get();
-    uint4 size = (c-0x20);
-    c = sin.get();
-    size ^= ((c-0x20)<<6);
-    isTrunc = (sin.get() != 0);
-    buffer.reserve(size);
-    uint1 *dblbuf = new uint1[size * 2];
-    sin.read((char *)dblbuf,size*2);
-    for (int4 i=0; i < size; i++) {
-      buffer.push_back(((dblbuf[i*2]-'A') << 4) | (dblbuf[i*2 + 1]-'A'));
-    }
-    delete [] dblbuf;
-    type = readToAnyBurst(sin);
-    if (type != 13)
-      throw JavaError("alignment","Expecting byte alignment end");
-    type = readToAnyBurst(sin);
-  }
-  if ((type&1)==1) {
-    // Leave the buffer empty
-  }
-  else
-    throw JavaError("alignment","Expecting end of query response");
+	readToResponse(sin);
+	int4 type = readToAnyBurst(sin);
+	if (type == 12) {
+		int4 c = sin.get();
+		uint4 size = (c-0x20);
+		c = sin.get();
+		size ^= ((c-0x20)<<6);
+		isTrunc = (sin.get() != 0);
+		buffer.reserve(size);
+		uint1 *dblbuf = new uint1[size * 2];
+		sin.read((char *)dblbuf,size*2);
+		for (int4 i=0; i < size; i++) {
+			buffer.push_back(((dblbuf[i*2]-'A') << 4) | (dblbuf[i*2 + 1]-'A'));
+		}
+		delete [] dblbuf;
+		type = readToAnyBurst(sin);
+		if (type != 13)
+			throw JavaError("alignment","Expecting byte alignment end");
+		type = readToAnyBurst(sin);
+	}
+	if ((type&1)==1) {
+		// Leave the buffer empty
+	}
+	else
+		throw JavaError("alignment","Expecting end of query response");
 }
 
 /// \brief Retrieve p-code to inject for a specific context
@@ -763,23 +763,23 @@ void ArchitectureGhidra::getStringData(vector<uint1> &buffer,const Address &addr
 Document *ArchitectureGhidra::getPcodeInject(const string &name,int4 type,const InjectContext &con)
 
 {
-  sout.write("\000\000\001\004",4);
-  if (type == InjectPayload::CALLFIXUP_TYPE)
-    writeStringStream(sout,"getCallFixup");
-  else if (type == InjectPayload::CALLOTHERFIXUP_TYPE)
-    writeStringStream(sout,"getCallotherFixup");
-  else if (type == InjectPayload::CALLMECHANISM_TYPE)
-    writeStringStream(sout,"getCallMech");
-  else
-    writeStringStream(sout,"getXPcode");
-  writeStringStream(sout,name);
-  sout.write("\000\000\001\016",4);
-  con.saveXml(sout);
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	if (type == InjectPayload::CALLFIXUP_TYPE)
+		writeStringStream(sout,"getCallFixup");
+	else if (type == InjectPayload::CALLOTHERFIXUP_TYPE)
+		writeStringStream(sout,"getCallotherFixup");
+	else if (type == InjectPayload::CALLMECHANISM_TYPE)
+		writeStringStream(sout,"getCallMech");
+	else
+		writeStringStream(sout,"getXPcode");
+	writeStringStream(sout,name);
+	sout.write("\000\000\001\016",4);
+	con.saveXml(sout);
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 /// The Ghidra client is provided a sequence of 1 or more integer values
@@ -791,18 +791,18 @@ Document *ArchitectureGhidra::getPcodeInject(const string &name,int4 type,const 
 Document *ArchitectureGhidra::getCPoolRef(const vector<uintb> &refs)
 
 {
-  sout.write("\000\000\001\004",4);
-  writeStringStream(sout,"getCPoolRef");
-  sout.write("\000\000\001\016",4); // Beginning of string header
-  sout << hex << refs[0];
-  for(int4 i=1;i<refs.size();++i) {
-    sout << ',' << hex << refs[i];
-  }
-  sout.write("\000\000\001\017",4);
-  sout.write("\000\000\001\005",4);
-  sout.flush();
+	sout.write("\000\000\001\004",4);
+	writeStringStream(sout,"getCPoolRef");
+	sout.write("\000\000\001\016",4); // Beginning of string header
+	sout << hex << refs[0];
+	for(int4 i=1;i<refs.size();++i) {
+		sout << ',' << hex << refs[i];
+	}
+	sout.write("\000\000\001\017",4);
+	sout.write("\000\000\001\005",4);
+	sout.flush();
 
-  return readXMLAll(sin);
+	return readXMLAll(sin);
 }
 
 // Document *ArchitectureGhidra::getScopeProperties(Scope *newscope)
@@ -826,7 +826,7 @@ Document *ArchitectureGhidra::getCPoolRef(const vector<uintb> &refs)
 void ArchitectureGhidra::printMessage(const string &message) const
 
 {
-  warnings += '\n'+message;
+	warnings += '\n'+message;
 }
 
 /// \brief Construct given specification files and i/o streams
@@ -838,39 +838,39 @@ void ArchitectureGhidra::printMessage(const string &message) const
 /// \param i is the input stream from the Ghidra client
 /// \param o is the output stream to the Ghidra client
 ArchitectureGhidra::ArchitectureGhidra(const string &pspec,const string &cspec,const string &tspec,
-				       const string &corespec,istream &i,ostream &o)
-  : Architecture(), sin(i), sout(o)
+																			 const string &corespec,istream &i,ostream &o)
+	: Architecture(), sin(i), sout(o)
 
 {
-  print->setXML(true);
-  print->setOutputStream(&sout);
-  pspecxml = pspec;
-  cspecxml = cspec;
-  tspecxml = tspec;
-  corespecxml = corespec;
-  sendsyntaxtree = true;	// Default to sending everything
-  sendCcode = true;
-  sendParamMeasures = false;
+	print->setXML(true);
+	print->setOutputStream(&sout);
+	pspecxml = pspec;
+	cspecxml = cspec;
+	tspecxml = tspec;
+	corespecxml = corespec;
+	sendsyntaxtree = true;        // Default to sending everything
+	sendCcode = true;
+	sendParamMeasures = false;
 }
 
 bool ArchitectureGhidra::isDynamicSymbolName(const string &nm)
 
 {
-  if (nm.size() < 8) return false;	// 4 characters of prefix, at least 4 of address
-  if (nm[3] != '_') return false;
-  if (nm[0]=='F' && nm[1]=='U' && nm[2]=='N') {
-  }
-  else if (nm[0]=='D' && nm[1]=='A' && nm[2]=='T') {
-  }
-  else {
-    return false;
-  }
-  for(int4 i=nm.size()-4;i<nm.size();++i) {
-    char c = nm[i];
-    if (c>='0' && c<='9') continue;
-    if (c>='a' && c<='f') continue;
-    return false;
-  }
-  return true;
+	if (nm.size() < 8) return false;      // 4 characters of prefix, at least 4 of address
+	if (nm[3] != '_') return false;
+	if (nm[0]=='F' && nm[1]=='U' && nm[2]=='N') {
+	}
+	else if (nm[0]=='D' && nm[1]=='A' && nm[2]=='T') {
+	}
+	else {
+		return false;
+	}
+	for(int4 i=nm.size()-4;i<nm.size();++i) {
+		char c = nm[i];
+		if (c>='0' && c<='9') continue;
+		if (c>='a' && c<='f') continue;
+		return false;
+	}
+	return true;
 }
 

@@ -20,27 +20,27 @@
 
 /// \brief Extension point for building an Architecture that reads in raw images
 class RawBinaryArchitectureCapability : public ArchitectureCapability {
-  static RawBinaryArchitectureCapability rawBinaryArchitectureCapability;	///< The singleton instance
-  RawBinaryArchitectureCapability(void);					///< Singleton
-  RawBinaryArchitectureCapability(const RawBinaryArchitectureCapability &op2);	///< Not implemented
-  RawBinaryArchitectureCapability &operator=(const RawBinaryArchitectureCapability &op2);	///< Not implemented
+	static RawBinaryArchitectureCapability rawBinaryArchitectureCapability;       ///< The singleton instance
+	RawBinaryArchitectureCapability(void);                                        ///< Singleton
+	RawBinaryArchitectureCapability(const RawBinaryArchitectureCapability &op2);  ///< Not implemented
+	RawBinaryArchitectureCapability &operator=(const RawBinaryArchitectureCapability &op2);       ///< Not implemented
 public:
-  virtual ~RawBinaryArchitectureCapability(void);
-  virtual Architecture *buildArchitecture(const string &filename,const string &target,ostream *estream);
-  virtual bool isFileMatch(const string &filename) const;
-  virtual bool isXmlMatch(Document *doc) const;
+	virtual ~RawBinaryArchitectureCapability(void);
+	virtual Architecture *buildArchitecture(const string &filename,const string &target,ostream *estream);
+	virtual bool isFileMatch(const string &filename) const;
+	virtual bool isXmlMatch(Document *doc) const;
 };
 
 /// \brief Architecture that reads its binary as a raw file
 class RawBinaryArchitecture : public SleighArchitecture {
-  long adjustvma;					///< What address byte 0 of the raw file gets treated as
-  virtual void buildLoader(DocumentStorage &store);
-  virtual void resolveArchitecture(void);
-  virtual void postSpecFile(void);
+	long adjustvma;                                       ///< What address byte 0 of the raw file gets treated as
+	virtual void buildLoader(DocumentStorage &store);
+	virtual void resolveArchitecture(void);
+	virtual void postSpecFile(void);
 public:
-  virtual void saveXml(ostream &s) const;
-  virtual void restoreXml(DocumentStorage &store);
-  RawBinaryArchitecture(const string &fname,const string &targ,ostream *estream);	///< Constructor
-  virtual ~RawBinaryArchitecture(void) {}
+	virtual void saveXml(ostream &s) const;
+	virtual void restoreXml(DocumentStorage &store);
+	RawBinaryArchitecture(const string &fname,const string &targ,ostream *estream);       ///< Constructor
+	virtual ~RawBinaryArchitecture(void) {}
 };
 

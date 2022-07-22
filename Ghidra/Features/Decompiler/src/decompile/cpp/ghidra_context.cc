@@ -18,12 +18,12 @@
 const TrackedSet &ContextGhidra::getTrackedSet(const Address &addr) const
 
 {
-  cache.clear();
+	cache.clear();
 
-  Document *doc = ((ArchitectureGhidra *)glb)->getTrackedRegisters(addr);
-  Element *root = doc->getRoot();
+	Document *doc = ((ArchitectureGhidra *)glb)->getTrackedRegisters(addr);
+	Element *root = doc->getRoot();
 
-  restoreTracked(root,glb,cache);
-  delete doc;
-  return cache;
+	restoreTracked(root,glb,cache);
+	delete doc;
+	return cache;
 }

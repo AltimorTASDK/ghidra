@@ -23,20 +23,20 @@
 void Funcdata::setVarnodeProperties(Varnode *vn) const
 
 {
-  if (!vn->isMapped()) {
-  // One more chance to find entry, now that we know usepoint
-    uint4 vflags=0;
-    SymbolEntry *entry = localmap->queryProperties(vn->getAddr(),vn->getSize(),vn->getUsePoint(*this),vflags);
-    if (entry != (SymbolEntry *)0) // Let entry try to force type
-      vn->setSymbolProperties(entry);
-    else
-      vn->setFlags(vflags & ~Varnode::typelock); // typelock set by updateType
-  }
+	if (!vn->isMapped()) {
+	// One more chance to find entry, now that we know usepoint
+		uint4 vflags=0;
+		SymbolEntry *entry = localmap->queryProperties(vn->getAddr(),vn->getSize(),vn->getUsePoint(*this),vflags);
+		if (entry != (SymbolEntry *)0) // Let entry try to force type
+			vn->setSymbolProperties(entry);
+		else
+			vn->setFlags(vflags & ~Varnode::typelock); // typelock set by updateType
+	}
 
-  if (vn->cover == (Cover *)0) {
-    if (isHighOn())
-      vn->calcCover();
-  }
+	if (vn->cover == (Cover *)0) {
+		if (isHighOn())
+			vn->calcCover();
+	}
 }
 
 /// If HighVariables are enabled, make sure the given Varnode has one assigned. Allocate
@@ -46,14 +46,14 @@ void Funcdata::setVarnodeProperties(Varnode *vn) const
 HighVariable *Funcdata::assignHigh(Varnode *vn)
 
 {
-  if ((flags & highlevel_on)!=0) {
-    if (vn->hasCover())
-      vn->calcCover();
-    if (!vn->isAnnotation()) {
-      return new HighVariable(vn);
-    }
-  }
-  return (HighVariable *)0;
+	if ((flags & highlevel_on)!=0) {
+		if (vn->hasCover())
+			vn->calcCover();
+		if (!vn->isAnnotation()) {
+			return new HighVariable(vn);
+		}
+	}
+	return (HighVariable *)0;
 }
 
 /// A Varnode is allocated which represents the indicated constant value.
@@ -64,13 +64,13 @@ HighVariable *Funcdata::assignHigh(Varnode *vn)
 Varnode *Funcdata::newConstant(int4 s,uintb constant_val)
 
 {
-  Datatype *ct = glb->types->getBase(s,TYPE_UNKNOWN);
+	Datatype *ct = glb->types->getBase(s,TYPE_UNKNOWN);
 
-  Varnode *vn = vbank.create(s,glb->getConstant(constant_val),ct);
-  assignHigh(vn);
+	Varnode *vn = vbank.create(s,glb->getConstant(constant_val),ct);
+	assignHigh(vn);
 
-				// There is no chance of matching localmap
-  return vn;
+																// There is no chance of matching localmap
+	return vn;
 }
 
 /// A new temporary register storage location is allocated from the \e unique
@@ -81,15 +81,15 @@ Varnode *Funcdata::newConstant(int4 s,uintb constant_val)
 Varnode *Funcdata::newUnique(int4 s,Datatype *ct)
 
 {
-  if (ct == (Datatype *)0)
-    ct = glb->types->getBase(s,TYPE_UNKNOWN);
-  Varnode *vn = vbank.createUnique(s,ct);
-  assignHigh(vn);
-  if (s >= minLanedSize)
-    checkForLanedRegister(s, vn->getAddr());
+	if (ct == (Datatype *)0)
+		ct = glb->types->getBase(s,TYPE_UNKNOWN);
+	Varnode *vn = vbank.createUnique(s,ct);
+	assignHigh(vn);
+	if (s >= minLanedSize)
+		checkForLanedRegister(s, vn->getAddr());
 
-				// No chance of matching localmap
-  return vn;
+																// No chance of matching localmap
+	return vn;
 }
 
 /// Create a new Varnode which is already defined as output of a given PcodeOp.
@@ -102,21 +102,21 @@ Varnode *Funcdata::newUnique(int4 s,Datatype *ct)
 Varnode *Funcdata::newVarnodeOut(int4 s,const Address &m,PcodeOp *op)
 
 {
-  Datatype *ct = glb->types->getBase(s,TYPE_UNKNOWN);
-  Varnode *vn = vbank.createDef(s,m,ct,op);
-  op->setOutput(vn);
-  assignHigh(vn);
+	Datatype *ct = glb->types->getBase(s,TYPE_UNKNOWN);
+	Varnode *vn = vbank.createDef(s,m,ct,op);
+	op->setOutput(vn);
+	assignHigh(vn);
 
-  if (s >= minLanedSize)
-    checkForLanedRegister(s,m);
-  uint4 vflags = 0;
-  SymbolEntry *entry = localmap->queryProperties(m,s,op->getAddr(),vflags);
-  if (entry != (SymbolEntry *)0)
-    vn->setSymbolProperties(entry);
-  else
-    vn->setFlags(vflags & ~Varnode::typelock); // Typelock set by updateType
+	if (s >= minLanedSize)
+		checkForLanedRegister(s,m);
+	uint4 vflags = 0;
+	SymbolEntry *entry = localmap->queryProperties(m,s,op->getAddr(),vflags);
+	if (entry != (SymbolEntry *)0)
+		vn->setSymbolProperties(entry);
+	else
+		vn->setFlags(vflags & ~Varnode::typelock); // Typelock set by updateType
 
-  return vn;
+	return vn;
 }
 
 /// Allocate a new register from the \e unique address space and create a new
@@ -127,14 +127,14 @@ Varnode *Funcdata::newVarnodeOut(int4 s,const Address &m,PcodeOp *op)
 Varnode *Funcdata::newUniqueOut(int4 s,PcodeOp *op)
 
 {
-  Datatype *ct = glb->types->getBase(s,TYPE_UNKNOWN);
-  Varnode *vn = vbank.createDefUnique(s,ct,op);
-  op->setOutput(vn);
-  assignHigh(vn);
-  if (s >= minLanedSize)
-    checkForLanedRegister(s, vn->getAddr());
-  // No chance of matching localmap
-  return vn;
+	Datatype *ct = glb->types->getBase(s,TYPE_UNKNOWN);
+	Varnode *vn = vbank.createDefUnique(s,ct,op);
+	op->setOutput(vn);
+	assignHigh(vn);
+	if (s >= minLanedSize)
+		checkForLanedRegister(s, vn->getAddr());
+	// No chance of matching localmap
+	return vn;
 }
 
 /// \brief Create a new unattached Varnode object
@@ -146,24 +146,24 @@ Varnode *Funcdata::newUniqueOut(int4 s,PcodeOp *op)
 Varnode *Funcdata::newVarnode(int4 s,const Address &m,Datatype *ct)
 
 {
-  Varnode *vn;
+	Varnode *vn;
 
-  if (ct == (const Datatype *)0)
-    ct = glb->types->getBase(s,TYPE_UNKNOWN);
+	if (ct == (const Datatype *)0)
+		ct = glb->types->getBase(s,TYPE_UNKNOWN);
 
-  vn = vbank.create(s,m,ct);
-  assignHigh(vn);
+	vn = vbank.create(s,m,ct);
+	assignHigh(vn);
 
-  if (s >= minLanedSize)
-    checkForLanedRegister(s,m);
-  uint4 vflags=0;
-  SymbolEntry *entry = localmap->queryProperties(vn->getAddr(),vn->getSize(),Address(),vflags);
-  if (entry != (SymbolEntry *)0)	// Let entry try to force type
-    vn->setSymbolProperties(entry);
-  else
-    vn->setFlags(vflags & ~Varnode::typelock); // Typelock set by updateType
+	if (s >= minLanedSize)
+		checkForLanedRegister(s,m);
+	uint4 vflags=0;
+	SymbolEntry *entry = localmap->queryProperties(vn->getAddr(),vn->getSize(),Address(),vflags);
+	if (entry != (SymbolEntry *)0)        // Let entry try to force type
+		vn->setSymbolProperties(entry);
+	else
+		vn->setFlags(vflags & ~Varnode::typelock); // Typelock set by updateType
 
-  return vn;
+	return vn;
 }
 
 /// Create a special \e annotation Varnode that holds a pointer reference to a specific
@@ -174,11 +174,11 @@ Varnode *Funcdata::newVarnode(int4 s,const Address &m,Datatype *ct)
 Varnode *Funcdata::newVarnodeIop(PcodeOp *op)
 
 {
-  Datatype *ct = glb->types->getBase(sizeof(op),TYPE_UNKNOWN);
-  AddrSpace *cspc = glb->getIopSpace();
-  Varnode *vn = vbank.create(sizeof(op),Address(cspc,(uintb)(uintp)op),ct);
-  assignHigh(vn);
-  return vn;
+	Datatype *ct = glb->types->getBase(sizeof(op),TYPE_UNKNOWN);
+	AddrSpace *cspc = glb->getIopSpace();
+	Varnode *vn = vbank.create(sizeof(op),Address(cspc,(uintb)(uintp)op),ct);
+	assignHigh(vn);
+	return vn;
 }
 
 /// A reference to a particular address space is encoded as a constant Varnode.
@@ -188,11 +188,11 @@ Varnode *Funcdata::newVarnodeIop(PcodeOp *op)
 Varnode *Funcdata::newVarnodeSpace(AddrSpace *spc)
 
 {
-  Datatype *ct = glb->types->getBase(sizeof(spc),TYPE_UNKNOWN);
+	Datatype *ct = glb->types->getBase(sizeof(spc),TYPE_UNKNOWN);
 
-  Varnode *vn = vbank.create(sizeof(spc),glb->createConstFromSpace(spc),ct);
-  assignHigh(vn);
-  return vn;
+	Varnode *vn = vbank.create(sizeof(spc),glb->createConstFromSpace(spc),ct);
+	assignHigh(vn);
+	return vn;
 }
 
 /// A call specification (FuncCallSpecs) is encoded into an \e annotation Varnode.
@@ -203,12 +203,12 @@ Varnode *Funcdata::newVarnodeSpace(AddrSpace *spc)
 Varnode *Funcdata::newVarnodeCallSpecs(FuncCallSpecs *fc)
 
 {
-  Datatype *ct = glb->types->getBase(sizeof(fc),TYPE_UNKNOWN);
+	Datatype *ct = glb->types->getBase(sizeof(fc),TYPE_UNKNOWN);
 
-  AddrSpace *cspc = glb->getFspecSpace();
-  Varnode *vn = vbank.create(sizeof(fc),Address(cspc,(uintb)(uintp)fc),ct);
-  assignHigh(vn);
-  return vn;
+	AddrSpace *cspc = glb->getFspecSpace();
+	Varnode *vn = vbank.create(sizeof(fc),Address(cspc,(uintb)(uintp)fc),ct);
+	assignHigh(vn);
+	return vn;
 }
 
 /// A reference to a specific Address is encoded in a Varnode.  The Varnode is
@@ -220,14 +220,14 @@ Varnode *Funcdata::newVarnodeCallSpecs(FuncCallSpecs *fc)
 Varnode *Funcdata::newCodeRef(const Address &m)
 
 {
-  Varnode *vn;
-  Datatype *ct;
+	Varnode *vn;
+	Datatype *ct;
 
-  ct = glb->types->getTypeCode();
-  vn = vbank.create(1,m,ct);
-  vn->setFlags(Varnode::annotation);
-  assignHigh(vn);
-  return vn;
+	ct = glb->types->getTypeCode();
+	vn = vbank.create(1,m,ct);
+	vn->setFlags(Varnode::annotation);
+	assignHigh(vn);
+	return vn;
 }
 
 /// \param s is the size of the Varnode in bytes
@@ -237,11 +237,11 @@ Varnode *Funcdata::newCodeRef(const Address &m)
 Varnode *Funcdata::newVarnode(int4 s,AddrSpace *base,uintb off)
 
 {
-  Varnode *vn;
+	Varnode *vn;
 
-  vn = newVarnode(s,Address(base,off));
+	vn = newVarnode(s,Address(base,off));
 
-  return vn;
+	return vn;
 }
 
 /// Internal factory for copying Varnodes from another Funcdata object into \b this.
@@ -250,18 +250,18 @@ Varnode *Funcdata::newVarnode(int4 s,AddrSpace *base,uintb off)
 Varnode *Funcdata::cloneVarnode(const Varnode *vn)
 
 {
-  Varnode *newvn;
+	Varnode *newvn;
 
-  newvn = vbank.create(vn->getSize(),vn->getAddr(),vn->getType());
-  uint4 vflags = vn->getFlags();
-  // These are the flags we allow to be cloned
-  vflags &= (Varnode::annotation | Varnode::externref |
-	     Varnode::readonly | Varnode::persist |
-	     Varnode::addrtied | Varnode::addrforce |
-	     Varnode::indirect_creation | Varnode::incidental_copy |
-	     Varnode::volatil | Varnode::mapped);
-  newvn->setFlags(vflags);
-  return newvn;
+	newvn = vbank.create(vn->getSize(),vn->getAddr(),vn->getType());
+	uint4 vflags = vn->getFlags();
+	// These are the flags we allow to be cloned
+	vflags &= (Varnode::annotation | Varnode::externref |
+						 Varnode::readonly | Varnode::persist |
+						 Varnode::addrtied | Varnode::addrforce |
+						 Varnode::indirect_creation | Varnode::incidental_copy |
+						 Varnode::volatil | Varnode::mapped);
+	newvn->setFlags(vflags);
+	return newvn;
 }
 
 /// References to the Varnode are replaced with NULL pointers and the object is freed,
@@ -270,23 +270,23 @@ Varnode *Funcdata::cloneVarnode(const Varnode *vn)
 void Funcdata::destroyVarnode(Varnode *vn)
 
 {
-  list<PcodeOp *>::const_iterator iter;
+	list<PcodeOp *>::const_iterator iter;
 
-  for(iter=vn->beginDescend();iter!=vn->endDescend();++iter) {
-    PcodeOp *op = *iter;
+	for(iter=vn->beginDescend();iter!=vn->endDescend();++iter) {
+		PcodeOp *op = *iter;
 #ifdef OPACTION_DEBUG
-    if (opactdbg_active)
-      debugModCheck(op);
+		if (opactdbg_active)
+			debugModCheck(op);
 #endif
-    op->clearInput(op->getSlot(vn));
-  }
-  if (vn->def != (PcodeOp *)0) {
-    vn->def->setOutput((Varnode *)0);
-    vn->def = (PcodeOp *)0;
-  }
+		op->clearInput(op->getSlot(vn));
+	}
+	if (vn->def != (PcodeOp *)0) {
+		vn->def->setOutput((Varnode *)0);
+		vn->def = (PcodeOp *)0;
+	}
 
-  vn->destroyDescend();
-  vbank.destroy(vn);
+	vn->destroyDescend();
+	vbank.destroy(vn);
 }
 
 /// Check if the given storage range is a potential laned register.
@@ -296,14 +296,14 @@ void Funcdata::destroyVarnode(Varnode *vn)
 void Funcdata::checkForLanedRegister(int4 sz,const Address &addr)
 
 {
-  const LanedRegister *lanedRegister  = glb->getLanedRegister(addr,sz);
-  if (lanedRegister == (const LanedRegister *)0)
-    return;
-  VarnodeData storage;
-  storage.space = addr.getSpace();
-  storage.offset = addr.getOffset();
-  storage.size = sz;
-  lanedMap[storage] = lanedRegister;
+	const LanedRegister *lanedRegister  = glb->getLanedRegister(addr,sz);
+	if (lanedRegister == (const LanedRegister *)0)
+		return;
+	VarnodeData storage;
+	storage.space = addr.getSpace();
+	storage.offset = addr.getOffset();
+	storage.size = sz;
+	lanedMap[storage] = lanedRegister;
 }
 
 /// Look up the Symbol visible in \b this function's Scope and return the HighVariable
@@ -314,15 +314,15 @@ void Funcdata::checkForLanedRegister(int4 sz,const Address &addr)
 HighVariable *Funcdata::findHigh(const string &nm) const
 
 {
-  vector<Symbol *> symList;
-  localmap->queryByName(nm,symList);
-  if (symList.empty()) return (HighVariable *)0;
-  Symbol *sym = symList[0];
-  Varnode *vn = findLinkedVarnode(sym->getFirstWholeMap());
-  if (vn != (Varnode *)0)
-    return vn->getHigh();
+	vector<Symbol *> symList;
+	localmap->queryByName(nm,symList);
+	if (symList.empty()) return (HighVariable *)0;
+	Symbol *sym = symList[0];
+	Varnode *vn = findLinkedVarnode(sym->getFirstWholeMap());
+	if (vn != (Varnode *)0)
+		return vn->getHigh();
 
-  return (HighVariable *)0;
+	return (HighVariable *)0;
 }
 
 /// An \e input Varnode has a special designation within SSA form as not being defined
@@ -338,36 +338,36 @@ HighVariable *Funcdata::findHigh(const string &nm) const
 Varnode *Funcdata::setInputVarnode(Varnode *vn)
 
 {
-  Varnode *invn;
+	Varnode *invn;
 
-  if (vn->isInput()) return vn;	// Already an input
-				// First we check if it overlaps any other varnode
-  VarnodeDefSet::const_iterator iter;
-  iter = vbank.beginDef(Varnode::input,vn->getAddr()+vn->getSize());
+	if (vn->isInput()) return vn; // Already an input
+																// First we check if it overlaps any other varnode
+	VarnodeDefSet::const_iterator iter;
+	iter = vbank.beginDef(Varnode::input,vn->getAddr()+vn->getSize());
 
-  // Iter points at first varnode AFTER vn
-  if (iter != vbank.beginDef()) {
-    --iter;			// previous varnode
-    invn = *iter;	  	// comes before vn or intersects
-    if (invn->isInput()) {
-      if ((-1 != vn->overlap(*invn))||(-1 != invn->overlap(*vn))) {
-	if ((vn->getSize() == invn->getSize())&&(vn->getAddr() == invn->getAddr()))
-	  return invn;
-	throw LowlevelError("Overlapping input varnodes");
-      }
-    }
-  }
+	// Iter points at first varnode AFTER vn
+	if (iter != vbank.beginDef()) {
+		--iter;                     // previous varnode
+		invn = *iter;               // comes before vn or intersects
+		if (invn->isInput()) {
+			if ((-1 != vn->overlap(*invn))||(-1 != invn->overlap(*vn))) {
+				if ((vn->getSize() == invn->getSize())&&(vn->getAddr() == invn->getAddr()))
+					return invn;
+				throw LowlevelError("Overlapping input varnodes");
+			}
+		}
+	}
 
-  vn = vbank.setInput(vn);
-  setVarnodeProperties(vn);
-  uint4 effecttype = funcp.hasEffect(vn->getAddr(),vn->getSize());
-  if (effecttype == EffectRecord::unaffected)
-    vn->setUnaffected();
-  if (effecttype == EffectRecord::return_address) {
-    vn->setUnaffected();	// Should be unaffected over the course of the function
-    vn->setReturnAddress();
-  }
-  return vn;
+	vn = vbank.setInput(vn);
+	setVarnodeProperties(vn);
+	uint4 effecttype = funcp.hasEffect(vn->getAddr(),vn->getSize());
+	if (effecttype == EffectRecord::unaffected)
+		vn->setUnaffected();
+	if (effecttype == EffectRecord::return_address) {
+		vn->setUnaffected();        // Should be unaffected over the course of the function
+		vn->setReturnAddress();
+	}
+	return vn;
 }
 
 /// \brief Adjust input Varnodes contained in the given range
@@ -381,46 +381,46 @@ Varnode *Funcdata::setInputVarnode(Varnode *vn)
 void Funcdata::adjustInputVarnodes(const Address &addr,int4 sz)
 
 {
-  Address endaddr = addr + (sz-1);
-  vector<Varnode *> inlist;
-  VarnodeDefSet::const_iterator iter,enditer;
-  iter = vbank.beginDef(Varnode::input,addr);
-  enditer = vbank.endDef(Varnode::input,endaddr);
-  while(iter != enditer) {
-    Varnode *vn = *iter;
-    ++iter;
-    if (vn->getOffset() + (vn->getSize()-1) > endaddr.getOffset())
-      throw LowlevelError("Cannot properly adjust input varnodes");
-    inlist.push_back(vn);
-  }
+	Address endaddr = addr + (sz-1);
+	vector<Varnode *> inlist;
+	VarnodeDefSet::const_iterator iter,enditer;
+	iter = vbank.beginDef(Varnode::input,addr);
+	enditer = vbank.endDef(Varnode::input,endaddr);
+	while(iter != enditer) {
+		Varnode *vn = *iter;
+		++iter;
+		if (vn->getOffset() + (vn->getSize()-1) > endaddr.getOffset())
+			throw LowlevelError("Cannot properly adjust input varnodes");
+		inlist.push_back(vn);
+	}
 
-  for(uint4 i=0;i<inlist.size();++i) {
-    Varnode *vn = inlist[i];
-    int4 sa = addr.justifiedContain(sz,vn->getAddr(),vn->getSize(),false);
-    if ((!vn->isInput())||(sa < 0)||(sz<=vn->getSize()))
-      throw LowlevelError("Bad adjustment to input varnode");
-    PcodeOp *subop = newOp(2,getAddress());
-    opSetOpcode(subop,CPUI_SUBPIECE);
-    opSetInput(subop,newConstant(4,sa),1);
-    Varnode *newvn = newVarnodeOut(vn->getSize(),vn->getAddr(),subop);
-    // newvn must not be free in order to give all vn's descendants
-    opInsertBegin(subop,(BlockBasic *)bblocks.getBlock(0));
-    totalReplace(vn,newvn);
-    deleteVarnode(vn); // Get rid of old input before creating new input
-    inlist[i] = newvn;
-  }
-  // Now that all the intersecting inputs have been pulled out, we can create the new input
-  Varnode *invn = newVarnode(sz,addr);
-  invn = setInputVarnode(invn);
-  // The new input may cause new heritage and "Heritage AFTER dead removal" errors
-  // So tell heritage to ignore it
-  // FIXME: It would probably be better to insert this directly into heritage's globaldisjoint
-  invn->setWriteMask();
-  // Now change all old inputs to be created as SUBPIECE from the new input
-  for(uint4 i=0;i<inlist.size();++i) {
-    PcodeOp *op = inlist[i]->getDef();
-    opSetInput(op,invn,0);
-  }
+	for(uint4 i=0;i<inlist.size();++i) {
+		Varnode *vn = inlist[i];
+		int4 sa = addr.justifiedContain(sz,vn->getAddr(),vn->getSize(),false);
+		if ((!vn->isInput())||(sa < 0)||(sz<=vn->getSize()))
+			throw LowlevelError("Bad adjustment to input varnode");
+		PcodeOp *subop = newOp(2,getAddress());
+		opSetOpcode(subop,CPUI_SUBPIECE);
+		opSetInput(subop,newConstant(4,sa),1);
+		Varnode *newvn = newVarnodeOut(vn->getSize(),vn->getAddr(),subop);
+		// newvn must not be free in order to give all vn's descendants
+		opInsertBegin(subop,(BlockBasic *)bblocks.getBlock(0));
+		totalReplace(vn,newvn);
+		deleteVarnode(vn); // Get rid of old input before creating new input
+		inlist[i] = newvn;
+	}
+	// Now that all the intersecting inputs have been pulled out, we can create the new input
+	Varnode *invn = newVarnode(sz,addr);
+	invn = setInputVarnode(invn);
+	// The new input may cause new heritage and "Heritage AFTER dead removal" errors
+	// So tell heritage to ignore it
+	// FIXME: It would probably be better to insert this directly into heritage's globaldisjoint
+	invn->setWriteMask();
+	// Now change all old inputs to be created as SUBPIECE from the new input
+	for(uint4 i=0;i<inlist.size();++i) {
+		PcodeOp *op = inlist[i]->getDef();
+		opSetInput(op,invn,0);
+	}
 }
 
 /// All p-code ops that read the Varnode are transformed so that they read
@@ -430,65 +430,65 @@ void Funcdata::adjustInputVarnodes(const Address &addr,int4 sz)
 bool Funcdata::descend2Undef(Varnode *vn)
 
 {
-  PcodeOp *op,*copyop;
-  BlockBasic *inbl;
-  Varnode *badconst;
-  list<PcodeOp *>::const_iterator iter;
-  int4 i,sz;
-  bool res;
+	PcodeOp *op,*copyop;
+	BlockBasic *inbl;
+	Varnode *badconst;
+	list<PcodeOp *>::const_iterator iter;
+	int4 i,sz;
+	bool res;
 
-  res = false;
-  sz = vn->getSize();
-  iter = vn->beginDescend();
-  while(iter != vn->endDescend()) {
-    op = *iter++;		// Move to next in list before deletion
-    if (op->getParent()->isDead()) continue;
-    if (op->getParent()->sizeIn()!=0) res = true;
-    i = op->getSlot(vn);
-    badconst = newConstant(sz,0xBADDEF);
-    if (op->code()==CPUI_MULTIEQUAL) { // Cannot put constant directly into MULTIEQUAL
-      inbl = (BlockBasic *) op->getParent()->getIn(i);
-      copyop = newOp(1,inbl->getStart());
-      Varnode *inputvn = newUniqueOut(sz,copyop);
-      opSetOpcode(copyop,CPUI_COPY);
-      opSetInput(copyop,badconst,0);
-      opInsertEnd(copyop,inbl);
-      opSetInput(op,inputvn,i);
-    }
-    else if (op->code()==CPUI_INDIRECT) { // Cannot put constant directly into INDIRECT
-      copyop = newOp(1,op->getAddr());
-      Varnode *inputvn = newUniqueOut(sz,copyop);
-      opSetOpcode(copyop,CPUI_COPY);
-      opSetInput(copyop,badconst,0);
-      opInsertBefore(copyop,op);
-      opSetInput(op,inputvn,i);
-    }
-    else
-      opSetInput(op,badconst,i);
-  }
-  return res;
+	res = false;
+	sz = vn->getSize();
+	iter = vn->beginDescend();
+	while(iter != vn->endDescend()) {
+		op = *iter++;               // Move to next in list before deletion
+		if (op->getParent()->isDead()) continue;
+		if (op->getParent()->sizeIn()!=0) res = true;
+		i = op->getSlot(vn);
+		badconst = newConstant(sz,0xBADDEF);
+		if (op->code()==CPUI_MULTIEQUAL) { // Cannot put constant directly into MULTIEQUAL
+			inbl = (BlockBasic *) op->getParent()->getIn(i);
+			copyop = newOp(1,inbl->getStart());
+			Varnode *inputvn = newUniqueOut(sz,copyop);
+			opSetOpcode(copyop,CPUI_COPY);
+			opSetInput(copyop,badconst,0);
+			opInsertEnd(copyop,inbl);
+			opSetInput(op,inputvn,i);
+		}
+		else if (op->code()==CPUI_INDIRECT) { // Cannot put constant directly into INDIRECT
+			copyop = newOp(1,op->getAddr());
+			Varnode *inputvn = newUniqueOut(sz,copyop);
+			opSetOpcode(copyop,CPUI_COPY);
+			opSetInput(copyop,badconst,0);
+			opInsertBefore(copyop,op);
+			opSetInput(op,inputvn,i);
+		}
+		else
+			opSetInput(op,badconst,i);
+	}
+	return res;
 }
 
 void Funcdata::initActiveOutput(void)
 
 {
-  activeoutput = new ParamActive(false);
-  int4 maxdelay = funcp.getMaxOutputDelay();
-  if (maxdelay > 0)
-    maxdelay = 3;
-  activeoutput->setMaxPass(maxdelay);
+	activeoutput = new ParamActive(false);
+	int4 maxdelay = funcp.getMaxOutputDelay();
+	if (maxdelay > 0)
+		maxdelay = 3;
+	activeoutput->setMaxPass(maxdelay);
 }
 
 void Funcdata::setHighLevel(void)
 
 {
-  if ((flags & highlevel_on)!=0) return;
-  flags |= highlevel_on;
-  high_level_index = vbank.getCreateIndex();
-  VarnodeLocSet::const_iterator iter;
+	if ((flags & highlevel_on)!=0) return;
+	flags |= highlevel_on;
+	high_level_index = vbank.getCreateIndex();
+	VarnodeLocSet::const_iterator iter;
 
-  for(iter=vbank.beginLoc();iter!=vbank.endLoc();++iter)
-    assignHigh(*iter);
+	for(iter=vbank.beginLoc();iter!=vbank.endLoc();++iter)
+		assignHigh(*iter);
 }
 
 /// \brief Copy properties from an existing Varnode to a new Varnode
@@ -501,12 +501,12 @@ void Funcdata::setHighLevel(void)
 void Funcdata::transferVarnodeProperties(Varnode *vn,Varnode *newVn,int4 lsbOffset)
 
 {
-  uintb newConsume = (vn->getConsume() >> 8*lsbOffset) & calc_mask(newVn->getSize());
+	uintb newConsume = (vn->getConsume() >> 8*lsbOffset) & calc_mask(newVn->getSize());
 
-  uint4 vnFlags = vn->getFlags() & (Varnode::directwrite|Varnode::addrforce);
+	uint4 vnFlags = vn->getFlags() & (Varnode::directwrite|Varnode::addrforce);
 
-  newVn->setFlags(vnFlags);	// Preserve addrforce setting
-  newVn->setConsume(newConsume);
+	newVn->setFlags(vnFlags);     // Preserve addrforce setting
+	newVn->setConsume(newConsume);
 }
 
 /// Treat the given Varnode as read-only, look up its value in LoadImage
@@ -516,77 +516,77 @@ void Funcdata::transferVarnodeProperties(Varnode *vn,Varnode *newVn,int4 lsbOffs
 bool Funcdata::fillinReadOnly(Varnode *vn)
 
 {
-  if (vn->isWritten()) {	// Can't replace output with constant
-    PcodeOp *defop = vn->getDef();
-    if (defop->isMarker())
-      defop->setAdditionalFlag(PcodeOp::warning);	// Not a true write, ignore it
-    else if (!defop->isWarning()) { // No warning generated before
-      defop->setAdditionalFlag(PcodeOp::warning);
-      ostringstream s;
-      if ((!vn->isAddrForce())||(!vn->hasNoDescend())) {
-	s << "Read-only address (";
-	s << vn->getSpace()->getName();
-	s << ',';
-	vn->getAddr().printRaw(s);
-	s << ") is written";
-	warning(s.str(),defop->getAddr());
-      }
-    }
-    return false;		// No change was made
-  }
+	if (vn->isWritten()) {        // Can't replace output with constant
+		PcodeOp *defop = vn->getDef();
+		if (defop->isMarker())
+			defop->setAdditionalFlag(PcodeOp::warning);       // Not a true write, ignore it
+		else if (!defop->isWarning()) { // No warning generated before
+			defop->setAdditionalFlag(PcodeOp::warning);
+			ostringstream s;
+			if ((!vn->isAddrForce())||(!vn->hasNoDescend())) {
+				s << "Read-only address (";
+				s << vn->getSpace()->getName();
+				s << ',';
+				vn->getAddr().printRaw(s);
+				s << ") is written";
+				warning(s.str(),defop->getAddr());
+			}
+		}
+		return false;               // No change was made
+	}
 
-  if (vn->getSize() > sizeof(uintb))
-    return false;		// Constant will exceed precision
+	if (vn->getSize() > sizeof(uintb))
+		return false;               // Constant will exceed precision
 
-  uintb res;
-  uint1 bytes[32];
-  try {
-    glb->loader->loadFill(bytes,vn->getSize(),vn->getAddr());
-  } catch(DataUnavailError &err) { // Could not get value from LoadImage
-    vn->clearFlags(Varnode::readonly); // Treat as writeable
-    return true;
-  }
+	uintb res;
+	uint1 bytes[32];
+	try {
+		glb->loader->loadFill(bytes,vn->getSize(),vn->getAddr());
+	} catch(DataUnavailError &err) { // Could not get value from LoadImage
+		vn->clearFlags(Varnode::readonly); // Treat as writeable
+		return true;
+	}
 
-  if (vn->getSpace()->isBigEndian()) { // Big endian
-    res = 0;
-    for(int4 i=0;i<vn->getSize();++i) {
-      res <<= 8;
-      res |= bytes[i];
-    }
-  }
-  else {
-    res = 0;
-    for(int4 i=vn->getSize()-1;i>=0;--i) {
-      res <<= 8;
-      res |= bytes[i];
-    }
-  }
-				// Replace all references to vn
-  bool changemade = false;
-  list<PcodeOp *>::const_iterator iter;
-  PcodeOp *op;
-  int4 i;
-  Datatype *locktype = vn->isTypeLock() ? vn->getType() : (Datatype *)0;
+	if (vn->getSpace()->isBigEndian()) { // Big endian
+		res = 0;
+		for(int4 i=0;i<vn->getSize();++i) {
+			res <<= 8;
+			res |= bytes[i];
+		}
+	}
+	else {
+		res = 0;
+		for(int4 i=vn->getSize()-1;i>=0;--i) {
+			res <<= 8;
+			res |= bytes[i];
+		}
+	}
+																// Replace all references to vn
+	bool changemade = false;
+	list<PcodeOp *>::const_iterator iter;
+	PcodeOp *op;
+	int4 i;
+	Datatype *locktype = vn->isTypeLock() ? vn->getType() : (Datatype *)0;
 
-  iter = vn->beginDescend();
-  while(iter != vn->endDescend()) {
-    op = *iter++;
-    i = op->getSlot(vn);
-    if (op->isMarker()) {		// Must be careful putting constants in here
-      if ((op->code()!=CPUI_INDIRECT)||(i!=0)) continue;
-      Varnode *outvn = op->getOut();
-      if (outvn->getAddr() == vn->getAddr()) continue; // Ignore indirect to itself
-      // Change the indirect to a COPY
-      opRemoveInput(op,1);
-      opSetOpcode(op,CPUI_COPY);
-    }
-    Varnode *cvn = newConstant(vn->getSize(),res);
-    if (locktype != (Datatype *)0)
-      cvn->updateType(locktype,true,true); // Try to pass on the locked datatype
-    opSetInput(op,cvn,i);
-    changemade = true;
-  }
-  return changemade;
+	iter = vn->beginDescend();
+	while(iter != vn->endDescend()) {
+		op = *iter++;
+		i = op->getSlot(vn);
+		if (op->isMarker()) {               // Must be careful putting constants in here
+			if ((op->code()!=CPUI_INDIRECT)||(i!=0)) continue;
+			Varnode *outvn = op->getOut();
+			if (outvn->getAddr() == vn->getAddr()) continue; // Ignore indirect to itself
+			// Change the indirect to a COPY
+			opRemoveInput(op,1);
+			opSetOpcode(op,CPUI_COPY);
+		}
+		Varnode *cvn = newConstant(vn->getSize(),res);
+		if (locktype != (Datatype *)0)
+			cvn->updateType(locktype,true,true); // Try to pass on the locked datatype
+		opSetInput(op,cvn,i);
+		changemade = true;
+	}
+	return changemade;
 }
 
 /// The Varnode is assumed not fully linked.  The read or write action is
@@ -598,44 +598,44 @@ bool Funcdata::fillinReadOnly(Varnode *vn)
 bool Funcdata::replaceVolatile(Varnode *vn)
 
 {
-  PcodeOp *newop;
-  if (vn->isWritten()) {	// A written value
-    VolatileWriteOp *vw_op = glb->userops.getVolatileWrite();
-    if (!vn->hasNoDescend()) throw LowlevelError("Volatile memory was propagated");
-    PcodeOp *defop = vn->getDef();
-    newop = newOp(3,defop->getAddr());
-    opSetOpcode(newop,CPUI_CALLOTHER);
-    // Create a userop of type specified by vw_op
-    opSetInput(newop,newConstant(4,vw_op->getIndex()),0);
-    // The first parameter is the offset of volatile memory location
-    opSetInput(newop,newCodeRef(vn->getAddr()),1);
-    // Replace the volatile variable with a temp
-    Varnode *tmp = newUnique(vn->getSize());
-    opSetOutput(defop,tmp);
-    // The temp is the second parameter to the userop
-    opSetInput(newop,tmp,2);
-    opInsertAfter(newop,defop); // Insert after defining op
-  }
-  else {			// A read value
-    VolatileReadOp *vr_op = glb->userops.getVolatileRead();
-    if (vn->hasNoDescend()) return false; // Dead
-    PcodeOp *readop = vn->loneDescend();
-    if (readop == (PcodeOp *)0)
-      throw LowlevelError("Volatile memory value used more than once");
-    newop = newOp(2,readop->getAddr());
-    opSetOpcode(newop,CPUI_CALLOTHER);
-    // Create a temp to replace the volatile variable
-    Varnode *tmp = newUniqueOut(vn->getSize(),newop);
-    // Create a userop of type specified by vr_op
-    opSetInput(newop,newConstant(4,vr_op->getIndex()),0);
-    // The first parameter is the offset of the volatile memory loc
-    opSetInput(newop,newCodeRef(vn->getAddr()),1);
-    opSetInput(readop,tmp,readop->getSlot(vn));
-    opInsertBefore(newop,readop); // Insert before read
-  }
-  if (vn->isTypeLock())		// If the original varnode had a type locked on it
-    newop->setAdditionalFlag(PcodeOp::special_prop); // Mark this op as doing special propagation
-  return true;
+	PcodeOp *newop;
+	if (vn->isWritten()) {        // A written value
+		VolatileWriteOp *vw_op = glb->userops.getVolatileWrite();
+		if (!vn->hasNoDescend()) throw LowlevelError("Volatile memory was propagated");
+		PcodeOp *defop = vn->getDef();
+		newop = newOp(3,defop->getAddr());
+		opSetOpcode(newop,CPUI_CALLOTHER);
+		// Create a userop of type specified by vw_op
+		opSetInput(newop,newConstant(4,vw_op->getIndex()),0);
+		// The first parameter is the offset of volatile memory location
+		opSetInput(newop,newCodeRef(vn->getAddr()),1);
+		// Replace the volatile variable with a temp
+		Varnode *tmp = newUnique(vn->getSize());
+		opSetOutput(defop,tmp);
+		// The temp is the second parameter to the userop
+		opSetInput(newop,tmp,2);
+		opInsertAfter(newop,defop); // Insert after defining op
+	}
+	else {                        // A read value
+		VolatileReadOp *vr_op = glb->userops.getVolatileRead();
+		if (vn->hasNoDescend()) return false; // Dead
+		PcodeOp *readop = vn->loneDescend();
+		if (readop == (PcodeOp *)0)
+			throw LowlevelError("Volatile memory value used more than once");
+		newop = newOp(2,readop->getAddr());
+		opSetOpcode(newop,CPUI_CALLOTHER);
+		// Create a temp to replace the volatile variable
+		Varnode *tmp = newUniqueOut(vn->getSize(),newop);
+		// Create a userop of type specified by vr_op
+		opSetInput(newop,newConstant(4,vr_op->getIndex()),0);
+		// The first parameter is the offset of the volatile memory loc
+		opSetInput(newop,newCodeRef(vn->getAddr()),1);
+		opSetInput(readop,tmp,readop->getSlot(vn));
+		opInsertBefore(newop,readop); // Insert before read
+	}
+	if (vn->isTypeLock())         // If the original varnode had a type locked on it
+		newop->setAdditionalFlag(PcodeOp::special_prop); // Mark this op as doing special propagation
+	return true;
 }
 
 /// \brief Check if the given Varnode only flows into call-based INDIRECT ops
@@ -646,43 +646,43 @@ bool Funcdata::replaceVolatile(Varnode *vn)
 bool Funcdata::checkIndirectUse(Varnode *vn)
 
 {
-  vector<Varnode *> vlist;
-  int4 i = 0;
-  vlist.push_back(vn);
-  vn->setMark();
-  bool result = true;
-  while((i<vlist.size())&&result) {
-    vn = vlist[i++];
-    list<PcodeOp *>::const_iterator iter;
-    for(iter=vn->beginDescend();iter!=vn->endDescend();++iter) {
-      PcodeOp *op = *iter;
-      OpCode opc = op->code();
-      if (opc == CPUI_INDIRECT) {
-	if (op->isIndirectStore()) {
-	  // INDIRECT from a STORE is not a negative result but continue to follow data-flow
-	  Varnode *outvn = op->getOut();
-	  if (!outvn->isMark()) {
-	    vlist.push_back(outvn);
-	    outvn->setMark();
-	  }
+	vector<Varnode *> vlist;
+	int4 i = 0;
+	vlist.push_back(vn);
+	vn->setMark();
+	bool result = true;
+	while((i<vlist.size())&&result) {
+		vn = vlist[i++];
+		list<PcodeOp *>::const_iterator iter;
+		for(iter=vn->beginDescend();iter!=vn->endDescend();++iter) {
+			PcodeOp *op = *iter;
+			OpCode opc = op->code();
+			if (opc == CPUI_INDIRECT) {
+				if (op->isIndirectStore()) {
+					// INDIRECT from a STORE is not a negative result but continue to follow data-flow
+					Varnode *outvn = op->getOut();
+					if (!outvn->isMark()) {
+						vlist.push_back(outvn);
+						outvn->setMark();
+					}
+				}
+			}
+			else if (opc == CPUI_MULTIEQUAL) {
+				Varnode *outvn = op->getOut();
+				if (!outvn->isMark()) {
+					vlist.push_back(outvn);
+					outvn->setMark();
+				}
+			}
+			else {
+				result = false;
+				break;
+			}
+		}
 	}
-      }
-      else if (opc == CPUI_MULTIEQUAL) {
-	Varnode *outvn = op->getOut();
-	if (!outvn->isMark()) {
-	  vlist.push_back(outvn);
-	  outvn->setMark();
-	}
-      }
-      else {
-	result = false;
-	break;
-      }
-    }
-  }
-  for(i=0;i<vlist.size();++i)
-    vlist[i]->clearMark();
-  return result;
+	for(i=0;i<vlist.size();++i)
+		vlist[i]->clearMark();
+	return result;
 }
 
 /// The illegal inputs are additionally marked as \b indirectonly and
@@ -690,16 +690,16 @@ bool Funcdata::checkIndirectUse(Varnode *vn)
 void Funcdata::markIndirectOnly(void)
 
 {
-  VarnodeDefSet::const_iterator iter,enditer;
+	VarnodeDefSet::const_iterator iter,enditer;
 
-  iter = beginDef(Varnode::input);
-  enditer = endDef(Varnode::input);
-  for(;iter!=enditer;++iter) {	// Loop over all inputs
-    Varnode *vn = *iter;
-    if (!vn->isIllegalInput()) continue; // Only check illegal inputs
-    if (checkIndirectUse(vn))
-      vn->setFlags(Varnode::indirectonly);
-  }
+	iter = beginDef(Varnode::input);
+	enditer = endDef(Varnode::input);
+	for(;iter!=enditer;++iter) {  // Loop over all inputs
+		Varnode *vn = *iter;
+		if (!vn->isIllegalInput()) continue; // Only check illegal inputs
+		if (checkIndirectUse(vn))
+			vn->setFlags(Varnode::indirectonly);
+	}
 }
 
 /// Free any Varnodes not attached to anything. This is only performed at fixed times so that
@@ -707,21 +707,21 @@ void Funcdata::markIndirectOnly(void)
 void Funcdata::clearDeadVarnodes(void)
 
 {
-  VarnodeLocSet::const_iterator iter;
-  Varnode *vn;
+	VarnodeLocSet::const_iterator iter;
+	Varnode *vn;
 
-  iter = vbank.beginLoc();
-  while(iter!=vbank.endLoc()) {
-    vn = *iter++;
-    if (vn->hasNoDescend()) {
-      if (vn->isInput() && !vn->isLockedInput()) {
-	vbank.makeFree(vn);
-	vn->clearCover();
-      }
-      if (vn->isFree())
-	vbank.destroy(vn);
-    }
-  }
+	iter = vbank.beginLoc();
+	while(iter!=vbank.endLoc()) {
+		vn = *iter++;
+		if (vn->hasNoDescend()) {
+			if (vn->isInput() && !vn->isLockedInput()) {
+				vbank.makeFree(vn);
+				vn->clearCover();
+			}
+			if (vn->isFree())
+				vbank.destroy(vn);
+		}
+	}
 }
 
 /// All Varnodes are initialized assuming that all its bits are possibly non-zero. This method
@@ -731,73 +731,73 @@ void Funcdata::clearDeadVarnodes(void)
 void Funcdata::calcNZMask(void)
 
 {
-  vector<PcodeOpNode> opstack;
-  list<PcodeOp *>::const_iterator oiter;
+	vector<PcodeOpNode> opstack;
+	list<PcodeOp *>::const_iterator oiter;
 
-  for(oiter=beginOpAlive();oiter!=endOpAlive();++oiter) {
-    PcodeOp *op = *oiter;
-    if (op->isMark()) continue;
-    opstack.push_back(PcodeOpNode(op,0));
-    op->setMark();
+	for(oiter=beginOpAlive();oiter!=endOpAlive();++oiter) {
+		PcodeOp *op = *oiter;
+		if (op->isMark()) continue;
+		opstack.push_back(PcodeOpNode(op,0));
+		op->setMark();
 
-    do {
-      // Get next edge
-      PcodeOpNode &node( opstack.back() );
-      if (node.slot >= node.op->numInput()) { // If no edge left
-	Varnode *outvn = node.op->getOut();
-	if (outvn != (Varnode *)0) {
-	  outvn->nzm = node.op->getNZMaskLocal(true);
+		do {
+			// Get next edge
+			PcodeOpNode &node( opstack.back() );
+			if (node.slot >= node.op->numInput()) { // If no edge left
+				Varnode *outvn = node.op->getOut();
+				if (outvn != (Varnode *)0) {
+					outvn->nzm = node.op->getNZMaskLocal(true);
+				}
+				opstack.pop_back();     // Pop a level
+				continue;
+			}
+			int4 oldslot = node.slot;
+			node.slot += 1; // Advance to next input
+			// Determine if we want to traverse this edge
+			if (node.op->code() == CPUI_MULTIEQUAL) {
+				if (node.op->getParent()->isLoopIn(oldslot)) // Clip looping edges
+					continue;
+			}
+			// Traverse edge indicated by slot
+			Varnode *vn = node.op->getIn(oldslot);
+			if (!vn->isWritten()) {
+				if (vn->isConstant())
+					vn->nzm = vn->getOffset();
+				else {
+					vn->nzm = calc_mask(vn->getSize());
+					if (vn->isSpacebase())
+						vn->nzm &= ~((uintb)0xff); // Treat spacebase input as aligned
+				}
+			}
+			else if (!vn->getDef()->isMark()) { // If haven't traversed before
+				opstack.push_back(PcodeOpNode(vn->getDef(),0));
+				vn->getDef()->setMark();
+			}
+		} while(!opstack.empty());
 	}
-	opstack.pop_back();	// Pop a level
-	continue;
-      }
-      int4 oldslot = node.slot;
-      node.slot += 1; // Advance to next input
-      // Determine if we want to traverse this edge
-      if (node.op->code() == CPUI_MULTIEQUAL) {
-	if (node.op->getParent()->isLoopIn(oldslot)) // Clip looping edges
-	  continue;
-      }
-      // Traverse edge indicated by slot
-      Varnode *vn = node.op->getIn(oldslot);
-      if (!vn->isWritten()) {
-	if (vn->isConstant())
-	  vn->nzm = vn->getOffset();
-	else {
-	  vn->nzm = calc_mask(vn->getSize());
-	  if (vn->isSpacebase())
-	    vn->nzm &= ~((uintb)0xff); // Treat spacebase input as aligned
+
+	vector<PcodeOp *> worklist;
+	// Clear marks and push ops with looping edges onto worklist
+	for(oiter=beginOpAlive();oiter!=endOpAlive();++oiter) {
+		PcodeOp *op = *oiter;
+		op->clearMark();
+		if (op->code() == CPUI_MULTIEQUAL)
+			worklist.push_back(op);
 	}
-      }
-      else if (!vn->getDef()->isMark()) { // If haven't traversed before
-	opstack.push_back(PcodeOpNode(vn->getDef(),0));
-	vn->getDef()->setMark();
-      }
-    } while(!opstack.empty());
-  }
 
-  vector<PcodeOp *> worklist;
-  // Clear marks and push ops with looping edges onto worklist
-  for(oiter=beginOpAlive();oiter!=endOpAlive();++oiter) {
-    PcodeOp *op = *oiter;
-    op->clearMark();
-    if (op->code() == CPUI_MULTIEQUAL)
-      worklist.push_back(op);
-  }
-
-  // Continue to propagate changes along all edges
-  while(!worklist.empty()) {
-    PcodeOp *op = worklist.back();
-    worklist.pop_back();
-    Varnode *vn = op->getOut();
-    if (vn == (Varnode *)0) continue;
-    uintb nzmask = op->getNZMaskLocal(false);
-    if (nzmask != vn->nzm) {
-      vn->nzm = nzmask;
-      for(oiter=vn->beginDescend();oiter!=vn->endDescend();++oiter)
-	worklist.push_back(*oiter);
-    }
-  }
+	// Continue to propagate changes along all edges
+	while(!worklist.empty()) {
+		PcodeOp *op = worklist.back();
+		worklist.pop_back();
+		Varnode *vn = op->getOut();
+		if (vn == (Varnode *)0) continue;
+		uintb nzmask = op->getNZMaskLocal(false);
+		if (nzmask != vn->nzm) {
+			vn->nzm = nzmask;
+			for(oiter=vn->beginDescend();oiter!=vn->endDescend();++oiter)
+				worklist.push_back(*oiter);
+		}
+	}
 }
 
 /// \brief Update Varnode properties based on (new) Symbol information
@@ -812,55 +812,55 @@ void Funcdata::calcNZMask(void)
 bool Funcdata::syncVarnodesWithSymbols(const ScopeLocal *lm,bool typesyes)
 
 {
-  bool updateoccurred = false;
-  VarnodeLocSet::const_iterator iter,enditer;
-  Datatype *ct;
-  SymbolEntry *entry;
-  uint4 fl;
+	bool updateoccurred = false;
+	VarnodeLocSet::const_iterator iter,enditer;
+	Datatype *ct;
+	SymbolEntry *entry;
+	uint4 fl;
 
-  iter = vbank.beginLoc(lm->getSpaceId());
-  enditer = vbank.endLoc(lm->getSpaceId());
-  while(iter != enditer) {
-    Varnode *vnexemplar = *iter;
-    entry = lm->findOverlap(vnexemplar->getAddr(),vnexemplar->getSize());
-    ct = (Datatype *)0;
-    if (entry != (SymbolEntry *)0) {
-      fl = entry->getAllFlags();
-      if (entry->getSize() >= vnexemplar->getSize()) {
-	if (typesyes) {
-	  uintb off = (vnexemplar->getOffset() - entry->getAddr().getOffset()) + entry->getOffset();
-	  Datatype *cur = entry->getSymbol()->getType();
-	  do {
-	    ct = cur;
-	    cur = cur->getSubType(off,&off);
-	  } while(cur != (Datatype *)0);
-	  if ((ct->getSize() != vnexemplar->getSize())||(ct->getMetatype() == TYPE_UNKNOWN))
-	    ct = (Datatype *)0;
+	iter = vbank.beginLoc(lm->getSpaceId());
+	enditer = vbank.endLoc(lm->getSpaceId());
+	while(iter != enditer) {
+		Varnode *vnexemplar = *iter;
+		entry = lm->findOverlap(vnexemplar->getAddr(),vnexemplar->getSize());
+		ct = (Datatype *)0;
+		if (entry != (SymbolEntry *)0) {
+			fl = entry->getAllFlags();
+			if (entry->getSize() >= vnexemplar->getSize()) {
+				if (typesyes) {
+					uintb off = (vnexemplar->getOffset() - entry->getAddr().getOffset()) + entry->getOffset();
+					Datatype *cur = entry->getSymbol()->getType();
+					do {
+						ct = cur;
+						cur = cur->getSubType(off,&off);
+					} while(cur != (Datatype *)0);
+					if ((ct->getSize() != vnexemplar->getSize())||(ct->getMetatype() == TYPE_UNKNOWN))
+						ct = (Datatype *)0;
+				}
+			}
+			else { // Overlapping but not containing
+				// This is usual indicative of a small locked symbol
+				// getting put in a bigger register
+				// Don't try to figure out type
+				// Don't keep typelock and namelock
+				fl &= ~((uint4)(Varnode::typelock|Varnode::namelock));
+				// we do particularly want to keep the nolocalalias
+			}
+		}
+		else { // Could not find any symbol
+			if (lm->inScope(vnexemplar->getAddr(),vnexemplar->getSize(),
+											vnexemplar->getUsePoint(*this))) {
+				// This is technically an error, there should be some
+				// kind of symbol, if we are in scope
+				fl = Varnode::mapped | Varnode::addrtied;
+			}
+			else
+				fl = 0;
+		}
+		if (syncVarnodesWithSymbol(iter,fl,ct))
+				updateoccurred = true;
 	}
-      }
-      else { // Overlapping but not containing
-	// This is usual indicative of a small locked symbol
-	// getting put in a bigger register
-	// Don't try to figure out type
-	// Don't keep typelock and namelock
-	fl &= ~((uint4)(Varnode::typelock|Varnode::namelock));
-	// we do particularly want to keep the nolocalalias
-      }
-    }
-    else { // Could not find any symbol
-      if (lm->inScope(vnexemplar->getAddr(),vnexemplar->getSize(),
-		      vnexemplar->getUsePoint(*this))) {
-	// This is technically an error, there should be some
-	// kind of symbol, if we are in scope
-	fl = Varnode::mapped | Varnode::addrtied;
-      }
-      else
-	fl = 0;
-    }
-    if (syncVarnodesWithSymbol(iter,fl,ct))
-	updateoccurred = true;
-  }
-  return updateoccurred;
+	return updateoccurred;
 }
 
 /// A Varnode overlaps the given SymbolEntry.  Make sure the Varnode is part of the variable
@@ -872,35 +872,35 @@ bool Funcdata::syncVarnodesWithSymbols(const ScopeLocal *lm,bool typesyes)
 Symbol *Funcdata::handleSymbolConflict(SymbolEntry *entry,Varnode *vn)
 
 {
-  if (vn->isInput() || vn->isAddrTied() ||
-      vn->isPersist() || vn->isConstant() || entry->isDynamic()) {
-    vn->setSymbolEntry(entry);
-    return entry->getSymbol();
-  }
-  HighVariable *high = vn->getHigh();
-  Varnode *otherVn;
-  HighVariable *otherHigh = (HighVariable *)0;
-  // Look for a conflicting HighVariable
-  VarnodeLocSet::const_iterator iter = beginLoc(entry->getSize(),entry->getAddr());
-  while(iter != endLoc()) {
-    otherVn = *iter;
-    if (otherVn->getSize() != entry->getSize()) break;
-    if (otherVn->getAddr() != entry->getAddr()) break;
-    HighVariable *tmpHigh = otherVn->getHigh();
-    if (tmpHigh != high) {
-      otherHigh = tmpHigh;
-      break;
-    }
-    ++iter;
-  }
-  if (otherHigh == (HighVariable *)0) {
-    vn->setSymbolEntry(entry);
-    return entry->getSymbol();
-  }
+	if (vn->isInput() || vn->isAddrTied() ||
+			vn->isPersist() || vn->isConstant() || entry->isDynamic()) {
+		vn->setSymbolEntry(entry);
+		return entry->getSymbol();
+	}
+	HighVariable *high = vn->getHigh();
+	Varnode *otherVn;
+	HighVariable *otherHigh = (HighVariable *)0;
+	// Look for a conflicting HighVariable
+	VarnodeLocSet::const_iterator iter = beginLoc(entry->getSize(),entry->getAddr());
+	while(iter != endLoc()) {
+		otherVn = *iter;
+		if (otherVn->getSize() != entry->getSize()) break;
+		if (otherVn->getAddr() != entry->getAddr()) break;
+		HighVariable *tmpHigh = otherVn->getHigh();
+		if (tmpHigh != high) {
+			otherHigh = tmpHigh;
+			break;
+		}
+		++iter;
+	}
+	if (otherHigh == (HighVariable *)0) {
+		vn->setSymbolEntry(entry);
+		return entry->getSymbol();
+	}
 
-  // If we reach here, we have a conflicting variable
-  buildDynamicSymbol(vn);
-  return vn->getSymbolEntry()->getSymbol();
+	// If we reach here, we have a conflicting variable
+	buildDynamicSymbol(vn);
+	return vn->getSymbolEntry()->getSymbol();
 }
 
 /// \brief Update properties (and the data-type) for a set of Varnodes associated with one Symbol
@@ -923,51 +923,51 @@ Symbol *Funcdata::handleSymbolConflict(SymbolEntry *entry,Varnode *vn)
 bool Funcdata::syncVarnodesWithSymbol(VarnodeLocSet::const_iterator &iter,uint4 fl,Datatype *ct)
 
 {
-  VarnodeLocSet::const_iterator enditer;
-  Varnode *vn;
-  uint4 vnflags;
-  bool updateoccurred = false;
-				// These are the flags we are going to try to update
-  uint4 mask = Varnode::mapped;
-				// We take special care with the addrtied flag
-				// as we cannot set it here if it is clear
-				// We can CLEAR but not SET the addrtied flag
-				// If addrtied is cleared, so should addrforce
-  if ((fl&Varnode::addrtied)==0) // Is the addrtied flags cleared
-    mask |= Varnode::addrtied | Varnode::addrforce;
-  // We can set the nolocalalias flag, but not clear it
-  // If nolocalalias is set, then addrforce should be cleared
-  if ((fl&Varnode::nolocalalias)!=0)
-    mask |= Varnode::nolocalalias | Varnode::addrforce;
-  fl &= mask;
+	VarnodeLocSet::const_iterator enditer;
+	Varnode *vn;
+	uint4 vnflags;
+	bool updateoccurred = false;
+																// These are the flags we are going to try to update
+	uint4 mask = Varnode::mapped;
+																// We take special care with the addrtied flag
+																// as we cannot set it here if it is clear
+																// We can CLEAR but not SET the addrtied flag
+																// If addrtied is cleared, so should addrforce
+	if ((fl&Varnode::addrtied)==0) // Is the addrtied flags cleared
+		mask |= Varnode::addrtied | Varnode::addrforce;
+	// We can set the nolocalalias flag, but not clear it
+	// If nolocalalias is set, then addrforce should be cleared
+	if ((fl&Varnode::nolocalalias)!=0)
+		mask |= Varnode::nolocalalias | Varnode::addrforce;
+	fl &= mask;
 
-  vn = *iter;
-  enditer = vbank.endLoc(vn->getSize(),vn->getAddr());
-  do {
-    vn = *iter++;
-    if (vn->isFree()) continue;
-    vnflags = vn->getFlags();
-    if (vn->mapentry != (SymbolEntry *)0) {		// If there is already an attached SymbolEntry (dynamic)
-      uint4 localMask = mask & ~Varnode::mapped;	// Make sure 'mapped' bit is unchanged
-      uint4 localFlags = fl & localMask;
-      if ((vnflags & localMask) != localFlags) {
-	updateoccurred = true;
-	vn->setFlags(localFlags);
-	vn->clearFlags((~localFlags)&localMask);
-      }
-    }
-    else if ((vnflags & mask) != fl) { // We have a change
-      updateoccurred = true;
-      vn->setFlags(fl);
-      vn->clearFlags((~fl)&mask);
-    }
-    if (ct != (Datatype *)0) {
-      if (vn->updateType(ct,false,false))
-	updateoccurred = true;
-      vn->getHigh()->finalizeDatatype(ct);	// Permanently set the data-type on the HighVariable
-    }
-  } while(iter != enditer);
-  return updateoccurred;
+	vn = *iter;
+	enditer = vbank.endLoc(vn->getSize(),vn->getAddr());
+	do {
+		vn = *iter++;
+		if (vn->isFree()) continue;
+		vnflags = vn->getFlags();
+		if (vn->mapentry != (SymbolEntry *)0) {             // If there is already an attached SymbolEntry (dynamic)
+			uint4 localMask = mask & ~Varnode::mapped;        // Make sure 'mapped' bit is unchanged
+			uint4 localFlags = fl & localMask;
+			if ((vnflags & localMask) != localFlags) {
+				updateoccurred = true;
+				vn->setFlags(localFlags);
+				vn->clearFlags((~localFlags)&localMask);
+			}
+		}
+		else if ((vnflags & mask) != fl) { // We have a change
+			updateoccurred = true;
+			vn->setFlags(fl);
+			vn->clearFlags((~fl)&mask);
+		}
+		if (ct != (Datatype *)0) {
+			if (vn->updateType(ct,false,false))
+				updateoccurred = true;
+			vn->getHigh()->finalizeDatatype(ct);      // Permanently set the data-type on the HighVariable
+		}
+	} while(iter != enditer);
+	return updateoccurred;
 }
 
 /// For each instance Varnode, remove any SymbolEntry reference and associated properties.
@@ -975,11 +975,11 @@ bool Funcdata::syncVarnodesWithSymbol(VarnodeLocSet::const_iterator &iter,uint4 
 void Funcdata::clearSymbolLinks(HighVariable *high)
 
 {
-  for(int4 i=0;i<high->numInstances();++i) {
-    Varnode *vn = high->getInstance(i);
-    vn->mapentry = (SymbolEntry *)0;
-    vn->clearFlags(Varnode::namelock | Varnode::typelock | Varnode::mapped);
-  }
+	for(int4 i=0;i<high->numInstances();++i) {
+		Varnode *vn = high->getInstance(i);
+		vn->mapentry = (SymbolEntry *)0;
+		vn->clearFlags(Varnode::namelock | Varnode::typelock | Varnode::mapped);
+	}
 }
 
 /// \brief Remap a Symbol to a given Varnode using a static mapping
@@ -992,9 +992,9 @@ void Funcdata::clearSymbolLinks(HighVariable *high)
 void Funcdata::remapVarnode(Varnode *vn,Symbol *sym,const Address &usepoint)
 
 {
-  clearSymbolLinks(vn->getHigh());
-  SymbolEntry *entry = localmap->remapSymbol(sym, vn->getAddr(), usepoint);
-  vn->setSymbolEntry(entry);
+	clearSymbolLinks(vn->getHigh());
+	SymbolEntry *entry = localmap->remapSymbol(sym, vn->getAddr(), usepoint);
+	vn->setSymbolEntry(entry);
 }
 
 /// \brief Remap a Symbol to a given Varnode using a new dynamic mapping
@@ -1008,9 +1008,9 @@ void Funcdata::remapVarnode(Varnode *vn,Symbol *sym,const Address &usepoint)
 void Funcdata::remapDynamicVarnode(Varnode *vn,Symbol *sym,const Address &usepoint,uint8 hash)
 
 {
-  clearSymbolLinks(vn->getHigh());
-  SymbolEntry *entry = localmap->remapSymbolDynamic(sym, hash, usepoint);
-  vn->setSymbolEntry(entry);
+	clearSymbolLinks(vn->getHigh());
+	SymbolEntry *entry = localmap->remapSymbolDynamic(sym, hash, usepoint);
+	vn->setSymbolEntry(entry);
 }
 
 /// The Symbol is really attached to the Varnode's HighVariable (which must exist).
@@ -1021,27 +1021,27 @@ void Funcdata::remapDynamicVarnode(Varnode *vn,Symbol *sym,const Address &usepoi
 Symbol *Funcdata::linkSymbol(Varnode *vn)
 
 {
-  HighVariable *high = vn->getHigh();
-  SymbolEntry *entry;
-  uint4 fl = 0;
-  Symbol *sym = high->getSymbol();
-  if (sym != (Symbol *)0) return sym; // Symbol already assigned
+	HighVariable *high = vn->getHigh();
+	SymbolEntry *entry;
+	uint4 fl = 0;
+	Symbol *sym = high->getSymbol();
+	if (sym != (Symbol *)0) return sym; // Symbol already assigned
 
-  Address usepoint = vn->getUsePoint(*this);
-  // Find any entry overlapping base address
-  entry = localmap->queryProperties(vn->getAddr(), 1, usepoint, fl);
-  if (entry != (SymbolEntry *) 0) {
-    sym = handleSymbolConflict(entry, vn);
-  }
-  else {			// Must create a symbol entry
-    if (!vn->isPersist()) {	// Only create local symbol
-      entry = localmap->addSymbol("", high->getType(), vn->getAddr(), usepoint);
-      sym = entry->getSymbol();
-      vn->setSymbolEntry(entry);
-    }
-  }
+	Address usepoint = vn->getUsePoint(*this);
+	// Find any entry overlapping base address
+	entry = localmap->queryProperties(vn->getAddr(), 1, usepoint, fl);
+	if (entry != (SymbolEntry *) 0) {
+		sym = handleSymbolConflict(entry, vn);
+	}
+	else {                        // Must create a symbol entry
+		if (!vn->isPersist()) {     // Only create local symbol
+			entry = localmap->addSymbol("", high->getType(), vn->getAddr(), usepoint);
+			sym = entry->getSymbol();
+			vn->setSymbolEntry(entry);
+		}
+	}
 
-  return sym;
+	return sym;
 }
 
 /// A reference to a symbol (i.e. &varname) is typically stored as a PTRSUB operation, where the
@@ -1054,23 +1054,23 @@ Symbol *Funcdata::linkSymbol(Varnode *vn)
 Symbol *Funcdata::linkSymbolReference(Varnode *vn)
 
 {
-  PcodeOp *op = vn->loneDescend();
-  Varnode *in0 = op->getIn(0);
-  TypePointer *ptype = (TypePointer *)in0->getHigh()->getType();
-  if (ptype->getMetatype() != TYPE_PTR) return (Symbol *)0;
-  TypeSpacebase *sb = (TypeSpacebase *)ptype->getPtrTo();
-  if (sb->getMetatype() != TYPE_SPACEBASE)
-      return (Symbol *)0;
-  Scope *scope = sb->getMap();
-  Address addr = sb->getAddress(vn->getOffset(),in0->getSize(),op->getAddr());
-  if (addr.isInvalid())
-    throw LowlevelError("Unable to generate proper address from spacebase");
-  SymbolEntry *entry = scope->queryContainer(addr,1,Address());
-  if (entry == (SymbolEntry *)0)
-    return (Symbol *)0;
-  int4 off = (int4)(addr.getOffset() - entry->getAddr().getOffset()) + entry->getOffset();
-  vn->setSymbolReference(entry, off);
-  return entry->getSymbol();
+	PcodeOp *op = vn->loneDescend();
+	Varnode *in0 = op->getIn(0);
+	TypePointer *ptype = (TypePointer *)in0->getHigh()->getType();
+	if (ptype->getMetatype() != TYPE_PTR) return (Symbol *)0;
+	TypeSpacebase *sb = (TypeSpacebase *)ptype->getPtrTo();
+	if (sb->getMetatype() != TYPE_SPACEBASE)
+			return (Symbol *)0;
+	Scope *scope = sb->getMap();
+	Address addr = sb->getAddress(vn->getOffset(),in0->getSize(),op->getAddr());
+	if (addr.isInvalid())
+		throw LowlevelError("Unable to generate proper address from spacebase");
+	SymbolEntry *entry = scope->queryContainer(addr,1,Address());
+	if (entry == (SymbolEntry *)0)
+		return (Symbol *)0;
+	int4 off = (int4)(addr.getOffset() - entry->getAddr().getOffset()) + entry->getOffset();
+	vn->setSymbolReference(entry, off);
+	return entry->getSymbol();
 }
 
 /// Return the (first) Varnode that matches the given SymbolEntry
@@ -1079,36 +1079,36 @@ Symbol *Funcdata::linkSymbolReference(Varnode *vn)
 Varnode *Funcdata::findLinkedVarnode(SymbolEntry *entry) const
 
 {
-  if (entry->isDynamic()) {
-    DynamicHash dhash;
-    Varnode *vn = dhash.findVarnode(this, entry->getFirstUseAddress(), entry->getHash());
-    if (vn == (Varnode *)0 || vn->isAnnotation())
-      return (Varnode *)0;
-    return vn;
-  }
+	if (entry->isDynamic()) {
+		DynamicHash dhash;
+		Varnode *vn = dhash.findVarnode(this, entry->getFirstUseAddress(), entry->getHash());
+		if (vn == (Varnode *)0 || vn->isAnnotation())
+			return (Varnode *)0;
+		return vn;
+	}
 
-  VarnodeLocSet::const_iterator iter,enditer;
-  Address usestart = entry->getFirstUseAddress();
-  enditer = vbank.endLoc(entry->getSize(),entry->getAddr());
+	VarnodeLocSet::const_iterator iter,enditer;
+	Address usestart = entry->getFirstUseAddress();
+	enditer = vbank.endLoc(entry->getSize(),entry->getAddr());
 
-  if (usestart.isInvalid()) {
-    iter = vbank.beginLoc(entry->getSize(),entry->getAddr());
-    if (iter == enditer)
-      return (Varnode *)0;
-    Varnode *vn = *iter;
-    if (!vn->isAddrTied())
-      return (Varnode *)0;	// Varnode(s) must be address tied in order to match this symbol
-    return vn;
-  }
-  iter = vbank.beginLoc(entry->getSize(),entry->getAddr(),usestart,~((uintm)0));
-  // TODO: Use a better end iterator
-  for(;iter!=enditer;++iter) {
-    Varnode *vn = *iter;
-    Address usepoint = vn->getUsePoint(*this);
-    if (entry->inUse(usepoint))
-      return vn;
-  }
-  return (Varnode *)0;
+	if (usestart.isInvalid()) {
+		iter = vbank.beginLoc(entry->getSize(),entry->getAddr());
+		if (iter == enditer)
+			return (Varnode *)0;
+		Varnode *vn = *iter;
+		if (!vn->isAddrTied())
+			return (Varnode *)0;      // Varnode(s) must be address tied in order to match this symbol
+		return vn;
+	}
+	iter = vbank.beginLoc(entry->getSize(),entry->getAddr(),usestart,~((uintm)0));
+	// TODO: Use a better end iterator
+	for(;iter!=enditer;++iter) {
+		Varnode *vn = *iter;
+		Address usepoint = vn->getUsePoint(*this);
+		if (entry->inUse(usepoint))
+			return vn;
+	}
+	return (Varnode *)0;
 }
 
 /// Look for Varnodes that are (should be) mapped to the given SymbolEntry and
@@ -1118,23 +1118,23 @@ Varnode *Funcdata::findLinkedVarnode(SymbolEntry *entry) const
 void Funcdata::findLinkedVarnodes(SymbolEntry *entry,vector<Varnode *> &res) const
 
 {
-  if (entry->isDynamic()) {
-    DynamicHash dhash;
-    Varnode *vn = dhash.findVarnode(this,entry->getFirstUseAddress(),entry->getHash());
-    if (vn != (Varnode *)0)
-      res.push_back(vn);
-  }
-  else {
-    VarnodeLocSet::const_iterator iter = beginLoc(entry->getSize(),entry->getAddr());
-    VarnodeLocSet::const_iterator enditer = endLoc(entry->getSize(),entry->getAddr());
-    for(;iter!=enditer;++iter) {
-      Varnode *vn = *iter;
-      Address addr = vn->getUsePoint(*this);
-      if (entry->inUse(addr)) {
-	res.push_back(vn);
-      }
-    }
-  }
+	if (entry->isDynamic()) {
+		DynamicHash dhash;
+		Varnode *vn = dhash.findVarnode(this,entry->getFirstUseAddress(),entry->getHash());
+		if (vn != (Varnode *)0)
+			res.push_back(vn);
+	}
+	else {
+		VarnodeLocSet::const_iterator iter = beginLoc(entry->getSize(),entry->getAddr());
+		VarnodeLocSet::const_iterator enditer = endLoc(entry->getSize(),entry->getAddr());
+		for(;iter!=enditer;++iter) {
+			Varnode *vn = *iter;
+			Address addr = vn->getUsePoint(*this);
+			if (entry->inUse(addr)) {
+				res.push_back(vn);
+			}
+		}
+	}
 }
 
 /// If a Symbol is already attached, no change is made. Otherwise a special \e dynamic Symbol is
@@ -1144,21 +1144,21 @@ void Funcdata::findLinkedVarnodes(SymbolEntry *entry,vector<Varnode *> &res) con
 void Funcdata::buildDynamicSymbol(Varnode *vn)
 
 {
-  if (vn->isTypeLock()||vn->isNameLock())
-    throw RecovError("Trying to build dynamic symbol on locked varnode");
-  if (!isHighOn())
-    throw RecovError("Cannot create dynamic symbols until decompile has completed");
-  HighVariable *high = vn->getHigh();
-  if (high->getSymbol() != (Symbol *)0)
-    return;			// Symbol already exists
-  DynamicHash dhash;
+	if (vn->isTypeLock()||vn->isNameLock())
+		throw RecovError("Trying to build dynamic symbol on locked varnode");
+	if (!isHighOn())
+		throw RecovError("Cannot create dynamic symbols until decompile has completed");
+	HighVariable *high = vn->getHigh();
+	if (high->getSymbol() != (Symbol *)0)
+		return;                     // Symbol already exists
+	DynamicHash dhash;
 
-  dhash.uniqueHash(vn,this);	// Calculate a unique dynamic hash for this varnode
-  if (dhash.getHash() == 0)
-    throw RecovError("Unable to find unique hash for varnode");
+	dhash.uniqueHash(vn,this);    // Calculate a unique dynamic hash for this varnode
+	if (dhash.getHash() == 0)
+		throw RecovError("Unable to find unique hash for varnode");
 
-  Symbol *sym = localmap->addDynamicSymbol("",high->getType(),dhash.getAddress(),dhash.getHash());
-  vn->setSymbolEntry(sym->getFirstWholeMap());
+	Symbol *sym = localmap->addDynamicSymbol("",high->getType(),dhash.getAddress(),dhash.getHash());
+	vn->setSymbolEntry(sym->getFirstWholeMap());
 }
 
 /// \brief Map properties of a dynamic symbol to a Varnode
@@ -1171,23 +1171,23 @@ void Funcdata::buildDynamicSymbol(Varnode *vn)
 bool Funcdata::attemptDynamicMapping(SymbolEntry *entry,DynamicHash &dhash)
 
 {
-  Symbol *sym = entry->getSymbol();
-  if (sym->getScope() != localmap)
-    throw LowlevelError("Cannot currently have a dynamic symbol outside the local scope");
-  dhash.clear();
-  Varnode *vn = dhash.findVarnode(this,entry->getFirstUseAddress(),entry->getHash());
-  if (vn == (Varnode *)0) return false;
-  if (entry->getSymbol()->getCategory() == 1) {	// Is this an equate symbol
-    if (vn->mapentry != entry) {		// Check we haven't marked this before
-      vn->setSymbolEntry(entry);
-      return true;
-    }
-  }
-  else if (entry->getSize() == vn->getSize()) {
-    if (vn->setSymbolProperties(entry))
-      return true;
-  }
-  return false;
+	Symbol *sym = entry->getSymbol();
+	if (sym->getScope() != localmap)
+		throw LowlevelError("Cannot currently have a dynamic symbol outside the local scope");
+	dhash.clear();
+	Varnode *vn = dhash.findVarnode(this,entry->getFirstUseAddress(),entry->getHash());
+	if (vn == (Varnode *)0) return false;
+	if (entry->getSymbol()->getCategory() == 1) { // Is this an equate symbol
+		if (vn->mapentry != entry) {                // Check we haven't marked this before
+			vn->setSymbolEntry(entry);
+			return true;
+		}
+	}
+	else if (entry->getSize() == vn->getSize()) {
+		if (vn->setSymbolProperties(entry))
+			return true;
+	}
+	return false;
 }
 
 /// \brief Map the name of a dynamic symbol to a Varnode
@@ -1201,52 +1201,52 @@ bool Funcdata::attemptDynamicMapping(SymbolEntry *entry,DynamicHash &dhash)
 bool Funcdata::attemptDynamicMappingLate(SymbolEntry *entry,DynamicHash &dhash)
 
 {
-  dhash.clear();
-  Varnode *vn = dhash.findVarnode(this,entry->getFirstUseAddress(),entry->getHash());
-  if (vn == (Varnode *)0)
-    return false;
-  if (vn->getSymbolEntry() == entry) return false; // Already applied it
-  Symbol *sym = entry->getSymbol();
-  if (sym->getCategory() == 1) {	// Equate symbol does not depend on size
-    vn->setSymbolEntry(entry);
-    return true;
-  }
-  if (vn->getSize() != entry->getSize()) {
-    ostringstream s;
-    s << "Unable to use symbol ";
-    if (!sym->isNameUndefined())
-	s << sym->getName() << ' ';
-    s << ": Size does not match variable it labels";
-    warningHeader(s.str());
-    return false;
-  }
+	dhash.clear();
+	Varnode *vn = dhash.findVarnode(this,entry->getFirstUseAddress(),entry->getHash());
+	if (vn == (Varnode *)0)
+		return false;
+	if (vn->getSymbolEntry() == entry) return false; // Already applied it
+	Symbol *sym = entry->getSymbol();
+	if (sym->getCategory() == 1) {        // Equate symbol does not depend on size
+		vn->setSymbolEntry(entry);
+		return true;
+	}
+	if (vn->getSize() != entry->getSize()) {
+		ostringstream s;
+		s << "Unable to use symbol ";
+		if (!sym->isNameUndefined())
+				s << sym->getName() << ' ';
+		s << ": Size does not match variable it labels";
+		warningHeader(s.str());
+		return false;
+	}
 
-  if (vn->isImplied()) {	// This should be finding an explicit, but a cast may have been inserted
-    Varnode *newvn = (Varnode *)0;
-    // Look at the "other side" of the cast
-    if (vn->isWritten() && (vn->getDef()->code() == CPUI_CAST))
-	newvn = vn->getDef()->getIn(0);
-    else {
-	PcodeOp *castop = vn->loneDescend();
-	if ((castop != (PcodeOp *)0)&&(castop->code() == CPUI_CAST))
-	  newvn = castop->getOut();
-    }
-    // See if the varnode on the other side is explicit
-    if ((newvn != (Varnode *)0)&&(newvn->isExplicit()))
-	vn = newvn;		// in which case we use it
-  }
+	if (vn->isImplied()) {        // This should be finding an explicit, but a cast may have been inserted
+		Varnode *newvn = (Varnode *)0;
+		// Look at the "other side" of the cast
+		if (vn->isWritten() && (vn->getDef()->code() == CPUI_CAST))
+				newvn = vn->getDef()->getIn(0);
+		else {
+				PcodeOp *castop = vn->loneDescend();
+				if ((castop != (PcodeOp *)0)&&(castop->code() == CPUI_CAST))
+					newvn = castop->getOut();
+		}
+		// See if the varnode on the other side is explicit
+		if ((newvn != (Varnode *)0)&&(newvn->isExplicit()))
+				vn = newvn;             // in which case we use it
+	}
 
-  vn->setSymbolEntry(entry);
-  if (!sym->isTypeLocked()) {	// If the dynamic symbol did not lock its type
-    localmap->retypeSymbol(sym,vn->getType()); // use the type propagated into the varnode
-  }
-  else if (sym->getType() != vn->getType()) {
-    ostringstream s;
-    s << "Unable to use type for symbol " << sym->getName();
-    warningHeader(s.str());
-    localmap->retypeSymbol(sym,vn->getType()); // use the type propagated into the varnode
-  }
-  return true;
+	vn->setSymbolEntry(entry);
+	if (!sym->isTypeLocked()) {   // If the dynamic symbol did not lock its type
+		localmap->retypeSymbol(sym,vn->getType()); // use the type propagated into the varnode
+	}
+	else if (sym->getType() != vn->getType()) {
+		ostringstream s;
+		s << "Unable to use type for symbol " << sym->getName();
+		warningHeader(s.str());
+		localmap->retypeSymbol(sym,vn->getType()); // use the type propagated into the varnode
+	}
+	return true;
 }
 
 /// \brief Replace all read references to the first Varnode with a second Varnode
@@ -1256,16 +1256,16 @@ bool Funcdata::attemptDynamicMappingLate(SymbolEntry *entry,DynamicHash &dhash)
 void Funcdata::totalReplace(Varnode *vn,Varnode *newvn)
 
 {
-  list<PcodeOp *>::const_iterator iter;
-  PcodeOp *op;
-  int4 i;
+	list<PcodeOp *>::const_iterator iter;
+	PcodeOp *op;
+	int4 i;
 
-  iter = vn->beginDescend();
-  while(iter != vn->endDescend()) {
-    op = *iter++;	       // Increment before removing descendant
-    i = op->getSlot(vn);
-    opSetInput(op,newvn,i);
-  }
+	iter = vn->beginDescend();
+	while(iter != vn->endDescend()) {
+		op = *iter++;              // Increment before removing descendant
+		i = op->getSlot(vn);
+		opSetInput(op,newvn,i);
+	}
 }
 
 /// \brief Replace every read reference of the given Varnode with a constant value
@@ -1278,41 +1278,41 @@ void Funcdata::totalReplace(Varnode *vn,Varnode *newvn)
 void Funcdata::totalReplaceConstant(Varnode *vn,uintb val)
 
 {
-  list<PcodeOp *>::const_iterator iter;
-  PcodeOp *op;
-  PcodeOp *copyop = (PcodeOp *)0;
-  Varnode *newrep;
-  int4 i;
+	list<PcodeOp *>::const_iterator iter;
+	PcodeOp *op;
+	PcodeOp *copyop = (PcodeOp *)0;
+	Varnode *newrep;
+	int4 i;
 
-  iter = vn->beginDescend();
-  while(iter != vn->endDescend()) {
-    op = *iter++;		// Increment before removing descendant
-    i = op->getSlot(vn);
-    if (op->isMarker()) {    // Do not put constant directly in marker
-      if (copyop == (PcodeOp *)0) {
-	if (vn->isWritten()) {
-	  copyop = newOp(1,vn->getDef()->getAddr());
-	  opSetOpcode(copyop,CPUI_COPY);
-	  newrep = newUniqueOut(vn->getSize(),copyop);
-	  opSetInput(copyop,newConstant(vn->getSize(),val),0);
-	  opInsertAfter(copyop,vn->getDef());
+	iter = vn->beginDescend();
+	while(iter != vn->endDescend()) {
+		op = *iter++;               // Increment before removing descendant
+		i = op->getSlot(vn);
+		if (op->isMarker()) {    // Do not put constant directly in marker
+			if (copyop == (PcodeOp *)0) {
+				if (vn->isWritten()) {
+					copyop = newOp(1,vn->getDef()->getAddr());
+					opSetOpcode(copyop,CPUI_COPY);
+					newrep = newUniqueOut(vn->getSize(),copyop);
+					opSetInput(copyop,newConstant(vn->getSize(),val),0);
+					opInsertAfter(copyop,vn->getDef());
+				}
+				else {
+					BlockBasic *bb = (BlockBasic *)getBasicBlocks().getBlock(0);
+					copyop = newOp(1,bb->getStart());
+					opSetOpcode(copyop,CPUI_COPY);
+					newrep = newUniqueOut(vn->getSize(),copyop);
+					opSetInput(copyop,newConstant(vn->getSize(),val),0);
+					opInsertBegin(copyop,bb);
+				}
+			}
+			else
+				newrep = copyop->getOut();
+		}
+		else
+			newrep = newConstant(vn->getSize(),val);
+		opSetInput(op,newrep,i);
 	}
-	else {
-	  BlockBasic *bb = (BlockBasic *)getBasicBlocks().getBlock(0);
-	  copyop = newOp(1,bb->getStart());
-	  opSetOpcode(copyop,CPUI_COPY);
-	  newrep = newUniqueOut(vn->getSize(),copyop);
-	  opSetInput(copyop,newConstant(vn->getSize(),val),0);
-	  opInsertBegin(copyop,bb);
-	}
-      }
-      else
-	newrep = copyop->getOut();
-    }
-    else
-      newrep = newConstant(vn->getSize(),val);
-    opSetInput(op,newrep,i);
-  }
 }
 
 /// For the given Varnode, duplicate its defining PcodeOp at each read of the Varnode
@@ -1322,30 +1322,30 @@ void Funcdata::totalReplaceConstant(Varnode *vn,uintb val)
 void Funcdata::splitUses(Varnode *vn)
 
 {
-  PcodeOp *op = vn->getDef();
-  Varnode *newvn;
-  PcodeOp *newop,*useop;
-  list<PcodeOp *>::iterator iter;
-  int4 slot;
+	PcodeOp *op = vn->getDef();
+	Varnode *newvn;
+	PcodeOp *newop,*useop;
+	list<PcodeOp *>::iterator iter;
+	int4 slot;
 
-  iter = vn->descend.begin();
-  if (iter == vn->descend.end()) return; // No descendants at all
-  useop = *iter++;
-  if (iter == vn->descend.end()) return; // Only one descendant
-  for(;;) {
-    slot = useop->getSlot(vn);		// Get first descendant
-    newop = newOp(op->numInput(),op->getAddr());
-    newvn = newVarnode(vn->getSize(),vn->getAddr(),vn->getType());
-    opSetOutput(newop,newvn);
-    opSetOpcode(newop,op->code());
-    for(int4 i=0;i<op->numInput();++i)
-      opSetInput(newop,op->getIn(i),i);
-    opSetInput(useop,newvn,slot);
-    opInsertBefore(newop,op);
-    if (iter == vn->descend.end()) break;
-    useop = *iter++;
-  }
-				// Dead-code actions should remove original op
+	iter = vn->descend.begin();
+	if (iter == vn->descend.end()) return; // No descendants at all
+	useop = *iter++;
+	if (iter == vn->descend.end()) return; // Only one descendant
+	for(;;) {
+		slot = useop->getSlot(vn);          // Get first descendant
+		newop = newOp(op->numInput(),op->getAddr());
+		newvn = newVarnode(vn->getSize(),vn->getAddr(),vn->getType());
+		opSetOutput(newop,newvn);
+		opSetOpcode(newop,op->code());
+		for(int4 i=0;i<op->numInput();++i)
+			opSetInput(newop,op->getIn(i),i);
+		opSetInput(useop,newvn,slot);
+		opInsertBefore(newop,op);
+		if (iter == vn->descend.end()) break;
+		useop = *iter++;
+	}
+																// Dead-code actions should remove original op
 }
 
 /// Find the minimal Address range covering the given Varnode that doesn't split other Varnodes
@@ -1355,26 +1355,26 @@ void Funcdata::splitUses(Varnode *vn)
 Address Funcdata::findDisjointCover(Varnode *vn,int4 &sz)
 
 {
-  Address addr = vn->getAddr();
-  Address endaddr = addr + vn->getSize();
-  VarnodeLocSet::const_iterator iter = vn->lociter;
+	Address addr = vn->getAddr();
+	Address endaddr = addr + vn->getSize();
+	VarnodeLocSet::const_iterator iter = vn->lociter;
 
-  while(iter != beginLoc()) {
-    --iter;
-    Varnode *curvn = *iter;
-    Address curEnd = curvn->getAddr() + curvn->getSize();
-    if (curEnd <= addr) break;
-    addr = curvn->getAddr();
-  }
-  iter = vn->lociter;
-  while(iter != endLoc()) {
-    Varnode *curvn = *iter;
-    ++iter;
-    if (endaddr <= curvn->getAddr()) break;
-    endaddr = curvn->getAddr() + curvn->getSize();
-  }
-  sz = (int4)(endaddr.getOffset() - addr.getOffset());
-  return addr;
+	while(iter != beginLoc()) {
+		--iter;
+		Varnode *curvn = *iter;
+		Address curEnd = curvn->getAddr() + curvn->getSize();
+		if (curEnd <= addr) break;
+		addr = curvn->getAddr();
+	}
+	iter = vn->lociter;
+	while(iter != endLoc()) {
+		Varnode *curvn = *iter;
+		++iter;
+		if (endaddr <= curvn->getAddr()) break;
+		endaddr = curvn->getAddr() + curvn->getSize();
+	}
+	sz = (int4)(endaddr.getOffset() - addr.getOffset());
+	return addr;
 }
 
 /// \brief Make sure every Varnode in the given list has a Symbol it will link to
@@ -1388,22 +1388,22 @@ Address Funcdata::findDisjointCover(Varnode *vn,int4 &sz)
 void Funcdata::coverVarnodes(SymbolEntry *entry,vector<Varnode *> &list)
 
 {
-  Scope *scope = entry->getSymbol()->getScope();
-  for(int4 i=0;i<list.size();++i) {
-    Varnode *vn = list[i];
-    // We only need to check once for all Varnodes at the same Address
-    // Of these, pick the biggest Varnode
-    if (i+1<list.size() && list[i+1]->getAddr() == vn->getAddr())
-      continue;
-    Address usepoint = vn->getUsePoint(*this);
-    SymbolEntry *overlapEntry = scope->findContainer(vn->getAddr(), vn->getSize(), usepoint);
-    if (overlapEntry == (SymbolEntry *)0) {
-      int4 diff = (int4)(vn->getOffset() - entry->getAddr().getOffset());
-      ostringstream s;
-      s << entry->getSymbol()->getName() << '_' << diff;
-      scope->addSymbol(s.str(),vn->getHigh()->getType(),vn->getAddr(),usepoint);
-    }
-  }
+	Scope *scope = entry->getSymbol()->getScope();
+	for(int4 i=0;i<list.size();++i) {
+		Varnode *vn = list[i];
+		// We only need to check once for all Varnodes at the same Address
+		// Of these, pick the biggest Varnode
+		if (i+1<list.size() && list[i+1]->getAddr() == vn->getAddr())
+			continue;
+		Address usepoint = vn->getUsePoint(*this);
+		SymbolEntry *overlapEntry = scope->findContainer(vn->getAddr(), vn->getSize(), usepoint);
+		if (overlapEntry == (SymbolEntry *)0) {
+			int4 diff = (int4)(vn->getOffset() - entry->getAddr().getOffset());
+			ostringstream s;
+			s << entry->getSymbol()->getName() << '_' << diff;
+			scope->addSymbol(s.str(),vn->getHigh()->getType(),vn->getAddr(),usepoint);
+		}
+	}
 }
 
 /// Search for \e addrtied Varnodes whose storage falls in the global Scope, then
@@ -1411,69 +1411,69 @@ void Funcdata::coverVarnodes(SymbolEntry *entry,vector<Varnode *> &list)
 void Funcdata::mapGlobals(void)
 
 {
-  SymbolEntry *entry;
-  VarnodeLocSet::const_iterator iter,enditer;
-  Varnode *vn,*maxvn;
-  Datatype *ct;
-  uint4 fl;
-  vector<Varnode *> uncoveredVarnodes;
-  bool inconsistentuse = false;
+	SymbolEntry *entry;
+	VarnodeLocSet::const_iterator iter,enditer;
+	Varnode *vn,*maxvn;
+	Datatype *ct;
+	uint4 fl;
+	vector<Varnode *> uncoveredVarnodes;
+	bool inconsistentuse = false;
 
-  iter = vbank.beginLoc(); // Go through all varnodes for this space
-  enditer = vbank.endLoc();
-  while(iter != enditer) {
-    vn = *iter++;
-    if (vn->isFree()) continue;
-    if (!vn->isPersist()) continue; // Could be a code ref
-    if (vn->getSymbolEntry() != (SymbolEntry *)0) continue;
-    maxvn = vn;
-    Address addr = vn->getAddr();
-    Address endaddr = addr + vn->getSize();
-    uncoveredVarnodes.clear();
-    while(iter != enditer) {
-      vn = *iter;
-      if (!vn->isPersist()) break;
-      if (vn->getAddr() < endaddr) {
-	// Varnodes at the same base address will get linked to the Symbol at that address
-	// even if the size doesn't match, but we check for internal Varnodes that
-	// do not have an attached Symbol as these won't get linked to anything
-	if (vn->getAddr() != addr && vn->getSymbolEntry() == (SymbolEntry *)0)
-	  uncoveredVarnodes.push_back(vn);
-	endaddr = vn->getAddr() + vn->getSize();
-	if (vn->getSize() > maxvn->getSize())
-	  maxvn = vn;
-	++iter;
-      }
-      else
-	break;
-    }
-    if ((maxvn->getAddr() == addr)&&(addr+maxvn->getSize() == endaddr))
-      ct = maxvn->getHigh()->getType();
-    else
-      ct = glb->types->getBase(endaddr.getOffset()-addr.getOffset(),TYPE_UNKNOWN);
+	iter = vbank.beginLoc(); // Go through all varnodes for this space
+	enditer = vbank.endLoc();
+	while(iter != enditer) {
+		vn = *iter++;
+		if (vn->isFree()) continue;
+		if (!vn->isPersist()) continue; // Could be a code ref
+		if (vn->getSymbolEntry() != (SymbolEntry *)0) continue;
+		maxvn = vn;
+		Address addr = vn->getAddr();
+		Address endaddr = addr + vn->getSize();
+		uncoveredVarnodes.clear();
+		while(iter != enditer) {
+			vn = *iter;
+			if (!vn->isPersist()) break;
+			if (vn->getAddr() < endaddr) {
+				// Varnodes at the same base address will get linked to the Symbol at that address
+				// even if the size doesn't match, but we check for internal Varnodes that
+				// do not have an attached Symbol as these won't get linked to anything
+				if (vn->getAddr() != addr && vn->getSymbolEntry() == (SymbolEntry *)0)
+					uncoveredVarnodes.push_back(vn);
+				endaddr = vn->getAddr() + vn->getSize();
+				if (vn->getSize() > maxvn->getSize())
+					maxvn = vn;
+				++iter;
+			}
+			else
+				break;
+		}
+		if ((maxvn->getAddr() == addr)&&(addr+maxvn->getSize() == endaddr))
+			ct = maxvn->getHigh()->getType();
+		else
+			ct = glb->types->getBase(endaddr.getOffset()-addr.getOffset(),TYPE_UNKNOWN);
 
-    fl = 0;
-    // Assume existing symbol is addrtied, so use empty usepoint
-    Address usepoint;
-    // Find any entry overlapping base address
-    entry = localmap->queryProperties(addr,1,usepoint,fl);
-    if (entry==(SymbolEntry *)0) {
-      Scope *discover = localmap->discoverScope(addr,ct->getSize(),usepoint);
-      if (discover == (Scope *)0)
-	throw LowlevelError("Could not discover scope");
-      int4 index = 0;
-      string symbolname = discover->buildVariableName(addr,usepoint,ct,index,
-						      Varnode::addrtied|Varnode::persist);
-      discover->addSymbol(symbolname,ct,addr,usepoint);
-    }
-    else if ((addr.getOffset()+ct->getSize())-1 > (entry->getAddr().getOffset()+entry->getSize()) -1) {
-      inconsistentuse = true;
-      if (!uncoveredVarnodes.empty())	// Provide Symbols for any uncovered internal Varnodes
-	coverVarnodes(entry, uncoveredVarnodes);
-    }
-  }
-  if (inconsistentuse)
-    warningHeader("Globals starting with '_' overlap smaller symbols at the same address");
+		fl = 0;
+		// Assume existing symbol is addrtied, so use empty usepoint
+		Address usepoint;
+		// Find any entry overlapping base address
+		entry = localmap->queryProperties(addr,1,usepoint,fl);
+		if (entry==(SymbolEntry *)0) {
+			Scope *discover = localmap->discoverScope(addr,ct->getSize(),usepoint);
+			if (discover == (Scope *)0)
+				throw LowlevelError("Could not discover scope");
+			int4 index = 0;
+			string symbolname = discover->buildVariableName(addr,usepoint,ct,index,
+																											Varnode::addrtied|Varnode::persist);
+			discover->addSymbol(symbolname,ct,addr,usepoint);
+		}
+		else if ((addr.getOffset()+ct->getSize())-1 > (entry->getAddr().getOffset()+entry->getSize()) -1) {
+			inconsistentuse = true;
+			if (!uncoveredVarnodes.empty())   // Provide Symbols for any uncovered internal Varnodes
+				coverVarnodes(entry, uncoveredVarnodes);
+		}
+	}
+	if (inconsistentuse)
+		warningHeader("Globals starting with '_' overlap smaller symbols at the same address");
 }
 
 /// \brief Return \b true if the alternate path looks more valid than the main path.
@@ -1487,17 +1487,17 @@ void Funcdata::mapGlobals(void)
 bool Funcdata::isAlternatePathValid(const Varnode *vn,uint4 flags)
 
 {
-  if ((flags & (traverse_indirect | traverse_indirectalt)) == traverse_indirect)
-    // If main path traversed an INDIRECT but the alternate did not
-    return true;	// Main path traversed INDIRECT, alternate did not
-  if ((flags & (traverse_indirect | traverse_indirectalt)) == traverse_indirectalt)
-    return false;	// Alternate path traversed INDIRECT, main did not
-  if ((flags & traverse_actionalt) != 0)
-    return true;	// Alternate path traversed a dedicated COPY
-  if (vn->loneDescend() == (PcodeOp*)0) return false;
-  const PcodeOp *op = vn->getDef();
-  if (op == (PcodeOp*)0) return true;
-  return !op->isMarker();	// MULTIEQUAL or INDIRECT indicates multiple values
+	if ((flags & (traverse_indirect | traverse_indirectalt)) == traverse_indirect)
+		// If main path traversed an INDIRECT but the alternate did not
+		return true;        // Main path traversed INDIRECT, alternate did not
+	if ((flags & (traverse_indirect | traverse_indirectalt)) == traverse_indirectalt)
+		return false;       // Alternate path traversed INDIRECT, main did not
+	if ((flags & traverse_actionalt) != 0)
+		return true;        // Alternate path traversed a dedicated COPY
+	if (vn->loneDescend() == (PcodeOp*)0) return false;
+	const PcodeOp *op = vn->getDef();
+	if (op == (PcodeOp*)0) return true;
+	return !op->isMarker();       // MULTIEQUAL or INDIRECT indicates multiple values
 }
 
 /// \brief Test for legitimate double use of a parameter trial
@@ -1514,41 +1514,41 @@ bool Funcdata::isAlternatePathValid(const Varnode *vn,uint4 flags)
 bool Funcdata::checkCallDoubleUse(const PcodeOp *opmatch,const PcodeOp *op,const Varnode *vn,uint4 fl,const ParamTrial &trial) const
 
 {
-  int4 j = op->getSlot(vn);
-  if (j<=0) return false;	// Flow traces to indirect call variable, definitely not a param
-  FuncCallSpecs	*fc = getCallSpecs(op);
-  FuncCallSpecs *matchfc = getCallSpecs(opmatch);
-  if (op->code() == opmatch->code()) {
-    bool isdirect = (opmatch->code() == CPUI_CALL);
-    if ((isdirect&&(matchfc->getEntryAddress() == fc->getEntryAddress())) ||
-	((!isdirect)&&(op->getIn(0) == opmatch->getIn(0)))) { // If it is a call to the same function
-      // Varnode addresses are unreliable for this test because copy propagation may have occurred
-      // So we check the actual ParamTrial which holds the original address
-//	  if (j == 0) return false;
-      const ParamTrial &curtrial( fc->getActiveInput()->getTrialForInputVarnode(j) );
-      if (curtrial.getAddress() == trial.getAddress()) { // Check for same memory location
-	if (op->getParent() == opmatch->getParent()) {
-	  if (opmatch->getSeqNum().getOrder() < op->getSeqNum().getOrder())
-	    return true;	// opmatch has dibs, don't reject
-	  // If use op occurs earlier than match op, we might still need to reject
+	int4 j = op->getSlot(vn);
+	if (j<=0) return false;       // Flow traces to indirect call variable, definitely not a param
+	FuncCallSpecs *fc = getCallSpecs(op);
+	FuncCallSpecs *matchfc = getCallSpecs(opmatch);
+	if (op->code() == opmatch->code()) {
+		bool isdirect = (opmatch->code() == CPUI_CALL);
+		if ((isdirect&&(matchfc->getEntryAddress() == fc->getEntryAddress())) ||
+				((!isdirect)&&(op->getIn(0) == opmatch->getIn(0)))) { // If it is a call to the same function
+			// Varnode addresses are unreliable for this test because copy propagation may have occurred
+			// So we check the actual ParamTrial which holds the original address
+//        if (j == 0) return false;
+			const ParamTrial &curtrial( fc->getActiveInput()->getTrialForInputVarnode(j) );
+			if (curtrial.getAddress() == trial.getAddress()) { // Check for same memory location
+				if (op->getParent() == opmatch->getParent()) {
+					if (opmatch->getSeqNum().getOrder() < op->getSeqNum().getOrder())
+						return true;        // opmatch has dibs, don't reject
+					// If use op occurs earlier than match op, we might still need to reject
+				}
+				else
+					return true;          // Same function, different basic blocks, assume legit doubleuse
+			}
+		}
 	}
-	else
-	  return true;		// Same function, different basic blocks, assume legit doubleuse
-      }
-    }
-  }
 
-  if (fc->isInputActive()) {
-    const ParamTrial &curtrial( fc->getActiveInput()->getTrialForInputVarnode(j) );
-    if (curtrial.isChecked()) {
-      if (curtrial.isActive())
+	if (fc->isInputActive()) {
+		const ParamTrial &curtrial( fc->getActiveInput()->getTrialForInputVarnode(j) );
+		if (curtrial.isChecked()) {
+			if (curtrial.isActive())
+				return false;
+		}
+		else if (isAlternatePathValid(vn,fl))
+			return false;
+		return true;
+	}
 	return false;
-    }
-    else if (isAlternatePathValid(vn,fl))
-      return false;
-    return true;
-  }
-  return false;
 }
 
 /// \brief Test if the given Varnode seems to only be used by a CALL
@@ -1563,89 +1563,89 @@ bool Funcdata::checkCallDoubleUse(const PcodeOp *opmatch,const PcodeOp *op,const
 bool Funcdata::onlyOpUse(const Varnode *invn,const PcodeOp *opmatch,const ParamTrial &trial,uint4 mainFlags) const
 
 {
-  vector<TraverseNode> varlist;
-  list<PcodeOp *>::const_iterator iter;
-  const Varnode *vn,*subvn;
-  const PcodeOp *op;
-  int4 i;
-  bool res = true;
+	vector<TraverseNode> varlist;
+	list<PcodeOp *>::const_iterator iter;
+	const Varnode *vn,*subvn;
+	const PcodeOp *op;
+	int4 i;
+	bool res = true;
 
-  varlist.reserve(64);
-  invn->setMark();		// Marks prevent infinite loops
-  varlist.emplace_back(invn,mainFlags);
+	varlist.reserve(64);
+	invn->setMark();              // Marks prevent infinite loops
+	varlist.emplace_back(invn,mainFlags);
 
-  for(i=0;i < varlist.size();++i) {
-    vn = varlist[i].vn;
-    uint4 baseFlags = varlist[i].flags;
-    for(iter=vn->descend.begin();iter!=vn->descend.end();++iter) {
-      op = *iter;
-      if (op == opmatch) {
-	if (op->getIn(trial.getSlot())==vn) continue;
-      }
-      uint4 curFlags = baseFlags;
-      switch(op->code()) {
-      case CPUI_BRANCH:		// These ops define a USE of a variable
-      case CPUI_CBRANCH:
-      case CPUI_BRANCHIND:
-      case CPUI_LOAD:
-      case CPUI_STORE:
-	res = false;
-	break;
-      case CPUI_CALL:
-      case CPUI_CALLIND:
-	if (checkCallDoubleUse(opmatch,op,vn,curFlags,trial)) continue;
-	res = false;
-	break;
-      case CPUI_INDIRECT:
-	curFlags |= Funcdata::traverse_indirectalt;
-	break;
-      case CPUI_COPY:
-	if ((op->getOut()->getSpace()->getType()!=IPTR_INTERNAL)&&!op->isIncidentalCopy()&&!vn->isIncidentalCopy()) {
-	  curFlags |= Funcdata::traverse_actionalt;
+	for(i=0;i < varlist.size();++i) {
+		vn = varlist[i].vn;
+		uint4 baseFlags = varlist[i].flags;
+		for(iter=vn->descend.begin();iter!=vn->descend.end();++iter) {
+			op = *iter;
+			if (op == opmatch) {
+				if (op->getIn(trial.getSlot())==vn) continue;
+			}
+			uint4 curFlags = baseFlags;
+			switch(op->code()) {
+			case CPUI_BRANCH:         // These ops define a USE of a variable
+			case CPUI_CBRANCH:
+			case CPUI_BRANCHIND:
+			case CPUI_LOAD:
+			case CPUI_STORE:
+				res = false;
+				break;
+			case CPUI_CALL:
+			case CPUI_CALLIND:
+				if (checkCallDoubleUse(opmatch,op,vn,curFlags,trial)) continue;
+				res = false;
+				break;
+			case CPUI_INDIRECT:
+				curFlags |= Funcdata::traverse_indirectalt;
+				break;
+			case CPUI_COPY:
+				if ((op->getOut()->getSpace()->getType()!=IPTR_INTERNAL)&&!op->isIncidentalCopy()&&!vn->isIncidentalCopy()) {
+					curFlags |= Funcdata::traverse_actionalt;
+				}
+				break;
+			case CPUI_RETURN:
+				if (opmatch->code()==CPUI_RETURN) { // Are we in a different return
+					if (op->getIn(trial.getSlot())==vn) // But at the same slot
+						continue;
+				}
+				else if (activeoutput != (ParamActive *)0) {    // Are we in the middle of analyzing returns
+					if (op->getIn(0) != vn) {             // Unless we hold actual return value
+						if (!isAlternatePathValid(vn,curFlags))
+							continue;                         // Don't consider this a "use"
+					}
+				}
+				res = false;
+				break;
+			case CPUI_MULTIEQUAL:
+			case CPUI_PIECE:
+			case CPUI_SUBPIECE:
+			case CPUI_INT_SEXT:
+			case CPUI_INT_ZEXT:
+			case CPUI_CAST:
+				break;
+			default:
+				curFlags |= Funcdata::traverse_actionalt;
+				break;
+			}
+			if (!res) break;
+			subvn = op->getOut();
+			if (subvn != (const Varnode *)0) {
+				if (subvn->isPersist()) {
+					res = false;
+					break;
+				}
+				if (!subvn->isMark()) {
+					varlist.emplace_back(subvn,curFlags);
+					subvn->setMark();
+				}
+			}
+		}
+		if (!res) break;
 	}
-	break;
-      case CPUI_RETURN:
-	if (opmatch->code()==CPUI_RETURN) { // Are we in a different return
-	  if (op->getIn(trial.getSlot())==vn) // But at the same slot
-	    continue;
-	}
-	else if (activeoutput != (ParamActive *)0) {	// Are we in the middle of analyzing returns
-	  if (op->getIn(0) != vn) {		// Unless we hold actual return value
-	    if (!isAlternatePathValid(vn,curFlags))
-	      continue;				// Don't consider this a "use"
-	  }
-	}
-	res = false;
-	break;
-      case CPUI_MULTIEQUAL:
-      case CPUI_PIECE:
-      case CPUI_SUBPIECE:
-      case CPUI_INT_SEXT:
-      case CPUI_INT_ZEXT:
-      case CPUI_CAST:
-	break;
-      default:
-	curFlags |= Funcdata::traverse_actionalt;
-	break;
-      }
-      if (!res) break;
-      subvn = op->getOut();
-      if (subvn != (const Varnode *)0) {
-	if (subvn->isPersist()) {
-	  res = false;
-	  break;
-	}
-	if (!subvn->isMark()) {
-	  varlist.emplace_back(subvn,curFlags);
-	  subvn->setMark();
-	}
-      }
-    }
-    if (!res) break;
-  }
-  for(i=0;i<varlist.size();++i)
-    varlist[i].vn->clearMark();
-  return res;
+	for(i=0;i<varlist.size();++i)
+		varlist[i].vn->clearMark();
+	return res;
 }
 
 /// \brief Test if the given trial Varnode is likely only used for parameter passing
@@ -1659,92 +1659,92 @@ bool Funcdata::onlyOpUse(const Varnode *invn,const PcodeOp *opmatch,const ParamT
 /// \param mainFlags describes traversals along the path from \e invn to \e op
 /// \return \b true if the Varnode is only used for the CALL/RETURN
 bool Funcdata::ancestorOpUse(int4 maxlevel,const Varnode *invn,
-			     const PcodeOp *op,ParamTrial &trial,uint4 mainFlags) const
+														 const PcodeOp *op,ParamTrial &trial,uint4 mainFlags) const
 
 {
-  int4 i;
+	int4 i;
 
-  if (maxlevel==0) return false;
+	if (maxlevel==0) return false;
 
-  if (!invn->isWritten()) {
-    if (!invn->isInput()) return false;
-    if (!invn->isTypeLock()) return false;
-				// If the input is typelocked
-				// this is as good as being written
-    return onlyOpUse(invn,op,trial,mainFlags); // Test if varnode is only used in op
-  }
+	if (!invn->isWritten()) {
+		if (!invn->isInput()) return false;
+		if (!invn->isTypeLock()) return false;
+																// If the input is typelocked
+																// this is as good as being written
+		return onlyOpUse(invn,op,trial,mainFlags); // Test if varnode is only used in op
+	}
 
-  const PcodeOp *def = invn->getDef();
-  switch(def->code()) {
-  case CPUI_INDIRECT:
-    // An indirectCreation is an indication of an output trial, this should not count as
-    // as an "only use"
-    if (def->isIndirectCreation())
-      return false;
-    return ancestorOpUse(maxlevel-1,def->getIn(0),op,trial,mainFlags | Funcdata::traverse_indirect);
-  case CPUI_MULTIEQUAL:
-				// Check if there is any ancestor whose only
-				// use is in this op
-    if (def->isMark()) return false;	// Trim the loop
-    def->setMark();		// Mark that this MULTIEQUAL is on the path
-				// Note: onlyOpUse is using Varnode::setMark
-    for(i=0;i<def->numInput();++i) {
-      if (ancestorOpUse(maxlevel-1,def->getIn(i),op,trial, mainFlags)) {
-	def->clearMark();
-	return true;
-      }
-    }
-    def->clearMark();
-    return false;
-  case CPUI_COPY:
-    if ((invn->getSpace()->getType()==IPTR_INTERNAL)||def->isIncidentalCopy()||def->getIn(0)->isIncidentalCopy()) {
-      return ancestorOpUse(maxlevel-1,def->getIn(0),op,trial,mainFlags);
-    }
-    break;
-  case CPUI_PIECE:
-    // Concatenation tends to be artificial, so recurse through the least significant part
-    return ancestorOpUse(maxlevel-1,def->getIn(1),op,trial,mainFlags);
-  case CPUI_SUBPIECE:
-    // This is a rather kludgy way to get around where a DIV (or other similar) instruction
-    // causes a register that looks like the high precision piece of the function return
-    // to be set with the remainder as a side effect
-    if (def->getIn(1)->getOffset()==0) {
-      const Varnode *vn = def->getIn(0);
-      if (vn->isWritten()) {
-	const PcodeOp *remop = vn->getDef();
-	if ((remop->code()==CPUI_INT_REM)||(remop->code()==CPUI_INT_SREM))
-	  trial.setRemFormed();
-      }
-    }
-    break;
-  case CPUI_CALL:
-  case CPUI_CALLIND:
-    return false;		// A call is never a good indication of a single op use
-  default:
-    break;
-  }
-				// This varnode must be top ancestor at this point
-  return onlyOpUse(invn,op,trial,mainFlags); // Test if varnode is only used in op
+	const PcodeOp *def = invn->getDef();
+	switch(def->code()) {
+	case CPUI_INDIRECT:
+		// An indirectCreation is an indication of an output trial, this should not count as
+		// as an "only use"
+		if (def->isIndirectCreation())
+			return false;
+		return ancestorOpUse(maxlevel-1,def->getIn(0),op,trial,mainFlags | Funcdata::traverse_indirect);
+	case CPUI_MULTIEQUAL:
+																// Check if there is any ancestor whose only
+																// use is in this op
+		if (def->isMark()) return false;    // Trim the loop
+		def->setMark();             // Mark that this MULTIEQUAL is on the path
+																// Note: onlyOpUse is using Varnode::setMark
+		for(i=0;i<def->numInput();++i) {
+			if (ancestorOpUse(maxlevel-1,def->getIn(i),op,trial, mainFlags)) {
+				def->clearMark();
+				return true;
+			}
+		}
+		def->clearMark();
+		return false;
+	case CPUI_COPY:
+		if ((invn->getSpace()->getType()==IPTR_INTERNAL)||def->isIncidentalCopy()||def->getIn(0)->isIncidentalCopy()) {
+			return ancestorOpUse(maxlevel-1,def->getIn(0),op,trial,mainFlags);
+		}
+		break;
+	case CPUI_PIECE:
+		// Concatenation tends to be artificial, so recurse through the least significant part
+		return ancestorOpUse(maxlevel-1,def->getIn(1),op,trial,mainFlags);
+	case CPUI_SUBPIECE:
+		// This is a rather kludgy way to get around where a DIV (or other similar) instruction
+		// causes a register that looks like the high precision piece of the function return
+		// to be set with the remainder as a side effect
+		if (def->getIn(1)->getOffset()==0) {
+			const Varnode *vn = def->getIn(0);
+			if (vn->isWritten()) {
+				const PcodeOp *remop = vn->getDef();
+				if ((remop->code()==CPUI_INT_REM)||(remop->code()==CPUI_INT_SREM))
+					trial.setRemFormed();
+			}
+		}
+		break;
+	case CPUI_CALL:
+	case CPUI_CALLIND:
+		return false;               // A call is never a good indication of a single op use
+	default:
+		break;
+	}
+																// This varnode must be top ancestor at this point
+	return onlyOpUse(invn,op,trial,mainFlags); // Test if varnode is only used in op
 }
 
 /// \return \b true if there are two input flows, one of which is a normal \e solid flow
 bool AncestorRealistic::checkConditionalExe(State &state)
 
 {
-  const BlockBasic *bl = state.op->getParent();
-  if (bl->sizeIn() != 2)
-    return false;
-  const FlowBlock *solidBlock = bl->getIn(state.getSolidSlot());
-  if (solidBlock->sizeOut() != 1)
-    return false;
+	const BlockBasic *bl = state.op->getParent();
+	if (bl->sizeIn() != 2)
+		return false;
+	const FlowBlock *solidBlock = bl->getIn(state.getSolidSlot());
+	if (solidBlock->sizeOut() != 1)
+		return false;
 //  const BlockBasic *callbl = stateStack[0].op->getParent();
 //  if (callbl != bl) {
 //    bool dominates = false;
 //    FlowBlock *dombl = callbl->getImmedDom();
 //    for(int4 i=0;i<2;++i) {
 //      if (dombl == bl) {
-//	dominates = true;
-//	break;
+//      dominates = true;
+//      break;
 //      }
 //      if (dombl == (FlowBlock *)0) break;
 //      dombl = dombl->getImmedDom();
@@ -1752,7 +1752,7 @@ bool AncestorRealistic::checkConditionalExe(State &state)
 //    if (!dominates)
 //      return false;
 //  }
-  return true;
+	return true;
 }
 
 /// Analyze a new node that has just entered, during the depth-first traversal
@@ -1761,86 +1761,86 @@ bool AncestorRealistic::checkConditionalExe(State &state)
 int4 AncestorRealistic::enterNode(State &state)
 
 {
-  // If the node has already been visited, we truncate the traversal to prevent cycles.
-  // We always return success assuming the proper result will get returned along the first path
-  if (state.vn->isMark()) return pop_success;
-  if (!state.vn->isWritten()) {
-    if (state.vn->isInput()) {
-      if (state.vn->isUnaffected()) return pop_fail;
-      if (state.vn->isPersist()) return pop_success;	// A global input, not active movement, but a valid possibility
-      if (!state.vn->isDirectWrite()) return pop_fail;
-    }
-    return pop_success;		// Probably a normal parameter, not active movement, but valid
-  }
-  mark(state.vn);		// Mark that the varnode has now been visited
-  PcodeOp *op = state.vn->getDef();
-  switch(op->code()) {
-  case CPUI_INDIRECT:
-    if (op->isIndirectCreation()) {	// Backtracking is stopped by a call
-      trial->setIndCreateFormed();
-      if (op->getIn(0)->isIndirectZero())	// True only if not a possible output
-	return pop_failkill;		// Truncate this path, indicating killedbycall
-      return pop_success;		// otherwise it could be valid
-    }
-    if (!op->isIndirectStore()) {	// If flow goes THROUGH a call
-      if (op->getOut()->isReturnAddress()) return pop_fail;	// Storage address location is completely invalid
-      if (trial->isKilledByCall()) return pop_fail;		// "Likely" killedbycall is invalid
-    }
-    stateStack.push_back(State(op,0));
-    return enter_node;			// Enter the new node
-  case CPUI_SUBPIECE:
-    // Extracting to a temporary, or to the same storage location, or otherwise incidental
-    // are viewed as just another node on the path to traverse
-    if (op->getOut()->getSpace()->getType()==IPTR_INTERNAL
-	|| op->isIncidentalCopy() || op->getIn(0)->isIncidentalCopy()
-	|| (op->getOut()->overlap(*op->getIn(0)) == (int4)op->getIn(1)->getOffset())) {
-      stateStack.push_back(State(op,0));
-      return enter_node;		// Push into the new node
-    }
-    // For other SUBPIECES, do a minimal traversal to rule out unaffected or other invalid inputs,
-    // but otherwise treat it as valid, active, movement into the parameter
-    do {
-      Varnode *vn = op->getIn(0);
-      if ((!vn->isMark())&&(vn->isInput())) {
-	if (vn->isUnaffected()||(!vn->isDirectWrite()))
-	  return pop_fail;
-      }
-      op = vn->getDef();
-    } while((op!=(PcodeOp *)0)&&((op->code() == CPUI_COPY)||(op->code()==CPUI_SUBPIECE)));
-    return pop_solid;	// treat the COPY as a solid movement
-  case CPUI_COPY:
-    // Copies to a temporary, or between varnodes with same storage location, or otherwise incidental
-    // are viewed as just another node on the path to traverse
-    if (op->getOut()->getSpace()->getType()==IPTR_INTERNAL
-	|| op->isIncidentalCopy() || op->getIn(0)->isIncidentalCopy()
-	|| (op->getOut()->getAddr() == op->getIn(0)->getAddr())) {
-      stateStack.push_back(State(op,0));
-      return enter_node;		// Push into the new node
-    }
-    // For other COPIES, do a minimal traversal to rule out unaffected or other invalid inputs,
-    // but otherwise treat it as valid, active, movement into the parameter
-    do {
-      Varnode *vn = op->getIn(0);
-      if ((!vn->isMark())&&(vn->isInput())) {
-	if (!vn->isDirectWrite())
-	  return pop_fail;
-      }
-      op = vn->getDef();
-    } while((op!=(PcodeOp *)0)&&((op->code() == CPUI_COPY)||(op->code()==CPUI_SUBPIECE)));
-    return pop_solid;	// treat the COPY as a solid movement
-  case CPUI_MULTIEQUAL:
-    multiDepth += 1;
-    stateStack.push_back(State(op,0));
-    return enter_node;				// Nothing to check, start traversing inputs of MULTIEQUAL
-  case CPUI_PIECE:
-    // If the trial is getting pieced together and then truncated in a register,
-    // this is evidence of artificial data-flow.
-    if (state.vn->getSize() > trial->getSize() && state.vn->getSpace()->getType() != IPTR_SPACEBASE)
-      return pop_fail;
-    return pop_solid;
-  default:
-    return pop_solid;				// Any other LOAD or arithmetic/logical operation is viewed as solid movement
-  }
+	// If the node has already been visited, we truncate the traversal to prevent cycles.
+	// We always return success assuming the proper result will get returned along the first path
+	if (state.vn->isMark()) return pop_success;
+	if (!state.vn->isWritten()) {
+		if (state.vn->isInput()) {
+			if (state.vn->isUnaffected()) return pop_fail;
+			if (state.vn->isPersist()) return pop_success;    // A global input, not active movement, but a valid possibility
+			if (!state.vn->isDirectWrite()) return pop_fail;
+		}
+		return pop_success;         // Probably a normal parameter, not active movement, but valid
+	}
+	mark(state.vn);               // Mark that the varnode has now been visited
+	PcodeOp *op = state.vn->getDef();
+	switch(op->code()) {
+	case CPUI_INDIRECT:
+		if (op->isIndirectCreation()) {     // Backtracking is stopped by a call
+			trial->setIndCreateFormed();
+			if (op->getIn(0)->isIndirectZero())       // True only if not a possible output
+				return pop_failkill;            // Truncate this path, indicating killedbycall
+			return pop_success;               // otherwise it could be valid
+		}
+		if (!op->isIndirectStore()) {       // If flow goes THROUGH a call
+			if (op->getOut()->isReturnAddress()) return pop_fail;     // Storage address location is completely invalid
+			if (trial->isKilledByCall()) return pop_fail;             // "Likely" killedbycall is invalid
+		}
+		stateStack.push_back(State(op,0));
+		return enter_node;                  // Enter the new node
+	case CPUI_SUBPIECE:
+		// Extracting to a temporary, or to the same storage location, or otherwise incidental
+		// are viewed as just another node on the path to traverse
+		if (op->getOut()->getSpace()->getType()==IPTR_INTERNAL
+				|| op->isIncidentalCopy() || op->getIn(0)->isIncidentalCopy()
+				|| (op->getOut()->overlap(*op->getIn(0)) == (int4)op->getIn(1)->getOffset())) {
+			stateStack.push_back(State(op,0));
+			return enter_node;                // Push into the new node
+		}
+		// For other SUBPIECES, do a minimal traversal to rule out unaffected or other invalid inputs,
+		// but otherwise treat it as valid, active, movement into the parameter
+		do {
+			Varnode *vn = op->getIn(0);
+			if ((!vn->isMark())&&(vn->isInput())) {
+				if (vn->isUnaffected()||(!vn->isDirectWrite()))
+					return pop_fail;
+			}
+			op = vn->getDef();
+		} while((op!=(PcodeOp *)0)&&((op->code() == CPUI_COPY)||(op->code()==CPUI_SUBPIECE)));
+		return pop_solid;   // treat the COPY as a solid movement
+	case CPUI_COPY:
+		// Copies to a temporary, or between varnodes with same storage location, or otherwise incidental
+		// are viewed as just another node on the path to traverse
+		if (op->getOut()->getSpace()->getType()==IPTR_INTERNAL
+				|| op->isIncidentalCopy() || op->getIn(0)->isIncidentalCopy()
+				|| (op->getOut()->getAddr() == op->getIn(0)->getAddr())) {
+			stateStack.push_back(State(op,0));
+			return enter_node;                // Push into the new node
+		}
+		// For other COPIES, do a minimal traversal to rule out unaffected or other invalid inputs,
+		// but otherwise treat it as valid, active, movement into the parameter
+		do {
+			Varnode *vn = op->getIn(0);
+			if ((!vn->isMark())&&(vn->isInput())) {
+				if (!vn->isDirectWrite())
+					return pop_fail;
+			}
+			op = vn->getDef();
+		} while((op!=(PcodeOp *)0)&&((op->code() == CPUI_COPY)||(op->code()==CPUI_SUBPIECE)));
+		return pop_solid;   // treat the COPY as a solid movement
+	case CPUI_MULTIEQUAL:
+		multiDepth += 1;
+		stateStack.push_back(State(op,0));
+		return enter_node;                          // Nothing to check, start traversing inputs of MULTIEQUAL
+	case CPUI_PIECE:
+		// If the trial is getting pieced together and then truncated in a register,
+		// this is evidence of artificial data-flow.
+		if (state.vn->getSize() > trial->getSize() && state.vn->getSpace()->getType() != IPTR_SPACEBASE)
+			return pop_fail;
+		return pop_solid;
+	default:
+		return pop_solid;                           // Any other LOAD or arithmetic/logical operation is viewed as solid movement
+	}
 }
 
 /// Backtrack into a previously visited node
@@ -1850,47 +1850,47 @@ int4 AncestorRealistic::enterNode(State &state)
 int4 AncestorRealistic::uponPop(State &state,int4 pop_command)
 
 {
-  if (state.op->code() == CPUI_MULTIEQUAL) {	// All the interesting action happens for MULTIEQUAL branch points
-    State &prevstate( stateStack[ stateStack.size()-2 ]);	// State previous the one being popped
-    if (pop_command == pop_fail) {		// For a pop_fail, we always pop and pass along the fail
-      multiDepth -= 1;
-      stateStack.pop_back();
-      return pop_command;
-    }
-    else if ((pop_command == pop_solid)&&(multiDepth == 1)&&(state.op->numInput()==2))
-      prevstate.markSolid(state.slot);	// Indicate we have seen a "solid" that could override a "failkill"
-    else if (pop_command == pop_failkill)
-      prevstate.markKill();		// Indicate we have seen a "failkill" along at least one path of MULTIEQUAL
-    state.slot += 1;				// Move to the next sibling
-    if (state.slot == state.op->numInput()) {		// If we have traversed all siblings
-      if (prevstate.seenSolid()) {			// If we have seen an overriding "solid" along at least one path
-	pop_command = pop_success;			// this is always a success
-	if (prevstate.seenKill()) {			// UNLESS we have seen a failkill
-	  if (allowFailingPath) {
-	    if (!checkConditionalExe(state))		// that can NOT be attributed to conditional execution
-	      pop_command = pop_fail;			// in which case we fail despite having solid movement
-	    else
-	      trial->setCondExeEffect();			// Slate this trial for additional testing
-	  }
-	  else
-	    pop_command = pop_fail;
+	if (state.op->code() == CPUI_MULTIEQUAL) {    // All the interesting action happens for MULTIEQUAL branch points
+		State &prevstate( stateStack[ stateStack.size()-2 ]);       // State previous the one being popped
+		if (pop_command == pop_fail) {              // For a pop_fail, we always pop and pass along the fail
+			multiDepth -= 1;
+			stateStack.pop_back();
+			return pop_command;
+		}
+		else if ((pop_command == pop_solid)&&(multiDepth == 1)&&(state.op->numInput()==2))
+			prevstate.markSolid(state.slot);  // Indicate we have seen a "solid" that could override a "failkill"
+		else if (pop_command == pop_failkill)
+			prevstate.markKill();             // Indicate we have seen a "failkill" along at least one path of MULTIEQUAL
+		state.slot += 1;                            // Move to the next sibling
+		if (state.slot == state.op->numInput()) {           // If we have traversed all siblings
+			if (prevstate.seenSolid()) {                      // If we have seen an overriding "solid" along at least one path
+				pop_command = pop_success;                      // this is always a success
+				if (prevstate.seenKill()) {                     // UNLESS we have seen a failkill
+					if (allowFailingPath) {
+						if (!checkConditionalExe(state))            // that can NOT be attributed to conditional execution
+							pop_command = pop_fail;                   // in which case we fail despite having solid movement
+						else
+							trial->setCondExeEffect();                        // Slate this trial for additional testing
+					}
+					else
+						pop_command = pop_fail;
+				}
+			}
+			else if (prevstate.seenKill())    // If we have seen a failkill without solid movement
+				pop_command = pop_failkill;                     // this is always a failure
+			else
+				pop_command = pop_success;                      // seeing neither solid nor failkill is still a success
+			multiDepth -= 1;
+			stateStack.pop_back();
+			return pop_command;
+		}
+		state.vn = state.op->getIn(state.slot); // Advance to next sibling
+		return enter_node;
 	}
-      }
-      else if (prevstate.seenKill())	// If we have seen a failkill without solid movement
-	pop_command = pop_failkill;			// this is always a failure
-      else
-	pop_command = pop_success;			// seeing neither solid nor failkill is still a success
-      multiDepth -= 1;
-      stateStack.pop_back();
-      return pop_command;
-    }
-    state.vn = state.op->getIn(state.slot); // Advance to next sibling
-    return enter_node;
-  }
-  else {
-    stateStack.pop_back();
-    return pop_command;
-  }
+	else {
+		stateStack.pop_back();
+		return pop_command;
+	}
 }
 
 /// \brief Perform a full ancestor check on a given parameter trial
@@ -1903,37 +1903,37 @@ int4 AncestorRealistic::uponPop(State &state,int4 pop_command)
 bool AncestorRealistic::execute(PcodeOp *op,int4 slot,ParamTrial *t,bool allowFail)
 
 {
-  trial = t;
-  allowFailingPath = allowFail;
-  markedVn.clear();		// Make sure to clear out any old data
-  stateStack.clear();
-  multiDepth = 0;
-  // If the parameter itself is an input, we don't consider this realistic, we expect to see active
-  // movement into the parameter. There are some cases where this doesn't happen, but they are rare and
-  // failure here doesn't necessarily mean further analysis won't still declare this a parameter
-  if (op->getIn(slot)->isInput()) {
-    if (!trial->hasCondExeEffect())	// Make sure we are not retesting
-      return false;
-  }
-  // Run the depth first traversal
-  int4 command = enter_node;
-  stateStack.push_back(State(op,slot));		// Start by entering the initial node
-  while(!stateStack.empty()) {			// Continue until all paths have been exhausted
-    switch(command) {
-    case enter_node:
-      command = enterNode(stateStack.back());
-      break;
-    case pop_success:
-    case pop_solid:
-    case pop_fail:
-    case pop_failkill:
-      command = uponPop(stateStack.back(),command);
-      break;
-    }
-  }
-  for(int4 i=0;i<markedVn.size();++i)		// Clean up marks we left along the way
-    markedVn[i]->clearMark();
-  if ((command != pop_success)&&(command != pop_solid))
-    return false;
-  return true;
+	trial = t;
+	allowFailingPath = allowFail;
+	markedVn.clear();             // Make sure to clear out any old data
+	stateStack.clear();
+	multiDepth = 0;
+	// If the parameter itself is an input, we don't consider this realistic, we expect to see active
+	// movement into the parameter. There are some cases where this doesn't happen, but they are rare and
+	// failure here doesn't necessarily mean further analysis won't still declare this a parameter
+	if (op->getIn(slot)->isInput()) {
+		if (!trial->hasCondExeEffect())     // Make sure we are not retesting
+			return false;
+	}
+	// Run the depth first traversal
+	int4 command = enter_node;
+	stateStack.push_back(State(op,slot));         // Start by entering the initial node
+	while(!stateStack.empty()) {                  // Continue until all paths have been exhausted
+		switch(command) {
+		case enter_node:
+			command = enterNode(stateStack.back());
+			break;
+		case pop_success:
+		case pop_solid:
+		case pop_fail:
+		case pop_failkill:
+			command = uponPop(stateStack.back(),command);
+			break;
+		}
+	}
+	for(int4 i=0;i<markedVn.size();++i)           // Clean up marks we left along the way
+		markedVn[i]->clearMark();
+	if ((command != pop_success)&&(command != pop_solid))
+		return false;
+	return true;
 }

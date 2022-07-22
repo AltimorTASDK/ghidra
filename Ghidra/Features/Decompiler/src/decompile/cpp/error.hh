@@ -42,9 +42,9 @@ using namespace std;
 /// level errors that immediately abort decompilation (usually
 /// for just a single function).
 struct LowlevelError {
-  string explain;		///< Explanatory string
-  /// Initialize the error with an explanatory string
-  LowlevelError(const string &s) { explain = s; }
+	string explain;               ///< Explanatory string
+	/// Initialize the error with an explanatory string
+	LowlevelError(const string &s) { explain = s; }
 };
 
 /// \brief A generic recoverable error
@@ -53,8 +53,8 @@ struct LowlevelError {
 /// meaning there is some problem that the user did not take
 /// into account.
 struct RecovError : public LowlevelError {
-  /// Initialize the error with an explanatory string
-  RecovError(const string &s) : LowlevelError(s) {}
+	/// Initialize the error with an explanatory string
+	RecovError(const string &s) : LowlevelError(s) {}
 };
 
 /// \brief An error generated while parsing a command or language
@@ -63,8 +63,8 @@ struct RecovError : public LowlevelError {
 /// form, as in a user command from the console or when parsing
 /// C syntax.
 struct ParseError : public LowlevelError { // Parsing error
-  /// Initialize the error with an explanatory string
-  ParseError(const string &s) : LowlevelError(s) {}
+	/// Initialize the error with an explanatory string
+	ParseError(const string &s) : LowlevelError(s) {}
 };
 
 #endif

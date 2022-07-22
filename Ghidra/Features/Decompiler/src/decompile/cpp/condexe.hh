@@ -31,35 +31,35 @@
 /// Assuming the common Varnode exists, the method finalJudgement() decides if the two boolean values
 /// are the same, uncorrelated, or complements of one another.
 class ConditionMarker {
-  PcodeOp *initop;		///< The root CBRANCH operation to compare against
-  Varnode *basevn;		///< The boolean Varnode on which the root CBRANCH keys
-  Varnode *boolvn;		///< If \b basevn is defined by BOOL_NEGATE, this is the unnegated Varnode
-  Varnode *bool2vn;		///< If the first param to \b binaryop is defined by BOOL_NEGATE, this is the unnegated Varnode
-  Varnode *bool3vn;		///< If the second param to \b binaryop is defined by BOOL_NEGATE, this is the unnegated Varnode
-  PcodeOp *binaryop;		///< The binary operator producing the root boolean (if non-null)
+	PcodeOp *initop;              ///< The root CBRANCH operation to compare against
+	Varnode *basevn;              ///< The boolean Varnode on which the root CBRANCH keys
+	Varnode *boolvn;              ///< If \b basevn is defined by BOOL_NEGATE, this is the unnegated Varnode
+	Varnode *bool2vn;             ///< If the first param to \b binaryop is defined by BOOL_NEGATE, this is the unnegated Varnode
+	Varnode *bool3vn;             ///< If the second param to \b binaryop is defined by BOOL_NEGATE, this is the unnegated Varnode
+	PcodeOp *binaryop;            ///< The binary operator producing the root boolean (if non-null)
 
-  bool matchflip;		///< True if the compared CBRANCH keys on the opposite boolean value of the root
-  int4 state;			///< Depth of critical path
-  PcodeOp *opstate[2];		///< p-code operations along the critical path
-  bool flipstate[2];		///< Boolean negation along the critical path
-  int4 slotstate[2];		///< Input Varnode to follow to stay on critical path
-  bool multion;			///< True if MULTIEQUAL used in condition
-  bool binon;			///< True if a binary operator is used in condition
-  int4 multislot;		///< Input slot of MULTIEQUAL on critical path, -1 if no MULTIEQUAL
+	bool matchflip;               ///< True if the compared CBRANCH keys on the opposite boolean value of the root
+	int4 state;                   ///< Depth of critical path
+	PcodeOp *opstate[2];          ///< p-code operations along the critical path
+	bool flipstate[2];            ///< Boolean negation along the critical path
+	int4 slotstate[2];            ///< Input Varnode to follow to stay on critical path
+	bool multion;                 ///< True if MULTIEQUAL used in condition
+	bool binon;                   ///< True if a binary operator is used in condition
+	int4 multislot;               ///< Input slot of MULTIEQUAL on critical path, -1 if no MULTIEQUAL
 
-  void setupInitOp(PcodeOp *op);	///< Map out the root boolean expression
-  Varnode *findMatch(PcodeOp *op);	///< Find a matching Varnode in the root expression producing the given CBRANCH boolean
-  bool sameOpComplement(PcodeOp *bin1op, PcodeOp *bin2op);
-  bool andOrComplement(PcodeOp *bin1op, PcodeOp *bin2op);
-  bool finalJudgement(Varnode *vn);
+	void setupInitOp(PcodeOp *op);        ///< Map out the root boolean expression
+	Varnode *findMatch(PcodeOp *op);      ///< Find a matching Varnode in the root expression producing the given CBRANCH boolean
+	bool sameOpComplement(PcodeOp *bin1op, PcodeOp *bin2op);
+	bool andOrComplement(PcodeOp *bin1op, PcodeOp *bin2op);
+	bool finalJudgement(Varnode *vn);
 public:
-  ConditionMarker(void);				///< Constructor
-  ~ConditionMarker(void);				///< Destructor
-  bool verifyCondition(PcodeOp *op, PcodeOp *iop);	///< Perform the correlation test on two CBRANCH operations
-  int4 getMultiSlot(void) const { return multislot; }	///< Get the MULTIEQUAL slot in the critical path
-  bool getFlip(void) const { return matchflip; }	///< Return \b true is the expressions are anti-correlated
-  static bool varnodeSame(Varnode *a,Varnode *b);
-  static bool varnodeComplement(Varnode *a,Varnode *b);
+	ConditionMarker(void);                                ///< Constructor
+	~ConditionMarker(void);                               ///< Destructor
+	bool verifyCondition(PcodeOp *op, PcodeOp *iop);      ///< Perform the correlation test on two CBRANCH operations
+	int4 getMultiSlot(void) const { return multislot; }   ///< Get the MULTIEQUAL slot in the critical path
+	bool getFlip(void) const { return matchflip; }        ///< Return \b true is the expressions are anti-correlated
+	static bool varnodeSame(Varnode *a,Varnode *b);
+	static bool varnodeComplement(Varnode *a,Varnode *b);
 };
 
 /// \brief A class for simplifying a series of conditionally executed statements.
@@ -129,40 +129,40 @@ public:
 /// path is referred to as the \b posta_block, this block will
 /// have a new block flowing into it.
 class ConditionalExecution {
-  Funcdata *fd;			///< Function being analyzed
-  PcodeOp *cbranch;		///< CBRANCH in iblock
-  BlockBasic *initblock;	///< The initial block computing the boolean value
-  BlockBasic *iblock;		///< The block where flow is (unnecessarily) coming together
-  int4 prea_inslot;	    	///< iblock->In(prea_inslot) = pre a path
-  bool init2a_true; 		///< Does \b true branch (in terms of iblock) go to path pre a
-  bool iblock2posta_true;	///< Does \b true branch go to path post a
-  int4 camethruposta_slot;	///< init or pre slot to use, for data-flow thru post
-  int4 posta_outslot;		///< The \b out edge from iblock to posta
-  BlockBasic *posta_block;	///< First block in posta path
-  BlockBasic *postb_block;	///< First block in postb path
-  bool directsplit;		///< True if this the \e direct \e split variation
-  map<int4,Varnode *> replacement;	///< Map from block to replacement Varnode for (current) Varnode
-  vector<PcodeOp *> returnop;	///< RETURN ops that have flow coming out of the iblock
-  vector<bool> heritageyes;	///< Boolean array indexed by address space indicating whether the space is heritaged
+	Funcdata *fd;                 ///< Function being analyzed
+	PcodeOp *cbranch;             ///< CBRANCH in iblock
+	BlockBasic *initblock;        ///< The initial block computing the boolean value
+	BlockBasic *iblock;           ///< The block where flow is (unnecessarily) coming together
+	int4 prea_inslot;             ///< iblock->In(prea_inslot) = pre a path
+	bool init2a_true;             ///< Does \b true branch (in terms of iblock) go to path pre a
+	bool iblock2posta_true;       ///< Does \b true branch go to path post a
+	int4 camethruposta_slot;      ///< init or pre slot to use, for data-flow thru post
+	int4 posta_outslot;           ///< The \b out edge from iblock to posta
+	BlockBasic *posta_block;      ///< First block in posta path
+	BlockBasic *postb_block;      ///< First block in postb path
+	bool directsplit;             ///< True if this the \e direct \e split variation
+	map<int4,Varnode *> replacement;      ///< Map from block to replacement Varnode for (current) Varnode
+	vector<PcodeOp *> returnop;   ///< RETURN ops that have flow coming out of the iblock
+	vector<bool> heritageyes;     ///< Boolean array indexed by address space indicating whether the space is heritaged
 
-  void buildHeritageArray(void);
-  bool testIBlock(void);
-  bool findInitPre(void);			///< Find \b initblock, based on \b iblock
-  bool verifySameCondition(void);		///< Verify that \b initblock and \b iblock branch on the same condition
-  bool testOpRead(Varnode *vn,PcodeOp *op);	///< Can we move the (non MULTIEQUAL) defining p-code of the given Varnode
-  bool testMultiRead(Varnode *vn,PcodeOp *op);	///< Can we mave the MULTIEQUAL defining p-code of the given Varnode
-  bool testRemovability(PcodeOp *op);		///< Test if the given PcodeOp can be removed from \b iblock
-  void predefineDirectMulti(PcodeOp *op);
-  void adjustDirectMulti(void);			///< Update inputs to any MULTIEQUAL in the direct block
-  Varnode *getNewMulti(PcodeOp *op,BlockBasic *bl);
-  Varnode *getReplacementRead(PcodeOp *op,BlockBasic *bl);
-  void doReplacement(PcodeOp *op);		///< Replace the data-flow for the given PcodeOp in \b iblock
-  void fixReturnOp(void);
-  bool verify(void);				///< Verify that we have a removable \b iblock
+	void buildHeritageArray(void);
+	bool testIBlock(void);
+	bool findInitPre(void);                       ///< Find \b initblock, based on \b iblock
+	bool verifySameCondition(void);               ///< Verify that \b initblock and \b iblock branch on the same condition
+	bool testOpRead(Varnode *vn,PcodeOp *op);     ///< Can we move the (non MULTIEQUAL) defining p-code of the given Varnode
+	bool testMultiRead(Varnode *vn,PcodeOp *op);  ///< Can we mave the MULTIEQUAL defining p-code of the given Varnode
+	bool testRemovability(PcodeOp *op);           ///< Test if the given PcodeOp can be removed from \b iblock
+	void predefineDirectMulti(PcodeOp *op);
+	void adjustDirectMulti(void);                 ///< Update inputs to any MULTIEQUAL in the direct block
+	Varnode *getNewMulti(PcodeOp *op,BlockBasic *bl);
+	Varnode *getReplacementRead(PcodeOp *op,BlockBasic *bl);
+	void doReplacement(PcodeOp *op);              ///< Replace the data-flow for the given PcodeOp in \b iblock
+	void fixReturnOp(void);
+	bool verify(void);                            ///< Verify that we have a removable \b iblock
 public:
-  ConditionalExecution(Funcdata *f);		///< Constructor
-  bool trial(BlockBasic *ib);			///< Test for a modifiable configuration around the given block
-  void execute(void);				///< Eliminate the unnecessary path join at \b iblock
+	ConditionalExecution(Funcdata *f);            ///< Constructor
+	bool trial(BlockBasic *ib);                   ///< Test for a modifiable configuration around the given block
+	void execute(void);                           ///< Eliminate the unnecessary path join at \b iblock
 };
 
 /// \brief Search for and remove various forms of redundant CBRANCH operations
@@ -171,12 +171,12 @@ public:
 /// that repeatedly branches on the same (or slightly modified) boolean expression.
 class ActionConditionalExe : public Action {
 public:
-  ActionConditionalExe(const string &g) : Action(0,"conditionalexe",g) {}	///< Constructor
-  virtual Action *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Action *)0;
-    return new ActionConditionalExe(getGroup());
-  }
-  virtual int4 apply(Funcdata &data);
+	ActionConditionalExe(const string &g) : Action(0,"conditionalexe",g) {}       ///< Constructor
+	virtual Action *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Action *)0;
+		return new ActionConditionalExe(getGroup());
+	}
+	virtual int4 apply(Funcdata &data);
 };
 
 /// \brief Simplify predication constructions involving the INT_OR operator
@@ -195,7 +195,7 @@ public:
 /// \endcode
 /// or to be precise
 /// \code
-///     newtmp = val1 ? val2;			// Using a new MULTIEQUAL
+///     newtmp = val1 ? val2;                   // Using a new MULTIEQUAL
 ///     result = newtmp;
 /// \endcode
 /// In an alternate form we have
@@ -209,29 +209,29 @@ public:
 ///     result = tmp1
 /// \endcode
 class RuleOrPredicate : public Rule {
-  /// \brief A helper class to mark up predicated INT_OR expressions
-  struct MultiPredicate {
-    PcodeOp *op;		///< Base MULTIEQUAL op
-    int4 zeroSlot;		///< Input slot containing path that sets zero
-    const FlowBlock *zeroBlock;	///< Final block in path that sets zero
-    const FlowBlock *condBlock;	///< Conditional block determining if zero is set or not
-    PcodeOp *cbranch;		///< CBRANCH determining if zero is set
-    Varnode *otherVn;		///< Other (non-zero) Varnode getting set on other path
-    bool zeroPathIsTrue;	///< True if path to zero set is the \b true path out of condBlock
-    bool discoverZeroSlot(Varnode *vn);
-    bool discoverCbranch(void);
-    void discoverPathIsTrue(void);
-    bool discoverConditionalZero(Varnode *vn);
-  };
-  int4 checkSingle(Varnode *vn,MultiPredicate &branch,PcodeOp *op,Funcdata &data);
+	/// \brief A helper class to mark up predicated INT_OR expressions
+	struct MultiPredicate {
+		PcodeOp *op;                ///< Base MULTIEQUAL op
+		int4 zeroSlot;              ///< Input slot containing path that sets zero
+		const FlowBlock *zeroBlock; ///< Final block in path that sets zero
+		const FlowBlock *condBlock; ///< Conditional block determining if zero is set or not
+		PcodeOp *cbranch;           ///< CBRANCH determining if zero is set
+		Varnode *otherVn;           ///< Other (non-zero) Varnode getting set on other path
+		bool zeroPathIsTrue;        ///< True if path to zero set is the \b true path out of condBlock
+		bool discoverZeroSlot(Varnode *vn);
+		bool discoverCbranch(void);
+		void discoverPathIsTrue(void);
+		bool discoverConditionalZero(Varnode *vn);
+	};
+	int4 checkSingle(Varnode *vn,MultiPredicate &branch,PcodeOp *op,Funcdata &data);
 public:
-  RuleOrPredicate(const string &g) : Rule(g, 0, "orpredicate") {}	///< Constructor
-  virtual Rule *clone(const ActionGroupList &grouplist) const {
-    if (!grouplist.contains(getGroup())) return (Rule *)0;
-    return new RuleOrPredicate(getGroup());
-  }
-  virtual void getOpList(vector<uint4> &oplist) const;
-  virtual int4 applyOp(PcodeOp *op,Funcdata &data);
+	RuleOrPredicate(const string &g) : Rule(g, 0, "orpredicate") {}       ///< Constructor
+	virtual Rule *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Rule *)0;
+		return new RuleOrPredicate(getGroup());
+	}
+	virtual void getOpList(vector<uint4> &oplist) const;
+	virtual int4 applyOp(PcodeOp *op,Funcdata &data);
 };
 
 #endif

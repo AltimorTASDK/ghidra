@@ -27,16 +27,16 @@ class ArchitectureGhidra;
 ///
 /// Requests for program bytes are marshaled to a Ghidra client which sends back the data
 class LoadImageGhidra : public LoadImage {
-  ArchitectureGhidra *glb;			///< The owning Architecture and connection to the client
+	ArchitectureGhidra *glb;                      ///< The owning Architecture and connection to the client
 public:
-  LoadImageGhidra(ArchitectureGhidra *g);	///< Constructor
-  //  virtual ~LoadImage(void) {}
-  void open(void);				///< Open any descriptors
-  void close(void);				///< Close any descriptor
-  virtual void loadFill(uint1 *ptr,int4 size,const Address &addr);
-  // Read only flags are all controlled through the database interface
-  virtual string getArchType(void) const;
-  virtual void adjustVma(long adjust);
+	LoadImageGhidra(ArchitectureGhidra *g);       ///< Constructor
+	//  virtual ~LoadImage(void) {}
+	void open(void);                              ///< Open any descriptors
+	void close(void);                             ///< Close any descriptor
+	virtual void loadFill(uint1 *ptr,int4 size,const Address &addr);
+	// Read only flags are all controlled through the database interface
+	virtual string getArchType(void) const;
+	virtual void adjustVma(long adjust);
 };
 
 #endif

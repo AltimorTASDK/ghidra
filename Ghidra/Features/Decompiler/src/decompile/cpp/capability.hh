@@ -34,18 +34,18 @@ using namespace std;
 /// will ensure that the initialize() method is called on each extension, allowing it
 /// to complete its integration.
 class CapabilityPoint {
-  static vector<CapabilityPoint *> &getList(void);	///< Retrieve the list of extension point singletons
+	static vector<CapabilityPoint *> &getList(void);      ///< Retrieve the list of extension point singletons
 protected:
-  CapabilityPoint(void);		///< Construct extension capability exactly once
+	CapabilityPoint(void);                ///< Construct extension capability exactly once
 public:
-  virtual ~CapabilityPoint(void) {}	///< Destructor
+	virtual ~CapabilityPoint(void) {}     ///< Destructor
 
-  /// \brief Complete initialization of an extension point
-  ///
-  /// This method is implemented by each extension so it can do specialized integration
-  virtual void initialize(void)=0;
+	/// \brief Complete initialization of an extension point
+	///
+	/// This method is implemented by each extension so it can do specialized integration
+	virtual void initialize(void)=0;
 
-  static void initializeAll(void);	///< Finish initialization for all extension points
+	static void initializeAll(void);      ///< Finish initialization for all extension points
 };
 
 

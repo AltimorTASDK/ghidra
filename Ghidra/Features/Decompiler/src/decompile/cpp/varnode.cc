@@ -26,22 +26,22 @@
 inline bool VarnodeCompareLocDef::operator()(const Varnode *a,const Varnode *b) const
 
 {
-  uint4 f1,f2;
+	uint4 f1,f2;
 
-  if (a->getAddr() != b->getAddr()) return (a->getAddr() < b->getAddr());
-  if (a->getSize() != b->getSize()) return (a->getSize() < b->getSize());
-  f1 = a->getFlags()&(Varnode::input|Varnode::written);
-  f2 = b->getFlags()&(Varnode::input|Varnode::written);
-  if (f1!=f2) return ((f1-1)<(f2-1)); // -1 forces free varnodes to come last
-  if (f1==Varnode::written) {
-    if (a->getDef()->getSeqNum() != b->getDef()->getSeqNum())
-      return (a->getDef()->getSeqNum() < b->getDef()->getSeqNum());
-  }
-  else if (f1 == 0)		// both are free
-    //    return (a < b);		// compare pointers
-    return (a->getCreateIndex() < b->getCreateIndex());
-  
-  return false;
+	if (a->getAddr() != b->getAddr()) return (a->getAddr() < b->getAddr());
+	if (a->getSize() != b->getSize()) return (a->getSize() < b->getSize());
+	f1 = a->getFlags()&(Varnode::input|Varnode::written);
+	f2 = b->getFlags()&(Varnode::input|Varnode::written);
+	if (f1!=f2) return ((f1-1)<(f2-1)); // -1 forces free varnodes to come last
+	if (f1==Varnode::written) {
+		if (a->getDef()->getSeqNum() != b->getDef()->getSeqNum())
+			return (a->getDef()->getSeqNum() < b->getDef()->getSeqNum());
+	}
+	else if (f1 == 0)             // both are free
+		//    return (a < b);               // compare pointers
+		return (a->getCreateIndex() < b->getCreateIndex());
+	
+	return false;
 }
 
 /// Compare by definition then by location.
@@ -52,22 +52,22 @@ inline bool VarnodeCompareLocDef::operator()(const Varnode *a,const Varnode *b) 
 inline bool VarnodeCompareDefLoc::operator()(const Varnode *a,const Varnode *b) const
 
 {
-  uint4 f1,f2;
+	uint4 f1,f2;
 
-  f1 = (a->getFlags() & (Varnode::input|Varnode::written));
-  f2 = (b->getFlags() & (Varnode::input|Varnode::written));
-  if (f1!=f2) return ((f1-1)<(f2-1));
-				// NOTE: The -1 forces free varnodes to come last
-  if (f1==Varnode::written) {
-    if (a->getDef()->getSeqNum() != b->getDef()->getSeqNum())
-      return (a->getDef()->getSeqNum() < b->getDef()->getSeqNum());
-  }
-  if (a->getAddr() != b->getAddr()) return (a->getAddr() < b->getAddr());
-  if (a->getSize() != b->getSize()) return (a->getSize() < b->getSize());
-  if (f1==0)			// both are free
-    //    return (a<b);		// Compare pointers
-    return (a->getCreateIndex() < b->getCreateIndex());
-  return false;
+	f1 = (a->getFlags() & (Varnode::input|Varnode::written));
+	f2 = (b->getFlags() & (Varnode::input|Varnode::written));
+	if (f1!=f2) return ((f1-1)<(f2-1));
+																// NOTE: The -1 forces free varnodes to come last
+	if (f1==Varnode::written) {
+		if (a->getDef()->getSeqNum() != b->getDef()->getSeqNum())
+			return (a->getDef()->getSeqNum() < b->getDef()->getSeqNum());
+	}
+	if (a->getAddr() != b->getAddr()) return (a->getAddr() < b->getAddr());
+	if (a->getSize() != b->getSize()) return (a->getSize() < b->getSize());
+	if (f1==0)                    // both are free
+		//    return (a<b);         // Compare pointers
+		return (a->getCreateIndex() < b->getCreateIndex());
+	return false;
 }
 
 /// During the course of analysis Varnodes are merged into high-level variables that are intended
@@ -80,9 +80,9 @@ inline bool VarnodeCompareDefLoc::operator()(const Varnode *a,const Varnode *b) 
 HighVariable *Varnode::getHigh(void) const
 
 {
-  if (high==(HighVariable *)0) 
-    throw LowlevelError("Requesting non-existent high-level");
-  return high;
+	if (high==(HighVariable *)0) 
+		throw LowlevelError("Requesting non-existent high-level");
+	return high;
 }
 
 /// Return various values depending on the containment of another Varnode within \b this.
@@ -97,14 +97,14 @@ HighVariable *Varnode::getHigh(void) const
 int4 Varnode::contains(const Varnode &op) const
 
 {
-  if (loc.getSpace() != op.loc.getSpace()) return 3;
-  if (loc.getSpace()->getType()==IPTR_CONSTANT) return 3;
-  uintb a = loc.getOffset();
-  uintb b = op.loc.getOffset();
-  if (b<a) return -1;
-  if (b>=a+size) return 2;
-  if (b+op.size > a+size) return 1;
-  return 0;
+	if (loc.getSpace() != op.loc.getSpace()) return 3;
+	if (loc.getSpace()->getType()==IPTR_CONSTANT) return 3;
+	uintb a = loc.getOffset();
+	uintb b = op.loc.getOffset();
+	if (b<a) return -1;
+	if (b>=a+size) return 2;
+	if (b+op.size > a+size) return 1;
+	return 0;
 }
 
 /// Check whether the storage locations of two varnodes intersect
@@ -113,16 +113,16 @@ int4 Varnode::contains(const Varnode &op) const
 bool Varnode::intersects(const Varnode &op) const
 
 {
-  if (loc.getSpace() != op.loc.getSpace()) return false;
-  if (loc.getSpace()->getType()==IPTR_CONSTANT) return false;
-  uintb a = loc.getOffset();
-  uintb b = op.loc.getOffset();
-  if (b<a) {
-    if (a>=b+op.size) return false;
-    return true;
-  }
-  if (b>=a+size) return false;
-  return true;
+	if (loc.getSpace() != op.loc.getSpace()) return false;
+	if (loc.getSpace()->getType()==IPTR_CONSTANT) return false;
+	uintb a = loc.getOffset();
+	uintb b = op.loc.getOffset();
+	if (b<a) {
+		if (a>=b+op.size) return false;
+		return true;
+	}
+	if (b>=a+size) return false;
+	return true;
 }
 
 /// Check if \b this intersects the given Address range
@@ -132,33 +132,33 @@ bool Varnode::intersects(const Varnode &op) const
 bool Varnode::intersects(const Address &op2loc,int4 op2size) const
 
 {
-  if (loc.getSpace() != op2loc.getSpace()) return false;
-  if (loc.getSpace()->getType()==IPTR_CONSTANT) return false;
-  uintb a = loc.getOffset();
-  uintb b = op2loc.getOffset();
-  if (b<a) {
-    if (a>=b+op2size) return false;
-    return true;
-  }
-  if (b>=a+size) return false;
-  return true;
+	if (loc.getSpace() != op2loc.getSpace()) return false;
+	if (loc.getSpace()->getType()==IPTR_CONSTANT) return false;
+	uintb a = loc.getOffset();
+	uintb b = op2loc.getOffset();
+	if (b<a) {
+		if (a>=b+op2size) return false;
+		return true;
+	}
+	if (b>=a+size) return false;
+	return true;
 }
 
 int4 Varnode::characterizeOverlap(const Varnode &op) const
 
 {
-  if (loc.getSpace() != op.loc.getSpace())
-    return 0;
-  if (loc.getOffset() == op.loc.getOffset())		// Left sides match
-    return (size == op.size) ? 2 : 1;	// Either total match or partial
-  else if (loc.getOffset() < op.loc.getOffset()) {
-    uintb thisright = loc.getOffset() + (size-1);
-    return (thisright < op.loc.getOffset()) ? 0: 1;		// Test if this ends before op begins
-  }
-  else {
-    uintb opright = op.loc.getOffset() + (op.size-1);
-    return (opright < loc.getOffset()) ? 0: 1;			// Test if op ends before this begins
-  }
+	if (loc.getSpace() != op.loc.getSpace())
+		return 0;
+	if (loc.getOffset() == op.loc.getOffset())            // Left sides match
+		return (size == op.size) ? 2 : 1;   // Either total match or partial
+	else if (loc.getOffset() < op.loc.getOffset()) {
+		uintb thisright = loc.getOffset() + (size-1);
+		return (thisright < op.loc.getOffset()) ? 0: 1;             // Test if this ends before op begins
+	}
+	else {
+		uintb opright = op.loc.getOffset() + (op.size-1);
+		return (opright < loc.getOffset()) ? 0: 1;                  // Test if op ends before this begins
+	}
 }
 
 /// Return whether \e Least \e Signifigant \e Byte of \b this occurs in \b op
@@ -170,14 +170,14 @@ int4 Varnode::characterizeOverlap(const Varnode &op) const
 int4 Varnode::overlap(const Varnode &op) const
 
 {  
-  if (!loc.isBigEndian())	// Little endian
-    return loc.overlap(0,op.loc,op.size);
-  else {			// Big endian
-    int4 over = loc.overlap(size-1,op.loc,op.size);
-    if (over != -1)
-      return op.size-1-over;
-  }
-  return -1;
+	if (!loc.isBigEndian())       // Little endian
+		return loc.overlap(0,op.loc,op.size);
+	else {                        // Big endian
+		int4 over = loc.overlap(size-1,op.loc,op.size);
+		if (over != -1)
+			return op.size-1-over;
+	}
+	return -1;
 }
 
 /// Return whether \e Least \e Signifigant \e Byte of \b this occurs in an Address range
@@ -190,14 +190,14 @@ int4 Varnode::overlap(const Varnode &op) const
 int4 Varnode::overlap(const Address &op2loc,int4 op2size) const
 
 {
-  if (!loc.isBigEndian())	// Little endian
-    return loc.overlap(0,op2loc,op2size);
-  else {			// Big endian
-    int4 over = loc.overlap(size-1,op2loc,op2size);
-    if (over != -1)
-      return op2size-1-over;
-  }
-  return -1;
+	if (!loc.isBigEndian())       // Little endian
+		return loc.overlap(0,op2loc,op2size);
+	else {                        // Big endian
+		int4 over = loc.overlap(size-1,op2loc,op2size);
+		if (over != -1)
+			return op2size-1-over;
+	}
+	return -1;
 }
 
 /// Rebuild variable cover based on where the Varnode
@@ -206,33 +206,33 @@ int4 Varnode::overlap(const Address &op2loc,int4 op2size) const
 void Varnode::updateCover(void) const
 
 {
-  if ((flags & Varnode::coverdirty)!=0) {
-    if (hasCover()&&(cover!=(Cover *)0))
-      cover->rebuild(this);
-    clearFlags(Varnode::coverdirty);
-  }
+	if ((flags & Varnode::coverdirty)!=0) {
+		if (hasCover()&&(cover!=(Cover *)0))
+			cover->rebuild(this);
+		clearFlags(Varnode::coverdirty);
+	}
 }
 
 /// Delete the Cover object.  Used for dead Varnodes before full deletion.
 void Varnode::clearCover(void) const
 
 {
-  if (cover != (Cover *)0) {
-    delete cover;
-    cover = (Cover *)0;
-  }
+	if (cover != (Cover *)0) {
+		delete cover;
+		cover = (Cover *)0;
+	}
 }
 
 /// Initialize a new Cover and set dirty bit so that updateCover will rebuild
 void Varnode::calcCover(void) const
 
 {
-  if (hasCover()) {
-    if (cover != (Cover *)0)
-      delete cover;
-    cover = new Cover;
-    setFlags(Varnode::coverdirty);
-  }
+	if (hasCover()) {
+		if (cover != (Cover *)0)
+			delete cover;
+		cover = new Cover;
+		setFlags(Varnode::coverdirty);
+	}
 }
 
 /// Print, to a stream, textual information about where \b this Varnode is in scope within its
@@ -242,12 +242,12 @@ void Varnode::calcCover(void) const
 void Varnode::printCover(ostream &s) const
 
 {
-  if (cover == (Cover *)0)
-    throw LowlevelError("No cover to print");
-  if ((flags & Varnode::coverdirty)!=0)
-    s << "Cover is dirty" << endl;
-  else
-    cover->print(s);
+	if (cover == (Cover *)0)
+		throw LowlevelError("No cover to print");
+	if ((flags & Varnode::coverdirty)!=0)
+		s << "Cover is dirty" << endl;
+	else
+		cover->print(s);
 }
 
 /// Print boolean attribute information about \b this as keywords to a stream
@@ -255,33 +255,33 @@ void Varnode::printCover(ostream &s) const
 void Varnode::printInfo(ostream &s) const
 
 {
-  type->printRaw(s);
-  s << " = ";
-  printRaw(s);
-  if (isAddrTied())
-    s << " tied";
-  if (isMapped())
-    s << " mapped";
-  if (isPersist())
-    s << " persistent";
-  if (isTypeLock())
-    s << " tlock";
-  if (isNameLock())
-    s << " nlock";
-  if (isSpacebase())
-    s << " base";
-  if (isUnaffected())
-    s << " unaff";
-  if (isImplied())
-    s << " implied";
-  if (isAddrForce())
-    s << " addrforce";
-  if (isReadOnly())
-    s << " readonly";
-  s << " (consumed=0x" << hex << consumed << ')';
-  s << " (internal=" << hex << this << ')';
-  s << " (create=0x" << hex << create_index << ')';
-  s << endl;
+	type->printRaw(s);
+	s << " = ";
+	printRaw(s);
+	if (isAddrTied())
+		s << " tied";
+	if (isMapped())
+		s << " mapped";
+	if (isPersist())
+		s << " persistent";
+	if (isTypeLock())
+		s << " tlock";
+	if (isNameLock())
+		s << " nlock";
+	if (isSpacebase())
+		s << " base";
+	if (isUnaffected())
+		s << " unaff";
+	if (isImplied())
+		s << " implied";
+	if (isAddrForce())
+		s << " addrforce";
+	if (isReadOnly())
+		s << " readonly";
+	s << " (consumed=0x" << hex << consumed << ')';
+	s << " (internal=" << hex << this << ')';
+	s << " (create=0x" << hex << create_index << ')';
+	s << endl;
 }
 
 /// Erase the operation from our descendant list and set the cover dirty flag
@@ -289,13 +289,13 @@ void Varnode::printInfo(ostream &s) const
 void Varnode::eraseDescend(PcodeOp *op)
 
 {
-  list<PcodeOp *>::iterator iter;
+	list<PcodeOp *>::iterator iter;
 
-  iter = descend.begin();
-  while (*iter != op)		// Find this op in list of vn's descendants
-    iter++;
-  descend.erase(iter);		// Remove it from list
-  setFlags(Varnode::coverdirty);
+	iter = descend.begin();
+	while (*iter != op)           // Find this op in list of vn's descendants
+		iter++;
+	descend.erase(iter);          // Remove it from list
+	setFlags(Varnode::coverdirty);
 }
 
 /// Put a new operator in the descendant list and set the cover dirty flag
@@ -303,13 +303,13 @@ void Varnode::eraseDescend(PcodeOp *op)
 void Varnode::addDescend(PcodeOp *op)
 
 {
-  //  if (!heritageknown()) {
-  if (isFree()&&(!isSpacebase())) {
-    if (!descend.empty())
-      throw LowlevelError("Free varnode has multiple descendants");
-  }
-  descend.push_back(op);
-  setFlags(Varnode::coverdirty);
+	//  if (!heritageknown()) {
+	if (isFree()&&(!isSpacebase())) {
+		if (!descend.empty())
+			throw LowlevelError("Free varnode has multiple descendants");
+	}
+	descend.push_back(op);
+	setFlags(Varnode::coverdirty);
 }
 
 /// Completely clear the descendant list
@@ -317,7 +317,7 @@ void Varnode::addDescend(PcodeOp *op)
 void Varnode::destroyDescend(void)
 
 {
-  descend.clear();
+	descend.clear();
 }
 
 /// Set desired boolean attributes on this Varnode and then set dirty bits if appropriate
@@ -325,12 +325,12 @@ void Varnode::destroyDescend(void)
 void Varnode::setFlags(uint4 fl) const
 
 {
-  flags |= fl;
-  if (high != (HighVariable *)0) {
-    high->flagsDirty();
-    if ((fl&Varnode::coverdirty)!=0)
-      high->coverDirty();
-  }
+	flags |= fl;
+	if (high != (HighVariable *)0) {
+		high->flagsDirty();
+		if ((fl&Varnode::coverdirty)!=0)
+			high->coverDirty();
+	}
 }
 
 /// Clear desired boolean attributes on this Varnode and then set dirty bits if appropriate
@@ -338,26 +338,26 @@ void Varnode::setFlags(uint4 fl) const
 void Varnode::clearFlags(uint4 fl) const
 
 {
-  flags &= ~fl;
-  if (high != (HighVariable *)0) {
-    high->flagsDirty();
-    if ((fl&Varnode::coverdirty)!=0)
-      high->coverDirty();
-  }
+	flags &= ~fl;
+	if (high != (HighVariable *)0) {
+		high->flagsDirty();
+		if ((fl&Varnode::coverdirty)!=0)
+			high->coverDirty();
+	}
 }
 
 /// Directly change the defining PcodeOp and set appropriate dirty bits
 /// \param op is the pointer to the new PcodeOp, which can be \b null
 void Varnode::setDef(PcodeOp *op)
 
-{				// Set the defining op
-  def = op;
-  if (op==(PcodeOp *)0) {
-    setFlags(Varnode::coverdirty);
-    clearFlags(Varnode::written);
-  }
-  else
-    setFlags(Varnode::coverdirty|Varnode::written);
+{                               // Set the defining op
+	def = op;
+	if (op==(PcodeOp *)0) {
+		setFlags(Varnode::coverdirty);
+		clearFlags(Varnode::written);
+	}
+	else
+		setFlags(Varnode::coverdirty|Varnode::written);
 }
 
 /// The given Symbol's data-type and flags are inherited by \b this Varnode.
@@ -367,17 +367,17 @@ void Varnode::setDef(PcodeOp *op)
 bool Varnode::setSymbolProperties(SymbolEntry *entry)
 
 {
-  bool res = entry->updateType(this);
-  if (entry->getSymbol()->isTypeLocked()) {
-    if (mapentry != entry) {
-      mapentry = entry;
-      if (high != (HighVariable *)0)
-	high->setSymbol(this);
-      res = true;
-    }
-  }
-  setFlags(entry->getAllFlags() & ~Varnode::typelock);
-  return res;
+	bool res = entry->updateType(this);
+	if (entry->getSymbol()->isTypeLocked()) {
+		if (mapentry != entry) {
+			mapentry = entry;
+			if (high != (HighVariable *)0)
+				high->setSymbol(this);
+			res = true;
+		}
+	}
+	setFlags(entry->getAllFlags() & ~Varnode::typelock);
+	return res;
 }
 
 /// A reference to the given Symbol is set on \b this Varnode.
@@ -386,13 +386,13 @@ bool Varnode::setSymbolProperties(SymbolEntry *entry)
 void Varnode::setSymbolEntry(SymbolEntry *entry)
 
 {
-  mapentry = entry;
-  uint4 fl = Varnode::mapped;	// Flags are generally not changed, but we do mark this as mapped
-  if (entry->getSymbol()->isNameLocked())
-    fl |= Varnode::namelock;
-  setFlags(fl);
-  if (high != (HighVariable *)0)
-    high->setSymbol(this);
+	mapentry = entry;
+	uint4 fl = Varnode::mapped;   // Flags are generally not changed, but we do mark this as mapped
+	if (entry->getSymbol()->isNameLocked())
+		fl |= Varnode::namelock;
+	setFlags(fl);
+	if (high != (HighVariable *)0)
+		high->setSymbol(this);
 }
 
 /// Link Symbol information to \b this as a \b reference. This only works for a constant Varnode.
@@ -403,9 +403,9 @@ void Varnode::setSymbolEntry(SymbolEntry *entry)
 void Varnode::setSymbolReference(SymbolEntry *entry,int4 off)
 
 {
-  if (high != (HighVariable *)0) {
-    high->setSymbolReference(entry->getSymbol(), off);
-  }
+	if (high != (HighVariable *)0) {
+		high->setSymbolReference(entry->getSymbol(), off);
+	}
 }
 
 /// Change the Datatype and lock state associated with this Varnode if various conditions are met
@@ -419,18 +419,18 @@ void Varnode::setSymbolReference(SymbolEntry *entry,int4 off)
 bool Varnode::updateType(Datatype *ct,bool lock,bool override)
 
 {
-  if (ct->getMetatype() == TYPE_UNKNOWN) // Unknown data type is ALWAYS unlocked
-    lock = false;
+	if (ct->getMetatype() == TYPE_UNKNOWN) // Unknown data type is ALWAYS unlocked
+		lock = false;
 
-  if (isTypeLock()&&(!override)) return false; // Type is locked
-  if ((type == ct)&&(isTypeLock()==lock)) return false; // No change
-  flags &= ~Varnode::typelock;
-  if (lock)
-    flags |= Varnode::typelock;
-  type = ct;
-  if (high != (HighVariable *)0)
-    high->typeDirty();
-  return true;
+	if (isTypeLock()&&(!override)) return false; // Type is locked
+	if ((type == ct)&&(isTypeLock()==lock)) return false; // No change
+	flags &= ~Varnode::typelock;
+	if (lock)
+		flags |= Varnode::typelock;
+	type = ct;
+	if (high != (HighVariable *)0)
+		high->typeDirty();
+	return true;
 }
 
 /// Copy any symbol and type information from -vn- into this
@@ -438,15 +438,15 @@ bool Varnode::updateType(Datatype *ct,bool lock,bool override)
 void Varnode::copySymbol(const Varnode *vn)
 
 {
-  type = vn->type;		// Copy any type
-  mapentry = vn->mapentry;	// Copy any symbol
-  flags &= ~(Varnode::typelock | Varnode::namelock);
-  flags |= (Varnode::typelock | Varnode::namelock) & vn->flags;
-  if (high != (HighVariable *)0) {
-    high->typeDirty();
-    if (mapentry != (SymbolEntry *)0)
-      high->setSymbol(this);
-  }
+	type = vn->type;              // Copy any type
+	mapentry = vn->mapentry;      // Copy any symbol
+	flags &= ~(Varnode::typelock | Varnode::namelock);
+	flags |= (Varnode::typelock | Varnode::namelock) & vn->flags;
+	if (high != (HighVariable *)0) {
+		high->typeDirty();
+		if (mapentry != (SymbolEntry *)0)
+			high->setSymbol(this);
+	}
 }
 
 /// Symbol information (if present) is copied from the given constant Varnode into \b this,
@@ -455,15 +455,15 @@ void Varnode::copySymbol(const Varnode *vn)
 void Varnode::copySymbolIfValid(const Varnode *vn)
 
 {
-  SymbolEntry *mapEntry = vn->getSymbolEntry();
-  if (mapEntry == (SymbolEntry *)0)
-    return;
-  EquateSymbol *sym = dynamic_cast<EquateSymbol *>(mapEntry->getSymbol());
-  if (sym == (EquateSymbol *) 0)
-    return;
-  if (sym->isValueClose(loc.getOffset(), size)) {
-    copySymbol(vn);	// Propagate the markup into our new constant
-  }
+	SymbolEntry *mapEntry = vn->getSymbolEntry();
+	if (mapEntry == (SymbolEntry *)0)
+		return;
+	EquateSymbol *sym = dynamic_cast<EquateSymbol *>(mapEntry->getSymbol());
+	if (sym == (EquateSymbol *) 0)
+		return;
+	if (sym->isValueClose(loc.getOffset(), size)) {
+		copySymbol(vn);     // Propagate the markup into our new constant
+	}
 }
 
 /// Compare two Varnodes
@@ -478,17 +478,17 @@ void Varnode::copySymbolIfValid(const Varnode *vn)
 bool Varnode::operator<(const Varnode &op2) const
 
 {
-  uint4 f1,f2;
+	uint4 f1,f2;
 
-  if (loc != op2.loc) return (loc < op2.loc);
-  if (size != op2.size) return (size < op2.size);
-  f1 = flags&(Varnode::input|Varnode::written);
-  f2 = op2.flags&(Varnode::input|Varnode::written);
-  if (f1!=f2) return ((f1-1)<(f2-1)); // -1 forces free varnodes to come last
-  if (f1==Varnode::written)
-    if (def->getSeqNum() != op2.def->getSeqNum())
-      return (def->getSeqNum() < op2.def->getSeqNum());
-  return false;
+	if (loc != op2.loc) return (loc < op2.loc);
+	if (size != op2.size) return (size < op2.size);
+	f1 = flags&(Varnode::input|Varnode::written);
+	f2 = op2.flags&(Varnode::input|Varnode::written);
+	if (f1!=f2) return ((f1-1)<(f2-1)); // -1 forces free varnodes to come last
+	if (f1==Varnode::written)
+		if (def->getSeqNum() != op2.def->getSeqNum())
+			return (def->getSeqNum() < op2.def->getSeqNum());
+	return false;
 }
 
 /// Determine if two Varnodes are equivalent.  They must match
@@ -500,18 +500,18 @@ bool Varnode::operator<(const Varnode &op2) const
 /// \return true if they are equivalent
 bool Varnode::operator==(const Varnode &op2) const
 
-{				// Compare two varnodes
-  uint4 f1,f2;
+{                               // Compare two varnodes
+	uint4 f1,f2;
 
-  if (loc != op2.loc) return false;
-  if (size != op2.size) return false;
-  f1 = flags&(Varnode::input|Varnode::written);
-  f2 = op2.flags&(Varnode::input|Varnode::written);
-  if (f1!=f2) return false;
-  if (f1==Varnode::written)
-    if (def->getSeqNum() != op2.def->getSeqNum()) return false;
-  
-  return true;
+	if (loc != op2.loc) return false;
+	if (size != op2.size) return false;
+	f1 = flags&(Varnode::input|Varnode::written);
+	f2 = op2.flags&(Varnode::input|Varnode::written);
+	if (f1!=f2) return false;
+	if (f1==Varnode::written)
+		if (def->getSeqNum() != op2.def->getSeqNum()) return false;
+	
+	return true;
 }
 
 /// This is the constructor for making an unmanaged Varnode
@@ -521,47 +521,47 @@ bool Varnode::operator==(const Varnode &op2) const
 /// \param m is the starting storage Address
 /// \param dt is the Datatype
 Varnode::Varnode(int4 s,const Address &m,Datatype *dt)
-  : loc(m)
-{				// Construct a varnode
-  size = s;
-  def = (PcodeOp *)0;		// No defining op yet
-  type = dt;
-  high = (HighVariable *)0;
-  mapentry = (SymbolEntry *)0;
-  consumed = ~((uintb)0);
-  cover = (Cover *)0;
-  mergegroup = 0;
-  addlflags = 0;
-  if (m.getSpace() == (AddrSpace *)0) {
-    flags = 0;
-    return;
-  }
-  spacetype tp = m.getSpace()->getType();
-  if (tp==IPTR_CONSTANT) {
-    flags = Varnode::constant;
-    nzm = m.getOffset();
-  }
-  else if ((tp==IPTR_FSPEC)||(tp==IPTR_IOP)) {
-    flags = Varnode::annotation|Varnode::coverdirty;
-    nzm = ~((uintb)0);
-  }
-  else {
-    flags = Varnode::coverdirty;
-    nzm = ~((uintb)0);
-  }
+	: loc(m)
+{                               // Construct a varnode
+	size = s;
+	def = (PcodeOp *)0;           // No defining op yet
+	type = dt;
+	high = (HighVariable *)0;
+	mapentry = (SymbolEntry *)0;
+	consumed = ~((uintb)0);
+	cover = (Cover *)0;
+	mergegroup = 0;
+	addlflags = 0;
+	if (m.getSpace() == (AddrSpace *)0) {
+		flags = 0;
+		return;
+	}
+	spacetype tp = m.getSpace()->getType();
+	if (tp==IPTR_CONSTANT) {
+		flags = Varnode::constant;
+		nzm = m.getOffset();
+	}
+	else if ((tp==IPTR_FSPEC)||(tp==IPTR_IOP)) {
+		flags = Varnode::annotation|Varnode::coverdirty;
+		nzm = ~((uintb)0);
+	}
+	else {
+		flags = Varnode::coverdirty;
+		nzm = ~((uintb)0);
+	}
 }
 
 /// Delete the Varnode object. This routine assumes all other cross-references have been removed.
 Varnode::~Varnode(void)
 
 {
-  if (cover != (Cover *)0)
-    delete cover;
-  if (high != (HighVariable *)0) {
-    high->remove(this);
-    if (high->isUnattached())
-      delete high;
-  }
+	if (cover != (Cover *)0)
+		delete cover;
+	if (high != (HighVariable *)0) {
+		high->remove(this);
+		if (high->isUnattached())
+			delete high;
+	}
 }
 
 /// This is a convenience method for quickly finding the unique PcodeOp that reads this Varnode
@@ -569,16 +569,16 @@ Varnode::~Varnode(void)
 PcodeOp *Varnode::loneDescend(void) const
 
 {
-  PcodeOp *op;
+	PcodeOp *op;
 
-  if (descend.empty()) return (PcodeOp *)0; // No descendants
+	if (descend.empty()) return (PcodeOp *)0; // No descendants
 
-  list<PcodeOp *>::const_iterator iter;
+	list<PcodeOp *>::const_iterator iter;
 
-  iter = descend.begin();
-  op = *iter++;			// First descendant
-  if (iter != descend.end()) return (PcodeOp *)0; // More than 1 descendant
-  return op;
+	iter = descend.begin();
+	op = *iter++;                 // First descendant
+	if (iter != descend.end()) return (PcodeOp *)0; // More than 1 descendant
+	return op;
 }
 
 /// A Varnode can be defined as "coming into scope" at the Address of the first PcodeOp that
@@ -589,10 +589,10 @@ PcodeOp *Varnode::loneDescend(void) const
 Address Varnode::getUsePoint(const Funcdata &fd) const
 
 {
-  if (isWritten())
-    return def->getAddr();
-  return fd.getAddress()+-1;
-  //  return loc.getSpace()->getTrans()->constant(0);
+	if (isWritten())
+		return def->getAddr();
+	return fd.getAddress()+-1;
+	//  return loc.getSpace()->getTrans()->constant(0);
 }
 
 /// Print to the stream either the name of the Varnode, such as a register name, if it exists
@@ -604,26 +604,26 @@ Address Varnode::getUsePoint(const Funcdata &fd) const
 int4 Varnode::printRawNoMarkup(ostream &s) const
 
 {
-  AddrSpace *spc = loc.getSpace();
-  const Translate *trans = spc->getTrans();
-  string name;
-  int4 expect;
+	AddrSpace *spc = loc.getSpace();
+	const Translate *trans = spc->getTrans();
+	string name;
+	int4 expect;
 
-  name = trans->getRegisterName(spc,loc.getOffset(),size);
-  if (name.size()!=0) {
-    const VarnodeData &point(trans->getRegister(name));
-    uintb off = loc.getOffset()-point.offset;
-    s << name;
-    expect = point.size;
-    if (off != 0)
-      s << '+' << dec << off;
-  }
-  else {
-    s << loc.getShortcut();	// Print type shortcut character
-    expect = trans->getDefaultSize();
-    loc.printRaw(s);
-  }
-  return expect;
+	name = trans->getRegisterName(spc,loc.getOffset(),size);
+	if (name.size()!=0) {
+		const VarnodeData &point(trans->getRegister(name));
+		uintb off = loc.getOffset()-point.offset;
+		s << name;
+		expect = point.size;
+		if (off != 0)
+			s << '+' << dec << off;
+	}
+	else {
+		s << loc.getShortcut();     // Print type shortcut character
+		expect = trans->getDefaultSize();
+		loc.printRaw(s);
+	}
+	return expect;
 }
 
 /// Print textual information about this Varnode including a base identifier along with enough
@@ -634,18 +634,18 @@ int4 Varnode::printRawNoMarkup(ostream &s) const
 void Varnode::printRaw(ostream &s) const
 
 {
-  int4 expect = printRawNoMarkup(s);
+	int4 expect = printRawNoMarkup(s);
 
-  if (expect != size)
-    s << ':' << setw(1) << size;
-  if ((flags&Varnode::input)!=0)
-    s << "(i)";
-  if (isWritten())
-    s << '(' << def->getSeqNum() << ')';
-  if ((flags&(Varnode::insert|Varnode::constant))==0) {
-    s << "(free)";
-    return;
-  }
+	if (expect != size)
+		s << ':' << setw(1) << size;
+	if ((flags&Varnode::input)!=0)
+		s << "(i)";
+	if (isWritten())
+		s << '(' << def->getSeqNum() << ')';
+	if ((flags&(Varnode::insert|Varnode::constant))==0) {
+		s << "(free)";
+		return;
+	}
 }
 
 /// Recursively print a terse textual representation of the data-flow (SSA) tree rooted at this Varnode
@@ -654,35 +654,35 @@ void Varnode::printRaw(ostream &s) const
 void Varnode::printRawHeritage(ostream &s,int4 depth) const
 
 {
-  for(int4 i=0;i<depth;++i)
-    s << ' ';
+	for(int4 i=0;i<depth;++i)
+		s << ' ';
 
-  if (isConstant()) {
-    printRaw(s);
-    s << endl;
-    return;
-  }
-  printRaw(s);
-  s << ' ';
-  if (def != (PcodeOp *)0)
-    def->printRaw(s);
-  else
-    printRaw(s);
+	if (isConstant()) {
+		printRaw(s);
+		s << endl;
+		return;
+	}
+	printRaw(s);
+	s << ' ';
+	if (def != (PcodeOp *)0)
+		def->printRaw(s);
+	else
+		printRaw(s);
 
-  if ((flags & Varnode::input)!=0)
-    s << " Input";
-  if ((flags & Varnode::constant)!=0)
-    s << " Constant";
-  if ((flags & Varnode::annotation)!=0)
-    s << " Code";
+	if ((flags & Varnode::input)!=0)
+		s << " Input";
+	if ((flags & Varnode::constant)!=0)
+		s << " Constant";
+	if ((flags & Varnode::annotation)!=0)
+		s << " Code";
 
-  if (def != (PcodeOp *)0) {
-    s << "\t\t" << def->getSeqNum() << endl;
-    for(int4 i=0;i<def->numInput();++i)
-      def->getIn(i)->printRawHeritage(s,depth+5);
-  }
-  else 
-    s << endl;
+	if (def != (PcodeOp *)0) {
+		s << "\t\t" << def->getSeqNum() << endl;
+		for(int4 i=0;i<def->numInput();++i)
+			def->getIn(i)->printRawHeritage(s,depth+5);
+	}
+	else 
+		s << endl;
 }
 
 /// If \b this is a constant, or is extended (INT_ZEXT,INT_SEXT) from a constant,
@@ -695,27 +695,27 @@ void Varnode::printRawHeritage(ostream &s,int4 depth) const
 int4 Varnode::isConstantExtended(uintb &val) const
 
 {
-  if (isConstant()) {
-    val = getOffset();
-    return 0;
-  }
-  if (!isWritten()) return -1;
-  OpCode opc = def->code();
-  if (opc == CPUI_INT_ZEXT) {
-    Varnode *vn0 = def->getIn(0);
-    if (vn0->isConstant()) {
-      val = vn0->getOffset();
-      return 1;
-    }
-  }
-  else if (opc == CPUI_INT_SEXT) {
-    Varnode *vn0 = def->getIn(0);
-    if (vn0->isConstant()) {
-      val = vn0->getOffset();
-      return 2;
-    }
-  }
-  return -1;
+	if (isConstant()) {
+		val = getOffset();
+		return 0;
+	}
+	if (!isWritten()) return -1;
+	OpCode opc = def->code();
+	if (opc == CPUI_INT_ZEXT) {
+		Varnode *vn0 = def->getIn(0);
+		if (vn0->isConstant()) {
+			val = vn0->getOffset();
+			return 1;
+		}
+	}
+	else if (opc == CPUI_INT_SEXT) {
+		Varnode *vn0 = def->getIn(0);
+		if (vn0->isConstant()) {
+			val = vn0->getOffset();
+			return 2;
+		}
+	}
+	return -1;
 }
 
 /// Make an initial determination of the Datatype of this Varnode. If a Datatype is already
@@ -726,39 +726,39 @@ int4 Varnode::isConstantExtended(uintb &val) const
 Datatype *Varnode::getLocalType(bool &blockup) const
 
 {
-  Datatype *ct;
-  Datatype *newct;
+	Datatype *ct;
+	Datatype *newct;
 
-  if (isTypeLock())			// Our type is locked, don't change
-    return type;		// Not a partial lock, return the locked type
+	if (isTypeLock())                     // Our type is locked, don't change
+		return type;                // Not a partial lock, return the locked type
 
-  ct = (Datatype *)0;
-  if (def != (PcodeOp *)0) {
-    ct = def->outputTypeLocal();
-    if (def->stopsPropagation()) {
-      blockup = true;
-      return ct;
-    }
-  }
+	ct = (Datatype *)0;
+	if (def != (PcodeOp *)0) {
+		ct = def->outputTypeLocal();
+		if (def->stopsPropagation()) {
+			blockup = true;
+			return ct;
+		}
+	}
 
-  list<PcodeOp *>::const_iterator iter;
-  PcodeOp *op;
-  int4 i;
-  for(iter=descend.begin();iter!=descend.end();++iter) {
-    op = *iter;
-    i = op->getSlot(this);
-    newct = op->inputTypeLocal(i);
+	list<PcodeOp *>::const_iterator iter;
+	PcodeOp *op;
+	int4 i;
+	for(iter=descend.begin();iter!=descend.end();++iter) {
+		op = *iter;
+		i = op->getSlot(this);
+		newct = op->inputTypeLocal(i);
 
-    if (ct == (Datatype *)0)
-      ct = newct;
-    else {
-      if (0>newct->typeOrder(*ct))
-	ct = newct;
-    }
-  }
-  if (ct == (Datatype *)0)
-    throw LowlevelError("NULL local type");
-  return ct;
+		if (ct == (Datatype *)0)
+			ct = newct;
+		else {
+			if (0>newct->typeOrder(*ct))
+				ct = newct;
+		}
+	}
+	if (ct == (Datatype *)0)
+		throw LowlevelError("NULL local type");
+	return ct;
 }
 
 /// Make a local determination if \b this and \b op2 hold the same value. We check if
@@ -769,21 +769,21 @@ Datatype *Varnode::getLocalType(bool &blockup) const
 bool Varnode::copyShadow(const Varnode *op2) const
 
 {
-  const Varnode *vn;
+	const Varnode *vn;
 
-  if (this==op2) return true;
-				// Trace -this- to the source of the copy chain
-  vn = this;
-  while( (vn->isWritten()) && (vn->getDef()->code() == CPUI_COPY)) {
-    vn = vn->getDef()->getIn(0);
-    if (vn == op2) return true;	// If we hit op2 then this and op2 must be the same
-  }
-				// Trace op2 to the source of copy chain
-  while( (op2->isWritten()) && (op2->getDef()->code() == CPUI_COPY)) {
-    op2 = op2->getDef()->getIn(0);
-    if (vn == op2) return true;	// If the source is the same then this and op2 are same
-  }
-  return false;
+	if (this==op2) return true;
+																// Trace -this- to the source of the copy chain
+	vn = this;
+	while( (vn->isWritten()) && (vn->getDef()->code() == CPUI_COPY)) {
+		vn = vn->getDef()->getIn(0);
+		if (vn == op2) return true; // If we hit op2 then this and op2 must be the same
+	}
+																// Trace op2 to the source of copy chain
+	while( (op2->isWritten()) && (op2->getDef()->code() == CPUI_COPY)) {
+		op2 = op2->getDef()->getIn(0);
+		if (vn == op2) return true; // If the source is the same then this and op2 are same
+	}
+	return false;
 }
 
 /// Compare term order of two Varnodes. Used in Term Rewriting strategies to order operands of commutative ops
@@ -792,23 +792,23 @@ bool Varnode::copyShadow(const Varnode *op2) const
 int4 Varnode::termOrder(const Varnode *op) const
 
 {
-  if (isConstant()) {
-    if (!op->isConstant()) return 1;
-  }
-  else {
-    if (op->isConstant()) return -1;
-    const Varnode *vn = this;
-    if (vn->isWritten()&&(vn->getDef()->code() == CPUI_INT_MULT))
-      if (vn->getDef()->getIn(1)->isConstant())
-	vn = vn->getDef()->getIn(0);
-    if (op->isWritten()&&(op->getDef()->code() == CPUI_INT_MULT))
-      if (op->getDef()->getIn(1)->isConstant())
-	op = op->getDef()->getIn(0);
-    
-    if (vn->getAddr() < op->getAddr()) return -1;
-    if (op->getAddr() < vn->getAddr()) return 1;
-  }
-  return 0;
+	if (isConstant()) {
+		if (!op->isConstant()) return 1;
+	}
+	else {
+		if (op->isConstant()) return -1;
+		const Varnode *vn = this;
+		if (vn->isWritten()&&(vn->getDef()->code() == CPUI_INT_MULT))
+			if (vn->getDef()->getIn(1)->isConstant())
+				vn = vn->getDef()->getIn(0);
+		if (op->isWritten()&&(op->getDef()->code() == CPUI_INT_MULT))
+			if (op->getDef()->getIn(1)->isConstant())
+				op = op->getDef()->getIn(0);
+		
+		if (vn->getAddr() < op->getAddr()) return -1;
+		if (op->getAddr() < vn->getAddr()) return 1;
+	}
+	return 0;
 }
 
 /// Write an XML tag, \b \<addr>, with at least the following attributes:
@@ -821,20 +821,20 @@ int4 Varnode::termOrder(const Varnode *op) const
 void Varnode::saveXml(ostream &s) const
 
 {
-  s << "<addr";
-  loc.getSpace()->saveXmlAttributes(s,loc.getOffset(),size);
-  a_v_u(s,"ref",getCreateIndex());
-  if (mergegroup != 0)
-    a_v_i(s,"grp",getMergeGroup());
-  if (isPersist())
-    s << " persists=\"true\"";
-  if (isAddrTied())
-    s << " addrtied=\"true\"";
-  if (isUnaffected())
-    s << " unaff=\"true\"";
-  if (isInput())
-    s << " input=\"true\"";
-  s << "/>";
+	s << "<addr";
+	loc.getSpace()->saveXmlAttributes(s,loc.getOffset(),size);
+	a_v_u(s,"ref",getCreateIndex());
+	if (mergegroup != 0)
+		a_v_i(s,"grp",getMergeGroup());
+	if (isPersist())
+		s << " persists=\"true\"";
+	if (isAddrTied())
+		s << " addrtied=\"true\"";
+	if (isUnaffected())
+		s << " unaff=\"true\"";
+	if (isInput())
+		s << " input=\"true\"";
+	s << "/>";
 }
 
 /// Invoke the printRaw method on the given Varnode pointer, but take into account that it
@@ -844,38 +844,38 @@ void Varnode::saveXml(ostream &s) const
 void Varnode::printRaw(ostream &s,const Varnode *vn)
 
 {
-  if (vn == (const Varnode *)0) {
-    s << "<null>";
-    return;
-  }
-  vn->printRaw(s);
+	if (vn == (const Varnode *)0) {
+		s << "<null>";
+		return;
+	}
+	vn->printRaw(s);
 }
 
 /// \param m is the underlying address space manager
 VarnodeBank::VarnodeBank(AddrSpaceManager *m)
-  : searchvn(0,Address(Address::m_minimal),(Datatype *)0)
+	: searchvn(0,Address(Address::m_minimal),(Datatype *)0)
 
 {
-  manage = m;
-  searchvn.flags = Varnode::input; // searchvn is always an input varnode of size 0
-  uniq_space = m->getUniqueSpace();
-  uniqbase = uniq_space->getTrans()->getUniqueStart(Translate::ANALYSIS);
-  uniqid = uniqbase;
-  create_index = 0;
+	manage = m;
+	searchvn.flags = Varnode::input; // searchvn is always an input varnode of size 0
+	uniq_space = m->getUniqueSpace();
+	uniqbase = uniq_space->getTrans()->getUniqueStart(Translate::ANALYSIS);
+	uniqid = uniqbase;
+	create_index = 0;
 }
 
 void VarnodeBank::clear(void)
 
 {
-  VarnodeLocSet::iterator iter;
+	VarnodeLocSet::iterator iter;
 
-  for(iter=loc_tree.begin();iter!=loc_tree.end();++iter)
-    delete *iter;
+	for(iter=loc_tree.begin();iter!=loc_tree.end();++iter)
+		delete *iter;
 
-  loc_tree.clear();
-  def_tree.clear();
-  uniqid = uniqbase;		// Reset counter to base value
-  create_index = 0;		// Reset varnode creation index
+	loc_tree.clear();
+	def_tree.clear();
+	uniqid = uniqbase;            // Reset counter to base value
+	create_index = 0;             // Reset varnode creation index
 }
 
 /// The Varnode is created and inserted into the maps as \e free: not
@@ -887,12 +887,12 @@ void VarnodeBank::clear(void)
 Varnode *VarnodeBank::create(int4 s,const Address &m,Datatype *ct)
 
 {
-  Varnode *vn = new Varnode(s,m,ct);
-  
-  vn->create_index = create_index++;
-  vn->lociter = loc_tree.insert(vn).first; // Frees can always be inserted without duplication
-  vn->defiter = def_tree.insert(vn).first;
-  return vn;
+	Varnode *vn = new Varnode(s,m,ct);
+	
+	vn->create_index = create_index++;
+	vn->lociter = loc_tree.insert(vn).first; // Frees can always be inserted without duplication
+	vn->defiter = def_tree.insert(vn).first;
+	return vn;
 }
 
 /// The Varnode is allocated in the \e unique space and automatically
@@ -902,9 +902,9 @@ Varnode *VarnodeBank::create(int4 s,const Address &m,Datatype *ct)
 Varnode *VarnodeBank::createUnique(int4 s,Datatype *ct)
 
 {
-  Address addr(uniq_space,uniqid); // Generate a unique address
-  uniqid += s;			// Update counter for next call
-  return create(s,addr,ct);	// Build varnode with our generated address
+	Address addr(uniq_space,uniqid); // Generate a unique address
+	uniqid += s;                  // Update counter for next call
+	return create(s,addr,ct);     // Build varnode with our generated address
 }
 
 /// The Varnode object is removed from the sorted lists and
@@ -913,12 +913,12 @@ Varnode *VarnodeBank::createUnique(int4 s,Datatype *ct)
 void VarnodeBank::destroy(Varnode *vn)
 
 {
-  if ((vn->getDef() != (PcodeOp *)0)||(!vn->hasNoDescend()))
-    throw LowlevelError("Deleting integrated varnode");
+	if ((vn->getDef() != (PcodeOp *)0)||(!vn->hasNoDescend()))
+		throw LowlevelError("Deleting integrated varnode");
 
-  loc_tree.erase(vn->lociter);
-  def_tree.erase(vn->defiter);
-  delete vn;
+	loc_tree.erase(vn->lociter);
+	def_tree.erase(vn->defiter);
+	delete vn;
 }
 
 /// Enter the Varnode into both the \e location and \e definition based trees.
@@ -928,22 +928,22 @@ void VarnodeBank::destroy(Varnode *vn)
 Varnode *VarnodeBank::xref(Varnode *vn)
 
 {
-  pair<VarnodeLocSet::iterator,bool> check;
-  Varnode *othervn;
+	pair<VarnodeLocSet::iterator,bool> check;
+	Varnode *othervn;
 
-  check = loc_tree.insert( vn );
-  if (!check.second) {		// Set already contains this varnode
-    othervn = *(check.first);
-    replace(vn,othervn); // Patch ops using the old varnode
-    delete vn;
-    return othervn;
-  }
-				// Otherwise a new insertion
-  vn->lociter = check.first;
-  vn->setFlags(Varnode::insert);
-  vn->defiter = def_tree.insert(vn).first; // Insertion should also be new in def_tree
+	check = loc_tree.insert( vn );
+	if (!check.second) {          // Set already contains this varnode
+		othervn = *(check.first);
+		replace(vn,othervn); // Patch ops using the old varnode
+		delete vn;
+		return othervn;
+	}
+																// Otherwise a new insertion
+	vn->lociter = check.first;
+	vn->setFlags(Varnode::insert);
+	vn->defiter = def_tree.insert(vn).first; // Insertion should also be new in def_tree
 
-  return vn;
+	return vn;
 }
 
 /// The Varnode is removed from the cross-referencing lists and reinserted as
@@ -953,14 +953,14 @@ Varnode *VarnodeBank::xref(Varnode *vn)
 void VarnodeBank::makeFree(Varnode *vn)
 
 {
-  loc_tree.erase(vn->lociter);
-  def_tree.erase(vn->defiter);
+	loc_tree.erase(vn->lociter);
+	def_tree.erase(vn->defiter);
 
-  vn->setDef((PcodeOp *)0);	// Clear things that make vn non-free
-  vn->clearFlags(Varnode::insert|Varnode::input|Varnode::indirect_creation);
+	vn->setDef((PcodeOp *)0);     // Clear things that make vn non-free
+	vn->clearFlags(Varnode::insert|Varnode::input|Varnode::indirect_creation);
 
-  vn->lociter = loc_tree.insert(vn).first; // Re-insert as free varnode
-  vn->defiter = def_tree.insert(vn).first;
+	vn->lociter = loc_tree.insert(vn).first; // Re-insert as free varnode
+	vn->defiter = def_tree.insert(vn).first;
 }
 
 /// Any PcodeOps that read \b oldvn are changed to read \b newvn
@@ -969,23 +969,23 @@ void VarnodeBank::makeFree(Varnode *vn)
 void VarnodeBank::replace(Varnode *oldvn,Varnode *newvn)
 
 {
-  list<PcodeOp *>::iterator iter,tmpiter;
-  PcodeOp *op;
-  int4 i;
+	list<PcodeOp *>::iterator iter,tmpiter;
+	PcodeOp *op;
+	int4 i;
 
-  iter = oldvn->descend.begin();
-  while(iter!=oldvn->descend.end()) {
-    op = *iter;
-    tmpiter = iter++;
-    if (op->output == newvn) continue; // Cannot be input to your own definition
-    i = op->getSlot(oldvn);
-    oldvn->descend.erase(tmpiter);	// Sever the link fully
-    op->clearInput(i); // Before attempting to build the new link
-    newvn->addDescend(op);
-    op->setInput(newvn,i); // This must be called AFTER descend is updated
-  }
-  oldvn->setFlags(Varnode::coverdirty);
-  newvn->setFlags(Varnode::coverdirty);
+	iter = oldvn->descend.begin();
+	while(iter!=oldvn->descend.end()) {
+		op = *iter;
+		tmpiter = iter++;
+		if (op->output == newvn) continue; // Cannot be input to your own definition
+		i = op->getSlot(oldvn);
+		oldvn->descend.erase(tmpiter);      // Sever the link fully
+		op->clearInput(i); // Before attempting to build the new link
+		newvn->addDescend(op);
+		op->setInput(newvn,i); // This must be called AFTER descend is updated
+	}
+	oldvn->setFlags(Varnode::coverdirty);
+	newvn->setFlags(Varnode::coverdirty);
 }
 
 /// Define the Varnode as an input formally; it is no longer considered \e free.
@@ -995,16 +995,16 @@ void VarnodeBank::replace(Varnode *oldvn,Varnode *newvn)
 Varnode *VarnodeBank::setInput(Varnode *vn)
 
 {
-  if (!vn->isFree())
-    throw LowlevelError("Making input out of varnode which is not free");
-  if (vn->isConstant())
-    throw LowlevelError("Making input out of constant varnode");
+	if (!vn->isFree())
+		throw LowlevelError("Making input out of varnode which is not free");
+	if (vn->isConstant())
+		throw LowlevelError("Making input out of constant varnode");
 
-  loc_tree.erase(vn->lociter);	// Erase the free version of varnode
-  def_tree.erase(vn->defiter);
+	loc_tree.erase(vn->lociter);  // Erase the free version of varnode
+	def_tree.erase(vn->defiter);
 
-  vn->setInput();		// Set the input flag
-  return xref(vn);
+	vn->setInput();               // Set the input flag
+	return xref(vn);
 }
 
 /// The Varnode must initially be \e free. It will be removed
@@ -1017,26 +1017,26 @@ Varnode *VarnodeBank::setInput(Varnode *vn)
 Varnode *VarnodeBank::setDef(Varnode *vn,PcodeOp *op)
 
 {
-  if (!vn->isFree()) {
-    ostringstream s;
-    const Address &addr(op->getAddr());
-    s << "Defining varnode which is not free at " << addr.getShortcut();
-    addr.printRaw(s);
-    throw LowlevelError(s.str());
-  }
-  if (vn->isConstant()) {
-    ostringstream s;
-    const Address &addr(op->getAddr());
-    s << "Assignment to constant at " << addr.getShortcut();
-    addr.printRaw(s);
-    throw LowlevelError(s.str());
-  }
+	if (!vn->isFree()) {
+		ostringstream s;
+		const Address &addr(op->getAddr());
+		s << "Defining varnode which is not free at " << addr.getShortcut();
+		addr.printRaw(s);
+		throw LowlevelError(s.str());
+	}
+	if (vn->isConstant()) {
+		ostringstream s;
+		const Address &addr(op->getAddr());
+		s << "Assignment to constant at " << addr.getShortcut();
+		addr.printRaw(s);
+		throw LowlevelError(s.str());
+	}
 
-  loc_tree.erase(vn->lociter);
-  def_tree.erase(vn->defiter);
+	loc_tree.erase(vn->lociter);
+	def_tree.erase(vn->defiter);
 
-  vn->setDef(op);		// Change the varnode to be defined
-  return xref(vn);
+	vn->setDef(op);               // Change the varnode to be defined
+	return xref(vn);
 }
 
 /// The new Varnode object will already be put in the \e definition list as if
@@ -1048,10 +1048,10 @@ Varnode *VarnodeBank::setDef(Varnode *vn,PcodeOp *op)
 Varnode *VarnodeBank::createDef(int4 s,const Address &m, Datatype *ct,PcodeOp *op)
 
 {
-  Varnode *vn = new Varnode(s,m,ct);
-  vn->create_index = create_index++;
-  vn->setDef(op);
-  return xref(vn);
+	Varnode *vn = new Varnode(s,m,ct);
+	vn->create_index = create_index++;
+	vn->setDef(op);
+	return xref(vn);
 }
 
 /// The new Varnode will be assigned from the \e unique space, and
@@ -1063,9 +1063,9 @@ Varnode *VarnodeBank::createDef(int4 s,const Address &m, Datatype *ct,PcodeOp *o
 Varnode *VarnodeBank::createDefUnique(int4 s,Datatype *ct,PcodeOp *op)
 
 { // Create unique varnode as output of op
-  Address addr(uniq_space,uniqid);
-  uniqid += s;
-  return createDef(s,addr,ct,op);
+	Address addr(uniq_space,uniqid);
+	uniqid += s;
+	return createDef(s,addr,ct,op);
 }
 
 /// Find a Varnode given its (loc,size) and the address where it is defined.
@@ -1077,22 +1077,22 @@ Varnode *VarnodeBank::createDefUnique(int4 s,Datatype *ct,PcodeOp *op)
 Varnode *VarnodeBank::find(int4 s,const Address &loc,const Address &pc,uintm uniq) const
 
 {
-  VarnodeLocSet::const_iterator iter;
-  Varnode *vn;
-  PcodeOp *op;
+	VarnodeLocSet::const_iterator iter;
+	Varnode *vn;
+	PcodeOp *op;
 
-  iter = beginLoc(s,loc,pc,uniq);
-  while(iter != loc_tree.end()) {
-    vn = *iter;
-    if (vn->getSize() != s) break;
-    if (vn->getAddr() != loc) break;
-    op = vn->getDef();
-    if ((op!=(PcodeOp *)0)&&(op->getAddr() == pc)) {
-      if ((uniq==~((uintm)0))||(op->getTime()==uniq)) return vn;
-    }
-    ++iter;
-  }
-  return (Varnode *)0;
+	iter = beginLoc(s,loc,pc,uniq);
+	while(iter != loc_tree.end()) {
+		vn = *iter;
+		if (vn->getSize() != s) break;
+		if (vn->getAddr() != loc) break;
+		op = vn->getDef();
+		if ((op!=(PcodeOp *)0)&&(op->getAddr() == pc)) {
+			if ((uniq==~((uintm)0))||(op->getTime()==uniq)) return vn;
+		}
+		++iter;
+	}
+	return (Varnode *)0;
 }
 
 /// Find a Varnode marked as a function input given its size and address
@@ -1102,16 +1102,16 @@ Varnode *VarnodeBank::find(int4 s,const Address &loc,const Address &pc,uintm uni
 Varnode *VarnodeBank::findInput(int4 s,const Address &loc) const
 
 {
-  VarnodeLocSet::const_iterator iter;
-  Varnode *vn;
+	VarnodeLocSet::const_iterator iter;
+	Varnode *vn;
 
-  iter = beginLoc(s,loc,Varnode::input);
-  if (iter != loc_tree.end()) {	// There is only one possible varnode matching this
-    vn = *iter;
-    if (vn->isInput() && (vn->getSize()==s) && (vn->getAddr()==loc))
-      return vn;
-  }
-  return (Varnode *)0;
+	iter = beginLoc(s,loc,Varnode::input);
+	if (iter != loc_tree.end()) { // There is only one possible varnode matching this
+		vn = *iter;
+		if (vn->isInput() && (vn->getSize()==s) && (vn->getAddr()==loc))
+			return vn;
+	}
+	return (Varnode *)0;
 }
 
 /// Find the first Varnode completely contained within the given range, which is
@@ -1122,25 +1122,25 @@ Varnode *VarnodeBank::findInput(int4 s,const Address &loc) const
 Varnode *VarnodeBank::findCoveredInput(int4 s,const Address &loc) const
 
 {
-  VarnodeDefSet::const_iterator iter,enditer;
-  Varnode *vn;
-  uintb highest = loc.getSpace()->getHighest();
-  uintb end = loc.getOffset() + s - 1;
+	VarnodeDefSet::const_iterator iter,enditer;
+	Varnode *vn;
+	uintb highest = loc.getSpace()->getHighest();
+	uintb end = loc.getOffset() + s - 1;
 
-  iter = beginDef(Varnode::input,loc);
-  if (end==highest) {	// Check for wrap around of address
-    Address tmp(loc.getSpace(),highest);
-    enditer = endDef(Varnode::input,tmp);
-  }
-  else
-    enditer = beginDef(Varnode::input,loc+s);
+	iter = beginDef(Varnode::input,loc);
+	if (end==highest) {   // Check for wrap around of address
+		Address tmp(loc.getSpace(),highest);
+		enditer = endDef(Varnode::input,tmp);
+	}
+	else
+		enditer = beginDef(Varnode::input,loc+s);
 
-  while(iter!=enditer) {
-    vn = *iter++;		// we know vn is input with vn->Loc in (loc,loc+s)
-    if (vn->getOffset()+vn->getSize()-1 <= end) // vn is completely contained
-      return vn;
-  }
-  return (Varnode *)0;
+	while(iter!=enditer) {
+		vn = *iter++;               // we know vn is input with vn->Loc in (loc,loc+s)
+		if (vn->getOffset()+vn->getSize()-1 <= end) // vn is completely contained
+			return vn;
+	}
+	return (Varnode *)0;
 }
 
 /// Search for the Varnode that completely contains the given range and is marked
@@ -1150,21 +1150,21 @@ Varnode *VarnodeBank::findCoveredInput(int4 s,const Address &loc) const
 Varnode *VarnodeBank::findCoveringInput(int4 s,const Address &loc) const
 
 {
-  VarnodeDefSet::const_iterator iter;
-  Varnode *vn;
-  iter = beginDef(Varnode::input,loc);
-  if (iter != def_tree.end()) {
-    vn = *iter;
-    if ((vn->getAddr() != loc)&&(iter!=def_tree.begin())) {
-      --iter;
-      vn = *iter;
-    }
-    if (vn->isInput() && (vn->getSpace() == loc.getSpace()) &&
-	(vn->getOffset() <= loc.getOffset()) &&
-	(vn->getOffset() + vn->getSize()-1 >= loc.getOffset() + s -1))
-      return vn;
-  }
-  return (Varnode *)0;
+	VarnodeDefSet::const_iterator iter;
+	Varnode *vn;
+	iter = beginDef(Varnode::input,loc);
+	if (iter != def_tree.end()) {
+		vn = *iter;
+		if ((vn->getAddr() != loc)&&(iter!=def_tree.begin())) {
+			--iter;
+			vn = *iter;
+		}
+		if (vn->isInput() && (vn->getSpace() == loc.getSpace()) &&
+				(vn->getOffset() <= loc.getOffset()) &&
+				(vn->getOffset() + vn->getSize()-1 >= loc.getOffset() + s -1))
+			return vn;
+	}
+	return (Varnode *)0;
 }
 
 /// \brief Beginning of Varnodes in given address space sorted by location
@@ -1174,8 +1174,8 @@ Varnode *VarnodeBank::findCoveringInput(int4 s,const Address &loc) const
 VarnodeLocSet::const_iterator VarnodeBank::beginLoc(AddrSpace *spaceid) const
 
 {
-  searchvn.loc = Address(spaceid,0);
-  return loc_tree.lower_bound(&searchvn);
+	searchvn.loc = Address(spaceid,0);
+	return loc_tree.lower_bound(&searchvn);
 }
 
 /// \brief Ending of Varnodes in given address space sorted by location
@@ -1185,8 +1185,8 @@ VarnodeLocSet::const_iterator VarnodeBank::beginLoc(AddrSpace *spaceid) const
 VarnodeLocSet::const_iterator VarnodeBank::endLoc(AddrSpace *spaceid) const
 
 {
-  searchvn.loc = Address(manage->getNextSpaceInOrder(spaceid),0);
-  return loc_tree.lower_bound(&searchvn);
+	searchvn.loc = Address(manage->getNextSpaceInOrder(spaceid),0);
+	return loc_tree.lower_bound(&searchvn);
 }
 
 /// \brief Beginning of Varnodes starting at a given address sorted by location
@@ -1196,8 +1196,8 @@ VarnodeLocSet::const_iterator VarnodeBank::endLoc(AddrSpace *spaceid) const
 VarnodeLocSet::const_iterator VarnodeBank::beginLoc(const Address &addr) const
 
 {
-  searchvn.loc = addr;
-  return loc_tree.lower_bound(&searchvn);
+	searchvn.loc = addr;
+	return loc_tree.lower_bound(&searchvn);
 }
 
 /// \brief End of Varnodes starting at a given address sorted by location
@@ -1207,13 +1207,13 @@ VarnodeLocSet::const_iterator VarnodeBank::beginLoc(const Address &addr) const
 VarnodeLocSet::const_iterator VarnodeBank::endLoc(const Address &addr) const
 
 {
-  if (addr.getOffset() == addr.getSpace()->getHighest()) {
-    AddrSpace* space = addr.getSpace();
-    searchvn.loc = Address(manage->getNextSpaceInOrder(space),0);
-  }
-  else
-    searchvn.loc = addr+1;
-  return loc_tree.lower_bound(&searchvn);
+	if (addr.getOffset() == addr.getSpace()->getHighest()) {
+		AddrSpace* space = addr.getSpace();
+		searchvn.loc = Address(manage->getNextSpaceInOrder(space),0);
+	}
+	else
+		searchvn.loc = addr+1;
+	return loc_tree.lower_bound(&searchvn);
 }
 
 /// \brief Beginning of Varnodes of given size and starting address sorted by location
@@ -1224,11 +1224,11 @@ VarnodeLocSet::const_iterator VarnodeBank::endLoc(const Address &addr) const
 VarnodeLocSet::const_iterator VarnodeBank::beginLoc(int4 s,const Address &addr) const
 
 {
-  searchvn.size = s;
-  searchvn.loc = addr;
-  VarnodeLocSet::const_iterator iter = loc_tree.lower_bound(&searchvn);
-  searchvn.size = 0;		// Return size to 0
-  return iter;
+	searchvn.size = s;
+	searchvn.loc = addr;
+	VarnodeLocSet::const_iterator iter = loc_tree.lower_bound(&searchvn);
+	searchvn.size = 0;            // Return size to 0
+	return iter;
 }
 
 /// \brief End of Varnodes of given size and starting address sorted by location
@@ -1239,11 +1239,11 @@ VarnodeLocSet::const_iterator VarnodeBank::beginLoc(int4 s,const Address &addr) 
 VarnodeLocSet::const_iterator VarnodeBank::endLoc(int4 s,const Address &addr) const
 
 {
-  searchvn.size = s+1;
-  searchvn.loc = addr;
-  VarnodeLocSet::const_iterator iter = loc_tree.lower_bound(&searchvn);
-  searchvn.size = 0;		// Return size to 0
-  return iter;
+	searchvn.size = s+1;
+	searchvn.loc = addr;
+	VarnodeLocSet::const_iterator iter = loc_tree.lower_bound(&searchvn);
+	searchvn.size = 0;            // Return size to 0
+	return iter;
 }
 
 /// \brief Beginning of Varnodes sorted by location
@@ -1257,41 +1257,41 @@ VarnodeLocSet::const_iterator VarnodeBank::endLoc(int4 s,const Address &addr) co
 /// \param fl is the property restriction
 /// \return the beginning iterator
 VarnodeLocSet::const_iterator VarnodeBank::beginLoc(int4 s,const Address &addr,
-						    uint4 fl) const
+																										uint4 fl) const
 {
-  VarnodeLocSet::const_iterator iter;
+	VarnodeLocSet::const_iterator iter;
 
-  if (fl == Varnode::input) {
-    searchvn.size = s;
-    searchvn.loc = addr;
-    iter = loc_tree.lower_bound(&searchvn);
-    searchvn.size = 0;
-    return iter;
-  }
-  if (fl == Varnode::written) {
-    SeqNum sq(Address::m_minimal); // Minimal sequence number
-    PcodeOp searchop(0,sq);
-    searchvn.size = s;
-    searchvn.loc = addr;
-    searchvn.flags = Varnode::written;
-    searchvn.def = &searchop;
-    iter = loc_tree.lower_bound(&searchvn);
-    searchvn.size = 0;
-    searchvn.flags = Varnode::input;
-    return iter;
-  }
+	if (fl == Varnode::input) {
+		searchvn.size = s;
+		searchvn.loc = addr;
+		iter = loc_tree.lower_bound(&searchvn);
+		searchvn.size = 0;
+		return iter;
+	}
+	if (fl == Varnode::written) {
+		SeqNum sq(Address::m_minimal); // Minimal sequence number
+		PcodeOp searchop(0,sq);
+		searchvn.size = s;
+		searchvn.loc = addr;
+		searchvn.flags = Varnode::written;
+		searchvn.def = &searchop;
+		iter = loc_tree.lower_bound(&searchvn);
+		searchvn.size = 0;
+		searchvn.flags = Varnode::input;
+		return iter;
+	}
 
-  SeqNum sq(Address::m_maximal); // Maximal sequence number
-  PcodeOp searchop(0,sq);
-  searchvn.size = s;
-  searchvn.loc = addr;
-  searchvn.flags = Varnode::written;
-  searchvn.def = &searchop;
-  iter = loc_tree.upper_bound(&searchvn);
-  searchvn.size = 0;
-  searchvn.flags = Varnode::input;
+	SeqNum sq(Address::m_maximal); // Maximal sequence number
+	PcodeOp searchop(0,sq);
+	searchvn.size = s;
+	searchvn.loc = addr;
+	searchvn.flags = Varnode::written;
+	searchvn.def = &searchop;
+	iter = loc_tree.upper_bound(&searchvn);
+	searchvn.size = 0;
+	searchvn.flags = Varnode::input;
 
-  return iter;
+	return iter;
 }
 
 /// \brief End of Varnodes sorted by location
@@ -1305,33 +1305,33 @@ VarnodeLocSet::const_iterator VarnodeBank::beginLoc(int4 s,const Address &addr,
 /// \param fl is the property restriction
 /// \return the ending iterator
 VarnodeLocSet::const_iterator VarnodeBank::endLoc(int4 s,const Address &addr,
-						  uint4 fl) const
+																									uint4 fl) const
 {
-  VarnodeLocSet::const_iterator iter;
-  searchvn.loc = addr;
-  
-  if (fl == Varnode::written) {
-    searchvn.size = s;
-    searchvn.flags = Varnode::written;
-    SeqNum sq(Address::m_maximal); // Maximal sequence number
-    PcodeOp searchop(0,sq);
-    searchvn.def = &searchop;
-    iter = loc_tree.upper_bound(&searchvn);
-    searchvn.size = 0;
-    searchvn.flags = Varnode::input;
-    return iter;
-  }
-  else if (fl == Varnode::input) {
-    searchvn.size = s;
-    iter = loc_tree.upper_bound(&searchvn);
-    searchvn.size = 0;
-    return iter;
-  }
+	VarnodeLocSet::const_iterator iter;
+	searchvn.loc = addr;
+	
+	if (fl == Varnode::written) {
+		searchvn.size = s;
+		searchvn.flags = Varnode::written;
+		SeqNum sq(Address::m_maximal); // Maximal sequence number
+		PcodeOp searchop(0,sq);
+		searchvn.def = &searchop;
+		iter = loc_tree.upper_bound(&searchvn);
+		searchvn.size = 0;
+		searchvn.flags = Varnode::input;
+		return iter;
+	}
+	else if (fl == Varnode::input) {
+		searchvn.size = s;
+		iter = loc_tree.upper_bound(&searchvn);
+		searchvn.size = 0;
+		return iter;
+	}
 
-  searchvn.size = s+1;
-  iter = loc_tree.lower_bound(&searchvn); // Find following input varnode
-  searchvn.size = 0;
-  return iter;
+	searchvn.size = s+1;
+	iter = loc_tree.lower_bound(&searchvn); // Find following input varnode
+	searchvn.size = 0;
+	return iter;
 }
 
 /// \brief Beginning of Varnodes sorted by location
@@ -1344,24 +1344,24 @@ VarnodeLocSet::const_iterator VarnodeBank::endLoc(int4 s,const Address &addr,
 /// \param uniq is the sequence number of the PcodeOp or -1 for now sequence number restriction
 /// \return the beginning iterator
 VarnodeLocSet::const_iterator VarnodeBank::beginLoc(int4 s,const Address &addr,
-						    const Address &pc,uintm uniq) const
+																										const Address &pc,uintm uniq) const
 
-{				// Find first varnode of given loc and size
-				// defined at a particular location
-  VarnodeLocSet::const_iterator iter;
-  searchvn.size = s;
-  searchvn.loc = addr;
-  searchvn.flags = Varnode::written;
-  if (uniq==~((uintm)0))	// If don't care about uniq
-    uniq = 0;			// find earliest
-  SeqNum sq(pc,uniq);
-  PcodeOp searchop(0,sq);
-  searchvn.def = &searchop;
-  iter = loc_tree.lower_bound(&searchvn);
+{                               // Find first varnode of given loc and size
+																// defined at a particular location
+	VarnodeLocSet::const_iterator iter;
+	searchvn.size = s;
+	searchvn.loc = addr;
+	searchvn.flags = Varnode::written;
+	if (uniq==~((uintm)0))        // If don't care about uniq
+		uniq = 0;                   // find earliest
+	SeqNum sq(pc,uniq);
+	PcodeOp searchop(0,sq);
+	searchvn.def = &searchop;
+	iter = loc_tree.lower_bound(&searchvn);
 
-  searchvn.size = 0;
-  searchvn.flags = Varnode::input;
-  return iter;
+	searchvn.size = 0;
+	searchvn.flags = Varnode::input;
+	return iter;
 }
 
 /// \brief End of Varnodes sorted by location
@@ -1374,23 +1374,23 @@ VarnodeLocSet::const_iterator VarnodeBank::beginLoc(int4 s,const Address &addr,
 /// \param uniq is the sequence number of the PcodeOp or -1 for now sequence number restriction
 /// \return the ending iterator
 VarnodeLocSet::const_iterator VarnodeBank::endLoc(int4 s,const Address &addr,
-						  const Address &pc,uintm uniq) const
+																									const Address &pc,uintm uniq) const
 
 {
-  VarnodeLocSet::const_iterator iter;
-  searchvn.size = s;
-  searchvn.loc = addr;
-  searchvn.flags = Varnode::written;
-  //  if (uniq==~((uintm)0))
-  //    uniq = 0;
-  SeqNum sq(pc,uniq);
-  PcodeOp searchop(0,sq);
-  searchvn.def = &searchop;
-  iter = loc_tree.upper_bound(&searchvn);
+	VarnodeLocSet::const_iterator iter;
+	searchvn.size = s;
+	searchvn.loc = addr;
+	searchvn.flags = Varnode::written;
+	//  if (uniq==~((uintm)0))
+	//    uniq = 0;
+	SeqNum sq(pc,uniq);
+	PcodeOp searchop(0,sq);
+	searchvn.def = &searchop;
+	iter = loc_tree.upper_bound(&searchvn);
 
-  searchvn.size = 0;
-  searchvn.flags = Varnode::input;
-  return iter;
+	searchvn.size = 0;
+	searchvn.flags = Varnode::input;
+	return iter;
 }
 
 /// \brief Beginning of varnodes with set definition property
@@ -1405,30 +1405,30 @@ VarnodeLocSet::const_iterator VarnodeBank::endLoc(int4 s,const Address &addr,
 VarnodeDefSet::const_iterator VarnodeBank::beginDef(uint4 fl) const
 
 {
-  VarnodeDefSet::const_iterator iter;
+	VarnodeDefSet::const_iterator iter;
 
-  if (fl == Varnode::input)
-    return def_tree.begin();	// Inputs occur first with def_tree
-  else if (fl == Varnode::written) {
-    searchvn.loc = Address(Address::m_minimal); // Lowest possible location
-    searchvn.flags = Varnode::written;
-    SeqNum sq(Address::m_minimal); // Lowest possible seqnum
-    PcodeOp searchop(0,sq);
-    searchvn.def = &searchop;
-    iter = def_tree.lower_bound(&searchvn);
-    searchvn.flags = Varnode::input; // Reset flags
-    return iter;
-  }
+	if (fl == Varnode::input)
+		return def_tree.begin();    // Inputs occur first with def_tree
+	else if (fl == Varnode::written) {
+		searchvn.loc = Address(Address::m_minimal); // Lowest possible location
+		searchvn.flags = Varnode::written;
+		SeqNum sq(Address::m_minimal); // Lowest possible seqnum
+		PcodeOp searchop(0,sq);
+		searchvn.def = &searchop;
+		iter = def_tree.lower_bound(&searchvn);
+		searchvn.flags = Varnode::input; // Reset flags
+		return iter;
+	}
 
-  // Find the start of the frees
-  searchvn.loc = Address(Address::m_maximal); // Maximal possible location
-  searchvn.flags = Varnode::written;
-  SeqNum sq(Address::m_maximal); // Maximal seqnum
-  PcodeOp searchop(0,sq);
-  searchvn.def = &searchop;
-  iter = def_tree.upper_bound(&searchvn);
-  searchvn.flags = Varnode::input; // Reset flags
-  return iter;
+	// Find the start of the frees
+	searchvn.loc = Address(Address::m_maximal); // Maximal possible location
+	searchvn.flags = Varnode::written;
+	SeqNum sq(Address::m_maximal); // Maximal seqnum
+	PcodeOp searchop(0,sq);
+	searchvn.def = &searchop;
+	iter = def_tree.upper_bound(&searchvn);
+	searchvn.flags = Varnode::input; // Reset flags
+	return iter;
 }
 
 /// \brief End of varnodes with set definition property
@@ -1443,29 +1443,29 @@ VarnodeDefSet::const_iterator VarnodeBank::beginDef(uint4 fl) const
 VarnodeDefSet::const_iterator VarnodeBank::endDef(uint4 fl) const
 
 {
-  VarnodeDefSet::const_iterator iter;
+	VarnodeDefSet::const_iterator iter;
 
-  if (fl == Varnode::input) {	// Highest input is lowest written
-    searchvn.loc = Address(Address::m_minimal); // Lowest possible location
-    searchvn.flags = Varnode::written;
-    SeqNum sq(Address::m_minimal); // Lowest possible seqnum
-    PcodeOp searchop(0,sq);
-    searchvn.def = &searchop;
-    iter = def_tree.lower_bound(&searchvn);
-    searchvn.flags = Varnode::input; // Reset flags
-    return iter;
-  }
-  else if (fl == Varnode::written) { // Highest written
-    searchvn.loc = Address(Address::m_maximal); // Maximal possible location
-    searchvn.flags = Varnode::written;
-    SeqNum sq(Address::m_maximal); // Maximal seqnum
-    PcodeOp searchop(0,sq);
-    searchvn.def = &searchop;
-    iter = def_tree.upper_bound(&searchvn);
-    searchvn.flags = Varnode::input; // Reset flags
-    return iter;
-  }
-  return def_tree.end();	// Highest free is end of def_tree
+	if (fl == Varnode::input) {   // Highest input is lowest written
+		searchvn.loc = Address(Address::m_minimal); // Lowest possible location
+		searchvn.flags = Varnode::written;
+		SeqNum sq(Address::m_minimal); // Lowest possible seqnum
+		PcodeOp searchop(0,sq);
+		searchvn.def = &searchop;
+		iter = def_tree.lower_bound(&searchvn);
+		searchvn.flags = Varnode::input; // Reset flags
+		return iter;
+	}
+	else if (fl == Varnode::written) { // Highest written
+		searchvn.loc = Address(Address::m_maximal); // Maximal possible location
+		searchvn.flags = Varnode::written;
+		SeqNum sq(Address::m_maximal); // Maximal seqnum
+		PcodeOp searchop(0,sq);
+		searchvn.def = &searchop;
+		iter = def_tree.upper_bound(&searchvn);
+		searchvn.flags = Varnode::input; // Reset flags
+		return iter;
+	}
+	return def_tree.end();        // Highest free is end of def_tree
 }
 
 /// \brief Beginning of varnodes starting at a given address with a set definition property
@@ -1481,25 +1481,25 @@ VarnodeDefSet::const_iterator VarnodeBank::endDef(uint4 fl) const
 /// \return the beginning iterator
 VarnodeDefSet::const_iterator VarnodeBank::beginDef(uint4 fl,const Address &addr) const
 
-{				// Get varnodes with addr and with definition type
-  VarnodeDefSet::const_iterator iter;
+{                               // Get varnodes with addr and with definition type
+	VarnodeDefSet::const_iterator iter;
 
-  if (fl == Varnode::written)
-    throw LowlevelError("Cannot get contiguous written AND addressed");
-  else if (fl == Varnode::input) {
-    searchvn.loc = addr;
-    iter = def_tree.lower_bound(&searchvn);
-    return iter;
-  }
+	if (fl == Varnode::written)
+		throw LowlevelError("Cannot get contiguous written AND addressed");
+	else if (fl == Varnode::input) {
+		searchvn.loc = addr;
+		iter = def_tree.lower_bound(&searchvn);
+		return iter;
+	}
 
-  // Find the start of the frees with a given address
-  searchvn.loc = addr;
-  searchvn.flags = 0;
-				// Since a size 0 object shouldn't exist, an upper bound
-				// should bump up to first free of addr with non-zero size
-  iter = def_tree.upper_bound(&searchvn);
-  searchvn.flags = Varnode::input; // Reset flags
-  return iter;
+	// Find the start of the frees with a given address
+	searchvn.loc = addr;
+	searchvn.flags = 0;
+																// Since a size 0 object shouldn't exist, an upper bound
+																// should bump up to first free of addr with non-zero size
+	iter = def_tree.upper_bound(&searchvn);
+	searchvn.flags = Varnode::input; // Reset flags
+	return iter;
 }
 
 /// \brief End of varnodes starting at a given address with a set definition property
@@ -1516,28 +1516,28 @@ VarnodeDefSet::const_iterator VarnodeBank::beginDef(uint4 fl,const Address &addr
 VarnodeDefSet::const_iterator VarnodeBank::endDef(uint4 fl,const Address &addr) const
 
 {
-  VarnodeDefSet::const_iterator iter;
+	VarnodeDefSet::const_iterator iter;
 
-  if (fl == Varnode::written)
-    throw LowlevelError("Cannot get contiguous written AND addressed");
-  else if (fl == Varnode::input) {
-    searchvn.loc = addr;
-    searchvn.size = 1000000;
-    iter = def_tree.lower_bound(&searchvn);
-    searchvn.size = 0;
-    return iter;
-  }
+	if (fl == Varnode::written)
+		throw LowlevelError("Cannot get contiguous written AND addressed");
+	else if (fl == Varnode::input) {
+		searchvn.loc = addr;
+		searchvn.size = 1000000;
+		iter = def_tree.lower_bound(&searchvn);
+		searchvn.size = 0;
+		return iter;
+	}
 
-  // Find the start of the frees with a given address
-  searchvn.loc = addr;
-  searchvn.size = 1000000;
-  searchvn.flags = 0;
-				// Since a size 0 object shouldn't exist, an upper bound
-				// should bump up to first free of addr with non-zero size
-  iter = def_tree.lower_bound(&searchvn);
-  searchvn.flags = Varnode::input; // Reset flags
-  searchvn.size = 0;
-  return iter;
+	// Find the start of the frees with a given address
+	searchvn.loc = addr;
+	searchvn.size = 1000000;
+	searchvn.flags = 0;
+																// Since a size 0 object shouldn't exist, an upper bound
+																// should bump up to first free of addr with non-zero size
+	iter = def_tree.lower_bound(&searchvn);
+	searchvn.flags = Varnode::input; // Reset flags
+	searchvn.size = 0;
+	return iter;
 }
 
 #ifdef VARBANK_DEBUG
@@ -1545,38 +1545,38 @@ VarnodeDefSet::const_iterator VarnodeBank::endDef(uint4 fl,const Address &addr) 
 void VarnodeBank::verifyIntegrity(void) const
 
 {
-  VarnodeLocSet::iterator iter;
-  Varnode *vn,*lastvn;
+	VarnodeLocSet::iterator iter;
+	Varnode *vn,*lastvn;
 
-  if (loc_tree.empty()) return;
-  iter = loc_tree.begin();
-  lastvn = *iter++;
-  if (def_tree.end() == def_tree.find(lastvn))
-    throw LowlevelError("Varbank first loc missing in def");
-  for(;iter!=loc_tree.end();++iter) {
-    vn = *iter;
-    if (def_tree.end() == def_tree.find(vn))
-      throw LowlevelError("Varbank loc missing in def");
-    if (*vn < *lastvn)
-      throw LowlevelError("Varbank locdef integrity test failed");
-    lastvn = vn;
-  }
+	if (loc_tree.empty()) return;
+	iter = loc_tree.begin();
+	lastvn = *iter++;
+	if (def_tree.end() == def_tree.find(lastvn))
+		throw LowlevelError("Varbank first loc missing in def");
+	for(;iter!=loc_tree.end();++iter) {
+		vn = *iter;
+		if (def_tree.end() == def_tree.find(vn))
+			throw LowlevelError("Varbank loc missing in def");
+		if (*vn < *lastvn)
+			throw LowlevelError("Varbank locdef integrity test failed");
+		lastvn = vn;
+	}
 
-  VarnodeDefSet::iterator diter;
-  VarnodeCompareDefLoc cmp;
+	VarnodeDefSet::iterator diter;
+	VarnodeCompareDefLoc cmp;
 
-  diter = def_tree.begin();
-  lastvn = *diter++;
-  if (loc_tree.end() == loc_tree.find(lastvn))
-    throw LowlevelError("Varbank first def missing in loc");
-  for(;diter!=def_tree.end();++diter) {
-    vn = *diter;
-    if (loc_tree.end() == loc_tree.find(vn))
-      throw LowlevelError("Varbank def missing in loc");
-    if (cmp(vn,lastvn))
-      throw LowlevelError("Varbank defloc integrity test failed");
-    lastvn = vn;
-  }
+	diter = def_tree.begin();
+	lastvn = *diter++;
+	if (loc_tree.end() == loc_tree.find(lastvn))
+		throw LowlevelError("Varbank first def missing in loc");
+	for(;diter!=def_tree.end();++diter) {
+		vn = *diter;
+		if (loc_tree.end() == loc_tree.find(vn))
+			throw LowlevelError("Varbank def missing in loc");
+		if (cmp(vn,lastvn))
+			throw LowlevelError("Varbank defloc integrity test failed");
+		lastvn = vn;
+	}
 }
 #endif
 
@@ -1588,26 +1588,26 @@ void VarnodeBank::verifyIntegrity(void) const
 bool contiguous_test(Varnode *vn1,Varnode *vn2)
 
 {
-  if (vn1->isInput()||vn2->isInput()) {
-    return false;
-  }
-  if ((!vn1->isWritten())||(!vn2->isWritten())) return false;
-  PcodeOp *op1 = vn1->getDef();
-  PcodeOp *op2 = vn2->getDef();
-  Varnode *vnwhole;
-  switch(op1->code()) {
-  case CPUI_SUBPIECE:
-    if (op2->code() != CPUI_SUBPIECE) return false;
-    vnwhole = op1->getIn(0);
-    if (op2->getIn(0) != vnwhole) return false;
-    if (op2->getIn(1)->getOffset() != 0) 
-      return false;		// Must be least sig
-    if (op1->getIn(1)->getOffset() != vn2->getSize())
-      return false;		// Must be contiguous
-    return true;
-  default:
-    return false;
-  }
+	if (vn1->isInput()||vn2->isInput()) {
+		return false;
+	}
+	if ((!vn1->isWritten())||(!vn2->isWritten())) return false;
+	PcodeOp *op1 = vn1->getDef();
+	PcodeOp *op2 = vn2->getDef();
+	Varnode *vnwhole;
+	switch(op1->code()) {
+	case CPUI_SUBPIECE:
+		if (op2->code() != CPUI_SUBPIECE) return false;
+		vnwhole = op1->getIn(0);
+		if (op2->getIn(0) != vnwhole) return false;
+		if (op2->getIn(1)->getOffset() != 0) 
+			return false;             // Must be least sig
+		if (op1->getIn(1)->getOffset() != vn2->getSize())
+			return false;             // Must be contiguous
+		return true;
+	default:
+		return false;
+	}
 }
 
 /// Assuming vn1,vn2 has passed the contiguous_test(), return
@@ -1619,8 +1619,8 @@ bool contiguous_test(Varnode *vn1,Varnode *vn2)
 Varnode *findContiguousWhole(Funcdata &data,Varnode *vn1,Varnode *vn2)
 
 {  if (vn1->isWritten())
-    if (vn1->getDef()->code() == CPUI_SUBPIECE)
-      return vn1->getDef()->getIn(0);
-  return (Varnode *)0;
+		if (vn1->getDef()->code() == CPUI_SUBPIECE)
+			return vn1->getDef()->getIn(0);
+	return (Varnode *)0;
 }
 

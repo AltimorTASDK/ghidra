@@ -20,26 +20,26 @@
 
 /// \brief Extension for building an XML format capable Architecture
 class XmlArchitectureCapability : public ArchitectureCapability {
-  static XmlArchitectureCapability xmlArchitectureCapability;		///< The singleton instance
-  XmlArchitectureCapability(void);					///< Singleton
-  XmlArchitectureCapability(const XmlArchitectureCapability &op2);	///< Not implemented
-  XmlArchitectureCapability &operator=(const XmlArchitectureCapability &op2);	///< Not implemented
+	static XmlArchitectureCapability xmlArchitectureCapability;           ///< The singleton instance
+	XmlArchitectureCapability(void);                                      ///< Singleton
+	XmlArchitectureCapability(const XmlArchitectureCapability &op2);      ///< Not implemented
+	XmlArchitectureCapability &operator=(const XmlArchitectureCapability &op2);   ///< Not implemented
 public:
-  virtual ~XmlArchitectureCapability(void);
-  virtual Architecture *buildArchitecture(const string &filename,const string &target,ostream *estream);
-  virtual bool isFileMatch(const string &filename) const;
-  virtual bool isXmlMatch(Document *doc) const;
+	virtual ~XmlArchitectureCapability(void);
+	virtual Architecture *buildArchitecture(const string &filename,const string &target,ostream *estream);
+	virtual bool isFileMatch(const string &filename) const;
+	virtual bool isXmlMatch(Document *doc) const;
 };
 
 /// \brief An Architecture that loads executables using an XML format
 class XmlArchitecture : public SleighArchitecture {
-  long adjustvma;					///< The amount to adjust the virtual memory address
-  virtual void buildLoader(DocumentStorage &store);
-  // virtual void resolveArchitecture(void);   		///< Inherit SleighArchitecture's version
-  virtual void postSpecFile(void);
+	long adjustvma;                                       ///< The amount to adjust the virtual memory address
+	virtual void buildLoader(DocumentStorage &store);
+	// virtual void resolveArchitecture(void);            ///< Inherit SleighArchitecture's version
+	virtual void postSpecFile(void);
 public:
-  virtual void saveXml(ostream &s) const;
-  virtual void restoreXml(DocumentStorage &store);
-  XmlArchitecture(const string &fname,const string &targ,ostream *estream);	///< Constructor
-  virtual ~XmlArchitecture(void) {}
+	virtual void saveXml(ostream &s) const;
+	virtual void restoreXml(DocumentStorage &store);
+	XmlArchitecture(const string &fname,const string &targ,ostream *estream);     ///< Constructor
+	virtual ~XmlArchitecture(void) {}
 };

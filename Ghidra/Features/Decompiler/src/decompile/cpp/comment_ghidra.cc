@@ -16,10 +16,10 @@
 #include "comment_ghidra.hh"
 
 CommentDatabaseGhidra::CommentDatabaseGhidra(ArchitectureGhidra *g)
-  : CommentDatabase()
+	: CommentDatabase()
 {
-  ghidra = g;
-  cachefilled = false;
+	ghidra = g;
+	cachefilled = false;
 }
 
 /// Fetch all comments for the function in one chunk. Deserialize them and
@@ -28,24 +28,24 @@ CommentDatabaseGhidra::CommentDatabaseGhidra(ArchitectureGhidra *g)
 void CommentDatabaseGhidra::fillCache(const Address &fad) const
 
 {
-  Document *doc;
-  uint4 commentfilter;
+	Document *doc;
+	uint4 commentfilter;
 
-  if (cachefilled) return;	// Already queried ghidra
-  cachefilled = true;
-  // Gather which types of comments are being printed currently
-  commentfilter = ghidra->print->getHeaderComment();
-  commentfilter |= ghidra->print->getInstructionComment();
-  if (commentfilter==0) return;
-  CommentSet::const_iterator iter,iterend;
-  iter = cache.beginComment(fad);
-  iterend = cache.endComment(fad);
+	if (cachefilled) return;      // Already queried ghidra
+	cachefilled = true;
+	// Gather which types of comments are being printed currently
+	commentfilter = ghidra->print->getHeaderComment();
+	commentfilter |= ghidra->print->getInstructionComment();
+	if (commentfilter==0) return;
+	CommentSet::const_iterator iter,iterend;
+	iter = cache.beginComment(fad);
+	iterend = cache.endComment(fad);
 
-  doc = ghidra->getComments(fad,commentfilter);
-  if (doc != (Document *)0) {
-    cache.restoreXml(doc->getRoot(),ghidra);
-    delete doc;
-  }
+	doc = ghidra->getComments(fad,commentfilter);
+	if (doc != (Document *)0) {
+		cache.restoreXml(doc->getRoot(),ghidra);
+		delete doc;
+	}
 }
 
 /// For the Ghidra implementation of CommentDatabase, addComment() is currently only
@@ -54,29 +54,29 @@ void CommentDatabaseGhidra::fillCache(const Address &fad) const
 /// these types is intended to be a permanent comment in the
 /// database, so we only add the comment to the cache
 void CommentDatabaseGhidra::addComment(uint4 tp,
-				       const Address &fad,
-				       const Address &ad,
-				       const string &txt)
+																			 const Address &fad,
+																			 const Address &ad,
+																			 const string &txt)
 {
-  cache.addComment(tp,fad,ad,txt);
+	cache.addComment(tp,fad,ad,txt);
 }
 
 bool CommentDatabaseGhidra::addCommentNoDuplicate(uint4 tp,const Address &fad,const Address &ad,
-						  const string &txt)
+																									const string &txt)
 {
-  return cache.addCommentNoDuplicate(tp,fad,ad,txt);
+	return cache.addCommentNoDuplicate(tp,fad,ad,txt);
 }
 
 CommentSet::const_iterator CommentDatabaseGhidra::beginComment(const Address &fad) const
 
 {
-  fillCache(fad);
-  return cache.beginComment(fad);
+	fillCache(fad);
+	return cache.beginComment(fad);
 }
 
 CommentSet::const_iterator CommentDatabaseGhidra::endComment(const Address &fad) const
 
 {
-  return cache.endComment(fad);
+	return cache.endComment(fad);
 }
 

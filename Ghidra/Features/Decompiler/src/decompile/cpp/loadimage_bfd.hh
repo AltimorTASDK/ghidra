@@ -23,45 +23,45 @@
 #include <bfd.h>
 
 struct ImportRecord {
-  string dllname;
-  string funcname;
-  int ordinal;
-  Address address;
-  Address thunkaddress;
+	string dllname;
+	string funcname;
+	int ordinal;
+	Address address;
+	Address thunkaddress;
 };
 
 class LoadImageBfd : public LoadImage {
-  static int4 bfdinit;		// Is the library (globally) initialized
-  string target;		// File format (supported by BFD)
-  bfd *thebfd;
-  AddrSpace *spaceid;		// We need to map space id to segments but since
-				// we are currently ignoring segments anyway...
-  uintb bufoffset;		// Starting offset of byte buffer
-  uint4 bufsize;		// Number of bytes in the buffer
-  uint1 *buffer;		// The actual buffer
-  mutable asymbol **symbol_table;
-  mutable long number_of_symbols;
-  mutable long cursymbol;
-  mutable asection *secinfoptr;
-  asection *findSection(uintb offset,uintb &ssize) const; // Find section containing given offset
-  void advanceToNextSymbol(void) const;
+	static int4 bfdinit;          // Is the library (globally) initialized
+	string target;                // File format (supported by BFD)
+	bfd *thebfd;
+	AddrSpace *spaceid;           // We need to map space id to segments but since
+																// we are currently ignoring segments anyway...
+	uintb bufoffset;              // Starting offset of byte buffer
+	uint4 bufsize;                // Number of bytes in the buffer
+	uint1 *buffer;                // The actual buffer
+	mutable asymbol **symbol_table;
+	mutable long number_of_symbols;
+	mutable long cursymbol;
+	mutable asection *secinfoptr;
+	asection *findSection(uintb offset,uintb &ssize) const; // Find section containing given offset
+	void advanceToNextSymbol(void) const;
 public:
-  LoadImageBfd(const string &f,const string &t);
-  void attachToSpace(AddrSpace *id) { spaceid = id; }
-  void open(void);		// Open any descriptors
-  void close(void);		// Close any descriptor
-  void getImportTable(vector<ImportRecord> &irec) { throw LowlevelError("Not implemented"); }
-  virtual ~LoadImageBfd(void);
-  virtual void loadFill(uint1 *ptr,int4 size,const Address &addr); // Load a chunk of image
-  virtual void openSymbols(void) const;
-  virtual void closeSymbols(void) const;
-  virtual bool getNextSymbol(LoadImageFunc &record) const;
-  virtual void openSectionInfo(void) const;
-  virtual void closeSectionInfo(void) const;
-  virtual bool getNextSection(LoadImageSection &sec) const;
-  virtual void getReadonly(RangeList &list) const;
-  virtual string getArchType(void) const;
-  virtual void adjustVma(long adjust);
+	LoadImageBfd(const string &f,const string &t);
+	void attachToSpace(AddrSpace *id) { spaceid = id; }
+	void open(void);              // Open any descriptors
+	void close(void);             // Close any descriptor
+	void getImportTable(vector<ImportRecord> &irec) { throw LowlevelError("Not implemented"); }
+	virtual ~LoadImageBfd(void);
+	virtual void loadFill(uint1 *ptr,int4 size,const Address &addr); // Load a chunk of image
+	virtual void openSymbols(void) const;
+	virtual void closeSymbols(void) const;
+	virtual bool getNextSymbol(LoadImageFunc &record) const;
+	virtual void openSectionInfo(void) const;
+	virtual void closeSectionInfo(void) const;
+	virtual bool getNextSection(LoadImageSection &sec) const;
+	virtual void getReadonly(RangeList &list) const;
+	virtual string getArchType(void) const;
+	virtual void adjustVma(long adjust);
 };
 
 #endif

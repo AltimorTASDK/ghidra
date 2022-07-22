@@ -22,8 +22,8 @@
 vector<CapabilityPoint *> &CapabilityPoint::getList(void)
 
 {
-  static vector<CapabilityPoint *> thelist;	// This gets allocated exactly once on first call
-  return thelist;
+	static vector<CapabilityPoint *> thelist;     // This gets allocated exactly once on first call
+	return thelist;
 }
 
 /// Constructing the object automatically registers it.
@@ -31,18 +31,18 @@ vector<CapabilityPoint *> &CapabilityPoint::getList(void)
 CapabilityPoint::CapabilityPoint(void)
 
 {
-  getList().push_back(this);
+	getList().push_back(this);
 }
 
 /// Give all registered capabilities a chance to initialize (\e after all static initialization has happened)
 void CapabilityPoint::initializeAll(void)
 
 {
-  vector<CapabilityPoint *> &list( getList() );
-  for(int4 i=0;i<list.size();++i) {
-    CapabilityPoint *ptr = list[i];
-    ptr->initialize();
-  }
-  list.clear();
+	vector<CapabilityPoint *> &list( getList() );
+	for(int4 i=0;i<list.size();++i) {
+		CapabilityPoint *ptr = list[i];
+		ptr->initialize();
+	}
+	list.clear();
 }
 

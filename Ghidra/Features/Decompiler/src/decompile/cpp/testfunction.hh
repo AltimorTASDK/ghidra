@@ -31,28 +31,28 @@ class IfaceDecompData;
 /// decompiled "source" form of the function.
 /// The property may "match" more than once or not at all.
 class FunctionTestProperty {
-  int4 minimumMatch;		///< Minimum number of times property is expected to match
-  int4 maximumMatch;		///< Maximum number of times property is expected to match
-  string name;			///< Name of the test, to be printed in test summaries
-  regex pattern;		///< Regular expression to match against a line of output
-  mutable uint4 count;		///< Number of times regular expression has been seen
+	int4 minimumMatch;            ///< Minimum number of times property is expected to match
+	int4 maximumMatch;            ///< Maximum number of times property is expected to match
+	string name;                  ///< Name of the test, to be printed in test summaries
+	regex pattern;                ///< Regular expression to match against a line of output
+	mutable uint4 count;          ///< Number of times regular expression has been seen
 public:
-  string getName(void) const { return name; }	///< Get the name of the property
-  void startTest(void) const;		///< Reset "state", counting number of matching lines
-  void processLine(const string &line) const;	///< Search thru \e line, update state if match found
-  bool endTest(void) const;		///< Return results of property search
-  void restoreXml(const Element *el);	///< Reconstruct the property from an XML tag
+	string getName(void) const { return name; }   ///< Get the name of the property
+	void startTest(void) const;           ///< Reset "state", counting number of matching lines
+	void processLine(const string &line) const;   ///< Search thru \e line, update state if match found
+	bool endTest(void) const;             ///< Return results of property search
+	void restoreXml(const Element *el);   ///< Reconstruct the property from an XML tag
 };
 
 /// \brief A console command run as part of a test sequence
 class ConsoleCommands : public IfaceStatus {
-  vector<string> &commands;		///< Sequence of commands
-  uint4 pos;				///< Position of next command to execute
-  virtual void readLine(string &line);
+	vector<string> &commands;             ///< Sequence of commands
+	uint4 pos;                            ///< Position of next command to execute
+	virtual void readLine(string &line);
 public:
-  ConsoleCommands(ostream &s,vector<string> &comms);		///< Constructor
-  virtual void reset(void);		///< Reset console for a new program
-  virtual bool isStreamFinished(void) const { return pos == commands.size(); }
+	ConsoleCommands(ostream &s,vector<string> &comms);            ///< Constructor
+	virtual void reset(void);             ///< Reset console for a new program
+	virtual bool isStreamFinished(void) const { return pos == commands.size(); }
 };
 
 /// \brief A collection of tests around a single program/function
@@ -65,33 +65,33 @@ public:
 /// Results of passed/failed tests are collected.  If the command line script
 /// does not complete properly, this is considered a special kind of failure.
 class FunctionTestCollection {
-  IfaceDecompData *dcp;		///< Program data for the test collection
-  string fileName;		///< Name of the file containing test data
-  list<FunctionTestProperty> testList;	///< List of tests for this collection
-  vector<string> commands;	///< Sequence of commands for current test
-  IfaceStatus *console;		///< Decompiler console for executing scripts
-  bool consoleOwner;		///< Set to \b true if \b this object owns the console
-  mutable int4 numTestsApplied;		///< Count of tests that were executed
-  mutable int4 numTestsSucceeded;	///< Count of tests that passed
-  void clear(void);		///< Clear any previous architecture and function
-  void restoreXmlCommands(const Element *el);	///< Reconstruct commands from an XML tag
-  void buildProgram(DocumentStorage &store);	///< Build program (Architecture) from \<binaryimage> tag
-  void startTests(void) const;	///< Initialize each FunctionTestProperty
-  void passLineToTests(const string &line) const;	///< Let all tests analyze a line of the results
-  void evaluateTests(list<string> &lateStream) const;
+	IfaceDecompData *dcp;         ///< Program data for the test collection
+	string fileName;              ///< Name of the file containing test data
+	list<FunctionTestProperty> testList;  ///< List of tests for this collection
+	vector<string> commands;      ///< Sequence of commands for current test
+	IfaceStatus *console;         ///< Decompiler console for executing scripts
+	bool consoleOwner;            ///< Set to \b true if \b this object owns the console
+	mutable int4 numTestsApplied;         ///< Count of tests that were executed
+	mutable int4 numTestsSucceeded;       ///< Count of tests that passed
+	void clear(void);             ///< Clear any previous architecture and function
+	void restoreXmlCommands(const Element *el);   ///< Reconstruct commands from an XML tag
+	void buildProgram(DocumentStorage &store);    ///< Build program (Architecture) from \<binaryimage> tag
+	void startTests(void) const;  ///< Initialize each FunctionTestProperty
+	void passLineToTests(const string &line) const;       ///< Let all tests analyze a line of the results
+	void evaluateTests(list<string> &lateStream) const;
 public:
-  FunctionTestCollection(ostream &s);		///< Constructor
-  FunctionTestCollection(IfaceStatus *con);	///< Constructor with preexisting console
-  ~FunctionTestCollection(void);		///< Destructor
-  int4 getTestsApplied(void) const { return numTestsApplied; }	///< Get the number of tests executed
-  int4 getTestsSucceeded(void) const { return numTestsSucceeded; }	///< Get the number of tests that passed
-  int4 numCommands(void) const { return commands.size(); }	///< Get the number of commands in the current script
-  string getCommand(int4 i) const { return commands[i]; }	///< Get the i-th command
-  void loadTest(const string &filename);	///< Load a test program, tests, and script
-  void restoreXml(DocumentStorage &store,const Element *el);	///< Load tests from a \<decompilertest> tag.
-  void restoreXmlOldForm(DocumentStorage &store,const Element *el);	///< Load tests from \<binaryimage> tag.
-  void runTests(list<string> &lateStream);	///< Run the script and perform the tests
-  static void runTestFiles(const vector<string> &testFiles,ostream &s);	///< Run tests for each listed file
+	FunctionTestCollection(ostream &s);           ///< Constructor
+	FunctionTestCollection(IfaceStatus *con);     ///< Constructor with preexisting console
+	~FunctionTestCollection(void);                ///< Destructor
+	int4 getTestsApplied(void) const { return numTestsApplied; }  ///< Get the number of tests executed
+	int4 getTestsSucceeded(void) const { return numTestsSucceeded; }      ///< Get the number of tests that passed
+	int4 numCommands(void) const { return commands.size(); }      ///< Get the number of commands in the current script
+	string getCommand(int4 i) const { return commands[i]; }       ///< Get the i-th command
+	void loadTest(const string &filename);        ///< Load a test program, tests, and script
+	void restoreXml(DocumentStorage &store,const Element *el);    ///< Load tests from a \<decompilertest> tag.
+	void restoreXmlOldForm(DocumentStorage &store,const Element *el);     ///< Load tests from \<binaryimage> tag.
+	void runTests(list<string> &lateStream);      ///< Run the script and perform the tests
+	static void runTestFiles(const vector<string> &testFiles,ostream &s); ///< Run tests for each listed file
 };
 
 #endif

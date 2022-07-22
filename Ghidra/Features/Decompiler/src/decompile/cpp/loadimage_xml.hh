@@ -26,26 +26,26 @@
 /// The image data is stored in an XML file in a \<binaryimage> file.
 /// The data is encoded in \<bytechunk> and potentially \<symbol> files.
 class LoadImageXml : public LoadImage {
-  const Element *rootel;			///< The root XML element
-  string archtype;				///< The architecture string
-  const AddrSpaceManager *manage;		///< Manager of addresses
-  set<Address> readonlyset;			///< Starting address of read-only chunks
-  map<Address,vector<uint1> > chunk;		///< Chunks of image data, mapped by address
-  map<Address,string> addrtosymbol;		///< Symbols sorted by address
-  mutable map<Address,string>::const_iterator cursymbol;	///< Current symbol being reported
-  void pad(void);			///< Make sure every chunk is followed by at least 512 bytes of pad
+	const Element *rootel;                        ///< The root XML element
+	string archtype;                              ///< The architecture string
+	const AddrSpaceManager *manage;               ///< Manager of addresses
+	set<Address> readonlyset;                     ///< Starting address of read-only chunks
+	map<Address,vector<uint1> > chunk;            ///< Chunks of image data, mapped by address
+	map<Address,string> addrtosymbol;             ///< Symbols sorted by address
+	mutable map<Address,string>::const_iterator cursymbol;        ///< Current symbol being reported
+	void pad(void);                       ///< Make sure every chunk is followed by at least 512 bytes of pad
 public:
-  LoadImageXml(const string &f,const Element *el);	///< Constructor
-  void open(const AddrSpaceManager *m);		///< Read XML tags into the containers
-  void clear(void);				///< Clear out all the caches
-  void saveXml(ostream &s) const;		///< Save the image back out to an XML stream
-  virtual ~LoadImageXml(void) { clear(); }
-  virtual void loadFill(uint1 *ptr,int4 size,const Address &addr);
-  virtual void openSymbols(void) const;
-  virtual bool getNextSymbol(LoadImageFunc &record) const;
-  virtual void getReadonly(RangeList &list) const;
-  virtual string getArchType(void) const { return archtype; }
-  virtual void adjustVma(long adjust);
+	LoadImageXml(const string &f,const Element *el);      ///< Constructor
+	void open(const AddrSpaceManager *m);         ///< Read XML tags into the containers
+	void clear(void);                             ///< Clear out all the caches
+	void saveXml(ostream &s) const;               ///< Save the image back out to an XML stream
+	virtual ~LoadImageXml(void) { clear(); }
+	virtual void loadFill(uint1 *ptr,int4 size,const Address &addr);
+	virtual void openSymbols(void) const;
+	virtual bool getNextSymbol(LoadImageFunc &record) const;
+	virtual void getReadonly(RangeList &list) const;
+	virtual string getArchType(void) const { return archtype; }
+	virtual void adjustVma(long adjust);
 };
 
 #endif

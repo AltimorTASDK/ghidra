@@ -33,18 +33,18 @@ extern "C" {
 /// and completion keys.
 class IfaceTerm : public IfaceStatus {
 #ifdef __TERMINAL__
-  bool is_terminal;		///< True if the input stream is a terminal
-  int4 ifd;			///< Underlying file descriptor
-  struct termios itty;		///< Original terminal settings
+	bool is_terminal;             ///< True if the input stream is a terminal
+	int4 ifd;                     ///< Underlying file descriptor
+	struct termios itty;          ///< Original terminal settings
 #endif
-  istream *sptr;		///< The base input stream for the interface
-  vector<istream *> inputstack;	///< Stack of nested input streams
-  int4 doCompletion(string &line,int4 cursor);	///< 'Complete' the current command line
-  virtual void readLine(string &line);
+	istream *sptr;                ///< The base input stream for the interface
+	vector<istream *> inputstack; ///< Stack of nested input streams
+	int4 doCompletion(string &line,int4 cursor);  ///< 'Complete' the current command line
+	virtual void readLine(string &line);
 public:
-  IfaceTerm(const string &prmpt,istream &is,ostream &os);	///< Constructor
-  virtual ~IfaceTerm(void);
-  virtual void pushScript(istream *iptr,const string &newprompt);
-  virtual void popScript(void);
-  virtual bool isStreamFinished(void) const;
+	IfaceTerm(const string &prmpt,istream &is,ostream &os);       ///< Constructor
+	virtual ~IfaceTerm(void);
+	virtual void pushScript(istream *iptr,const string &newprompt);
+	virtual void popScript(void);
+	virtual bool isStreamFinished(void) const;
 };

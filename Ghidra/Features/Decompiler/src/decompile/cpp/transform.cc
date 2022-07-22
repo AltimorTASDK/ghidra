@@ -20,9 +20,9 @@
 LaneDescription::LaneDescription(const LaneDescription &op2)
 
 {
-  wholeSize = op2.wholeSize;
-  laneSize = op2.laneSize;
-  lanePosition = op2.lanePosition;
+	wholeSize = op2.wholeSize;
+	laneSize = op2.laneSize;
+	lanePosition = op2.lanePosition;
 }
 
 /// Create lanes that are all the same size
@@ -31,16 +31,16 @@ LaneDescription::LaneDescription(const LaneDescription &op2)
 LaneDescription::LaneDescription(int4 origSize,int4 sz)
 
 {
-  wholeSize = origSize;
-  int4 numLanes = origSize / sz;
-  laneSize.resize(numLanes);
-  lanePosition.resize(numLanes);
-  int4 pos = 0;
-  for(int4 i=0;i<numLanes;++i) {
-    laneSize[i] = sz;
-    lanePosition[i] = pos;
-    pos += sz;
-  }
+	wholeSize = origSize;
+	int4 numLanes = origSize / sz;
+	laneSize.resize(numLanes);
+	lanePosition.resize(numLanes);
+	int4 pos = 0;
+	for(int4 i=0;i<numLanes;++i) {
+		laneSize[i] = sz;
+		lanePosition[i] = pos;
+		pos += sz;
+	}
 }
 
 /// \param origSize is the size of the whole in bytes
@@ -49,13 +49,13 @@ LaneDescription::LaneDescription(int4 origSize,int4 sz)
 LaneDescription::LaneDescription(int4 origSize,int4 lo,int4 hi)
 
 {
-  wholeSize = origSize;
-  laneSize.resize(2);
-  lanePosition.resize(2);
-  laneSize[0] = lo;
-  laneSize[1] = hi;
-  lanePosition[0] = 0;
-  lanePosition[1] = lo;
+	wholeSize = origSize;
+	laneSize.resize(2);
+	lanePosition.resize(2);
+	laneSize[0] = lo;
+	laneSize[1] = hi;
+	lanePosition[0] = 0;
+	lanePosition[1] = lo;
 }
 
 /// Given a subrange, specified as an offset into the whole and size,
@@ -68,24 +68,24 @@ LaneDescription::LaneDescription(int4 origSize,int4 lo,int4 hi)
 bool LaneDescription::subset(int4 lsbOffset,int4 size)
 
 {
-  if (lsbOffset == 0 && size == wholeSize)
-    return true;			// subrange is the whole range
-  int4 firstLane = getBoundary(lsbOffset);
-  if (firstLane < 0) return false;
-  int4 lastLane = getBoundary(lsbOffset + size);
-  if (lastLane < 0) return false;
-  vector<int4> newLaneSize;
-  lanePosition.clear();
-  int4 newPosition = 0;
-  for(int4 i=firstLane;i<lastLane;++i) {
-    int4 sz = laneSize[i];
-    lanePosition.push_back(newPosition);
-    newLaneSize.push_back(sz);
-    newPosition += sz;
-  }
-  wholeSize = size;
-  laneSize = newLaneSize;
-  return true;
+	if (lsbOffset == 0 && size == wholeSize)
+		return true;                        // subrange is the whole range
+	int4 firstLane = getBoundary(lsbOffset);
+	if (firstLane < 0) return false;
+	int4 lastLane = getBoundary(lsbOffset + size);
+	if (lastLane < 0) return false;
+	vector<int4> newLaneSize;
+	lanePosition.clear();
+	int4 newPosition = 0;
+	for(int4 i=firstLane;i<lastLane;++i) {
+		int4 sz = laneSize[i];
+		lanePosition.push_back(newPosition);
+		newLaneSize.push_back(sz);
+		newPosition += sz;
+	}
+	wholeSize = size;
+	laneSize = newLaneSize;
+	return true;
 }
 
 /// Position 0 will map to index 0 and a position equal to whole size will
@@ -96,22 +96,22 @@ bool LaneDescription::subset(int4 lsbOffset,int4 size)
 int4 LaneDescription::getBoundary(int4 bytePos) const
 
 {
-  if (bytePos < 0 || bytePos > wholeSize)
-    return -1;
-  if (bytePos == wholeSize)
-    return lanePosition.size();
-  int4 min = 0;
-  int4 max = lanePosition.size() - 1;
-  while(min <= max) {
-    int4 index = (min + max) / 2;
-    int4 pos = lanePosition[index];
-    if (pos == bytePos) return index;
-    if (pos < bytePos)
-      min = index + 1;
-    else
-      max = index - 1;
-  }
-  return -1;
+	if (bytePos < 0 || bytePos > wholeSize)
+		return -1;
+	if (bytePos == wholeSize)
+		return lanePosition.size();
+	int4 min = 0;
+	int4 max = lanePosition.size() - 1;
+	while(min <= max) {
+		int4 index = (min + max) / 2;
+		int4 pos = lanePosition[index];
+		if (pos == bytePos) return index;
+		if (pos < bytePos)
+			min = index + 1;
+		else
+			max = index - 1;
+	}
+	return -1;
 }
 
 /// \brief Decide if a given truncation is natural for \b this description
@@ -127,15 +127,15 @@ int4 LaneDescription::getBoundary(int4 bytePos) const
 /// \param resSkipLanes will hold the starting lane in the truncation
 /// \return \b true if the truncation is natural
 bool LaneDescription::restriction(int4 numLanes,int4 skipLanes,int4 bytePos,int4 size,
-				  int4 &resNumLanes,int4 &resSkipLanes) const
+																	int4 &resNumLanes,int4 &resSkipLanes) const
 
 {
-  resSkipLanes = getBoundary(lanePosition[skipLanes] + bytePos);
-  if (resSkipLanes < 0) return false;
-  int4 finalIndex = getBoundary(lanePosition[skipLanes] + bytePos + size);
-  if (finalIndex < 0) return false;
-  resNumLanes = finalIndex - resSkipLanes;
-  return (resNumLanes != 0);
+	resSkipLanes = getBoundary(lanePosition[skipLanes] + bytePos);
+	if (resSkipLanes < 0) return false;
+	int4 finalIndex = getBoundary(lanePosition[skipLanes] + bytePos + size);
+	if (finalIndex < 0) return false;
+	resNumLanes = finalIndex - resSkipLanes;
+	return (resNumLanes != 0);
 }
 
 /// \brief Decide if a given subset of lanes can be extended naturally for \b this description
@@ -152,15 +152,15 @@ bool LaneDescription::restriction(int4 numLanes,int4 skipLanes,int4 bytePos,int4
 /// \param resSkipLanes will hold the starting lane in the extension
 /// \return \b true if the extension is natural
 bool LaneDescription::extension(int4 numLanes,int4 skipLanes,int4 bytePos,int4 size,
-				int4 &resNumLanes,int4 &resSkipLanes) const
+																int4 &resNumLanes,int4 &resSkipLanes) const
 
 {
-  resSkipLanes = getBoundary(lanePosition[skipLanes] - bytePos);
-  if (resSkipLanes < 0) return false;
-  int4 finalIndex = getBoundary(lanePosition[skipLanes] - bytePos + size);
-  if (finalIndex < 0) return false;
-  resNumLanes = finalIndex - resSkipLanes;
-  return (resNumLanes != 0);
+	resSkipLanes = getBoundary(lanePosition[skipLanes] - bytePos);
+	if (resSkipLanes < 0) return false;
+	int4 finalIndex = getBoundary(lanePosition[skipLanes] - bytePos + size);
+	if (finalIndex < 0) return false;
+	resNumLanes = finalIndex - resSkipLanes;
+	return (resNumLanes != 0);
 }
 
 /// Create the Varnode object (constant, unique, vector piece) described by the
@@ -171,48 +171,48 @@ bool LaneDescription::extension(int4 numLanes,int4 skipLanes,int4 bytePos,int4 s
 void TransformVar::createReplacement(Funcdata *fd)
 
 {
-  if (replacement != (Varnode *)0)
-    return;			// Replacement already created
-  switch(type) {
-    case TransformVar::preexisting:
-      replacement = vn;
-      break;
-    case TransformVar::constant:
-      replacement = fd->newConstant(byteSize,val);
-      break;
-    case TransformVar::normal_temp:
-    case TransformVar::piece_temp:
-      if (def == (TransformOp *)0)
-	replacement = fd->newUnique(byteSize);
-      else
-	replacement = fd->newUniqueOut(byteSize,def->replacement);
-      break;
-    case TransformVar::piece:
-    {
-      int4 bytePos = (int4)val;
-      if ((bytePos & 7) != 0)
-	throw LowlevelError("Varnode piece is not byte aligned");
-      bytePos >>= 3;
-      if (vn->getSpace()->isBigEndian())
-	bytePos = vn->getSize() - bytePos - byteSize;
-      Address addr = vn->getAddr() + bytePos;
-      addr.renormalize(byteSize);
-      if (def == (TransformOp *)0)
-	replacement = fd->newVarnode(byteSize,addr);
-      else
-	replacement = fd->newVarnodeOut(byteSize, addr, def->replacement);
-      fd->transferVarnodeProperties(vn,replacement,bytePos);
-      break;
-    }
-    case TransformVar::constant_iop:
-    {
-      PcodeOp *indeffect = PcodeOp::getOpFromConst(Address(fd->getArch()->getIopSpace(),val));
-      replacement = fd->newVarnodeIop(indeffect);
-      break;
-    }
-    default:
-      throw LowlevelError("Bad TransformVar type");
-  }
+	if (replacement != (Varnode *)0)
+		return;                     // Replacement already created
+	switch(type) {
+		case TransformVar::preexisting:
+			replacement = vn;
+			break;
+		case TransformVar::constant:
+			replacement = fd->newConstant(byteSize,val);
+			break;
+		case TransformVar::normal_temp:
+		case TransformVar::piece_temp:
+			if (def == (TransformOp *)0)
+				replacement = fd->newUnique(byteSize);
+			else
+				replacement = fd->newUniqueOut(byteSize,def->replacement);
+			break;
+		case TransformVar::piece:
+		{
+			int4 bytePos = (int4)val;
+			if ((bytePos & 7) != 0)
+				throw LowlevelError("Varnode piece is not byte aligned");
+			bytePos >>= 3;
+			if (vn->getSpace()->isBigEndian())
+				bytePos = vn->getSize() - bytePos - byteSize;
+			Address addr = vn->getAddr() + bytePos;
+			addr.renormalize(byteSize);
+			if (def == (TransformOp *)0)
+				replacement = fd->newVarnode(byteSize,addr);
+			else
+				replacement = fd->newVarnodeOut(byteSize, addr, def->replacement);
+			fd->transferVarnodeProperties(vn,replacement,bytePos);
+			break;
+		}
+		case TransformVar::constant_iop:
+		{
+			PcodeOp *indeffect = PcodeOp::getOpFromConst(Address(fd->getArch()->getIopSpace(),val));
+			replacement = fd->newVarnodeIop(indeffect);
+			break;
+		}
+		default:
+			throw LowlevelError("Bad TransformVar type");
+	}
 }
 
 /// Create a new PcodeOp or modify an existing one so that it matches this placeholder description.
@@ -221,28 +221,28 @@ void TransformVar::createReplacement(Funcdata *fd)
 void TransformOp::createReplacement(Funcdata *fd)
 
 {
-  if ((special & TransformOp::op_preexisting)!=0) {
-    replacement = op;
-    fd->opSetOpcode(op, opc);
-    while(input.size() < op->numInput())
-      fd->opRemoveInput(op, op->numInput()-1);
-    for(int4 i=0;i<op->numInput();++i)
-      fd->opUnsetInput(op,i);			// Clear any remaining inputs
-    while(op->numInput() < input.size())
-      fd->opInsertInput(op, (Varnode *)0, op->numInput()-1);
-  }
-  else {
-    replacement = fd->newOp(input.size(),op->getAddr());
-    fd->opSetOpcode(replacement, opc);
-    if (output != (TransformVar *)0)
-      output->createReplacement(fd);
-    if (follow == (TransformOp *)0) {		// Can be inserted immediately
-      if (opc == CPUI_MULTIEQUAL)
-	fd->opInsertBegin(replacement, op->getParent());
-      else
-	fd->opInsertBefore(replacement, op);
-    }
-  }
+	if ((special & TransformOp::op_preexisting)!=0) {
+		replacement = op;
+		fd->opSetOpcode(op, opc);
+		while(input.size() < op->numInput())
+			fd->opRemoveInput(op, op->numInput()-1);
+		for(int4 i=0;i<op->numInput();++i)
+			fd->opUnsetInput(op,i);                   // Clear any remaining inputs
+		while(op->numInput() < input.size())
+			fd->opInsertInput(op, (Varnode *)0, op->numInput()-1);
+	}
+	else {
+		replacement = fd->newOp(input.size(),op->getAddr());
+		fd->opSetOpcode(replacement, opc);
+		if (output != (TransformVar *)0)
+			output->createReplacement(fd);
+		if (follow == (TransformOp *)0) {           // Can be inserted immediately
+			if (opc == CPUI_MULTIEQUAL)
+				fd->opInsertBegin(replacement, op->getParent());
+			else
+				fd->opInsertBefore(replacement, op);
+		}
+	}
 }
 
 /// \param fd is the function into which the PcodeOp will be inserted
@@ -250,31 +250,31 @@ void TransformOp::createReplacement(Funcdata *fd)
 bool TransformOp::attemptInsertion(Funcdata *fd)
 
 {
-  if (follow != (TransformOp *)0) {
-    if (follow->follow == (TransformOp *)0) {	// Check if the follow is inserted
-      if (opc == CPUI_MULTIEQUAL)
-	fd->opInsertBegin(replacement, follow->replacement->getParent());
-      else
-	fd->opInsertBefore(replacement,follow->replacement);
-      follow = (TransformOp *)0;	// Mark that this has been inserted
-      return true;
-    }
-    return false;
-  }
-  return true;		// Already inserted
+	if (follow != (TransformOp *)0) {
+		if (follow->follow == (TransformOp *)0) {   // Check if the follow is inserted
+			if (opc == CPUI_MULTIEQUAL)
+				fd->opInsertBegin(replacement, follow->replacement->getParent());
+			else
+				fd->opInsertBefore(replacement,follow->replacement);
+			follow = (TransformOp *)0;        // Mark that this has been inserted
+			return true;
+		}
+		return false;
+	}
+	return true;          // Already inserted
 }
 
 void LanedRegister::LanedIterator::normalize(void)
 
 {
-  uint4 flag = 1;
-  flag <<= size;
-  while(flag <= mask) {
-    if ((flag & mask) != 0) return;	// Found a valid lane size
-    size += 1;
-    flag <<= 1;
-  }
-  size = -1;		// Indicate ending iterator
+	uint4 flag = 1;
+	flag <<= size;
+	while(flag <= mask) {
+		if ((flag & mask) != 0) return;     // Found a valid lane size
+		size += 1;
+		flag <<= 1;
+	}
+	size = -1;            // Indicate ending iterator
 }
 
 /// Read XML of the form \<register name=".." vector_lane_sizes=".."/>
@@ -284,51 +284,51 @@ void LanedRegister::LanedIterator::normalize(void)
 bool LanedRegister::restoreXml(const Element *el,const AddrSpaceManager *manage)
 
 {
-  string laneSizes;
-  for(int4 i=0;i<el->getNumAttributes();++i) {
-    if (el->getAttributeName(i) == "vector_lane_sizes") {
-      laneSizes = el->getAttributeValue(i);
-      break;
-    }
-  }
-  if (laneSizes.empty()) return false;
-  VarnodeData storage;
-  storage.space = (AddrSpace *)0;
-  storage.restoreXml(el, manage);
-  wholeSize = storage.size;
-  sizeBitMask = 0;
-  string::size_type pos = 0;
-  while(pos != string::npos) {
-    string::size_type nextPos = laneSizes.find(',',pos);
-    string value;
-    if (nextPos == string::npos) {
-      value = laneSizes.substr(pos);	// To the end of the string
-      pos = nextPos;
-    }
-    else {
-      value = laneSizes.substr(pos,(nextPos - pos));
-      pos = nextPos + 1;
-      if (pos >= laneSizes.size())
-	pos = string::npos;
-    }
-    istringstream s(value);
-    s.unsetf(ios::dec | ios::hex | ios::oct);
-    int4 sz = -1;
-    s >> sz;
-    if (sz < 0 || sz > 16)
-      throw LowlevelError("Bad lane size: " + value);
-    addLaneSize(sz);
-  }
-  return true;
+	string laneSizes;
+	for(int4 i=0;i<el->getNumAttributes();++i) {
+		if (el->getAttributeName(i) == "vector_lane_sizes") {
+			laneSizes = el->getAttributeValue(i);
+			break;
+		}
+	}
+	if (laneSizes.empty()) return false;
+	VarnodeData storage;
+	storage.space = (AddrSpace *)0;
+	storage.restoreXml(el, manage);
+	wholeSize = storage.size;
+	sizeBitMask = 0;
+	string::size_type pos = 0;
+	while(pos != string::npos) {
+		string::size_type nextPos = laneSizes.find(',',pos);
+		string value;
+		if (nextPos == string::npos) {
+			value = laneSizes.substr(pos);    // To the end of the string
+			pos = nextPos;
+		}
+		else {
+			value = laneSizes.substr(pos,(nextPos - pos));
+			pos = nextPos + 1;
+			if (pos >= laneSizes.size())
+				pos = string::npos;
+		}
+		istringstream s(value);
+		s.unsetf(ios::dec | ios::hex | ios::oct);
+		int4 sz = -1;
+		s >> sz;
+		if (sz < 0 || sz > 16)
+			throw LowlevelError("Bad lane size: " + value);
+		addLaneSize(sz);
+	}
+	return true;
 }
 
 TransformManager::~TransformManager(void)
 
 {
-  map<int4,TransformVar *>::iterator iter;
-  for(iter=pieceMap.begin();iter!=pieceMap.end();++iter) {
-    delete [] (*iter).second;
-  }
+	map<int4,TransformVar *>::iterator iter;
+	for(iter=pieceMap.begin();iter!=pieceMap.end();++iter) {
+		delete [] (*iter).second;
+	}
 }
 
 /// \brief Should the address of the given Varnode be preserved when constructing a piece
@@ -344,21 +344,21 @@ TransformManager::~TransformManager(void)
 bool TransformManager::preserveAddress(Varnode *vn,int4 bitSize,int4 lsbOffset) const
 
 {
-  if ((lsbOffset & 7) != 0) return false;	// Logical value not aligned
-  if (vn->getSpace()->getType() == IPTR_INTERNAL) return false;
-  return true;
+	if ((lsbOffset & 7) != 0) return false;       // Logical value not aligned
+	if (vn->getSpace()->getType() == IPTR_INTERNAL) return false;
+	return true;
 }
 
 void TransformManager::clearVarnodeMarks(void)
 
 {
-  map<int4,TransformVar *>::const_iterator iter;
-  for(iter=pieceMap.begin();iter!=pieceMap.end();++iter) {
-    Varnode *vn = (*iter).second->vn;
-    if (vn == (Varnode *)0)
-      continue;
-    vn->clearMark();
-  }
+	map<int4,TransformVar *>::const_iterator iter;
+	for(iter=pieceMap.begin();iter!=pieceMap.end();++iter) {
+		Varnode *vn = (*iter).second->vn;
+		if (vn == (Varnode *)0)
+			continue;
+		vn->clearMark();
+	}
 }
 
 /// \param vn is the preexisting Varnode to create a placeholder for
@@ -366,13 +366,13 @@ void TransformManager::clearVarnodeMarks(void)
 TransformVar *TransformManager::newPreexistingVarnode(Varnode *vn)
 
 {
-  TransformVar *res = new TransformVar[1];
-  pieceMap[vn->getCreateIndex()] = res;	// Enter preexisting Varnode into map, so we don't make another placeholder
+	TransformVar *res = new TransformVar[1];
+	pieceMap[vn->getCreateIndex()] = res; // Enter preexisting Varnode into map, so we don't make another placeholder
 
-  // value of 0 treats this as "piece" of itself at offset 0, allows getPiece() to find it
-  res->initialize(TransformVar::preexisting,vn,vn->getSize()*8,vn->getSize(),0);
-  res->flags = TransformVar::split_terminator;
-  return res;
+	// value of 0 treats this as "piece" of itself at offset 0, allows getPiece() to find it
+	res->initialize(TransformVar::preexisting,vn,vn->getSize()*8,vn->getSize(),0);
+	res->flags = TransformVar::split_terminator;
+	return res;
 }
 
 /// \param size is the size in bytes of the new unique Varnode
@@ -380,10 +380,10 @@ TransformVar *TransformManager::newPreexistingVarnode(Varnode *vn)
 TransformVar *TransformManager::newUnique(int4 size)
 
 {
-  newVarnodes.emplace_back();
-  TransformVar *res = &newVarnodes.back();
-  res->initialize(TransformVar::normal_temp,(Varnode *)0,size*8,size,0);
-  return res;
+	newVarnodes.emplace_back();
+	TransformVar *res = &newVarnodes.back();
+	res->initialize(TransformVar::normal_temp,(Varnode *)0,size*8,size,0);
+	return res;
 }
 
 /// Create a new constant in the transform view.  A piece of an existing constant
@@ -395,10 +395,10 @@ TransformVar *TransformManager::newUnique(int4 size)
 TransformVar *TransformManager::newConstant(int4 size,int4 lsbOffset,uintb val)
 
 {
-  newVarnodes.emplace_back();
-  TransformVar *res = &newVarnodes.back();
-  res->initialize(TransformVar::constant,(Varnode *)0,size*8,size,(val >> lsbOffset) & calc_mask(size));
-  return res;
+	newVarnodes.emplace_back();
+	TransformVar *res = &newVarnodes.back();
+	res->initialize(TransformVar::constant,(Varnode *)0,size*8,size,(val >> lsbOffset) & calc_mask(size));
+	return res;
 }
 
 /// Used for creating INDIRECT placeholders.
@@ -407,10 +407,10 @@ TransformVar *TransformManager::newConstant(int4 size,int4 lsbOffset,uintb val)
 TransformVar *TransformManager::newIop(Varnode *vn)
 
 {
-  newVarnodes.emplace_back();
-  TransformVar *res = &newVarnodes.back();
-  res->initialize(TransformVar::constant_iop,(Varnode *)0,vn->getSize()*8,vn->getSize(),vn->getOffset());
-  return res;
+	newVarnodes.emplace_back();
+	TransformVar *res = &newVarnodes.back();
+	res->initialize(TransformVar::constant_iop,(Varnode *)0,vn->getSize()*8,vn->getSize(),vn->getOffset());
+	return res;
 }
 
 /// Given a single logical value within a larger Varnode, create a placeholder for
@@ -422,13 +422,13 @@ TransformVar *TransformManager::newIop(Varnode *vn)
 TransformVar *TransformManager::newPiece(Varnode *vn,int4 bitSize,int4 lsbOffset)
 
 {
-  TransformVar *res = new TransformVar[1];
-  pieceMap[vn->getCreateIndex()] = res;
-  int4 byteSize = (bitSize + 7) / 8;
-  uint4 type = preserveAddress(vn, bitSize, lsbOffset) ? TransformVar::piece : TransformVar::piece_temp;
-  res->initialize(type, vn, bitSize, byteSize, lsbOffset);
-  res->flags = TransformVar::split_terminator;
-  return res;
+	TransformVar *res = new TransformVar[1];
+	pieceMap[vn->getCreateIndex()] = res;
+	int4 byteSize = (bitSize + 7) / 8;
+	uint4 type = preserveAddress(vn, bitSize, lsbOffset) ? TransformVar::piece : TransformVar::piece_temp;
+	res->initialize(type, vn, bitSize, byteSize, lsbOffset);
+	res->flags = TransformVar::split_terminator;
+	return res;
 }
 
 /// \brief Create placeholder nodes splitting a Varnode into its lanes
@@ -441,22 +441,22 @@ TransformVar *TransformManager::newPiece(Varnode *vn,int4 bitSize,int4 lsbOffset
 TransformVar *TransformManager::newSplit(Varnode *vn,const LaneDescription &description)
 
 {
-  int4 num = description.getNumLanes();
-  TransformVar *res = new TransformVar[num];
-  pieceMap[vn->getCreateIndex()] = res;
-  for(int4 i=0;i<num;++i) {
-    int4 bitpos = description.getPosition(i) * 8;
-    TransformVar *newVar = &res[i];
-    int4 byteSize = description.getSize(i);
-    if (vn->isConstant())
-      newVar->initialize(TransformVar::constant,vn,byteSize * 8,byteSize, (vn->getOffset() >> bitpos) & calc_mask(byteSize));
-    else {
-      uint4 type = preserveAddress(vn, byteSize * 8, bitpos) ? TransformVar::piece : TransformVar::piece_temp;
-      newVar->initialize(type,vn,byteSize * 8, byteSize, bitpos);
-    }
-  }
-  res[num-1].flags = TransformVar::split_terminator;
-  return res;
+	int4 num = description.getNumLanes();
+	TransformVar *res = new TransformVar[num];
+	pieceMap[vn->getCreateIndex()] = res;
+	for(int4 i=0;i<num;++i) {
+		int4 bitpos = description.getPosition(i) * 8;
+		TransformVar *newVar = &res[i];
+		int4 byteSize = description.getSize(i);
+		if (vn->isConstant())
+			newVar->initialize(TransformVar::constant,vn,byteSize * 8,byteSize, (vn->getOffset() >> bitpos) & calc_mask(byteSize));
+		else {
+			uint4 type = preserveAddress(vn, byteSize * 8, bitpos) ? TransformVar::piece : TransformVar::piece_temp;
+			newVar->initialize(type,vn,byteSize * 8, byteSize, bitpos);
+		}
+	}
+	res[num-1].flags = TransformVar::split_terminator;
+	return res;
 }
 
 /// \brief Create placeholder nodes splitting a Varnode into a subset of lanes in the given description
@@ -471,22 +471,22 @@ TransformVar *TransformManager::newSplit(Varnode *vn,const LaneDescription &desc
 TransformVar *TransformManager::newSplit(Varnode *vn,const LaneDescription &description,int4 numLanes,int4 startLane)
 
 {
-  TransformVar *res = new TransformVar[numLanes];
-  pieceMap[vn->getCreateIndex()] = res;
-  int4 baseBitPos = description.getPosition(startLane) * 8;
-  for(int4 i=0;i<numLanes;++i) {
-    int4 bitpos = description.getPosition(startLane + i) * 8 - baseBitPos;
-    int4 byteSize = description.getSize(startLane + i);
-    TransformVar *newVar = &res[i];
-    if (vn->isConstant())
-      newVar->initialize(TransformVar::constant,vn,byteSize * 8, byteSize, (vn->getOffset() >> bitpos) & calc_mask(byteSize));
-    else {
-      uint4 type = preserveAddress(vn, byteSize * 8, bitpos) ? TransformVar::piece : TransformVar::piece_temp;
-      newVar->initialize(type,vn,byteSize * 8, byteSize, bitpos);
-    }
-  }
-  res[numLanes-1].flags = TransformVar::split_terminator;
-  return res;
+	TransformVar *res = new TransformVar[numLanes];
+	pieceMap[vn->getCreateIndex()] = res;
+	int4 baseBitPos = description.getPosition(startLane) * 8;
+	for(int4 i=0;i<numLanes;++i) {
+		int4 bitpos = description.getPosition(startLane + i) * 8 - baseBitPos;
+		int4 byteSize = description.getSize(startLane + i);
+		TransformVar *newVar = &res[i];
+		if (vn->isConstant())
+			newVar->initialize(TransformVar::constant,vn,byteSize * 8, byteSize, (vn->getOffset() >> bitpos) & calc_mask(byteSize));
+		else {
+			uint4 type = preserveAddress(vn, byteSize * 8, bitpos) ? TransformVar::piece : TransformVar::piece_temp;
+			newVar->initialize(type,vn,byteSize * 8, byteSize, bitpos);
+		}
+	}
+	res[numLanes-1].flags = TransformVar::split_terminator;
+	return res;
 }
 
 /// \brief Create a new placeholder op intended to replace an existing op
@@ -499,16 +499,16 @@ TransformVar *TransformManager::newSplit(Varnode *vn,const LaneDescription &desc
 TransformOp *TransformManager::newOpReplace(int4 numParams,OpCode opc,PcodeOp *replace)
 
 {
-  newOps.emplace_back();
-  TransformOp &rop(newOps.back());
-  rop.op = replace;
-  rop.replacement = (PcodeOp *)0;
-  rop.opc = opc;
-  rop.special = TransformOp::op_replacement;
-  rop.output = (TransformVar *)0;
-  rop.follow = (TransformOp *)0;
-  rop.input.resize(numParams,(TransformVar *)0);
-  return &rop;
+	newOps.emplace_back();
+	TransformOp &rop(newOps.back());
+	rop.op = replace;
+	rop.replacement = (PcodeOp *)0;
+	rop.opc = opc;
+	rop.special = TransformOp::op_replacement;
+	rop.output = (TransformVar *)0;
+	rop.follow = (TransformOp *)0;
+	rop.input.resize(numParams,(TransformVar *)0);
+	return &rop;
 }
 
 /// \brief Create a new placeholder op that will not replace an existing op
@@ -522,16 +522,16 @@ TransformOp *TransformManager::newOpReplace(int4 numParams,OpCode opc,PcodeOp *r
 TransformOp *TransformManager::newOp(int4 numParams,OpCode opc,TransformOp *follow)
 
 {
-  newOps.emplace_back();
-  TransformOp &rop(newOps.back());
-  rop.op = follow->op;
-  rop.replacement = (PcodeOp *)0;
-  rop.opc = opc;
-  rop.special = 0;
-  rop.output = (TransformVar *)0;
-  rop.follow = follow;
-  rop.input.resize(numParams,(TransformVar *)0);
-  return &rop;
+	newOps.emplace_back();
+	TransformOp &rop(newOps.back());
+	rop.op = follow->op;
+	rop.replacement = (PcodeOp *)0;
+	rop.opc = opc;
+	rop.special = 0;
+	rop.output = (TransformVar *)0;
+	rop.follow = follow;
+	rop.input.resize(numParams,(TransformVar *)0);
+	return &rop;
 }
 
 /// \brief Create a new placeholder op for an existing PcodeOp
@@ -546,16 +546,16 @@ TransformOp *TransformManager::newOp(int4 numParams,OpCode opc,TransformOp *foll
 TransformOp *TransformManager::newPreexistingOp(int4 numParams,OpCode opc,PcodeOp *originalOp)
 
 {
-  newOps.emplace_back();
-  TransformOp &rop(newOps.back());
-  rop.op = originalOp;
-  rop.replacement = (PcodeOp *)0;
-  rop.opc = opc;
-  rop.special = TransformOp::op_preexisting;
-  rop.output = (TransformVar *)0;
-  rop.follow = (TransformOp *)0;
-  rop.input.resize(numParams,(TransformVar *)0);
-  return &rop;
+	newOps.emplace_back();
+	TransformOp &rop(newOps.back());
+	rop.op = originalOp;
+	rop.replacement = (PcodeOp *)0;
+	rop.opc = opc;
+	rop.special = TransformOp::op_preexisting;
+	rop.output = (TransformVar *)0;
+	rop.follow = (TransformOp *)0;
+	rop.input.resize(numParams,(TransformVar *)0);
+	return &rop;
 }
 
 /// Check if a placeholder node was created for the preexisting Varnode for,
@@ -565,13 +565,13 @@ TransformOp *TransformManager::newPreexistingOp(int4 numParams,OpCode opc,PcodeO
 TransformVar *TransformManager::getPreexistingVarnode(Varnode *vn)
 
 {
-  if (vn->isConstant())
-    return newConstant(vn->getSize(), 0, vn->getOffset());
-  map<int4,TransformVar *>::const_iterator iter;
-  iter = pieceMap.find(vn->getCreateIndex());
-  if (iter != pieceMap.end())
-    return (*iter).second;
-  return newPreexistingVarnode(vn);
+	if (vn->isConstant())
+		return newConstant(vn->getSize(), 0, vn->getOffset());
+	map<int4,TransformVar *>::const_iterator iter;
+	iter = pieceMap.find(vn->getCreateIndex());
+	if (iter != pieceMap.end())
+		return (*iter).second;
+	return newPreexistingVarnode(vn);
 }
 
 /// Given a big Varnode, find the placeholder corresponding to the logical value
@@ -583,15 +583,15 @@ TransformVar *TransformManager::getPreexistingVarnode(Varnode *vn)
 TransformVar *TransformManager::getPiece(Varnode *vn,int4 bitSize,int4 lsbOffset)
 
 {
-  map<int4,TransformVar *>::const_iterator iter;
-  iter = pieceMap.find(vn->getCreateIndex());
-  if (iter != pieceMap.end()) {
-    TransformVar *res = (*iter).second;
-    if (res->bitSize != bitSize || res->val != lsbOffset)
-      throw LowlevelError("Cannot create multiple pieces for one Varnode through getPiece");
-    return res;
-  }
-  return newPiece(vn,bitSize,lsbOffset);
+	map<int4,TransformVar *>::const_iterator iter;
+	iter = pieceMap.find(vn->getCreateIndex());
+	if (iter != pieceMap.end()) {
+		TransformVar *res = (*iter).second;
+		if (res->bitSize != bitSize || res->val != lsbOffset)
+			throw LowlevelError("Cannot create multiple pieces for one Varnode through getPiece");
+		return res;
+	}
+	return newPiece(vn,bitSize,lsbOffset);
 }
 
 /// \brief Find (or create) placeholder nodes splitting a Varnode into its lanes
@@ -604,12 +604,12 @@ TransformVar *TransformManager::getPiece(Varnode *vn,int4 bitSize,int4 lsbOffset
 TransformVar *TransformManager::getSplit(Varnode *vn,const LaneDescription &description)
 
 {
-  map<int4,TransformVar *>::const_iterator iter;
-  iter = pieceMap.find(vn->getCreateIndex());
-  if (iter != pieceMap.end()) {
-    return (*iter).second;
-  }
-  return newSplit(vn,description);
+	map<int4,TransformVar *>::const_iterator iter;
+	iter = pieceMap.find(vn->getCreateIndex());
+	if (iter != pieceMap.end()) {
+		return (*iter).second;
+	}
+	return newSplit(vn,description);
 }
 
 /// \brief Find (or create) placeholder nodes splitting a Varnode into a subset of lanes from a description
@@ -624,12 +624,12 @@ TransformVar *TransformManager::getSplit(Varnode *vn,const LaneDescription &desc
 TransformVar *TransformManager::getSplit(Varnode *vn,const LaneDescription &description,int4 numLanes,int4 startLane)
 
 {
-  map<int4,TransformVar *>::const_iterator iter;
-  iter = pieceMap.find(vn->getCreateIndex());
-  if (iter != pieceMap.end()) {
-    return (*iter).second;
-  }
-  return newSplit(vn,description,numLanes,startLane);
+	map<int4,TransformVar *>::const_iterator iter;
+	iter = pieceMap.find(vn->getCreateIndex());
+	if (iter != pieceMap.end()) {
+		return (*iter).second;
+	}
+	return newSplit(vn,description,numLanes,startLane);
 }
 
 /// \brief Handle some special PcodeOp marking
@@ -637,10 +637,10 @@ TransformVar *TransformManager::getSplit(Varnode *vn,const LaneDescription &desc
 /// \param rop is the placeholder op with the special requirement
 void TransformManager::specialHandling(TransformOp &rop)
 {
-  if ((rop.special & TransformOp::indirect_creation) != 0)
-    fd->markIndirectCreation(rop.replacement, false);
-  else if ((rop.special & TransformOp::indirect_creation_possible_out) != 0)
-    fd->markIndirectCreation(rop.replacement, true);
+	if ((rop.special & TransformOp::indirect_creation) != 0)
+		fd->markIndirectCreation(rop.replacement, false);
+	else if ((rop.special & TransformOp::indirect_creation_possible_out) != 0)
+		fd->markIndirectCreation(rop.replacement, true);
 }
 
 /// Run through the list of TransformOp placeholders and create the actual PcodeOp object.
@@ -649,18 +649,18 @@ void TransformManager::specialHandling(TransformOp &rop)
 void TransformManager::createOps(void)
 
 {
-  list<TransformOp>::iterator iter;
-  for(iter=newOps.begin();iter!=newOps.end();++iter)
-    (*iter).createReplacement(fd);
+	list<TransformOp>::iterator iter;
+	for(iter=newOps.begin();iter!=newOps.end();++iter)
+		(*iter).createReplacement(fd);
 
-  int4 followCount;
-  do {
-    followCount = 0;
-    for(iter=newOps.begin();iter!=newOps.end();++iter) {
-      if (!(*iter).attemptInsertion(fd))
-	followCount += 1;
-    }
-  } while(followCount != 0);
+	int4 followCount;
+	do {
+		followCount = 0;
+		for(iter=newOps.begin();iter!=newOps.end();++iter) {
+			if (!(*iter).attemptInsertion(fd))
+				followCount += 1;
+		}
+	} while(followCount != 0);
 }
 
 /// Record any input vars in the given container
@@ -668,43 +668,43 @@ void TransformManager::createOps(void)
 void TransformManager::createVarnodes(vector<TransformVar *> &inputList)
 
 {
-  map<int4,TransformVar *>::iterator piter;
-  for(piter=pieceMap.begin();piter!=pieceMap.end();++piter) {
-    TransformVar *vArray = (*piter).second;
-    for(int4 i=0;;++i) {
-      TransformVar *rvn = vArray + i;
-      if (rvn->type == TransformVar::piece) {
-	Varnode *vn = rvn->vn;
-	if (vn->isInput()) {
-	  inputList.push_back(rvn);
-	  if (vn->isMark())
-	    rvn->flags |= TransformVar::input_duplicate;
-	  else
-	    vn->setMark();
+	map<int4,TransformVar *>::iterator piter;
+	for(piter=pieceMap.begin();piter!=pieceMap.end();++piter) {
+		TransformVar *vArray = (*piter).second;
+		for(int4 i=0;;++i) {
+			TransformVar *rvn = vArray + i;
+			if (rvn->type == TransformVar::piece) {
+				Varnode *vn = rvn->vn;
+				if (vn->isInput()) {
+					inputList.push_back(rvn);
+					if (vn->isMark())
+						rvn->flags |= TransformVar::input_duplicate;
+					else
+						vn->setMark();
+				}
+			}
+			rvn->createReplacement(fd);
+			if ((rvn->flags & TransformVar::split_terminator)!=0)
+				break;
+		}
 	}
-      }
-      rvn->createReplacement(fd);
-      if ((rvn->flags & TransformVar::split_terminator)!=0)
-	break;
-    }
-  }
-  list<TransformVar>::iterator iter;
-  for(iter=newVarnodes.begin();iter!=newVarnodes.end();++iter) {
-    (*iter).createReplacement(fd);
-  }
+	list<TransformVar>::iterator iter;
+	for(iter=newVarnodes.begin();iter!=newVarnodes.end();++iter) {
+		(*iter).createReplacement(fd);
+	}
 }
 
 void TransformManager::removeOld(void)
 
 {
-  list<TransformOp>::iterator iter;
-  for(iter=newOps.begin();iter!=newOps.end();++iter) {
-    TransformOp &rop(*iter);
-    if ((rop.special & TransformOp::op_replacement) != 0) {
-      if (!rop.op->isDead())
-	fd->opDestroy(rop.op);	// Destroy old op (and its output Varnode)
-    }
-  }
+	list<TransformOp>::iterator iter;
+	for(iter=newOps.begin();iter!=newOps.end();++iter) {
+		TransformOp &rop(*iter);
+		if ((rop.special & TransformOp::op_replacement) != 0) {
+			if (!rop.op->isDead())
+				fd->opDestroy(rop.op);  // Destroy old op (and its output Varnode)
+		}
+	}
 }
 
 /// Remove all input Varnodes from the given container.
@@ -713,37 +713,37 @@ void TransformManager::removeOld(void)
 void TransformManager::transformInputVarnodes(vector<TransformVar *> &inputList)
 
 {
-  for(int4 i=0;i<inputList.size();++i) {
-    TransformVar *rvn = inputList[i];
-    if ((rvn->flags & TransformVar::input_duplicate)==0)
-      fd->deleteVarnode(rvn->vn);
-    rvn->replacement = fd->setInputVarnode(rvn->replacement);
-  }
+	for(int4 i=0;i<inputList.size();++i) {
+		TransformVar *rvn = inputList[i];
+		if ((rvn->flags & TransformVar::input_duplicate)==0)
+			fd->deleteVarnode(rvn->vn);
+		rvn->replacement = fd->setInputVarnode(rvn->replacement);
+	}
 }
 
 void TransformManager::placeInputs(void)
 
 {
-  list<TransformOp>::iterator iter;
-  for(iter=newOps.begin();iter!=newOps.end();++iter) {
-    TransformOp &rop(*iter);
-    PcodeOp *op = rop.replacement;
-    for(int4 i=0;i<rop.input.size();++i) {
-      TransformVar *rvn = rop.input[i];
-      Varnode *vn = rvn->replacement;
-      fd->opSetInput(op, vn, i);
-    }
-    specialHandling(rop);
-  }
+	list<TransformOp>::iterator iter;
+	for(iter=newOps.begin();iter!=newOps.end();++iter) {
+		TransformOp &rop(*iter);
+		PcodeOp *op = rop.replacement;
+		for(int4 i=0;i<rop.input.size();++i) {
+			TransformVar *rvn = rop.input[i];
+			Varnode *vn = rvn->replacement;
+			fd->opSetInput(op, vn, i);
+		}
+		specialHandling(rop);
+	}
 }
 
 void TransformManager::apply(void)
 
 {
-  vector<TransformVar *> inputList;
-  createOps();
-  createVarnodes(inputList);
-  removeOld();
-  transformInputVarnodes(inputList);
-  placeInputs();
+	vector<TransformVar *> inputList;
+	createOps();
+	createVarnodes(inputList);
+	removeOld();
+	transformInputVarnodes(inputList);
+	placeInputs();
 }

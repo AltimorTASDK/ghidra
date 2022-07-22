@@ -16,10 +16,10 @@
 #include "loadimage_ghidra.hh"
 
 LoadImageGhidra::LoadImageGhidra(ArchitectureGhidra *g)
-  : LoadImage("ghidra_progam")
+	: LoadImage("ghidra_progam")
 
 {
-  glb = g;
+	glb = g;
 }
 
 void LoadImageGhidra::open(void)
@@ -35,17 +35,17 @@ void LoadImageGhidra::close(void)
 void LoadImageGhidra::loadFill(uint1 *ptr,int4 size,const Address &inaddr)
 
 {
-  glb->getBytes(ptr,size,inaddr);
+	glb->getBytes(ptr,size,inaddr);
 }
 
 string LoadImageGhidra::getArchType(void) const
 
 {
-  return "ghidra";
+	return "ghidra";
 }
 
 void LoadImageGhidra::adjustVma(long adjust)
 
 {
-  throw LowlevelError("Cannot adjust GHIDRA virtual memory");
+	throw LowlevelError("Cannot adjust GHIDRA virtual memory");
 }
