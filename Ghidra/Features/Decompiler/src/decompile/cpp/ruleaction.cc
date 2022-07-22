@@ -3167,14 +3167,11 @@ int4 RuleSignShift::applyOp(PcodeOp *op,Funcdata &data)
 	if (inVn->isFree()) return 0;
 
 	// Only apply to signed types
-	HighVariable *high = inVn->getHigh();
-	if (high != (HighVariable *)0) {
-		Datatype *dt = high->getType();
-		type_metatype meta = dt->getMetatype();
-		if ((meta != TYPE_INT)&&(meta != TYPE_FLOAT)) return false;
-		if (dt->isCharPrint()) return false;
-		if (dt->isEnumType()) return false;
-	}
+	Datatype *dt = inVn->getType();
+	type_metatype meta = dt->getMetatype();
+	if ((meta != TYPE_INT)&&(meta != TYPE_FLOAT)) return false;
+	if (dt->isCharPrint()) return false;
+	if (dt->isEnumType()) return false;
 
 	bool doConversion = false;
 	Varnode *outVn = op->getOut();
