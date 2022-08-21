@@ -8363,7 +8363,7 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 
 	PcodeOp *piece = target->getDef();
 
-	if (piece->code() != CPUI_PIECE)
+	if (piece == NULL || piece->code() != CPUI_PIECE)
 		return 0;
 
 	Varnode *hi = piece->getIn(0);
@@ -8381,13 +8381,16 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 		// Sign bit gets flipped before concat if signed
 		PcodeOp *xor_op = lo->getDef();
 
+		if (xor_op == NULL || xor_op->code() != CPUI_INT_XOR)
+			return 0;
+
 		if (xor_op->code() != CPUI_INT_XOR || !xor_op->getIn(1)->constantMatch(sign_mask))
 			return 0;
 
 		integer = xor_op->getIn(0);
 	}
 
-	while (integer->getDef()->code() == CPUI_COPY)
+	while (integer->getDef() != NULL && integer->getDef()->code() == CPUI_COPY)
 		integer = integer->getDef()->getIn(0);
 
 	data.opUnsetInput(op, 0);
@@ -8404,17 +8407,6 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 	data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
 	data.opSetInput(op, integer, 0);
 	data.opRemoveInput(op, 1);
-
-	////////////////////
-	ostringstream filename;
-	filename << "C:\\users\\altim\\decomp_";
-	op->getAddr().printRaw(filename);
-	filename << "_";
-	integer->getDef()->getAddr().printRaw(filename);
-	filename << ".log";
-	ofstream stream(filename.str());
-	data.printRaw(stream);
-	////////////////////
 
 	return 1;
 }
