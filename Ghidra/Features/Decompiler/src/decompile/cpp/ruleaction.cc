@@ -8245,27 +8245,12 @@ void RuleSoftwareDoubleCast::getOpList(vector<uint4> &oplist) const
 }
 
 #warning last arg is for debug print
-static void removeUnusedDescendants(Varnode *vn, Funcdata &data, PcodeOp *origin)
-{
-	for (list<PcodeOp*>::const_iterator iter = vn->beginDescend(); iter != vn->endDescend(); ) {
-		// Increment before removing descendant
-		PcodeOp *op = *iter++;
+static bool removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 
-		ostringstream text;
-		text << "desc: ";
-		op->printRaw(text);
-		text << " op: " << op->code();
-		text << " no descend: " << op->getOut()->hasNoDescend();
-		data.warning(text.str(), origin->getAddr());
-
-		if (op->getOut()->hasNoDescend())
-			data.opDestroy(op);
-	}
-}
-
-static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 {
 	vector<Varnode*> visited;
+	vector<PcodeOp*> indirects;
+	vector<PcodeOp*> multis;
 	visited.push_back(vn);
 
 	uint4 traced = 0;
@@ -8278,15 +8263,18 @@ static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 			PcodeOp *op = *iter++;
 			Varnode *out = op->getOut();
 
-			if (out->isPersist())
-				return;
+			if (find(visited.begin(), visited.end(), out) != visited.end())
+				continue;
 
-			if (op->code() == CPUI_INDIRECT) {
+			if (out->isPersist())
+				return false;
+
+			if (op->code() == CPUI_INDIRECT && !op->isIndirectStore()) {
 				ostringstream text;
 				origin->printDebug(text);
 				text << " -> ";
 				op->printDebug(text);
-				text << " indirect store " << op->isIndirectStore();
+				text << " indirect";
 				data.warning(text.str(), op->getAddr());
 
 				if (out->getAddr() != vn->getAddr()) {
@@ -8296,9 +8284,18 @@ static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 					op->printDebug(text);
 					text << " data flow cucked";
 					data.warning(text.str(), op->getAddr());
-					return;
+					return false;
 				}
+
+				indirects.push_back(op);
 			} else if (op->code() == CPUI_MULTIEQUAL) {
+				ostringstream text;
+				origin->printDebug(text);
+				text << " -> ";
+				op->printDebug(text);
+				text << " multi";
+				data.warning(text.str(), op->getAddr());
+
 				if (out->getAddr() != vn->getAddr()) {
 					ostringstream text;
 					origin->printDebug(text);
@@ -8306,8 +8303,10 @@ static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 					op->printDebug(text);
 					text << " data flow cucked";
 					data.warning(text.str(), op->getAddr());
-					return;
+					return false;
 				}
+
+				multis.push_back(op);
 			} else {
 				ostringstream text;
 				origin->printDebug(text);
@@ -8315,10 +8314,22 @@ static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 				op->printDebug(text);
 				text << " data flow cucked";
 				data.warning(text.str(), op->getAddr());
-				return;
+				return false;
 			}
 
 			visited.push_back(out);
+		}
+	}
+
+	for (auto *op : indirects) {
+		data.opSetInput(op, data.newConstant(op->getOut()->getSize(), 0), 0);
+		data.markIndirectCreation(op, false);
+	}
+
+	for (auto *op : multis) {
+		for (int i = 0; i < op->numInput(); i++) {
+			if (find(visited.begin(), visited.end(), op->getIn(i)) != visited.end())
+				data.opRemoveInput(op, i);
 		}
 	}
 
@@ -8326,18 +8337,69 @@ static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 	origin->printDebug(text);
 	text << "we did it";
 	data.warning(text.str(), origin->getAddr());
+
+	return true;
+}
+
+static bool removeUnusedStackOutput(PcodeOp *op, Funcdata &data, PcodeOp *origin)
+
+{
+	Varnode *out = op->getOut();
+	if (/*out->getSpace() == data.getArch()->getStackSpace() &&*/ removeUnusedStackVar(out, data, origin)) {
+		data.opDestroy(op);
+		return true;
+	}
+	return false;
+}
+
+static bool removeUnusedValues(Varnode *vn, Funcdata &data, PcodeOp *origin, bool stack)
+
+{
+	if (stack && removeUnusedStackOutput(vn->getDef(), data, origin))
+		return true;
+
+	for (list<PcodeOp*>::const_iterator iter = vn->beginDescend(); iter != vn->endDescend(); ) {
+		PcodeOp *op = *iter++;
+		if (op->getOut()->hasNoDescend())
+			data.opDestroy(op);
+		else if (stack && op->code() == CPUI_COPY)
+			removeUnusedStackOutput(op, data, origin);
+	}
+
+	if (stack && vn->hasNoDescend()) {
+		data.opDestroy(vn->getDef());
+		return true;
+	}
+
+	return false;
+}
+
+void RuleSoftwareDoubleCast::removeHiConstant(Varnode *lo, Funcdata &data, PcodeOp *origin)
+
+{
+	list<PcodeOp*>::const_iterator iter = data.beginOp(CPUI_COPY);
+	while (iter != data.endOp(CPUI_COPY)) {
+		PcodeOp *op = *iter++;
+		// Magic exponent
+		if (!op->getIn(1)->constantMatch(unsigned_magic >> 32))
+			continue;
+
+		if (!op->getOut()->getAddr().isContiguous(4, lo->getAddr(), 4))
+			continue;
+
+		ostringstream text;
+		text << "hi def ";
+		op->printDebug(text);
+		data.warning(text.str(), op->getAddr());
+
+		if (removeUnusedValues(op->getOut(), data, origin, true))
+			return;
+	}
 }
 
 int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 
 {
-	// Double with exponent equal to mantissa bits
-	const uintb unsigned_magic = 0x4330000000000000;
-
-	// Bias for signed conversions
-	const uint4 sign_mask = 1 << 31;
-	const uintb signed_magic = unsigned_magic ^ sign_mask;
-
 	Varnode *target = op->getIn(0);
 	Varnode *constant = op->getIn(1);
 
@@ -8379,79 +8441,44 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 			return 0;
 
 		integer = xor_op->getIn(0);
-
-		removeUnusedDescendants(lo, data, op);
-
-		////////////////////
-		ostringstream filename;
-		filename << "C:\\users\\altim\\decomp_";
-		op->getAddr().printRaw(filename);
-		filename << "_";
-		integer->getDef()->getAddr().printRaw(filename);
-		filename << ".log";
-		ofstream stream(filename.str());
-		data.printRaw(stream);
-		////////////////////
-
-		for (list<PcodeOp*>::const_iterator iter = lo->beginDescend(); iter != lo->endDescend(); ) {
-			PcodeOp *store = *iter++;
-			if (store->code() == CPUI_STORE)
-				removeUnusedStackVar(store->getOut(), data, xor_op);
-		}
 	}
-
-	/*Varnode *out = op->getOut();
-	Varnode *dummy = data.newUnique(op->getOut()->getSize());
-	dummy->updateType(op->outputTypeLocal(), false, false);
-	dummy->setImplied();
-	data.opSetOutput(op, dummy);
-
-	PcodeOp *convert = data.newOp(1, op->getAddr());
-	data.opSetOpcode(convert, CPUI_FLOAT_INT2FLOAT);
-	data.opSetInput(convert, integer, 0);
-	data.opSetOutput(convert, out);
-	data.opInsertAfter(convert, op);*/
 
 	while (integer->getDef()->code() == CPUI_COPY)
 		integer = integer->getDef()->getIn(0);
 
-#if 0
-	PcodeOp *join = integer->getDef();
-
-	/*if (join->code() == CPUI_INT_OR)*/ {
-		ostringstream text;
-		join->printDebug(text);
-		text << " op " << join->code() << " " << join->getOpName() << "; ";
-
-		for (int i = 0; i < join->numInput(); i++) {
-			Varnode *input = join->getIn(i);
-			text << "input " << i;
-			text << " size " << input->getSize();
-			text << " written " << input->isWritten();
-			text << " writemask " << input->isWriteMask();
-			text << " constant " << input->isConstant();
-			if (input->isConstant())
-				text << " offset " << input->getOffset();
-			text << "; ";
-		}
-
-		data.warning(text.str(), op->getAddr());
-	}
-#endif
-
 	data.opUnsetInput(op, 0);
 
-	removeUnusedDescendants(integer, data, op);
+	////////////////////
+	ostringstream filename;
+	filename << "C:\\users\\altim\\decomp_";
+	op->getAddr().printRaw(filename);
+	filename << "_";
+	integer->getDef()->getAddr().printRaw(filename);
+	filename << ".log";
+	ofstream stream(filename.str());
+	data.printRaw(stream);
+	////////////////////
 
+	removeUnusedValues(target, data, op, true);
+	if (is_signed)
+		removeUnusedValues(lo, data, op, true);
+
+	// necessary?
+	removeUnusedValues(integer, data, op, false);
+
+	removeHiConstant(lo, data, op);
+
+	// Recognize as int to float conversion
 	data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
 	data.opSetInput(op, integer, 0);
 	data.opRemoveInput(op, 1);
+
+	//hi->getAddr().isContiguous()
 
 	//data.opUnlink(piece);
 
 	//recursiveUnlink(piece, data);
 
-	// Recognize as int to float conversion
 	//data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
 	//data.opRemoveInput(op, 1);
 

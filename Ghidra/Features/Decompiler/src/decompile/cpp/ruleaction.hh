@@ -1388,6 +1388,15 @@ public:
 };
 
 class RuleSoftwareDoubleCast : public Rule {
+	enum {
+		// Double with exponent equal to mantissa bits
+		unsigned_magic = 0x4330000000000000,
+
+		// Bias for signed conversions
+		sign_mask = 1 << 31,
+		signed_magic = unsigned_magic ^ sign_mask
+	};
+	void removeHiConstant(Varnode *lo, Funcdata &data, PcodeOp *origin);
 public:
 	RuleSoftwareDoubleCast(const string &g) : Rule( g, 0, "software_double_cast") {}     ///< Constructor
 	virtual Rule *clone(const ActionGroupList &grouplist) const {
