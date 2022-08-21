@@ -8301,28 +8301,33 @@ bool RuleSoftwareDoubleCast::removeUnusedStackOutput(PcodeOp *op, Funcdata &data
 
 {
 	Varnode *out = op->getOut();
-	if (out->getSpace() == data.getArch()->getStackSpace() && removeUnusedStackVar(out, data)) {
+
+	if (out == NULL || out->getSpace() != data.getArch()->getStackSpace())
+		return false;
+
+	if (removeUnusedStackVar(out, data)) {
 		data.opDestroy(op);
 		return true;
 	}
+
 	return false;
 }
 
 bool RuleSoftwareDoubleCast::removeUnusedValues(Varnode *vn, Funcdata &data, bool aggressive)
 
 {
-	if (aggressive && removeUnusedStackOutput(vn->getDef(), data))
+	if (aggressive && vn->getDef() != NULL && removeUnusedStackOutput(vn->getDef(), data))
 		return true;
 
 	for (list<PcodeOp*>::const_iterator iter = vn->beginDescend(); iter != vn->endDescend(); ) {
 		PcodeOp *op = *iter++;
-		if (op->getOut()->hasNoDescend())
+		if (op->getOut() != NULL && op->getOut()->hasNoDescend())
 			data.opDestroy(op);
 		else if (aggressive && op->code() == CPUI_COPY)
 			removeUnusedStackOutput(op, data);
 	}
 
-	if (aggressive && vn->hasNoDescend()) {
+	if (aggressive && vn->getDef() != NULL && vn->hasNoDescend()) {
 		data.opDestroy(vn->getDef());
 		return true;
 	}
