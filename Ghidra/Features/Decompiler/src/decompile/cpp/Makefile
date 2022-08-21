@@ -12,7 +12,7 @@ GHIDRA_BIN=../../../../../../../ghidra.bin
 OS = $(shell uname -s)
 CPU = $(shell uname -m)
 
-# TODO: need to revise to support arm64/aarch64 arch - improve on both OS and arch detection 
+# TODO: need to revise to support arm64/aarch64 arch - improve on both OS and arch detection
 
 ifeq ($(OS),Linux)
 # Allow ARCH to be specified externally so we can build for 32-bit from a 64-bit Linux
@@ -119,7 +119,7 @@ COMMANDLINE_NAMES=$(CORE) $(DECCORE) $(EXTRA) $(SLEIGH) consolemain
 COMMANDLINE_DEBUG=-DCPUI_DEBUG -D__TERMINAL__
 COMMANDLINE_OPT=-D__TERMINAL__
 
-TEST_NAMES=$(CORE) $(DECCORE) $(SLEIGH) $(EXTRA) test 
+TEST_NAMES=$(CORE) $(DECCORE) $(SLEIGH) $(EXTRA) test
 TEST_DEBUG=-D__TERMINAL__
 
 GHIDRA_NAMES=$(CORE) $(DECCORE) $(GHIDRA)
@@ -160,7 +160,7 @@ ifeq ($(MAKECMDGOALS),install_ghidraopt)
 	DEPNAMES=ghi_opt/depend
 endif
 ifeq ($(MAKECMDGOALS),install_ghidradbg)
-	DEPNAMES=ghi_dbg/depend
+	DEPNAMES=$(GHIDRA_DBG_OBJS:%.o=%.d)
 endif
 ifeq ($(MAKECMDGOALS),ghidra_opt)
 	DEPNAMES=ghi_opt/depend
@@ -169,7 +169,7 @@ ifeq ($(MAKECMDGOALS),ghidra_opt_mac)
 	DEPNAMES=ghi_opt/depend
 endif
 ifeq ($(MAKECMDGOALS),ghidra_dbg)
-	DEPNAMES=ghi_dbg/depend
+	DEPNAMES=$(GHIDRA_DBG_OBJS:%.o=%.d)
 endif
 ifeq ($(MAKECMDGOALS),sleigh_opt)
 	DEPNAMES=sla_opt/depend
@@ -221,9 +221,9 @@ com_opt/%.o:	%.cc
 test_dbg/%.o:	%.cc
 	$(CXX) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(TEST_DEBUG)        $< -o $@
 test_dbg/%.o:	../unittests/%.cc
-	$(CXX) -I. $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(TEST_DEBUG)        $< -o $@
+	$(CXX) -I. $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(TEST_DEBUG)    $< -o $@
 ghi_dbg/%.o:	%.cc
-	$(CXX) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(GHIDRA_DEBUG)      $< -o $@
+	$(CXX) -MMD -MP -MF $(patsubst %.o, %.d, $@) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(GHIDRA_DEBUG) $< -o $@
 ghi_opt/%.o:	%.cc
 	$(CXX) $(ARCH_TYPE) -c $(OPT_CXXFLAGS) $(ADDITIONAL_FLAGS) $(GHIDRA_OPT)        $< -o $@
 sla_dbg/%.o:	%.cc
@@ -333,7 +333,7 @@ tags:
 
 # Rules to build the different dependency files
 com_dbg/depend:	$(COMMANDLINE_NAMES:%=%.cc)
-	mkdir -p com_dbg 
+	mkdir -p com_dbg
 	@set -e; rm -f $@; \
 	$(CXX) -MM $(COMMANDLINE_DEBUG) $^ > $@.$$$$; \
 	sed 's,\(.*\)\.o[ :]*,com_dbg/\1.o $@ : ,g' < $@.$$$$ > $@; \
@@ -353,15 +353,8 @@ test_dbg/depend:	$(TEST_NAMES:%=%.cc) $(UNITTEST_NAMES:%=%.cc)
 	sed 's,\(.*\)\.o[ :]*,test_dbg/\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-ghi_dbg/depend:	$(GHIDRA_NAMES_DBG:%=%.cc)
-	mkdir -p ghi_dbg
-	@set -e; rm -f $@; \
-	$(CXX) -MM $(GHIDRA_DEBUG) $^ > $@.$$$$; \
-	sed 's,\(.*\)\.o[ :]*,ghi_dbg/\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$
-
 ghi_opt/depend:	$(GHIDRA_NAMES:%=%.cc)
-	mkdir -p ghi_opt 
+	mkdir -p ghi_opt
 	@set -e; rm -f $@; \
 	$(CXX) -MM $(GHIDRA_OPT) $^ > $@.$$$$; \
 	sed 's,\(.*\)\.o[ :]*,ghi_opt/\1.o $@ : ,g' < $@.$$$$ > $@; \
@@ -395,7 +388,7 @@ com_dbg/depend.lib_sla:	$(LIBSLA_NAMES:%=%.cc)
 	sed 's,\(.*\)\.o[ :]*,com_dbg/\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
-include $(DEPNAMES)
+-include $(DEPNAMES)
 
 doc:
 	doxygen Doxyfile
@@ -407,7 +400,7 @@ clean:
 resetgcov:
 	rm -f *.gcov com_dbg/*.gcda
 
-reallyclean:	clean	
+reallyclean:	clean
 	rm -rf coreext_*.cc coreext_*.hh ghidraext_*.cc ghidraext_*.hh consoleext_*.cc consoleext_*.hh
 	rm -rf com_dbg com_opt test_dbg ghi_dbg ghi_opt sla_dbg sla_opt
 	rm -f $(EXECS) TAGS *~

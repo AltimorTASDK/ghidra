@@ -8235,6 +8235,230 @@ int4 RuleSubfloatConvert::applyOp(PcodeOp *op,Funcdata &data)
 	}
 	return 1;
 }
+/// \class RuleSoftwareDoubleCast
+/// \brief Handle software float conversions done by selecting an exponent that produces a double
+///        value equal to its mantissa as an integer plus a constant
+void RuleSoftwareDoubleCast::getOpList(vector<uint4> &oplist) const
+
+{
+	oplist.push_back(CPUI_FLOAT_SUB);
+}
+
+#warning last arg is for debug print
+static void removeUnusedDescendants(Varnode *vn, Funcdata &data, PcodeOp *origin)
+{
+	for (list<PcodeOp*>::const_iterator iter = vn->beginDescend(); iter != vn->endDescend(); ) {
+		// Increment before removing descendant
+		PcodeOp *op = *iter++;
+
+		ostringstream text;
+		text << "desc: ";
+		op->printRaw(text);
+		text << " op: " << op->code();
+		text << " no descend: " << op->getOut()->hasNoDescend();
+		data.warning(text.str(), origin->getAddr());
+
+		if (op->getOut()->hasNoDescend())
+			data.opDestroy(op);
+	}
+}
+
+static void removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
+{
+	vector<Varnode*> visited;
+	visited.push_back(vn);
+
+	uint4 traced = 0;
+
+	while (traced < visited.size()) {
+		Varnode *current_vn = visited[traced++];
+		list<PcodeOp*>::const_iterator iter = current_vn->beginDescend();
+		list<PcodeOp*>::const_iterator end = current_vn->endDescend();
+		while (iter != end) {
+			PcodeOp *op = *iter++;
+			Varnode *out = op->getOut();
+
+			if (out->isPersist())
+				return;
+
+			if (op->code() == CPUI_INDIRECT) {
+				ostringstream text;
+				origin->printDebug(text);
+				text << " -> ";
+				op->printDebug(text);
+				text << " indirect store " << op->isIndirectStore();
+				data.warning(text.str(), op->getAddr());
+
+				if (out->getAddr() != vn->getAddr()) {
+					ostringstream text;
+					origin->printDebug(text);
+					text << " -> ";
+					op->printDebug(text);
+					text << " data flow cucked";
+					data.warning(text.str(), op->getAddr());
+					return;
+				}
+			} else if (op->code() == CPUI_MULTIEQUAL) {
+				if (out->getAddr() != vn->getAddr()) {
+					ostringstream text;
+					origin->printDebug(text);
+					text << " -> ";
+					op->printDebug(text);
+					text << " data flow cucked";
+					data.warning(text.str(), op->getAddr());
+					return;
+				}
+			} else {
+				ostringstream text;
+				origin->printDebug(text);
+				text << " -> ";
+				op->printDebug(text);
+				text << " data flow cucked";
+				data.warning(text.str(), op->getAddr());
+				return;
+			}
+
+			visited.push_back(out);
+		}
+	}
+
+	ostringstream text;
+	origin->printDebug(text);
+	text << "we did it";
+	data.warning(text.str(), origin->getAddr());
+}
+
+int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
+
+{
+	// Double with exponent equal to mantissa bits
+	const uintb unsigned_magic = 0x4330000000000000;
+
+	// Bias for signed conversions
+	const uint4 sign_mask = 1 << 31;
+	const uintb signed_magic = unsigned_magic ^ sign_mask;
+
+	Varnode *target = op->getIn(0);
+	Varnode *constant = op->getIn(1);
+
+	// Doubles only (though others are possible)
+	if (target->getSize() != 8 || constant->getSize() != 8)
+		return 0;
+
+	bool is_signed;
+
+	if (constant->constantMatch(unsigned_magic))
+		is_signed = false;
+	else if (constant->constantMatch(signed_magic))
+		is_signed = true;
+	else
+		return 0;
+
+	PcodeOp *piece = target->getDef();
+
+	if (piece->code() != CPUI_PIECE)
+		return 0;
+
+	Varnode *hi = piece->getIn(0);
+	Varnode *lo = piece->getIn(1);
+
+	// Concat integer with magic exponent
+	if (!hi->constantMatch(unsigned_magic >> 32))
+		return 0;
+
+
+	Varnode *integer;
+
+	if (!is_signed) {
+		integer = lo;
+	} else {
+		// Sign bit gets flipped before concat if signed
+		PcodeOp *xor_op = lo->getDef();
+
+		if (xor_op->code() != CPUI_INT_XOR || !xor_op->getIn(1)->constantMatch(sign_mask))
+			return 0;
+
+		integer = xor_op->getIn(0);
+
+		removeUnusedDescendants(lo, data, op);
+
+		////////////////////
+		ostringstream filename;
+		filename << "C:\\users\\altim\\decomp_";
+		op->getAddr().printRaw(filename);
+		filename << "_";
+		integer->getDef()->getAddr().printRaw(filename);
+		filename << ".log";
+		ofstream stream(filename.str());
+		data.printRaw(stream);
+		////////////////////
+
+		for (list<PcodeOp*>::const_iterator iter = lo->beginDescend(); iter != lo->endDescend(); ) {
+			PcodeOp *store = *iter++;
+			if (store->code() == CPUI_STORE)
+				removeUnusedStackVar(store->getOut(), data, xor_op);
+		}
+	}
+
+	/*Varnode *out = op->getOut();
+	Varnode *dummy = data.newUnique(op->getOut()->getSize());
+	dummy->updateType(op->outputTypeLocal(), false, false);
+	dummy->setImplied();
+	data.opSetOutput(op, dummy);
+
+	PcodeOp *convert = data.newOp(1, op->getAddr());
+	data.opSetOpcode(convert, CPUI_FLOAT_INT2FLOAT);
+	data.opSetInput(convert, integer, 0);
+	data.opSetOutput(convert, out);
+	data.opInsertAfter(convert, op);*/
+
+	while (integer->getDef()->code() == CPUI_COPY)
+		integer = integer->getDef()->getIn(0);
+
+#if 0
+	PcodeOp *join = integer->getDef();
+
+	/*if (join->code() == CPUI_INT_OR)*/ {
+		ostringstream text;
+		join->printDebug(text);
+		text << " op " << join->code() << " " << join->getOpName() << "; ";
+
+		for (int i = 0; i < join->numInput(); i++) {
+			Varnode *input = join->getIn(i);
+			text << "input " << i;
+			text << " size " << input->getSize();
+			text << " written " << input->isWritten();
+			text << " writemask " << input->isWriteMask();
+			text << " constant " << input->isConstant();
+			if (input->isConstant())
+				text << " offset " << input->getOffset();
+			text << "; ";
+		}
+
+		data.warning(text.str(), op->getAddr());
+	}
+#endif
+
+	data.opUnsetInput(op, 0);
+
+	removeUnusedDescendants(integer, data, op);
+
+	data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
+	data.opSetInput(op, integer, 0);
+	data.opRemoveInput(op, 1);
+
+	//data.opUnlink(piece);
+
+	//recursiveUnlink(piece, data);
+
+	// Recognize as int to float conversion
+	//data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
+	//data.opRemoveInput(op, 1);
+
+	//followOutput(lo, data);
+
+	return 1;
+}
 
 /// \class RuleNegateNegate
 /// \brief Simplify INT_NEGATE chains:  `~~V  =>  V`

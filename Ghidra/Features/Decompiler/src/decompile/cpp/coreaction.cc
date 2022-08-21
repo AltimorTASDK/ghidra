@@ -5182,6 +5182,9 @@ void ActionDatabase::universalAction(Architecture *conf)
 				actprop->addRule( new RuleSubfloatConvert("floatprecision") );
 				actprop->addRule( new RuleFloatCast("floatprecision") );
 				actprop->addRule( new RuleIgnoreNan("floatprecision") );
+				actprop->addRule( new RuleTermOrder("analysis"));
+				actprop->addRule( new RuleIdentityEl("analysis") );
+				actprop->addRule( new RuleSoftwareDoubleCast("typerecovery") );
 				actprop->addRule( new RulePtraddUndo("typerecovery") );
 				actprop->addRule( new RulePtrsubUndo("typerecovery") );
 				actprop->addRule( new RuleSegment("segment") );
