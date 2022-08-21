@@ -16,4 +16,16 @@ ghi_dbg
 ghi_opt
 sla_dbg
 sla_opt
-
+decomp_dbg.exe
+decomp_opt.exe
+ghidra_dbg.exe
+ghidra_opt.exe
+ghidra_test_dbg.exe
+sleigh_dbg.exe
+com_dbg.exe
+com_opt.exe
+test_dbg.exe
+ghi_dbg.exe
+ghi_opt.exe
+sla_dbg.exe
+sla_opt.exe
