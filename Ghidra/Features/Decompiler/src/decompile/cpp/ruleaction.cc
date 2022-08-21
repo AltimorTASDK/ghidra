@@ -8244,8 +8244,7 @@ void RuleSoftwareDoubleCast::getOpList(vector<uint4> &oplist) const
 	oplist.push_back(CPUI_FLOAT_SUB);
 }
 
-#warning last arg is for debug print
-static bool removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
+bool RuleSoftwareDoubleCast::removeUnusedStackVar(Varnode *vn, Funcdata &data)
 
 {
 	vector<Varnode*> visited;
@@ -8269,53 +8268,15 @@ static bool removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 			if (out->isPersist())
 				return false;
 
-			if (op->code() == CPUI_INDIRECT && !op->isIndirectStore()) {
-				ostringstream text;
-				origin->printDebug(text);
-				text << " -> ";
-				op->printDebug(text);
-				text << " indirect";
-				data.warning(text.str(), op->getAddr());
-
-				if (out->getAddr() != vn->getAddr()) {
-					ostringstream text;
-					origin->printDebug(text);
-					text << " -> ";
-					op->printDebug(text);
-					text << " data flow cucked";
-					data.warning(text.str(), op->getAddr());
-					return false;
-				}
-
-				indirects.push_back(op);
-			} else if (op->code() == CPUI_MULTIEQUAL) {
-				ostringstream text;
-				origin->printDebug(text);
-				text << " -> ";
-				op->printDebug(text);
-				text << " multi";
-				data.warning(text.str(), op->getAddr());
-
-				if (out->getAddr() != vn->getAddr()) {
-					ostringstream text;
-					origin->printDebug(text);
-					text << " -> ";
-					op->printDebug(text);
-					text << " data flow cucked";
-					data.warning(text.str(), op->getAddr());
-					return false;
-				}
-
-				multis.push_back(op);
-			} else {
-				ostringstream text;
-				origin->printDebug(text);
-				text << " -> ";
-				op->printDebug(text);
-				text << " data flow cucked";
-				data.warning(text.str(), op->getAddr());
+			if (out->getAddr() != vn->getAddr())
 				return false;
-			}
+
+			if (op->code() == CPUI_INDIRECT && !op->isIndirectStore())
+				indirects.push_back(op);
+			else if (op->code() == CPUI_MULTIEQUAL)
+				multis.push_back(op);
+			else
+				return false;
 
 			visited.push_back(out);
 		}
@@ -8333,40 +8294,35 @@ static bool removeUnusedStackVar(Varnode *vn, Funcdata &data, PcodeOp *origin)
 		}
 	}
 
-	ostringstream text;
-	origin->printDebug(text);
-	text << "we did it";
-	data.warning(text.str(), origin->getAddr());
-
 	return true;
 }
 
-static bool removeUnusedStackOutput(PcodeOp *op, Funcdata &data, PcodeOp *origin)
+bool RuleSoftwareDoubleCast::removeUnusedStackOutput(PcodeOp *op, Funcdata &data)
 
 {
 	Varnode *out = op->getOut();
-	if (/*out->getSpace() == data.getArch()->getStackSpace() &&*/ removeUnusedStackVar(out, data, origin)) {
+	if (out->getSpace() == data.getArch()->getStackSpace() && removeUnusedStackVar(out, data)) {
 		data.opDestroy(op);
 		return true;
 	}
 	return false;
 }
 
-static bool removeUnusedValues(Varnode *vn, Funcdata &data, PcodeOp *origin, bool stack)
+bool RuleSoftwareDoubleCast::removeUnusedValues(Varnode *vn, Funcdata &data, bool aggressive)
 
 {
-	if (stack && removeUnusedStackOutput(vn->getDef(), data, origin))
+	if (aggressive && removeUnusedStackOutput(vn->getDef(), data))
 		return true;
 
 	for (list<PcodeOp*>::const_iterator iter = vn->beginDescend(); iter != vn->endDescend(); ) {
 		PcodeOp *op = *iter++;
 		if (op->getOut()->hasNoDescend())
 			data.opDestroy(op);
-		else if (stack && op->code() == CPUI_COPY)
-			removeUnusedStackOutput(op, data, origin);
+		else if (aggressive && op->code() == CPUI_COPY)
+			removeUnusedStackOutput(op, data);
 	}
 
-	if (stack && vn->hasNoDescend()) {
+	if (aggressive && vn->hasNoDescend()) {
 		data.opDestroy(vn->getDef());
 		return true;
 	}
@@ -8374,26 +8330,15 @@ static bool removeUnusedValues(Varnode *vn, Funcdata &data, PcodeOp *origin, boo
 	return false;
 }
 
-void RuleSoftwareDoubleCast::removeHiConstant(Varnode *lo, Funcdata &data, PcodeOp *origin)
+void RuleSoftwareDoubleCast::removeHiConstants(Funcdata &data)
 
 {
-	list<PcodeOp*>::const_iterator iter = data.beginOp(CPUI_COPY);
-	while (iter != data.endOp(CPUI_COPY)) {
+	list<PcodeOp*>::const_iterator iter = data.beginOpAlive();
+
+	while (iter != data.endOpAlive()) {
 		PcodeOp *op = *iter++;
-		// Magic exponent
-		if (!op->getIn(1)->constantMatch(unsigned_magic >> 32))
-			continue;
-
-		if (!op->getOut()->getAddr().isContiguous(4, lo->getAddr(), 4))
-			continue;
-
-		ostringstream text;
-		text << "hi def ";
-		op->printDebug(text);
-		data.warning(text.str(), op->getAddr());
-
-		if (removeUnusedValues(op->getOut(), data, origin, true))
-			return;
+		if (op->code() == CPUI_COPY && op->getIn(0)->constantMatch(unsigned_magic >> 32))
+			removeUnusedValues(op->getOut(), data, true);
 	}
 }
 
@@ -8428,7 +8373,6 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 	if (!hi->constantMatch(unsigned_magic >> 32))
 		return 0;
 
-
 	Varnode *integer;
 
 	if (!is_signed) {
@@ -8448,6 +8392,19 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 
 	data.opUnsetInput(op, 0);
 
+	removeUnusedValues(target, data, true);
+	if (is_signed)
+		removeUnusedValues(lo, data, true);
+
+	removeUnusedValues(integer, data, false);
+
+	removeHiConstants(data);
+
+	// Recognize as int to float conversion
+	data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
+	data.opSetInput(op, integer, 0);
+	data.opRemoveInput(op, 1);
+
 	////////////////////
 	ostringstream filename;
 	filename << "C:\\users\\altim\\decomp_";
@@ -8458,31 +8415,6 @@ int4 RuleSoftwareDoubleCast::applyOp(PcodeOp *op, Funcdata &data)
 	ofstream stream(filename.str());
 	data.printRaw(stream);
 	////////////////////
-
-	removeUnusedValues(target, data, op, true);
-	if (is_signed)
-		removeUnusedValues(lo, data, op, true);
-
-	// necessary?
-	removeUnusedValues(integer, data, op, false);
-
-	removeHiConstant(lo, data, op);
-
-	// Recognize as int to float conversion
-	data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
-	data.opSetInput(op, integer, 0);
-	data.opRemoveInput(op, 1);
-
-	//hi->getAddr().isContiguous()
-
-	//data.opUnlink(piece);
-
-	//recursiveUnlink(piece, data);
-
-	//data.opSetOpcode(op, CPUI_FLOAT_INT2FLOAT);
-	//data.opRemoveInput(op, 1);
-
-	//followOutput(lo, data);
 
 	return 1;
 }
