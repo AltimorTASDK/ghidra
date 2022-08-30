@@ -8290,7 +8290,7 @@ bool RuleSoftwareDoubleCast::removeUnusedStackVar(Varnode *vn, Funcdata &data)
 	for (auto *op : multis) {
 		for (int i = 0; i < op->numInput(); i++) {
 			if (find(visited.begin(), visited.end(), op->getIn(i)) != visited.end())
-				data.opRemoveInput(op, i);
+				data.opRemoveInput(op, i--);
 		}
 	}
 
