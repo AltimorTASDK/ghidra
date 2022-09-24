@@ -22,50 +22,52 @@ OpToken PrintC::hidden            = { "",    1, 70, OpToken::non_associative, Op
 OpToken PrintC::scope             = { "::",  2, 70, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
 OpToken PrintC::object_member     = { ".",   2, 66, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
 OpToken PrintC::pointer_member    = { "->",  2, 66, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
-OpToken PrintC::subscript         = { "[]",  2, 66, OpToken::non_associative, OpToken::postsurround,   0,  0, (OpToken *)0 };
-OpToken PrintC::function_call     = { "()",  2, 66, OpToken::non_associative, OpToken::postsurround,   0, 10, (OpToken *)0 };
-OpToken PrintC::bitwise_not       = { "~",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::boolean_not       = { "!",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::unary_minus       = { "-",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::unary_plus        = { "+",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::addressof         = { "&",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::dereference       = { "*",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::typecast          = { "()",  2, 62, OpToken::non_associative, OpToken::presurround,    0,  0, (OpToken *)0 };
+OpToken PrintC::subscript         = { "[]",  2, 66, OpToken::l2r_associative, OpToken::postsurround,   0,  0, (OpToken *)0 };
+OpToken PrintC::function_call     = { "()",  2, 66, OpToken::l2r_associative, OpToken::postsurround,   0, 10, (OpToken *)0 };
+
+OpToken PrintC::bitwise_not       = { "~",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::boolean_not       = { "!",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::unary_minus       = { "-",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::unary_plus        = { "+",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::addressof         = { "&",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::dereference       = { "*",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::typecast          = { "()",  2, 62, OpToken::r2l_associative, OpToken::presurround,    0,  0, (OpToken *)0 };
+
 OpToken PrintC::multiply          = { "*",   2, 54, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::divide            = { "/",   2, 54, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::modulo            = { "%",   2, 54, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::divide            = { "/",   2, 54, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::modulo            = { "%",   2, 54, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::binary_plus       = { "+",   2, 50, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::binary_minus      = { "-",   2, 50, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::shift_left        = { "<<",  2, 46, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::shift_right       = { ">>",  2, 46, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::shift_sright      = { ">>",  2, 46, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::less_than         = { "<",   2, 42, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::less_equal        = { "<=",  2, 42, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::greater_than      = { ">",   2, 42, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::greater_equal     = { ">=",  2, 42, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::equal             = { "==",  2, 38, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::not_equal         = { "!=",  2, 38, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::binary_minus      = { "-",   2, 50, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::shift_left        = { "<<",  2, 46, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::shift_right       = { ">>",  2, 46, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::shift_sright      = { ">>",  2, 46, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::less_than         = { "<",   2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::less_equal        = { "<=",  2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::greater_than      = { ">",   2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::greater_equal     = { ">=",  2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::equal             = { "==",  2, 38, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::not_equal         = { "!=",  2, 38, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::bitwise_and       = { "&",   2, 34, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::bitwise_xor       = { "^",   2, 30, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::bitwise_or        = { "|",   2, 26, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::boolean_and       = { "&&",  2, 22, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::boolean_xor       = { "^^",  2, 20, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::boolean_or        = { "||",  2, 18, OpToken::non_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::assignment        = { "=",   2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::boolean_and       = { "&&",  2, 22, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::boolean_xor       = { "^^",  2, 20, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::boolean_or        = { "||",  2, 18, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::comma             = { ",",   2,  2, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
 OpToken PrintC::new_op            = { "",    2, 62, OpToken::non_associative, OpToken::space,          1,  0, (OpToken *)0 };
 
 // Inplace assignment operators
-OpToken PrintC::multequal         = { "*=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::divequal          = { "/=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::remequal          = { "%=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::plusequal         = { "+=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::minusequal        = { "-=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::leftequal         = { "<<=", 2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::rightequal        = { ">>=", 2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::andequal          = { "&=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::orequal           = { "|=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::xorequal          = { "^=",  2, 14, OpToken::non_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::assignment        = { "=",   2, 14, OpToken::l2r_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::multequal         = { "*=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::divequal          = { "/=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::remequal          = { "%=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::plusequal         = { "+=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::minusequal        = { "-=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::leftequal         = { "<<=", 2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::rightequal        = { ">>=", 2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::andequal          = { "&=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::orequal           = { "|=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::xorequal          = { "^=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
 
 // Operator tokens for type expressions
 OpToken PrintC::type_expr_space   = { "",    2, 10, OpToken::non_associative, OpToken::space,          1,  0, (OpToken *)0 };
@@ -2486,20 +2488,34 @@ uint4 PrintC::getBlockStatementCount(const BlockBasic *bb)
 
 bool PrintC::isOneLineBlock(const FlowBlock *bl)
 {
-	if (bl->getType() == FlowBlock::t_copy)
+	switch (bl->getType()) {
+	case FlowBlock::t_condition:
+	case FlowBlock::t_copy:
 		return isOneLineBlock(bl->subBlock(0));
-
-	if (bl->getType() != FlowBlock::t_basic)
+	case FlowBlock::t_basic:
+		return getBlockStatementCount((const BlockBasic*)bl) == 1;
+	default:
 		return false;
-
-	return getBlockStatementCount((const BlockBasic*)bl) == 1;
+	}
 }
 
-bool PrintC::bodyNeedsBraces(const BlockIf *bl)
+bool PrintC::bodyNeedsBraces(const BlockIf *bl, bool descend)
 {
+	if (!descend && bl->sizeIn() == 1 && bl->getIn(0)->getType() == FlowBlock::t_if) {
+		// Start from head of else if chain
+		const auto *prev = (const BlockIf*)bl->getIn(0);
+		if (prev->getBlock(2) == bl)
+			return bodyNeedsBraces(prev);
+	}
+
+	// no complex conditions for else ifs
+	if (descend && !isOneLineBlock(bl->getBlock(0)))
+		return true;
+
 	if (bl->getGotoTarget() != nullptr)
 		return false;
 
+	// one line true clause
 	if (!isOneLineBlock(bl->getBlock(1)))
 		return true;
 
@@ -2507,10 +2523,24 @@ bool PrintC::bodyNeedsBraces(const BlockIf *bl)
 		return false;
 
 	const auto *else_block = bl->getBlock(2);
+
 	if (else_block->getType() == FlowBlock::t_if)
-		return bodyNeedsBraces((const BlockIf*)else_block);
+		return bodyNeedsBraces((const BlockIf*)else_block, true);
 	else
 		return isOneLineBlock(else_block);
+}
+
+bool PrintC::bodyNeedsBraces(const BlockGraph *bl)
+{
+	if (bl->getType() == FlowBlock::t_if)
+		return bodyNeedsBraces((const BlockIf*)bl);
+	else
+		return !isOneLineBlock(bl->getBlock(1));
+}
+
+bool PrintC::isLastChildBlock(const FlowBlock *bl)
+{
+	return bl->getOut(0)->getParent() != bl->getParent();
 }
 
 void PrintC::emitBlockBasic(const BlockBasic *bb)
@@ -2608,8 +2638,8 @@ void PrintC::emitBlockGoto(const BlockGoto *bl)
 	setMod(no_branch);
 	bl->getBlock(0)->emit(this);
 	popMod();
-																// Make sure we don't print goto, if it is the
-																// next block to be printed
+	// Make sure we don't print goto, if it is the
+	// next block to be printed
 	if (bl->gotoPrints()) {
 		emit->tagLine();
 		emitGotoStatement(bl->getBlock(0),bl->getGotoTarget(),bl->getGotoType());
@@ -2710,6 +2740,7 @@ void PrintC::emitBlockCondition(const BlockCondition *bl)
 void PendingBrace::callback(EmitXml *emit)
 
 {
+	emit->spaces(1);
 	emit->print("{");
 	indentId = emit->startIndent();
 }
@@ -2730,16 +2761,25 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	pushMod();
 	unsetMod(no_branch|only_branch|pending_brace);
 
+	const auto emit_braces  = bodyNeedsBraces(bl);
+	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
+	const auto has_else     = bl->getSize() == 3;
+
 	pushMod();
 	setMod(no_branch);
 	FlowBlock *condBlock = bl->getBlock(0);
 	condBlock->emit(this);
 	popMod();
 	emitCommentBlockTree(condBlock);
-	if (emit->hasPendingPrint(&pendingBrace))     // If we issued a brace but it did not emit
+	if (emit->hasPendingPrint(&pendingBrace)) {   // If we issued a brace but it did not emit
 		emit->cancelPendingPrint();           // Cancel the brace in order to have "else if" syntax
-	else
+		emit->spaces(1);
+	} else {
 		emit->tagLine();                      // Otherwise start the "if" on a new line
+	}
+
+	PendingDetector condLineBreakDetector;
+	emit->setPendingPrint(&condLineBreakDetector);
 
 	op = condBlock->lastOp();
 	emit->tagOp("if",EmitXml::keyword_color,op);
@@ -2749,15 +2789,12 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	condBlock->emit(this);
 	popMod();
 
-	const auto emit_braces  = bodyNeedsBraces(bl);
-	const auto emit_newline = emit_braces || bl->getOut(0)->getParent() == bl->getParent();
-	const auto has_else     = bl->getSize() == 3;
-
 	if (bl->getGotoTarget() != nullptr) {
 		emit->spaces(1);
 		emitGotoStatement(condBlock,bl->getGotoTarget(),bl->getGotoType());
 	} else {
 		setMod(no_branch);
+
 		if (emit_braces)
 			emit->spaces(1);
 		int4 id = emit->startIndent();
@@ -2776,21 +2813,20 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 			if (emit_braces)
 				emit->spaces(1);
 			emit->print("else",EmitXml::keyword_color);
-			if (emit_braces)
-				emit->spaces(1);
 			FlowBlock *elseBlock = bl->getBlock(2);
+
 			if (elseBlock->getType() == FlowBlock::t_if) {
 				// Attempt to merge the "else" and "if" syntax
-				if (emit_braces)
-					setMod(pending_brace);
+				setMod(pending_brace);
 				int4 id2 = emit->beginBlock(elseBlock);
 				elseBlock->emit(this);
 				emit->endBlock(id2);
-			}
-			else {
+			} else {
 				int4 id2 = emit->startIndent();
-				if (emit_braces)
+				if (emit_braces) {
+					emit->spaces(1);
 					emit->print("{");
+				}
 				int4 id3 = emit->beginBlock(elseBlock);
 				elseBlock->emit(this);
 				emit->endBlock(id3);
@@ -2822,6 +2858,9 @@ void PrintC::emitForLoop(const BlockWhileDo *bl)
 	const PcodeOp *op;
 	int4 indent;
 
+	const auto emit_braces  = bodyNeedsBraces(bl);
+	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
+
 	pushMod();
 	unsetMod(no_branch|only_branch);
 	emitAnyLabelStatement(bl);
@@ -2851,16 +2890,20 @@ void PrintC::emitForLoop(const BlockWhileDo *bl)
 	emit->endStatement(id4);
 	popMod();
 	emit->closeParen(')',id1);
-	emit->spaces(1);
+	if (emit_braces)
+		emit->spaces(1);
 	indent = emit->startIndent();
-	emit->print("{");
+	if (emit_braces)
+		emit->print("{");
 	setMod(no_branch); // Dont print goto at bottom of clause
 	int4 id2 = emit->beginBlock(bl->getBlock(1));
 	bl->getBlock(1)->emit(this);
 	emit->endBlock(id2);
 	emit->stopIndent(indent);
-	emit->tagLine();
-	emit->print("}");
+	if (emit_newline)
+		emit->tagLine();
+	if (emit_braces)
+		emit->print("}");
 	popMod();
 }
 
@@ -2874,7 +2917,11 @@ void PrintC::emitBlockWhileDo(const BlockWhileDo *bl)
 		emitForLoop(bl);
 		return;
 	}
-																// whiledo block NEVER prints final branch
+
+	const auto emit_braces  = bodyNeedsBraces(bl) || bl->hasOverflowSyntax();
+	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
+
+	// whiledo block NEVER prints final branch
 	pushMod();
 	unsetMod(no_branch|only_branch);
 	emitAnyLabelStatement(bl);
@@ -2923,17 +2970,21 @@ void PrintC::emitBlockWhileDo(const BlockWhileDo *bl)
 		condBlock->emit(this);
 		popMod();
 		emit->closeParen(')',id1);
-		emit->spaces(1);
+		if (emit_braces)
+			emit->spaces(1);
 		indent = emit->startIndent();
-		emit->print("{");
+		if (emit_braces)
+			emit->print("{");
 	}
 	setMod(no_branch); // Dont print goto at bottom of clause
 	int4 id2 = emit->beginBlock(bl->getBlock(1));
 	bl->getBlock(1)->emit(this);
 	emit->endBlock(id2);
 	emit->stopIndent(indent);
-	emit->tagLine();
-	emit->print("}");
+	if (emit_newline)
+		emit->tagLine();
+	if (emit_braces)
+		emit->print("}");
 	popMod();
 }
 
