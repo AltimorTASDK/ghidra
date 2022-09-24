@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -241,7 +241,7 @@ void EmitXml::tagField(const char *ptr,syntax_highlight hl,const Datatype *ct,in
 		if (ct->getId() != 0) {
 			*s << "\" id=\"0x" << hex << ct->getId();
 		}
-		
+
 		*s << "\" off=\"" << dec << o << '\"';
 	}
 	*s << '>';
@@ -649,8 +649,13 @@ void EmitPrettyPrint::print(const TokenSplit &tok)
 		if (indentstack.empty())
 			throw LowlevelError("indent error");
 #ifdef PRETTY_DEBUG
-		if (checkid.empty() || (checkid.back() != tok.getCount()))
-			throw LowlevelError("mismatch1");
+		if (checkid.empty()) {
+			throw LowlevelError("end_indent checkid empty");
+		} else if (checkid.back() != tok.getCount()) {
+			ostringstream ss;
+			ss << "end_indent id " << tok.getCount() << ", expected " << checkid.back();
+			throw LowlevelError(ss.str());
+		}
 		checkid.pop_back();
 		if (indentstack.empty())
 			throw LowlevelError("Empty indent stack");
@@ -663,8 +668,13 @@ void EmitPrettyPrint::print(const TokenSplit &tok)
 	case TokenSplit::end:
 		tok.print(lowlevel);
 #ifdef PRETTY_DEBUG
-		if (checkid.empty() || (checkid.back() != tok.getCount()))
-			throw LowlevelError("mismatch2");
+		if (checkid.empty()) {
+			throw LowlevelError("end checkid empty");
+		} else if (checkid.back() != tok.getCount()) {
+			ostringstream ss;
+			ss << "end id " << tok.getCount() << ", expected " << checkid.back();
+			throw LowlevelError(ss.str());
+		}
 		checkid.pop_back();
 		if (indentstack.empty())
 			throw LowlevelError("indent error");
