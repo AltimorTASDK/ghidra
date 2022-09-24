@@ -17,7 +17,7 @@
 #include "funcdata.hh"
 
 // Operator tokens for expressions
-//                                   token #in prec assoc   optype       space bump
+//                                   token #in prec assoc                     optype                space bump negate
 OpToken PrintC::hidden            = { "",    1, 70, OpToken::non_associative, OpToken::hiddenfunction, 0,  0, (OpToken *)0 };
 OpToken PrintC::scope             = { "::",  2, 70, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
 OpToken PrintC::object_member     = { ".",   2, 66, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
