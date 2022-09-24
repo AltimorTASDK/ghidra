@@ -223,6 +223,8 @@ public:
 	virtual bool bodyNeedsBraces(const BlockGraph *bl);
 	virtual bool isLastChildBlock(const FlowBlock *bl);
 
+	virtual bool shouldEmitInstruction(const PcodeOp *inst);
+
 	virtual void emitBlockBasic(const BlockBasic *bb);
 	virtual void emitBlockGraph(const BlockGraph *bl);
 	virtual void emitBlockCopy(const BlockCopy *bl);

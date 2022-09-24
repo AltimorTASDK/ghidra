@@ -456,45 +456,38 @@ void PrintC::opCbranch(const PcodeOp *op)
 
 {
 	// FIXME:  This routine shouldn't emit directly
-	bool yesif = isSet(flat);
-	bool yesparen = !isSet(comma_separate);
+	int4 id;
 	bool booleanflip = op->isBooleanFlip();
 	uint4 m = mods;
 
-	if (yesif) {                  // If not printing block structure
-		emit->tagOp("if",EmitXml::keyword_color,op);
+	if (isSet(flat)) {                  // If not printing block structure
+		emit->tagOp("if", EmitXml::keyword_color, op);
 		emit->spaces(1);
 		if (op->isFallthruTrue()) { // and the fallthru is the true branch
 			booleanflip = !booleanflip; // print negation of condition
 			m |= falsebranch;   // and print the false (non-fallthru) branch
 		}
-	}
-	int4 id;
-	if (yesparen)
 		id = emit->openParen('(');
-	else
-		id = emit->openGroup();
-	if (booleanflip) {
-		if (checkPrintNegation(op->getIn(1))) {
-			m |= PrintLanguage::negatetoken;
-			booleanflip = false;
-		}
 	}
-	if (booleanflip)
-		pushOp(&boolean_not,op);
-	pushVnImplied(op->getIn(1),op,m);
+
+	if (booleanflip) {
+		if (checkPrintNegation(op->getIn(1)))
+			m |= PrintLanguage::negatetoken;
+		else
+			pushOp(&boolean_not,op);
+	}
+
+	pushVnImplied(op->getIn(1), op, m);
+
 	// Make sure stack is clear before emitting more
 	recurse();
-	if (yesparen)
-		emit->closeParen(')',id);
-	else
-		emit->closeGroup(id);
 
-	if (yesif) {
+	if (isSet(flat)) {
+		emit->closeParen(')', id);
 		emit->spaces(1);
-		emit->print("goto",EmitXml::keyword_color);
+		emit->print("goto", EmitXml::keyword_color);
 		emit->spaces(1);
-		pushVnImplied(op->getIn(0),op,mods);
+		pushVnImplied(op->getIn(0), op, mods);
 	}
 }
 
@@ -2543,72 +2536,84 @@ bool PrintC::isLastChildBlock(const FlowBlock *bl)
 	return bl->getOut(0)->getParent() != bl->getParent();
 }
 
-void PrintC::emitBlockBasic(const BlockBasic *bb)
-
+bool PrintC::shouldEmitInstruction(const PcodeOp *inst)
 {
-	const PcodeOp *inst;
-	bool separator;
+	if (inst->notPrinted())
+		return false;
 
+	if (inst->isBranch() && isSet(no_branch))
+		return false;
+
+	// A straight branch is always printed by the block classes
+	if (inst->code() == CPUI_BRANCH)
+		return false;
+
+	if (inst->getOut() != nullptr && inst->getOut()->isImplied())
+		return false;
+
+	return true;
+}
+
+void PrintC::emitBlockBasic(const BlockBasic *bb)
+{
 	commsorter.setupBlockList(bb);
 	emitLabelStatement(bb);       // Print label (for flat prints)
+
 	if (isSet(only_branch)) {
-		inst = bb->lastOp();
+		const auto *inst = bb->lastOp();
 		if (inst->isBranch())
 			emitExpression(inst);     // Only print branch instruction
+		return;
 	}
-	else {
-		separator = false;
-		list<PcodeOp *>::const_iterator iter;
-		for(iter=bb->beginOp();iter!=bb->endOp();++iter) {
-			inst = *iter;
-			if (inst->notPrinted()) continue;
-			if (inst->isBranch()) {
-				if (isSet(no_branch)) continue;
-				// A straight branch is always printed by
-				// the block classes
-				if (inst->code() == CPUI_BRANCH) continue;
-			}
-			const Varnode *vn = inst->getOut();
-			if ((vn!=(const Varnode *)0)&&(vn->isImplied()))
+
+	if (isSet(comma_separate)) {
+		// Create a comma for each instruction past the first
+		auto first = false;
+		for (auto iter = bb->beginOp(); iter != bb->endOp(); ++iter) {
+			if (!shouldEmitInstruction(*iter))
 				continue;
-			if (separator) {
-				if (isSet(comma_separate)) {
-					emit->print(",");
-					emit->spaces(1);
-				}
-				else {
-					emitCommentGroup(inst);
-					emit->tagLine();
-				}
-			}
-			else if (!isSet(comma_separate)) {
-				emitCommentGroup(inst);
-				emit->tagLine();
-			}
-			emitStatement(inst);
-			separator = true;
+
+			if (first)
+				pushOp(&comma, nullptr);
+			else
+				first = true;
 		}
-																// If we are printing flat structure and there
-																// is no longer a normal fallthru, print a goto
-		if (isSet(flat)&&isSet(nofallthru)) {
-			inst = bb->lastOp();
+	}
+
+	for (auto iter = bb->beginOp(); iter != bb->endOp(); ++iter) {
+		if (!shouldEmitInstruction(*iter))
+			continue;
+
+		if (isSet(comma_separate)) {
+			emitExpression(*iter);
+		} else {
+			emitCommentGroup(*iter);
 			emit->tagLine();
-			int4 id = emit->beginStatement(inst);
-			emit->print("goto",EmitXml::keyword_color);
-			emit->spaces(1);
-			if (bb->sizeOut()==2) {
-				if (inst->isFallthruTrue())
-					emitLabel(bb->getOut(1));
-				else
-					emitLabel(bb->getOut(0));
-			}
+			emitStatement(*iter);
+		}
+	}
+
+	// If we are printing flat structure and there
+	// is no longer a normal fallthru, print a goto
+	if (isSet(flat) && isSet(nofallthru)) {
+		const auto *inst = bb->lastOp();
+		emit->tagLine();
+		int4 id = emit->beginStatement(inst);
+		emit->print("goto", EmitXml::keyword_color);
+		emit->spaces(1);
+		if (bb->sizeOut()==2) {
+			if (inst->isFallthruTrue())
+				emitLabel(bb->getOut(1));
 			else
 				emitLabel(bb->getOut(0));
-			emit->print(";");
-			emit->endStatement(id);
 		}
-		emitCommentGroup((const PcodeOp *)0); // Any remaining comments
+		else
+			emitLabel(bb->getOut(0));
+		emit->print(";");
+		emit->endStatement(id);
 	}
+
+	emitCommentGroup(nullptr); // Any remaining comments
 }
 
 void PrintC::emitBlockGraph(const BlockGraph *bl)
@@ -2704,7 +2709,6 @@ void PrintC::emitBlockLs(const BlockList *bl)
 void PrintC::emitBlockCondition(const BlockCondition *bl)
 
 {
-	// FIXME: get rid of parens and properly emit && and ||
 	if (isSet(no_branch)) {
 		int4 id = emit->beginBlock(bl->getBlock(0));
 		bl->getBlock(0)->emit(this);
@@ -2712,28 +2716,17 @@ void PrintC::emitBlockCondition(const BlockCondition *bl)
 		return;
 	}
 	if (isSet(only_branch) || isSet(comma_separate)) {
-		int4 id = emit->openParen('(');
-		bl->getBlock(0)->emit(this);
-		pushMod();
-		unsetMod(only_branch);
-																// Notice comma_separate placed only on second block
-		setMod(comma_separate);
-
-		// Set up OpToken so it is emitted as if on the stack
-		ReversePolish pol;
-		pol.op = (PcodeOp *)0;
-		pol.visited = 1;
 		if (bl->getOpcode() == CPUI_BOOL_AND)
-			pol.tok = &boolean_and;
+			pushOp(&boolean_and, nullptr);
 		else
-			pol.tok = &boolean_or;
-		emitOp(pol);
+			pushOp(&boolean_or, nullptr);
 
-		int4 id2 = emit->openParen('(');
+		pushMod();
+		setMod(comma_separate);
+		bl->getBlock(0)->emit(this);
+		unsetMod(only_branch);
 		bl->getBlock(1)->emit(this);
-		emit->closeParen(')',id2);
 		popMod();
-		emit->closeParen(')',id);
 	}
 }
 
@@ -2786,7 +2779,9 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	emit->spaces(1);
 	pushMod();
 	setMod(only_branch);
+	int4 id = emit->openParen('(');
 	condBlock->emit(this);
+	emit->closeParen(')', id);
 	popMod();
 
 	if (bl->getGotoTarget() != nullptr) {
@@ -3134,7 +3129,7 @@ void PrintC::emitLabelStatement(const FlowBlock *bl)
 	else {                        // Printing structured version
 		if (!bl->isUnstructuredTarget()) return;
 		if (bl->getType() != FlowBlock::t_copy) return;
-																// Only print labels that have unstructured jump to them
+		// Only print labels that have unstructured jump to them
 	}
 	emit->tagLine(0);
 	emitLabel(bl);
