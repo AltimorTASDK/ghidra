@@ -219,7 +219,9 @@ public:
 
 	virtual uint4 getBlockStatementCount(const BlockBasic *bb);
 	virtual bool isOneLineBlock(const FlowBlock *bl);
-	virtual bool bodyNeedsBraces(const BlockIf *bl);
+	virtual bool bodyNeedsBraces(const BlockIf *bl, bool descend = false);
+	virtual bool bodyNeedsBraces(const BlockGraph *bl);
+	virtual bool isLastChildBlock(const FlowBlock *bl);
 
 	virtual void emitBlockBasic(const BlockBasic *bb);
 	virtual void emitBlockGraph(const BlockGraph *bl);
@@ -317,6 +319,14 @@ public:
 	PendingBrace(void) { indentId = -1; }                 ///< Constructor
 	int4 getIndentId(void) const { return indentId; }     ///< If commands have been issued, returns the new indent level id.
 	virtual void callback(EmitXml *emit);
+};
+
+/// \brief Pending print without side effects for detecting line breaks.
+class PendingDetector : public PendPrint {
+	bool triggered = false;
+public:
+	bool check() const { return triggered; }
+	void callback(EmitXml *emit) override { triggered = true; }
 };
 
 /// \brief Push a token indicating a PTRSUB (a -> operator) is acting at an offset from the original pointer
