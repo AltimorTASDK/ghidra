@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,6 +20,7 @@ import static ghidra.GhidraOptions.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import ghidra.GhidraOptions.CURSOR_MOUSE_BUTTON_NAMES;
 import ghidra.app.util.HelpTopics;
@@ -706,6 +707,7 @@ public class DecompileOptions {
 	public String getXML(DecompInterface iface) {
 		StringBuffer buf = new StringBuffer();
 		buf.append("<optionslist>\n");
+
 		appendOption(buf, "currentaction", "conditionalexe", predicate ? "on" : "off", "");
 		appendOption(buf, "readonly", readOnly ? "on" : "off", "", "");
 		appendOption(buf, "currentaction", iface.getSimplificationStyle(), "unreachable",
@@ -787,6 +789,11 @@ public class DecompileOptions {
 			appendOption(buf, "maxinstruction", Integer.toString(maxIntructionsPer), "", "");
 		}
 		appendOption(buf, "protoeval", protoEvalModel, "", "");
+
+		// Add language decompiler option overrides
+		for (LanguageDecompileOption option : iface.getLanguage().getDecompileOptions())
+			appendOption(buf, option.name, option.param1, option.param2, option.param3);
+
 		buf.append("</optionslist>\n");
 		return buf.toString();
 	}

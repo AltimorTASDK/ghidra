@@ -5,9 +5,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -85,6 +85,7 @@ void BfdArchitecture::resolveArchitecture(void)
 	if (archid.find(':')==string::npos) {
 		archid = loader->getArchType();
 		// kludge to distinguish windows binaries from linux/gcc
+#if 0
 		if (archid.find("efi-app-ia32") != string::npos)
 			archid = "x86:LE:32:default:windows";
 		else if (archid.find("pe-i386") != string::npos)
@@ -103,6 +104,8 @@ void BfdArchitecture::resolveArchitecture(void)
 			archid = "PowerPC:BE:32:default:macosx";
 		else
 			throw LowlevelError("Cannot convert bfd target to sleigh target: "+archid);
+#endif
+		archid = "PowerPC:BE:32:Gekko_Broadway:default";
 	}
 	SleighArchitecture::resolveArchitecture();
 }

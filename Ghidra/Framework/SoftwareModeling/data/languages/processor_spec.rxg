@@ -26,11 +26,15 @@
         </optional>
 
         <optional>
+          <ref name="optionslist_type"/>
+        </optional>
+
+        <optional>
           <element name="programcounter">
             <attribute name="register"/>
           </element>
         </optional>
-        
+
         <optional>
           <element name="data_space">
             <attribute name="space"/>
@@ -90,7 +94,7 @@
           <element name="jumpassist"><ref name="jumpassist_type"/>
           </element>
         </zeroOrMore>
-		
+
         <optional>
           <element name="register_data">
             <oneOrMore>

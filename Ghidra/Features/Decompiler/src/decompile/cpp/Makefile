@@ -39,19 +39,19 @@ CC=gcc
 CXX=g++
 
 # Debug flags
-DBG_CXXFLAGS=-g -std=c++11 -Wall -Wno-sign-compare
+DBG_CXXFLAGS=-g -std=c++23 -Wall -Wno-sign-compare -Wno-unknown-pragmas -Wno-deprecated-enum-enum-conversion
 #DBG_CXXFLAGS=-g -pg -Wall -Wno-sign-compare
 #DBG_CXXFLAGS=-g -fprofile-arcs -ftest-coverage -Wall -Wno-sign-compare
 
 # Optimization flags
-OPT_CXXFLAGS=-O2 -std=c++11 -Wall -Wno-sign-compare
+OPT_CXXFLAGS=-O2 -std=c++23 -Wall -Wno-sign-compare -Wno-unknown-pragmas -Wno-deprecated-enum-enum-conversion
 
 YACC=bison
 
 # libraries
 #INCLUDES=-I$(BFDHOME)/include
 INCLUDES=
-BFDLIB=-lbfd -lz
+BFDLIB=-lbfd -lz -lintl -liberty
 
 LNK=
 
@@ -116,8 +116,8 @@ EXECS=decomp_dbg decomp_opt ghidra_test_dbg ghidra_dbg ghidra_opt sleigh_dbg sle
 #     CPUI_DEBUG               # This is the one controlling switch for all the other debug switches
 
 COMMANDLINE_NAMES=$(CORE) $(DECCORE) $(EXTRA) $(SLEIGH) consolemain
-COMMANDLINE_DEBUG=-DCPUI_DEBUG -D__TERMINAL__
-COMMANDLINE_OPT=-D__TERMINAL__
+COMMANDLINE_DEBUG=-DCPUI_DEBUG -D_WINDOWS
+COMMANDLINE_OPT=
 
 TEST_NAMES=$(CORE) $(DECCORE) $(SLEIGH) $(EXTRA) test
 TEST_DEBUG=-D__TERMINAL__
@@ -187,7 +187,7 @@ ifeq ($(MAKECMDGOALS),libsla_dbg.a)
 	DEPNAMES=com_dbg/depend.lib_sla
 endif
 ifeq ($(MAKECMDGOALS),decomp_dbg)
-	DEPNAMES=com_dbg/depend
+	DEPNAMES=$(COMMANDLINE_DBG_OBJS:%.o=%.d)
 endif
 ifeq ($(MAKECMDGOALS),decomp_opt)
 	DEPNAMES=com_opt/depend
@@ -215,7 +215,7 @@ ifeq ($(MAKECMDGOALS),link_extensions_hard)
 endif
 
 com_dbg/%.o:	%.cc
-	$(CXX) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(COMMANDLINE_DEBUG) $< -o $@
+	$(CXX) -MMD -MP -MF $(patsubst %.o, %.d, $@) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(COMMANDLINE_DEBUG) $< -o $@
 com_opt/%.o:	%.cc
 	$(CXX) $(ARCH_TYPE) -c $(OPT_CXXFLAGS) $(ADDITIONAL_FLAGS) $(COMMANDLINE_OPT)   $< -o $@
 test_dbg/%.o:	%.cc

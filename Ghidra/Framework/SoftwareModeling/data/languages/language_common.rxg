@@ -40,6 +40,31 @@
     </element>
   </define>
 
+  <define name="optionslist_type">
+    <element name="optionslist">
+      <zeroOrMore>
+        <element>
+          <anyName/>
+          <optional>
+            <element name="param1">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="param2">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="param3">
+              <text/>
+            </element>
+          </optional>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
   <!--
       memory_tags_type is a helper choice for memory-tagging elements
       such as global, nohighptr, etc.
@@ -190,7 +215,7 @@
       </zeroOrMore>
     </interleave>
   </define>
-  
+
   <define name="symbol_type">
 	<choice>
       <value type="string">code</value>
@@ -204,7 +229,7 @@
       <attribute name="size"/>
     </optional>
   </define>
-  
+
   <define name="pcode_type">
     <optional>
       <attribute name="paramshift"/>
@@ -245,7 +270,7 @@
       </optional>
     </element>
   </define>
-  
+
   <define name="jumpassist_type">
     <attribute name="name"/>
     <interleave>

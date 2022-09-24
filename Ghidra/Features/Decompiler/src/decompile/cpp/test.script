@@ -1,0 +1,14 @@
+restore ../datatests/ssbm/Physics_UpdateECBBones.xml
+load function Physics_UpdateECBBones
+trace enable
+trace address 0x800425e8
+// trace address 0x800425f8
+// debug action restructure_varnode
+// debug action restructure_high
+// debug action inputprototype
+// option togglerule subfloat_convert off
+// option togglerule shiftand off
+option inplaceops on
+decompile
+print C
+quit

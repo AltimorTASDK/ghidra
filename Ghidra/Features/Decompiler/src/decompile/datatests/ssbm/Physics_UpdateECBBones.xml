@@ -1,0 +1,975 @@
+<xml_savefile name="Physics_UpdateECBBones" target="default" adjustvma="0">
+<binaryimage arch="PowerPC:BE:32:Gekko_Broadway:default">
+<bytechunk space="ram" offset="0x800424dc">
+                        7c0802a6
+900100049421ffa0dbe10058dbc10050
+dba10048db810040db610038db410030
+93e1002c7c7f1b7893c100283bc40000
+80030130540006b541820034c00285c4
+d01f00a4d01f00a8d01f00acd01f00b0
+d01f00b4d01f00b8d01f00bcd01f00c0
+801f0130540006f2901f0130807f00a4
+38a10018801f00a838800000907f00e4
+901f00e8807f00ac801f00b0907f00ec
+901f00f0807f00b4801f00b8907f00f4
+901f00f8807f00bc801f00c0907f00fc
+901f0100c37f0004c35f0008807f010c
+4bfc8c2dc021001838a10018c001001c
+38800000efa1d828ef80d028807f0110
+ffe0e890ffc0e0904bfc8c05c0210018
+c001001cec21d828ec40d028fc1f0840
+fc0008904081000cffe000904800000c
+40800008ffa00090fc1e10404081000c
+ffc0109048000010fc1c104040800008
+ff801090807f011438a1001838800000
+4bfc8badc0210018c001001cec21d828
+ec00d028fc1f08404081000cffe00890
+48000010fc1d084040800008ffa00890
+fc1e00404081000cffc0009048000010
+fc1c004040800008ff800090807f0118
+38a10018388000004bfc8b55c0210018
+c001001cec21d828ec00d028fc1f0840
+4081000cffe0089048000010fc1d0840
+40800008ffa00890fc1e00404081000c
+ffc0009048000010fc1c004040800008
+ff800090807f011c38a1001838800000
+4bfc8afdc0210018c001001cec21d828
+ec00d028fc1f08404081000cffe00890
+48000010fc1d084040800008ffa00890
+fc1e00404081000cffc0009048000010
+fc1c004040800008ff800090807f0120
+38a10018388000004bfc8aa5c0210018
+c001001cec21d828ec00d028fc1f0840
+4081000cffe0089048000010fc1d0840
+40800008ffa00890fc1e00404081000c
+ffc0009048000010fc1c004040800008
+ff80009057c0077b40820018c00285e4
+efff0028efbd002aefde0028ef9c002a
+c02285d8c01f012cfc01004040810008
+48000008fc200090ec5df828c00285c4
+fc02004040800008fc401050fc020840
+40800014c00285b8ec0000b2ffa00090
+ffe00050c02285d8c01f0128fc010040
+4081000848000008fc200090ec5cf028
+c00285c4fc02004040800008fc401050
+fc0208404080001cec1cf02ac02285b8
+ec4100b2ec010032ef80102aefc01028
+57c0073941820010c0a285ccc08285c8
+4800002cc08285e4fc1d204040800008
+48000008fc80e890c0a285e8fc1f2840
+4081000848000008fca0f89057c007ff
+4182001857c006f7c3c285c441820050
+c38285e448000048c00285c4fc1e0040
+40800008ffc0009057c006f741820030
+ec5ee02ac06285b8c02285c8c00285c4
+ec4300b2efc20828ef81102afc1e0040
+4080000cffc00090c38285e4c02285c4
+ec1ee02a38600000d03f0084d39f0088
+d03f008cd3df0090d09f0094c02285b8
+c05f0124ec210032ec02082ad01f0098
+d0bf009cc01f0124ec00082ad01f00a0
+881f003450603e30981f003480010064
+cbe10058cbc10050cba10048cb810040
+cb610038cb41003083e1002c83c10028
+382100607c0803a64e800020
+</bytechunk>
+<bytechunk space="ram" offset="0x804d7f98" readonly="true">
+                3f000000
+</bytechunk>
+<bytechunk space="ram" offset="0x804d7fa4" readonly="true">
+        000000003f800000bf800000
+
+</bytechunk>
+<bytechunk space="ram" offset="0x804d7fb8" readonly="true">
+                40800000
+</bytechunk>
+<bytechunk space="ram" offset="0x804d7fc4" readonly="true">
+        40000000c0000000
+</bytechunk>
+</binaryimage>
+<coretypes>
+<void/>
+<type name="uint" size="4" metatype="uint" id="-9223371465083307041"/>
+<type name="code" size="1" metatype="code" id="-9223371462259126427"/>
+<type name="int" size="4" metatype="int" id="-9223370945157383201"/>
+<type name="uint3" size="3" metatype="uint" id="-9223225663358771405"/>
+<type name="uint5" size="5" metatype="uint" id="-9223225663358771403"/>
+<type name="uint7" size="7" metatype="uint" id="-9223225663358771401"/>
+<type name="uint6" size="6" metatype="uint" id="-9223225661105102435"/>
+<type name="int3" size="3" metatype="int" id="-9223092562322268365"/>
+<type name="int5" size="5" metatype="int" id="-9223092562322268363"/>
+<type name="int7" size="7" metatype="int" id="-9223092562322268361"/>
+<type name="int6" size="6" metatype="int" id="-9223092560068599395"/>
+<type name="char" size="1" metatype="int" char="true" id="-9223091865880322087"/>
+<type name="uint16" size="16" metatype="uint" id="-9185900419569365091"/>
+<type name="ushort" size="2" metatype="uint" id="-9185691276929259553"/>
+<type name="int16" size="16" metatype="int" id="-9151826554224586851"/>
+<type name="byte" size="1" metatype="uint" id="-9151688846347870363"/>
+<type name="bool" size="1" metatype="bool" id="-9151688804115639865"/>
+<type name="sbyte" size="1" metatype="int" id="-9151648198777381019"/>
+<type name="short" size="2" metatype="int" id="-9151648197910059041"/>
+<type name="wchar_t" size="2" metatype="int" utf="true" id="-8801050271826140705"/>
+<type name="wchar32" size="4" metatype="int" utf="true" id="-8801050271826129511"/>
+<type name="double" size="8" metatype="float" id="-6087405195602966429"/>
+<type name="float10" size="10" metatype="float" id="-5894303970639204475"/>
+<type name="float16" size="16" metatype="float" id="-5894303970639204469"/>
+<type name="undefined" size="1" metatype="unknown" id="-4223139060020122321"/>
+<type name="float2" size="2" metatype="float" id="-3085472373819564389"/>
+<type name="undefined2" size="2" metatype="unknown" id="-1989071053142544393"/>
+<type name="undefined4" size="4" metatype="unknown" id="-1989071053142544391"/>
+<type name="undefined6" size="6" metatype="unknown" id="-1989071053142544389"/>
+<type name="undefined8" size="8" metatype="unknown" id="-1989071053142544387"/>
+<type name="undefined5" size="5" metatype="unknown" id="-1989071052499136175"/>
+<type name="undefined3" size="3" metatype="unknown" id="-1989071052499136173"/>
+<type name="undefined7" size="7" metatype="unknown" id="-1989071052499136169"/>
+<type name="undefined1" size="1" metatype="unknown" id="-1989071052499136163"/>
+<type name="ulonglong" size="8" metatype="uint" id="-1409786767045072009"/>
+<type name="longlong" size="8" metatype="int" id="-1409786554015684791"/>
+<type name="float" size="4" metatype="float" id="-120139017508053025"/>
+</coretypes>
+<save_state>
+<typegrp intsize="4" structalign="4" enumsize="4" enumsigned="false">
+<type name="HSD_FObj" id="0x100000000000023" metatype="struct" size="0"></type>
+<type name="HSD_RObjDesc" id="0x100000000000041" metatype="struct" size="0"></type>
+<type name="HSD_Material" id="0x100000000000168" metatype="struct" size="0"></type>
+<type name="HSD_TExpTevDesc" id="0x10000000000016a" metatype="struct" size="0"></type>
+<type name="HSD_TExp" id="0x10000000000016b" metatype="struct" size="0"></type>
+<type name="HSD_VtxDescList" id="0x10000000000007a" metatype="struct" size="0"></type>
+<type name="HSD_TexLODDesc" id="0x1000000000000a4" metatype="struct" size="0"></type>
+<type name="HSD_RObj" id="0x100000000000024" metatype="struct" size="0"></type>
+<type name="HSD_AObj" id="0x100000000000022" metatype="struct" size="0"></type>
+<type name="Vec" id="0x100000000000004" metatype="struct" size="0"></type>
+<type name="Vec2" id="0x10000000000000b" metatype="struct" size="0"></type>
+<type name="Quaternion" id="0x10000000000001d" metatype="struct" size="0"></type>
+<type name="HSD_Class" id="0x10000000000006b" metatype="struct" size="0"></type>
+<type name="GXColor" id="0x10000000000000f" metatype="struct" size="0"></type>
+<type name="HSD_PObjClass" id="0x10000000000007b" metatype="struct" size="0"></type>
+<type name="HSD_PEDesc" id="0x100000000000169" metatype="struct" size="0"></type>
+<type name="HSD_ImageDesc" id="0x1000000000000a1" metatype="struct" size="0"></type>
+<type name="HSD_TlutDesc" id="0x1000000000000a2" metatype="struct" size="0"></type>
+<type name="HSD_ClassInfoHead" id="0x100000000000069" metatype="struct" size="0"></type>
+<type name="HSD_GObj" id="0x10000000000000d" metatype="struct" size="0"></type>
+<type name="Mtx" id="0x100000000000006" metatype="struct" size="0"></type>
+<type name="HSD_JObjDesc" id="0x100000000000025" metatype="struct" size="0"></type>
+<type name="CollisionContact" id="0x10000000000002f" metatype="struct" size="0"></type>
+<type name="ECB" id="0x10000000000001c" metatype="struct" size="0"></type>
+<type name="HSD_Object" id="0x100000000000009" metatype="struct" size="0"></type>
+<type name="HSD_DObj" id="0x10000000000005a" metatype="struct" size="0"></type>
+<type name="HSD_MObj" id="0x10000000000005b" metatype="struct" size="0"></type>
+<type name="HSD_TObjTev" id="0x1000000000000a5" metatype="struct" size="0"></type>
+<type name="HSD_PObj" id="0x100000000000079" metatype="struct" size="0"></type>
+<type name="HSD_ClassInfo" id="0x10000000000006a" metatype="struct" size="0"></type>
+<type name="HSD_GObjProc" id="0x10000000000000e" metatype="struct" size="0"></type>
+<type name="Physics" id="0x100000000000017" metatype="struct" size="0"></type>
+<type name="HSD_TObj" id="0x100000000000021" metatype="struct" size="0"></type>
+<type name="HSD_JObj" id="0x100000000000013" metatype="struct" size="0"></type>
+<type name="HSD_PObjInfo" id="0x100000000000078" metatype="struct" size="0"></type>
+<type name="GObjClass" id="0x800000000000003" metatype="uint" size="2" enum="true">
+<val name="GOBJ_CLASS_ZAKO" value="2"/><val name="GOBJ_CLASS_STAGE" value="3"/><val name="GOBJ_CLASS_PLAYER" value="4"/><val name="GOBJ_CLASS_ITEM" value="6"/><val name="GOBJ_CLASS_GFX" value="8"/><val name="GOBJ_CLASS_TEXT" value="9"/><val name="GOBJ_CLASS_FOG" value="10"/><val name="GOBJ_CLASS_LIGHT" value="11"/><val name="GOBJ_CLASS_UI" value="14"/><val name="GOBJ_CLASS_CAMERA" value="19"/><val name="GOBJ_CLASS_DEV_TEXT" value="21"/></type>
+<type name="GObjPLink" id="0x800000000000004" metatype="uint" size="1" enum="true">
+<val name="GOBJ_PLINK_LIGHT" value="3"/><val name="GOBJ_PLINK_STAGE" value="5"/><val name="GOBJ_PLINK_PLAYER" value="8"/><val name="GOBJ_PLINK_ITEM" value="9"/><val name="GOBJ_PLINK_GFX1" value="11"/><val name="GOBJ_PLINK_GFX2" value="12"/><val name="GOBJ_PLINK_UI" value="15"/><val name="GOBJ_PLINK_MENU_CAMERA" value="18"/><val name="GOBJ_PLINK_DEV_TEXT" value="24"/><val name="GOBJ_PLINK_MENU_SCENE" value="26"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="Vec" id="0x100000000000004"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="Mtx" id="0x100000000000006"/></type>
+<type name="ECBFlag" id="0x800000000000013" metatype="uint" size="4" enum="true">
+<val name="ECBFlag_FreezeBottom" value="16"/><val name="ECBFlag_ZeroLastECB" value="32"/></type>
+<type name="JObjFlag" id="0x800000000000014" metatype="uint" size="4" enum="true">
+<val name="SKELETON" value="1"/><val name="SKELETON_ROOT" value="2"/><val name="CLASSICAL_SCALE" value="4"/><val name="ENVELOPE_MODEL" value="8"/><val name="HIDDEN" value="16"/><val name="PTCL" value="32"/><val name="MTX_DIRTY" value="64"/><val name="LIGHTING" value="128"/><val name="TEXGEN" value="256"/><val name="BILLBOARD" value="512"/><val name="VBILLBOARD" value="1024"/><val name="HBILLBOARD" value="1536"/><val name="RBILLBOARD" value="2048"/><val name="INSTANCE" value="4096"/><val name="PBILLBOARD" value="8192"/><val name="SPLINE" value="16384"/><val name="FLIP_IK" value="32768"/><val name="SPECULAR" value="65536"/><val name="USE_QUATERNION" value="131072"/><val name="OPA" value="262144"/><val name="XLU" value="524288"/><val name="TEXEDGE" value="1048576"/><val name="JOINT1" value="2097152"/><val name="JOINT2" value="4194304"/><val name="EFFECTOR" value="6291456"/><val name="USER_DEF_MTX" value="8388608"/><val name="MTX_INDEP_PARENT" value="16777216"/><val name="MTX_INDEP_SRT" value="33554432"/></type>
+<type name="AObjFlag" id="0x800000000000018" metatype="uint" size="4" enum="true">
+<val name="AOBJ_REWINDED" value="67108864"/><val name="AOBJ_FIRST_PLAY" value="134217728"/><val name="AOBJ_NO_UPDATE" value="268435456"/><val name="AOBJ_LOOP" value="536870912"/><val name="AOBJ_NO_ANIM" value="1073741824"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_GObjProc" id="0x10000000000000e"/></type>
+<type name="ECBUpdateFlag" id="0x80000000000001f" metatype="uint" size="4" enum="true">
+<val name="ECBUpdateFlag_GroundECB" value="1"/><val name="ECBUpdateFlag_Unused1" value="2"/><val name="ECBUpdateFlag_No2UnitExpansion" value="4"/><val name="ECBUpdateFlag_SkinnyECB" value="8"/><val name="ECBUpdateFlag_ShortECB" value="16"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type>
+<type name="HSD_FObj" id="0x100000000000023" metatype="struct" size="1">
+</type>
+<type name="" metatype="ptr" size="4"><typeref name="Physics" id="0x100000000000017"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_FObj" id="0x100000000000023"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_Object" id="0x100000000000009"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_RObj" id="0x100000000000024"/></type>
+<type name="CollisionAttribute32" id="0x800000000000033" metatype="uint" size="4" enum="true">
+<val name="CollisionAttribute_Platform" value="256"/><val name="CollisionAttribute_Ledge" value="512"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_JObjDesc" id="0x100000000000025"/></type>
+<type name="CollisionPushFlag" id="0x800000000000036" metatype="uint" size="1" enum="true">
+<val name="CollisionPushFlag_Squeezed" value="2"/><val name="CollisionPushFlag_Pushed" value="4"/></type>
+<type name="GObjUserDataKind" id="0x800000000000038" metatype="uint" size="1" enum="true">
+<val name="HSD_GOBJ_USER_DATA_GENERIC" value="0"/><val name="HSD_GOBJ_USER_DATA_PLAYER" value="4"/><val name="HSD_GOBJ_USER_DATA_NONE" value="255"/></type>
+<type name="HSD_PObjFlags" id="0x80000000000003b" metatype="uint" size="2" enum="true">
+<val name="POBJ_SKIN" value="0"/><val name="POBJ_ANIM" value="8"/><val name="POBJ_SHAPEANIM" value="4096"/><val name="POBJ_ENVELOPE" value="8192"/><val name="POBJ_CULLFRONT" value="16384"/><val name="POBJ_CULLBACK" value="32768"/></type>
+<type name="HSD_RObjDesc" id="0x100000000000041" metatype="struct" size="1">
+</type>
+<type name="RObjFlag" id="0x800000000000046" metatype="uint" size="4" enum="true">
+<val name="CONSTRAINT_POS" value="1"/><val name="CONSTRAINT_IK" value="2"/><val name="CONSTRAINT_ROT" value="4"/><val name="REFTYPE_JOBJ" value="268435456"/><val name="REFTYPE_LIMIT" value="536870912"/><val name="REFTYPE_IKHINT" value="1073741824"/><val name="ROBJ_CONSTRAINT" value="2147483648"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_JObjDesc" id="0x100000000000025"/></type>
+<type name="GObjGXLink" id="0x800000000000056" metatype="uint" size="1" enum="true">
+<val name="GOBJ_GXLINK_FOG" value="0"/><val name="GOBJ_GXLINK_LIGHT" value="1"/><val name="GOBJ_GXLINK_MENU_BG" value="2"/><val name="GOBJ_GXLINK_MENU_FG" value="3"/><val name="GOBJ_GXLINK_PLAYER" value="5"/><val name="GOBJ_GXLINK_ITEM" value="6"/><val name="GOBJ_GXLINK_HUD" value="11"/><val name="GOBJ_GXLINK_OVERLAY" value="16"/><val name="GOBJ_GXLINK_DEVTEXT" value="17"/><val name="GOBJ_GXLINK_SAVE_ICON" value="19"/><val name="GOBJ_GXLINK_NONE" value="255"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_ImageDesc" id="0x1000000000000a1"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TlutDesc" id="0x1000000000000a2"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TexLODDesc" id="0x1000000000000a4"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_DObj" id="0x10000000000005a"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_MObj" id="0x10000000000005b"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_PObj" id="0x100000000000079"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_DObj" id="0x10000000000005a"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TObjTev" id="0x1000000000000a5"/></type>
+<type name="HSD_Material" id="0x100000000000168" metatype="struct" size="1">
+</type>
+<type name="HSD_TExpTevDesc" id="0x10000000000016a" metatype="struct" size="1">
+</type>
+<type name="HSD_TExp" id="0x10000000000016b" metatype="struct" size="1">
+</type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_RObjDesc" id="0x100000000000041"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></type>
+<type name="HSD_VtxDescList" id="0x10000000000007a" metatype="struct" size="1">
+</type>
+<type name="Collide" id="0x800000000000084" metatype="uint" size="4" enum="true">
+<val name="Collide_LeftWallPush" value="1"/><val name="Collide_LeftWallHug" value="32"/><val name="Collide_LeftWallMask" value="63"/><val name="Collide_RightWallPush" value="64"/><val name="Collide_RightWallHug" value="2048"/><val name="Collide_RightWallMask" value="4032"/><val name="Collide_CeilingPush" value="8192"/><val name="Collide_CeilingHug" value="16384"/><val name="Collide_FloorPush" value="32768"/><val name="Collide_FloorHug" value="65536"/><val name="Collide_LeftEdge" value="1048576"/><val name="Collide_RightEdge" value="2097152"/><val name="Collide_Edge" value="8388608"/><val name="Collide_LeftLedgeGrab" value="16777216"/><val name="Collide_RightLedgeGrab" value="33554432"/><val name="Collide_LeftEdgeSlip" value="268435456"/><val name="Collide_RightEdgeSlip" value="536870912"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_PObjInfo" id="0x100000000000078"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_Material" id="0x100000000000168"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_PObj" id="0x100000000000079"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_PEDesc" id="0x100000000000169"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_VtxDescList" id="0x10000000000007a"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TExpTevDesc" id="0x10000000000016a"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_TExp" id="0x10000000000016b"/></type>
+<type name="DObjFlag" id="0x80000000000008b" metatype="uint" size="4" enum="true">
+<val name="DOBJ_00000000" value="0"/></type>
+<type name="PEFlag" id="0x80000000000008f" metatype="uint" size="1" enum="true">
+<val name="ENABLE_COLOR_UPDATE" value="1"/><val name="ENABLE_ALPHA_UPDATE" value="2"/><val name="ENABLE_DST_ALPHA" value="4"/><val name="BEFORE_TEX" value="8"/><val name="ENABLE_COMPARE" value="16"/><val name="ENABLE_ZUPDATE" value="32"/><val name="ENABLE_DITHER" value="64"/></type>
+<type name="GObjKind" id="0x80000000000009c" metatype="uint" size="1" enum="true">
+<val name="GOBJ_KIND_SOBJ" value="0"/><val name="GOBJ_KIND_LIGHT" value="2"/><val name="GOBJ_KIND_JOBJ" value="3"/><val name="GOBJ_KIND_NONE" value="255"/></type>
+<type name="HSD_TexLODDesc" id="0x1000000000000a4" metatype="struct" size="1">
+</type>
+<type name="HSD_RObj" id="0x100000000000024" metatype="struct" size="28">
+<field name="next" offset="0"><type name="" metatype="ptr" size="4"><typeref name="HSD_RObj" id="0x100000000000024"/></type></field>
+<field name="flags" offset="4"><typeref name="RObjFlag" id="0x800000000000046"/></field>
+<field name="jobj" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></field>
+<field name="aobj" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type></field>
+</type>
+<type name="" metatype="array" size="24" arraysize="6"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></type>
+<type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_ImageDesc" id="0x1000000000000a1"/></type></type>
+<type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_TlutDesc" id="0x1000000000000a2"/></type></type>
+<type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type>
+<type name="" metatype="ptr" size="4"><void/></type>
+<type name="GObjCallback" id="0x60000000000000a" metatype="code" size="1"><prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr/>
+   <void/>  </returnsym>
+<internallist>
+<param typelock="true" namelock="false">
+  <addr/>
+  <type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></param>
+</internallist>
+</prototype>
+</type>
+<type name="HSD_AObj" id="0x100000000000022" metatype="struct" size="28">
+<field name="flags" offset="0"><typeref name="AObjFlag" id="0x800000000000018"/></field>
+<field name="curr_frame" offset="4"><typeref name="float"/></field>
+<field name="rewind_frame" offset="8"><typeref name="float"/></field>
+<field name="end_frame" offset="12"><typeref name="float"/></field>
+<field name="framerate" offset="16"><typeref name="float"/></field>
+<field name="fobj" offset="20"><type name="" metatype="ptr" size="4"><typeref name="HSD_FObj" id="0x100000000000023"/></type></field>
+<field name="hsd_obj" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_Object" id="0x100000000000009"/></type></field>
+</type>
+<type name="" metatype="array" size="48" arraysize="12"><typeref name="float"/></type>
+<type name="Vec" id="0x100000000000004" metatype="struct" size="12">
+<field name="x" offset="0"><typeref name="float"/></field>
+<field name="y" offset="4"><typeref name="float"/></field>
+<field name="z" offset="8"><typeref name="float"/></field>
+</type>
+<type name="Vec2" id="0x10000000000000b" metatype="struct" size="8">
+<field name="x" offset="0"><typeref name="float"/></field>
+<field name="y" offset="4"><typeref name="float"/></field>
+</type>
+<type name="Quaternion" id="0x10000000000001d" metatype="struct" size="16">
+<field name="x" offset="0"><typeref name="float"/></field>
+<field name="y" offset="4"><typeref name="float"/></field>
+<field name="z" offset="8"><typeref name="float"/></field>
+<field name="w" offset="12"><typeref name="float"/></field>
+</type>
+<type name="HSD_Class" id="0x10000000000006b" metatype="struct" size="4">
+<field name="class_info" offset="0"><type name="" metatype="ptr" size="4"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></type></field>
+</type>
+<type name="" metatype="ptr" size="4"><type name="byte" metatype="uint" size="1"></type></type>
+<type name="GXColor" id="0x10000000000000f" metatype="struct" size="4">
+<field name="r" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="g" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="b" offset="2"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="a" offset="3"><type name="byte" metatype="uint" size="1"></type></field>
+</type>
+<type name="HSD_PObjClass" id="0x10000000000007b" metatype="struct" size="4">
+<field name="class_info" offset="0"><type name="" metatype="ptr" size="4"><typeref name="HSD_PObjInfo" id="0x100000000000078"/></type></field>
+</type>
+<type name="HSD_PEDesc" id="0x100000000000169" metatype="struct" size="12">
+<field name="flags" offset="0"><typeref name="PEFlag" id="0x80000000000008f"/></field>
+<field name="ref0" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="ref1" offset="2"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="dst_alpha" offset="3"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="type" offset="4"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="src_factor" offset="5"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="dst_factor" offset="6"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="logic_op" offset="7"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="z_comp" offset="8"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_comp0" offset="9"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_op" offset="10"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_comp1" offset="11"><type name="byte" metatype="uint" size="1"></type></field>
+</type>
+<type name="HSD_ImageDesc" id="0x1000000000000a1" metatype="struct" size="24">
+<field name="img_ptr" offset="0"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="width" offset="4"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="height" offset="6"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="format" offset="8"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="mipmap" offset="12"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="minLOD" offset="16"><typeref name="float"/></field>
+<field name="maxLOD" offset="20"><typeref name="float"/></field>
+</type>
+<type name="HSD_TlutDesc" id="0x1000000000000a2" metatype="struct" size="14">
+<field name="lut" offset="0"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="fmt" offset="4"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="tlut_name" offset="8"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="n_entries" offset="12"><type name="ushort" metatype="uint" size="2"></type></field>
+</type>
+<type name="HSD_ClassInfoHead" id="0x100000000000069" metatype="struct" size="40">
+<field name="info_init" offset="0"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="flags" offset="4"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="library_name" offset="8"><type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type></field>
+<field name="class_name" offset="12"><type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type></field>
+<field name="obj_size" offset="16"><type name="short" metatype="int" size="2"></type></field>
+<field name="info_size" offset="18"><type name="short" metatype="int" size="2"></type></field>
+<field name="parent" offset="20"><type name="" metatype="ptr" size="4"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></type></field>
+<field name="next" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></type></field>
+<field name="child" offset="28"><type name="" metatype="ptr" size="4"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></type></field>
+<field name="nb_exist" offset="32"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="nb_peak" offset="36"><type name="uint" metatype="uint" size="4"></type></field>
+</type>
+<type name="HSD_GObj" id="0x10000000000000d" metatype="struct" size="56">
+<field name="classifier" offset="0"><typeref name="GObjClass" id="0x800000000000003"/></field>
+<field name="p_link" offset="2"><typeref name="GObjPLink" id="0x800000000000004"/></field>
+<field name="gx_link" offset="3"><typeref name="GObjGXLink" id="0x800000000000056"/></field>
+<field name="p_priority" offset="4"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="render_priority" offset="5"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="obj_kind" offset="6"><typeref name="GObjKind" id="0x80000000000009c"/></field>
+<field name="user_data_kind" offset="7"><typeref name="GObjUserDataKind" id="0x800000000000038"/></field>
+<field name="next" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></field>
+<field name="prev" offset="12"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></field>
+<field name="next_gx" offset="16"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></field>
+<field name="prev_gx" offset="20"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></field>
+<field name="proc" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObjProc" id="0x10000000000000e"/></type></field>
+<field name="render_cb" offset="28"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="gxlink_prios" offset="32"><type name="ulonglong" metatype="uint" size="8"></type></field>
+<field name="hsd_obj" offset="40"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="data" offset="44"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="user_data_remove_func" offset="48"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="pad0034" offset="52"><type name="" metatype="ptr" size="4"><void/></type></field>
+</type>
+<type name="" metatype="ptr" size="4"><typeref name="GObjCallback" id="0x60000000000000a" size="1"/></type>
+<type name="Mtx" id="0x100000000000006" metatype="struct" size="48">
+<field name="m" offset="0"><type name="" metatype="array" size="48" arraysize="12"><typeref name="float"/></type></field>
+</type>
+<type name="HSD_JObjDesc" id="0x100000000000025" metatype="struct" size="64">
+<field name="class_name" offset="0"><type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type></field>
+<field name="flags" offset="4"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="child" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObjDesc" id="0x100000000000025"/></type></field>
+<field name="next" offset="12"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObjDesc" id="0x100000000000025"/></type></field>
+<field name="u" offset="16"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="rotation" offset="20"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="scale" offset="32"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="position" offset="44"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="mtx" offset="56"><type name="" metatype="ptr" size="4"><typeref name="Mtx" id="0x100000000000006"/></type></field>
+<field name="robjdesc" offset="60"><type name="" metatype="ptr" size="4"><typeref name="HSD_RObjDesc" id="0x100000000000041"/></type></field>
+</type>
+<type name="CollisionContact" id="0x10000000000002f" metatype="struct" size="20">
+<field name="line" offset="0"><type name="int" metatype="int" size="4"></type></field>
+<field name="type" offset="4"><typeref name="CollisionAttribute32" id="0x800000000000033"/></field>
+<field name="normal" offset="8"><typeref name="Vec" id="0x100000000000004"/></field>
+</type>
+<type name="ECB" id="0x10000000000001c" metatype="struct" size="32">
+<field name="top" offset="0"><typeref name="Vec2" id="0x10000000000000b"/></field>
+<field name="bottom" offset="8"><typeref name="Vec2" id="0x10000000000000b"/></field>
+<field name="right" offset="16"><typeref name="Vec2" id="0x10000000000000b"/></field>
+<field name="left" offset="24"><typeref name="Vec2" id="0x10000000000000b"/></field>
+</type>
+<type name="HSD_Object" id="0x100000000000009" metatype="struct" size="8">
+<field name="class" offset="0"><typeref name="HSD_Class" id="0x10000000000006b"/></field>
+<field name="ref_count" offset="4"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="ref_count_individual" offset="6"><type name="ushort" metatype="uint" size="2"></type></field>
+</type>
+<type name="HSD_DObj" id="0x10000000000005a" metatype="struct" size="24">
+<field name="parent" offset="0"><typeref name="HSD_Class" id="0x10000000000006b"/></field>
+<field name="next" offset="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_DObj" id="0x10000000000005a"/></type></field>
+<field name="mobj" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_MObj" id="0x10000000000005b"/></type></field>
+<field name="pobj" offset="12"><type name="" metatype="ptr" size="4"><typeref name="HSD_PObj" id="0x100000000000079"/></type></field>
+<field name="aobj" offset="16"><type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type></field>
+<field name="flags" offset="20"><typeref name="DObjFlag" id="0x80000000000008b"/></field>
+</type>
+<type name="HSD_MObj" id="0x10000000000005b" metatype="struct" size="48">
+<field name="parent" offset="0"><typeref name="HSD_Class" id="0x10000000000006b"/></field>
+<field name="rendermode" offset="4"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="tobj" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type></field>
+<field name="mat" offset="12"><type name="" metatype="ptr" size="4"><typeref name="HSD_Material" id="0x100000000000168"/></type></field>
+<field name="pe" offset="16"><type name="" metatype="ptr" size="4"><typeref name="HSD_PEDesc" id="0x100000000000169"/></type></field>
+<field name="aobj" offset="20"><type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type></field>
+<field name="tevdesc" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_TExpTevDesc" id="0x10000000000016a"/></type></field>
+<field name="texp" offset="28"><type name="" metatype="ptr" size="4"><typeref name="HSD_TExp" id="0x10000000000016b"/></type></field>
+<field name="tobj_toon" offset="32"><type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type></field>
+<field name="tobj_gradation" offset="36"><type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type></field>
+<field name="tobj_backlight" offset="40"><type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type></field>
+<field name="z_offset" offset="44"><typeref name="float"/></field>
+</type>
+<type name="HSD_TObjTev" id="0x1000000000000a5" metatype="struct" size="32">
+<field name="color_op" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_op" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_bias" offset="2"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_bias" offset="3"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_scale" offset="4"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_scale" offset="5"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_clamp" offset="6"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_clamp" offset="7"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_a" offset="8"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_b" offset="9"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_c" offset="10"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_d" offset="11"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_a" offset="12"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_b" offset="13"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_c" offset="14"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha_d" offset="15"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="constant" offset="16"><typeref name="GXColor" id="0x10000000000000f"/></field>
+<field name="tev0" offset="20"><typeref name="GXColor" id="0x10000000000000f"/></field>
+<field name="tev1" offset="24"><typeref name="GXColor" id="0x10000000000000f"/></field>
+</type>
+<type name="HSD_PObj" id="0x100000000000079" metatype="struct" size="28">
+<field name="parent" offset="0"><typeref name="HSD_PObjClass" id="0x10000000000007b"/></field>
+<field name="next" offset="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_PObj" id="0x100000000000079"/></type></field>
+<field name="verts" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_VtxDescList" id="0x10000000000007a"/></type></field>
+<field name="flags" offset="12"><typeref name="HSD_PObjFlags" id="0x80000000000003b"/></field>
+<field name="n_display" offset="14"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="display" offset="16"><type name="" metatype="ptr" size="4"><type name="byte" metatype="uint" size="1"></type></type></field>
+<field name="u" offset="20"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="aobj" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type></field>
+</type>
+<type name="HSD_ClassInfo" id="0x10000000000006a" metatype="struct" size="60">
+<field name="head" offset="0"><typeref name="HSD_ClassInfoHead" id="0x100000000000069"/></field>
+<field name="alloc" offset="40"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="init" offset="44"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="release" offset="48"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="destroy" offset="52"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="amnesia" offset="56"><type name="" metatype="ptr" size="4"><void/></type></field>
+</type>
+<type name="HSD_GObjProc" id="0x10000000000000e" metatype="struct" size="24">
+<field name="child" offset="0"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObjProc" id="0x10000000000000e"/></type></field>
+<field name="next" offset="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObjProc" id="0x10000000000000e"/></type></field>
+<field name="prev" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObjProc" id="0x10000000000000e"/></type></field>
+<field name="s_link" offset="12"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="flags" offset="13"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="gobj" offset="16"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></field>
+<field name="callback" offset="20"><type name="" metatype="ptr" size="4"><typeref name="GObjCallback" id="0x60000000000000a" size="1"/></type></field>
+</type>
+<type name="Physics" id="0x100000000000017" metatype="struct" size="412">
+<field name="gobj" offset="0"><type name="" metatype="ptr" size="4"><typeref name="HSD_GObj" id="0x10000000000000d"/></type></field>
+<field name="position" offset="4"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="trace_start_position" offset="16"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="start_position" offset="28"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="last_position" offset="40"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="push_flags" offset="52"><typeref name="CollisionPushFlag" id="0x800000000000036"/></field>
+<field name="field6_0x35" offset="53"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="direction" offset="54"><type name="short" metatype="int" size="2"></type></field>
+<field name="last_stage_animation_frame" offset="56"><type name="int" metatype="int" size="4"></type></field>
+<field name="platform_pass_line" offset="60"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="right_ledge_line" offset="64"><type name="int" metatype="int" size="4"></type></field>
+<field name="left_ledge_line" offset="68"><type name="int" metatype="int" size="4"></type></field>
+<field name="exclude_joint" offset="72"><type name="int" metatype="int" size="4"></type></field>
+<field name="only_check_joint" offset="76"><type name="int" metatype="int" size="4"></type></field>
+<field name="weight" offset="80"><typeref name="float"/></field>
+<field name="ledge_grab_width" offset="84"><typeref name="float"/></field>
+<field name="ledge_grab_y_offset" offset="88"><typeref name="float"/></field>
+<field name="ledge_grab_height" offset="92"><typeref name="float"/></field>
+<field name="stick_x" offset="96"><typeref name="float"/></field>
+<field name="unsqueezed_ecb" offset="100"><typeref name="ECB" id="0x10000000000001c"/></field>
+<field name="end_ecb" offset="132"><typeref name="ECB" id="0x10000000000001c"/></field>
+<field name="ecb" offset="164"><typeref name="ECB" id="0x10000000000001c"/></field>
+<field name="start_ecb" offset="196"><typeref name="ECB" id="0x10000000000001c"/></field>
+<field name="last_ecb" offset="228"><typeref name="ECB" id="0x10000000000001c"/></field>
+<field name="ecb_type" offset="260"><type name="int" metatype="int" size="4"></type></field>
+<field name="root_bone" offset="264"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></field>
+<field name="ecb_bones" offset="268"><type name="" metatype="array" size="24" arraysize="6"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></type></field>
+<field name="ecb_side_y_offset" offset="292"><typeref name="float"/></field>
+<field name="min_asymmetrical_ecb_height" offset="296"><typeref name="float"/></field>
+<field name="min_asymmetrical_ecb_width" offset="300"><typeref name="float"/></field>
+<field name="ecb_flags" offset="304"><typeref name="ECBFlag" id="0x800000000000013"/></field>
+<field name="collide" offset="308"><typeref name="Collide" id="0x800000000000084"/></field>
+<field name="last_collide" offset="312"><typeref name="Collide" id="0x800000000000084"/></field>
+<field name="contact_point" offset="320"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="floor" offset="332"><typeref name="CollisionContact" id="0x10000000000002f"/></field>
+<field name="left_wall" offset="352"><typeref name="CollisionContact" id="0x10000000000002f"/></field>
+<field name="right_wall" offset="372"><typeref name="CollisionContact" id="0x10000000000002f"/></field>
+<field name="ceiling" offset="392"><typeref name="CollisionContact" id="0x10000000000002f"/></field>
+</type>
+<type name="HSD_TObj" id="0x100000000000021" metatype="struct" size="172">
+<field name="parent" offset="0"><typeref name="HSD_Object" id="0x100000000000009"/></field>
+<field name="next" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_TObj" id="0x100000000000021"/></type></field>
+<field name="id" offset="12"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="src" offset="16"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="mtxid" offset="20"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="rotate" offset="24"><typeref name="Quaternion" id="0x10000000000001d"/></field>
+<field name="scale" offset="40"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="translate" offset="52"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="wrap_s" offset="64"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="wrap_t" offset="68"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="repeat_s" offset="72"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="repeat_t" offset="73"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="anim_id" offset="74"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="flags" offset="76"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="blending" offset="80"><typeref name="float"/></field>
+<field name="magFilt" offset="84"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="imagedesc" offset="88"><type name="" metatype="ptr" size="4"><typeref name="HSD_ImageDesc" id="0x1000000000000a1"/></type></field>
+<field name="tlut" offset="92"><type name="" metatype="ptr" size="4"><typeref name="HSD_TlutDesc" id="0x1000000000000a2"/></type></field>
+<field name="lod" offset="96"><type name="" metatype="ptr" size="4"><typeref name="HSD_TexLODDesc" id="0x1000000000000a4"/></type></field>
+<field name="aobj" offset="100"><type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type></field>
+<field name="imagetbl" offset="104"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_ImageDesc" id="0x1000000000000a1"/></type></type></field>
+<field name="tluttbl" offset="108"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="HSD_TlutDesc" id="0x1000000000000a2"/></type></type></field>
+<field name="tlut_no" offset="112"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="mtx" offset="116"><typeref name="Mtx" id="0x100000000000006"/></field>
+<field name="coord" offset="164"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="tev" offset="168"><type name="" metatype="ptr" size="4"><typeref name="HSD_TObjTev" id="0x1000000000000a5"/></type></field>
+</type>
+<type name="HSD_JObj" id="0x100000000000013" metatype="struct" size="136">
+<field name="base" offset="0"><typeref name="HSD_Object" id="0x100000000000009"/></field>
+<field name="next" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></field>
+<field name="parent" offset="12"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></field>
+<field name="child" offset="16"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></field>
+<field name="flags" offset="20"><typeref name="JObjFlag" id="0x800000000000014"/></field>
+<field name="u.dobj" offset="24"><type name="" metatype="ptr" size="4"><typeref name="HSD_DObj" id="0x10000000000005a"/></type></field>
+<field name="rotation" offset="28"><typeref name="Quaternion" id="0x10000000000001d"/></field>
+<field name="scale" offset="44"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="position" offset="56"><typeref name="Vec" id="0x100000000000004"/></field>
+<field name="mtx" offset="68"><typeref name="Mtx" id="0x100000000000006"/></field>
+<field name="pvec" offset="116"><type name="" metatype="ptr" size="4"><typeref name="Vec" id="0x100000000000004"/></type></field>
+<field name="vmtx" offset="120"><type name="" metatype="ptr" size="4"><typeref name="Mtx" id="0x100000000000006"/></type></field>
+<field name="aobj" offset="124"><type name="" metatype="ptr" size="4"><typeref name="HSD_AObj" id="0x100000000000022"/></type></field>
+<field name="robj" offset="128"><type name="" metatype="ptr" size="4"><typeref name="HSD_RObj" id="0x100000000000024"/></type></field>
+<field name="desc" offset="132"><type name="" metatype="ptr" size="4"><typeref name="HSD_JObjDesc" id="0x100000000000025"/></type></field>
+</type>
+<type name="HSD_PObjInfo" id="0x100000000000078" metatype="struct" size="72">
+<field name="parent" offset="0"><typeref name="HSD_ClassInfo" id="0x10000000000006a"/></field>
+<field name="disp" offset="60"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="setup_mtx" offset="64"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="load" offset="68"><type name="" metatype="ptr" size="4"><void/></type></field>
+</type>
+</typegrp>
+<db scodeidbyname="false">
+<scope name="" id="0x0">
+<symbollist>
+<mapsym>
+<function id="0x7dd" name="Physics_UpdateECBBones" size="1">
+<addr space="ram" offset="0x800424dc"/><localdb lock="false" main="stack">
+<scope name="Physics_UpdateECBBones">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1d74f" name="max_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3fdf868234"/><rangelist><range space="ram" first="0x80042870" last="0x80042870"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1be0f" name="phys" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="Physics" id="0x100000000000017"/></type></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x800424db" last="0x800424db"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d751" name="max_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3f618d766f"/><rangelist><range space="ram" first="0x8004282c" last="0x8004282c"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d750" name="min_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x79fb8d7d22a"/><rangelist><range space="ram" first="0x800428bc" last="0x800428bc"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1be10" name="flags" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="1">
+<typeref name="ECBUpdateFlag" id="0x80000000000001f"/></symbol>
+<addr space="register" offset="0x10" size="4"/><rangelist><range space="ram" first="0x800424db" last="0x800424db"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d753" name="side_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x63fbe4d8975"/><rangelist><range space="ram" first="0x800428e4" last="0x800428e4"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d752" name="min_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x79f1d3edd0d"/><rangelist><range space="ram" first="0x8004285c" last="0x8004285c"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d754" name="center_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x63f5b70444e"/><rangelist><range space="ram" first="0x800428a0" last="0x800428a0"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d757" name="width" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f446ed6fc"/><rangelist><range space="ram" first="0x800427a8" last="0x800427a8"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d756" name="height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65fe367cd83"/><rangelist><range space="ram" first="0x800427ec" last="0x800427ec"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d759" name="min_height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x5fb02d9419"/><rangelist><range space="ram" first="0x800427d8" last="0x800427d8"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d758" name="min_width" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x5fba56d99b"/><rangelist><range space="ram" first="0x80042794" last="0x80042794"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d75b" name="pos_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x5fb7d75b6d"/><rangelist><range space="ram" first="0x80042598" last="0x80042598"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d75a" name="pos_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x5fa819bf7f"/><rangelist><range space="ram" first="0x80042594" last="0x80042594"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d75f" name="bone1_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65fa880044a"/><rangelist><range space="ram" first="0x800425d8" last="0x800425d8"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d75e" name="bone1_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f23ba1b1a"/><rangelist><range space="ram" first="0x800425d4" last="0x800425d4"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d761" name="bone2_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f2e6f5962"/><rangelist><range space="ram" first="0x8004262c" last="0x8004262c"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d760" name="bone0_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f996fbb6b"/><rangelist><range space="ram" first="0x800425b4" last="0x800425b4"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d763" name="bone3_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f7f9b8c4b"/><rangelist><range space="ram" first="0x80042684" last="0x80042684"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d762" name="bone2_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65fd7bd73a6"/><rangelist><range space="ram" first="0x80042630" last="0x80042630"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d765" name="bone4_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f9f7a2aa8"/><rangelist><range space="ram" first="0x800426dc" last="0x800426dc"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d764" name="bone3_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f0415c4c1"/><rangelist><range space="ram" first="0x80042688" last="0x80042688"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d767" name="bone5_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65ff5c768cb"/><rangelist><range space="ram" first="0x80042734" last="0x80042734"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d766" name="bone4_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65f7d6dc952"/><rangelist><range space="ram" first="0x800426e0" last="0x800426e0"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbea9" name="local_60" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffa0" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d768" name="bone5_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x65fc82c20c6"/><rangelist><range space="ram" first="0x80042738" last="0x80042738"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeaa" name="bone_pos" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="Vec" id="0x100000000000004"/></symbol>
+<addr space="stack" offset="0xffffffb8" size="12"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d76b" name="min_x_tmp2" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3f73d7cbbb"/><rangelist><range space="ram" first="0x80042690" last="0x80042690"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d76a" name="min_x_tmp1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3f8a8abfd6"/><rangelist><range space="ram" first="0x80042638" last="0x80042638"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeac" name="local_38" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffc8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xbead" name="local_34" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffcc" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d76c" name="min_x_tmp3" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3f1f54550a"/><rangelist><range space="ram" first="0x800426e8" last="0x800426e8"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeae" name="local_30" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined8"/></symbol>
+<addr space="stack" offset="0xffffffd0" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d76f" name="min_y_tmp2" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3f70e8e1b6"/><rangelist><range space="ram" first="0x800426ac" last="0x800426ac"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeaf" name="local_28" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined8"/></symbol>
+<addr space="stack" offset="0xffffffd8" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xbeb0" name="local_20" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined8"/></symbol>
+<addr space="stack" offset="0xffffffe0" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xbeb1" name="local_18" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined8"/></symbol>
+<addr space="stack" offset="0xffffffe8" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d770" name="min_y_tmp3" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3f3f3e4491"/><rangelist><range space="ram" first="0x80042704" last="0x80042704"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeb2" name="local_10" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined8"/></symbol>
+<addr space="stack" offset="0xfffffff0" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d773" name="min_y_tmp1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3ffbac1c31"/><rangelist><range space="ram" first="0x80042654" last="0x80042654"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeb3" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined8"/></symbol>
+<addr space="stack" offset="0xfffffff8" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d772" name="min_y_tmp0" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3fd625e2a2"/><rangelist><range space="ram" first="0x800425fc" last="0x800425fc"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xbeb4" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d775" name="fVar1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x3fd7330759"/><rangelist><range space="ram" first="0x800425f0" last="0x800425f0"/></rangelist>
+</mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr/>
+   <void/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x800424dc" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0xb5" name="HSD_JObjTransform" size="1">
+<addr space="ram" offset="0x8000b1cc"/><localdb lock="false" main="stack">
+<scope name="HSD_JObjTransform">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0xafa3" name="local_40" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffc0" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafa4" name="local_2c" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffd4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafa5" name="local_28" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffd8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafa6" name="local_24" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffdc" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafa7" name="local_20" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffe0" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafa8" name="local_1c" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffe4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafa9" name="local_18" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffe8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafaa" name="local_14" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffec" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1beab" name="jobj" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="HSD_JObj" id="0x100000000000013"/></type></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x8000b1cb" last="0x8000b1cb"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xafab" name="local_c" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffff4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0xafac" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffff8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1bead" name="out" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="2">
+<type name="" metatype="ptr" size="4"><typeref name="Vec" id="0x100000000000004"/></type></symbol>
+<addr space="register" offset="0x14" size="4"/><rangelist><range space="ram" first="0x8000b1cb" last="0x8000b1cb"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xafad" name="local_4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffffc" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1beac" name="in" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="1">
+<type name="" metatype="ptr" size="4"><typeref name="Vec" id="0x100000000000004"/></type></symbol>
+<addr space="register" offset="0x10" size="4"/><rangelist><range space="ram" first="0x8000b1cb" last="0x8000b1cb"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0xafae" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr/>
+   <void/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x8000b1cc" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_804d7fa4" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x804d7fa4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="FLOAT_804d7fc4" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="ram" offset="0x804d7fc4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="FLOAT_804d7fb8" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="ram" offset="0x804d7fb8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="FLOAT_804d7f98" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="ram" offset="0x804d7f98" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="FLOAT_804d7fac" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="ram" offset="0x804d7fac" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="FLOAT_804d7fa8" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="ram" offset="0x804d7fa8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="FLOAT_804d7fc8" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="ram" offset="0x804d7fc8" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</db>
+<context_points>
+<context_pointset space="ram" offset="0x80042078">
+  <set name="linkreg" val="0"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<context_pointset space="ram" offset="0x80042938">
+  <set name="linkreg" val="1"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<context_pointset space="ram" offset="0x8004293c">
+  <set name="linkreg" val="0"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<tracked_pointset space="ram" offset="0x800424dc">
+<set space="register" offset="0x8" size="4" val="0x804df9e0"/>
+<set space="register" offset="0x34" size="4" val="0x804db6a0"/>
+<set space="register" offset="0x1e40" size="4" val="0x0"/>
+<set space="register" offset="0x1e48" size="4" val="0x40004"/>
+<set space="register" offset="0x1e4c" size="4" val="0x50005"/>
+<set space="register" offset="0x1e50" size="4" val="0x60006"/>
+<set space="register" offset="0x1e54" size="4" val="0x70007"/>
+<set space="register" offset="0x1e58" size="4" val="0x3d043d04"/>
+</tracked_pointset>
+</context_points>
+<commentdb>
+</commentdb>
+<optionslist>
+ <currentaction>
+  <param1>conditionalexe</param1>
+  <param2>on</param2>
+</currentaction>
+ <readonly>on</readonly>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>unreachable</param2>
+  <param3>on</param3>
+</currentaction>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>doubleprecis</param2>
+  <param3>on</param3>
+</currentaction>
+ <setlanguage>c-language</setlanguage>
+ <nullprinting>on</nullprinting>
+ <inplaceops>on</inplaceops>
+ <aliasblock>none</aliasblock>
+ <maxlinewidth>80</maxlinewidth>
+ <commentindent>0</commentindent>
+ <commentstyle>cplusplus</commentstyle>
+ <commentinstruction>
+  <param1>header</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user1</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user3</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <namespacestrategy>all</namespacestrategy>
+ <protoeval>__stdcall</protoeval>
+</optionslist>
+</save_state>
+</xml_savefile>

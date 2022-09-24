@@ -3566,6 +3566,17 @@ int4 RulePropagateCopy::applyOp(PcodeOp *op,Funcdata &data)
 //   else if (opc == CPUI_INDIRECT) {
 //     if (op->Output()->isAddrForce()) return 0;
 //   }
+
+	// Preserve multiequals that recombine overlapping varnodes, likely a single variable
+	if (opc == CPUI_MULTIEQUAL) {
+		for (i = 0; i < op->numInput(); i++) {
+			if (op->getIn(i)->getAddr() != op->getOut()->getAddr())
+				break;
+			if (i == op->numInput() - 1)
+				return 0;
+		}
+	}
+
 	for(i=0;i<op->numInput();++i) {
 		vn = op->getIn(i);
 		if (!vn->isWritten()) continue; // Varnode must be written to
