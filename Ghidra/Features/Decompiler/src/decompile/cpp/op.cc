@@ -365,7 +365,7 @@ PcodeOp *PcodeOp::target(void) const
 	list<PcodeOp *>::iterator iter;
 	iter = isDead() ? insertiter : basiciter;
 	retop = *iter;
-	while((retop->flags&PcodeOp::startmark)==0) {
+	while((retop->flags & PcodeOp::startmark) == 0 && iter != parent->beginOp()) {
 		--iter;
 		retop = *iter;
 	}
