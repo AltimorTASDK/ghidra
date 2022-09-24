@@ -3551,6 +3551,28 @@ int4 RuleTransformCpool::applyOp(PcodeOp *op,Funcdata &data)
 	return 1;
 }
 
+int4 RulePropagateCopy::eliminateTemporary(PcodeOp *copy, Varnode *vn, Varnode *tmp, Funcdata &data)
+{
+	if (!tmp->isWritten())
+		return 0;;
+
+	for (auto it = tmp->beginDescend(); it != tmp->endDescend(); ++it) {
+		// copy must be the first read of the temporary
+		auto *descendant = *it;
+		if (descendant != copy && descendant->compareOrder(copy) <= 0)
+			return 0;
+	}
+
+	// replace the temporary with the persistent variable
+	auto *def = tmp->getDef();
+	data.opUninsert(def);
+	data.opInsertBefore(def, copy);
+	data.opSetOutput(def, vn);
+	data.opDestroy(copy);
+	data.totalReplace(tmp, vn);
+	return 1;
+}
+
 /// \class RulePropagateCopy
 /// \brief Propagate the input of a COPY to all the places that read the output
 int4 RulePropagateCopy::applyOp(PcodeOp *op,Funcdata &data)
@@ -3566,14 +3588,16 @@ int4 RulePropagateCopy::applyOp(PcodeOp *op,Funcdata &data)
 //   else if (opc == CPUI_INDIRECT) {
 //     if (op->Output()->isAddrForce()) return 0;
 //   }
+	auto preserve_vn = false;
 
 	// Preserve multiequals that recombine overlapping varnodes, likely a single variable
 	if (opc == CPUI_MULTIEQUAL) {
+		preserve_vn = true;
 		for (i = 0; i < op->numInput(); i++) {
-			if (op->getIn(i)->getAddr() != op->getOut()->getAddr())
+			if (op->getIn(i)->getAddr() != op->getOut()->getAddr()) {
+				preserve_vn = false;
 				break;
-			if (i == op->numInput() - 1)
-				return 0;
+			}
 		}
 	}
 
@@ -3593,10 +3617,17 @@ int4 RulePropagateCopy::applyOp(PcodeOp *op,Funcdata &data)
 			if (invn->isConstant()) continue;         // Don't propagate constants into markers
 			if (vn->isAddrForce()) continue;          // Don't propagate if we are keeping the COPY anyway
 			if (invn->isAddrTied() && op->getOut()->isAddrTied() &&
-					(op->getOut()->getAddr() != invn->getAddr()))
+			    (op->getOut()->getAddr() != invn->getAddr()))
 				continue;               // We must not allow merging of different addrtieds
 		}
-		data.opSetInput(op,invn,i); // otherwise propagate just a single copy
+		if (!preserve_vn) {
+			// bypass copy to temporary
+			data.opSetInput(op,invn,i);
+		} else {
+			// bypass copy from temporary
+			if (!eliminateTemporary(copyop, vn, invn, data))
+				continue;
+		}
 		return 1;
 	}
 	return 0;

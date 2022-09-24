@@ -683,6 +683,8 @@ public:
 	}
 	// applies to all opcodes
 	virtual int4 applyOp(PcodeOp *op,Funcdata &data);
+private:
+	int4 eliminateTemporary(PcodeOp *copy, Varnode *vn, Varnode *tmp, Funcdata &data);
 };
 class Rule2Comp2Mult : public Rule {
 public:
