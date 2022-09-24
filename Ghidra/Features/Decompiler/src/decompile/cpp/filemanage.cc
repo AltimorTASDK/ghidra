@@ -14,8 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "filemanage.hh"
-
 #ifdef _WINDOWS
 #include <windows.h>
 
@@ -28,6 +26,8 @@ extern "C" {
 #include <dirent.h>
 }
 #endif
+
+#include "filemanage.hh"
 
 // Path name separator
 #ifdef _WINDOWS
