@@ -17,64 +17,64 @@
 #include "funcdata.hh"
 
 // Operator tokens for expressions
-//                                   token #in prec assoc                     optype                space bump negate
-OpToken PrintC::hidden            = { "",    1, 70, OpToken::non_associative, OpToken::hiddenfunction, 0,  0, (OpToken *)0 };
-OpToken PrintC::scope             = { "::",  2, 70, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
-OpToken PrintC::object_member     = { ".",   2, 66, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
-OpToken PrintC::pointer_member    = { "->",  2, 66, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
-OpToken PrintC::subscript         = { "[]",  2, 66, OpToken::l2r_associative, OpToken::postsurround,   0,  0, (OpToken *)0 };
-OpToken PrintC::function_call     = { "()",  2, 66, OpToken::l2r_associative, OpToken::postsurround,   0, 10, (OpToken *)0 };
+//                                   token #in prec          assoc          exclusion      optype          space bump negate
+OpToken PrintC::hidden            = { "",    1, 70, OpToken::non_associative, false, OpToken::hiddenfunction, 0,  0, (OpToken *)0 };
+OpToken PrintC::scope             = { "::",  2, 70, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
+OpToken PrintC::object_member     = { ".",   2, 66, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
+OpToken PrintC::pointer_member    = { "->",  2, 66, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
+OpToken PrintC::subscript         = { "[]",  2, 66, OpToken::l2r_associative, false, OpToken::postsurround,   0,  0, (OpToken *)0 };
+OpToken PrintC::function_call     = { "()",  2, 66, OpToken::l2r_associative, false, OpToken::postsurround,   0, 10, (OpToken *)0 };
 
-OpToken PrintC::bitwise_not       = { "~",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::boolean_not       = { "!",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::unary_minus       = { "-",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::unary_plus        = { "+",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::addressof         = { "&",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::dereference       = { "*",   1, 62, OpToken::r2l_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::typecast          = { "()",  2, 62, OpToken::r2l_associative, OpToken::presurround,    0,  0, (OpToken *)0 };
+OpToken PrintC::bitwise_not       = { "~",   1, 62, OpToken::r2l_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::boolean_not       = { "!",   1, 62, OpToken::r2l_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::unary_minus       = { "-",   1, 62, OpToken::r2l_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::unary_plus        = { "+",   1, 62, OpToken::r2l_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::addressof         = { "&",   1, 62, OpToken::r2l_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::dereference       = { "*",   1, 62, OpToken::r2l_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::typecast          = { "()",  2, 62, OpToken::r2l_associative, false, OpToken::presurround,    0,  0, (OpToken *)0 };
 
-OpToken PrintC::multiply          = { "*",   2, 54, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::divide            = { "/",   2, 54, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::modulo            = { "%",   2, 54, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::binary_plus       = { "+",   2, 50, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::binary_minus      = { "-",   2, 50, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::shift_left        = { "<<",  2, 46, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::shift_right       = { ">>",  2, 46, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::shift_sright      = { ">>",  2, 46, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::less_than         = { "<",   2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::less_equal        = { "<=",  2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::greater_than      = { ">",   2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::greater_equal     = { ">=",  2, 42, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::equal             = { "==",  2, 38, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::not_equal         = { "!=",  2, 38, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::bitwise_and       = { "&",   2, 34, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::bitwise_xor       = { "^",   2, 30, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::bitwise_or        = { "|",   2, 26, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::boolean_and       = { "&&",  2, 22, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::boolean_xor       = { "^^",  2, 20, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::boolean_or        = { "||",  2, 18, OpToken::l2r_associative, OpToken::binary,         1,  0, (OpToken *)0 };
-OpToken PrintC::comma             = { ",",   2,  2, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
-OpToken PrintC::new_op            = { "",    2, 62, OpToken::non_associative, OpToken::space,          1,  0, (OpToken *)0 };
+OpToken PrintC::multiply          = { "*",   2, 54, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::divide            = { "/",   2, 54, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::modulo            = { "%",   2, 54, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::binary_plus       = { "+",   2, 50, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::binary_minus      = { "-",   2, 50, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::shift_left        = { "<<",  2, 46, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::shift_right       = { ">>",  2, 46, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::shift_sright      = { ">>",  2, 46, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::less_than         = { "<",   2, 42, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::less_equal        = { "<=",  2, 42, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::greater_than      = { ">",   2, 42, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::greater_equal     = { ">=",  2, 42, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::equal             = { "==",  2, 38, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::not_equal         = { "!=",  2, 38, OpToken::l2r_associative, false, OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::bitwise_and       = { "&",   2, 34, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::bitwise_xor       = { "^",   2, 30, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::bitwise_or        = { "|",   2, 26, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::boolean_and       = { "&&",  2, 22, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::boolean_xor       = { "^^",  2, 20, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::boolean_or        = { "||",  2, 18, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
+OpToken PrintC::comma             = { ",",   2,  2, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
+OpToken PrintC::new_op            = { "",    2, 62, OpToken::non_associative, false, OpToken::space,          1,  0, (OpToken *)0 };
 
 // Inplace assignment operators
-OpToken PrintC::assignment        = { "=",   2, 14, OpToken::l2r_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::multequal         = { "*=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::divequal          = { "/=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::remequal          = { "%=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::plusequal         = { "+=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::minusequal        = { "-=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::leftequal         = { "<<=", 2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::rightequal        = { ">>=", 2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::andequal          = { "&=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::orequal           = { "|=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
-OpToken PrintC::xorequal          = { "^=",  2, 14, OpToken::r2l_associative, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::assignment        = { "=",   2, 14, OpToken::l2r_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::multequal         = { "*=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::divequal          = { "/=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::remequal          = { "%=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::plusequal         = { "+=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::minusequal        = { "-=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::leftequal         = { "<<=", 2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::rightequal        = { ">>=", 2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::andequal          = { "&=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::orequal           = { "|=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
+OpToken PrintC::xorequal          = { "^=",  2, 14, OpToken::r2l_associative, false, OpToken::binary,         1,  5, (OpToken *)0 };
 
 // Operator tokens for type expressions
-OpToken PrintC::type_expr_space   = { "",    2, 10, OpToken::non_associative, OpToken::space,          1,  0, (OpToken *)0 };
-OpToken PrintC::type_expr_nospace = { "",    2, 10, OpToken::non_associative, OpToken::space,          0,  0, (OpToken *)0 };
-OpToken PrintC::ptr_expr          = { "*",   1, 62, OpToken::non_associative, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
-OpToken PrintC::array_expr        = { "[]",  2, 66, OpToken::non_associative, OpToken::postsurround,   1,  0, (OpToken *)0 };
-OpToken PrintC::enum_cat          = { "|",   2, 26, OpToken::l2r_associative, OpToken::binary,         0,  0, (OpToken *)0 };
+OpToken PrintC::type_expr_space   = { "",    2, 10, OpToken::non_associative, false, OpToken::space,          1,  0, (OpToken *)0 };
+OpToken PrintC::type_expr_nospace = { "",    2, 10, OpToken::non_associative, false, OpToken::space,          0,  0, (OpToken *)0 };
+OpToken PrintC::ptr_expr          = { "*",   1, 62, OpToken::non_associative, false, OpToken::unary_prefix,   0,  0, (OpToken *)0 };
+OpToken PrintC::array_expr        = { "[]",  2, 66, OpToken::non_associative, false, OpToken::postsurround,   1,  0, (OpToken *)0 };
+OpToken PrintC::enum_cat          = { "|",   2, 26, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
 
 const string PrintC::typePointerRelToken = "ADJ";
 

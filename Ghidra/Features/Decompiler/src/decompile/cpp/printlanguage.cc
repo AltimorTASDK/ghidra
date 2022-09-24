@@ -281,6 +281,8 @@ bool PrintLanguage::parentheses(const OpToken *op2)
 	switch(topToken->type) {
 	case OpToken::space:
 	case OpToken::binary:
+		// Logical and bitwise operators can't touch each other
+		if (topToken->exclusion && op2->exclusion && topToken != op2) return true;
 		if (topToken->precedence > op2->precedence) return true;
 		if (topToken->precedence < op2->precedence) return false;
 		// If operators are adjacent to each other, determine which needs parentheses

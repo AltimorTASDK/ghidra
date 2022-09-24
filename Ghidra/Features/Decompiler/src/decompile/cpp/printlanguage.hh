@@ -99,6 +99,7 @@ public:
 	int4 stage;                   ///< Additional elements consumed from the RPN stack when emitting this token
 	int4 precedence;              ///< Precedence level of this token (higher binds more tightly)
 	token_assoc associativity;    ///< Indicates associativity and direction of associativity
+	bool exclusion;               ///< Prevents grouping with other operators with the exclusion flag
 	tokentype type;               ///< The basic token type
 	int4 spacing;                 ///< Spaces to print around operator
 	int4 bump;                    ///< Spaces to indent if we break here
