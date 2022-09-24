@@ -2451,6 +2451,68 @@ void PrintC::docFunction(const Funcdata *fd)
 	}
 }
 
+uint4 PrintC::getBlockStatementCount(const BlockBasic *bb)
+{
+	if (isSet(only_branch))
+		return 1;
+
+	uint4 statements = 0;
+
+	for(auto iter = bb->beginOp(); iter != bb->endOp(); ++iter) {
+		auto *inst = *iter;
+
+		if (inst->notPrinted())
+			continue;
+
+		if (inst->isBranch() && (isSet(no_branch) || inst->code() == CPUI_BRANCH))
+			continue;
+
+		if (inst->getOut() != nullptr && inst->getOut()->isImplied())
+			continue;
+
+		if (isSet(comma_separate) && statements > 0)
+			continue;
+
+		statements++;
+	}
+
+	// If we are printing flat structure and there
+	// is no longer a normal fallthru, print a goto
+	if (isSet(flat) && isSet(nofallthru))
+		statements++;
+
+	return statements;
+}
+
+bool PrintC::isOneLineBlock(const FlowBlock *bl)
+{
+	if (bl->getType() == FlowBlock::t_copy)
+		return isOneLineBlock(bl->subBlock(0));
+
+	if (bl->getType() != FlowBlock::t_basic)
+		return false;
+
+	return getBlockStatementCount((const BlockBasic*)bl) == 1;
+}
+
+bool PrintC::bodyNeedsBraces(const BlockIf *bl)
+{
+	if (bl->getGotoTarget() != nullptr)
+		return false;
+
+	if (!isOneLineBlock(bl->getBlock(1)))
+		return true;
+
+	if (bl->getSize() != 3)
+		return false;
+
+	const auto *else_block = bl->getBlock(2);
+	if (else_block->getType() == FlowBlock::t_if)
+		return bodyNeedsBraces((const BlockIf*)else_block);
+	else
+		return isOneLineBlock(else_block);
+}
+
 void PrintC::emitBlockBasic(const BlockBasic *bb)
 
 {
@@ -2661,10 +2723,10 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	if (isSet(pending_brace))
 		emit->setPendingPrint(&pendingBrace);
 
-																// if block never prints final branch
-																// so no_branch and only_branch don't matter
-																// and shouldn't be passed automatically to
-																// the subblocks
+	// if block never prints final branch
+	// so no_branch and only_branch don't matter
+	// and shouldn't be passed automatically to
+	// the subblocks
 	pushMod();
 	unsetMod(no_branch|only_branch|pending_brace);
 
@@ -2675,9 +2737,9 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	popMod();
 	emitCommentBlockTree(condBlock);
 	if (emit->hasPendingPrint(&pendingBrace))     // If we issued a brace but it did not emit
-		emit->cancelPendingPrint();                 // Cancel the brace in order to have "else if" syntax
+		emit->cancelPendingPrint();           // Cancel the brace in order to have "else if" syntax
 	else
-		emit->tagLine();                            // Otherwise start the "if" on a new line
+		emit->tagLine();                      // Otherwise start the "if" on a new line
 
 	op = condBlock->lastOp();
 	emit->tagOp("if",EmitXml::keyword_color,op);
@@ -2686,42 +2748,57 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	setMod(only_branch);
 	condBlock->emit(this);
 	popMod();
-	if (bl->getGotoTarget() != (FlowBlock *)0) {
+
+	const auto emit_braces  = bodyNeedsBraces(bl);
+	const auto emit_newline = emit_braces || bl->getOut(0)->getParent() == bl->getParent();
+	const auto has_else     = bl->getSize() == 3;
+
+	if (bl->getGotoTarget() != nullptr) {
 		emit->spaces(1);
 		emitGotoStatement(condBlock,bl->getGotoTarget(),bl->getGotoType());
-	}
-	else {
+	} else {
 		setMod(no_branch);
-		emit->spaces(1);
+		if (emit_braces)
+			emit->spaces(1);
 		int4 id = emit->startIndent();
-		emit->print("{");
+		if (emit_braces)
+			emit->print("{");
 		int4 id1 = emit->beginBlock(bl->getBlock(1));
 		bl->getBlock(1)->emit(this);
 		emit->endBlock(id1);
 		emit->stopIndent(id);
-		emit->tagLine();
-		emit->print("}");
-		if (bl->getSize() == 3) {
+		if (emit_newline || has_else)
 			emit->tagLine();
+		if (emit_braces)
+			emit->print("}");
+
+		if (has_else) {
+			if (emit_braces)
+				emit->spaces(1);
 			emit->print("else",EmitXml::keyword_color);
-			emit->spaces(1);
+			if (emit_braces)
+				emit->spaces(1);
 			FlowBlock *elseBlock = bl->getBlock(2);
 			if (elseBlock->getType() == FlowBlock::t_if) {
 				// Attempt to merge the "else" and "if" syntax
-				setMod(pending_brace);
+				if (emit_braces)
+					setMod(pending_brace);
 				int4 id2 = emit->beginBlock(elseBlock);
 				elseBlock->emit(this);
 				emit->endBlock(id2);
 			}
 			else {
 				int4 id2 = emit->startIndent();
-				emit->print("{");
+				if (emit_braces)
+					emit->print("{");
 				int4 id3 = emit->beginBlock(elseBlock);
 				elseBlock->emit(this);
 				emit->endBlock(id3);
 				emit->stopIndent(id2);
-				emit->tagLine();
-				emit->print("}");
+				if (emit_newline)
+					emit->tagLine();
+				if (emit_braces)
+					emit->print("}");
 			}
 		}
 	}

@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -141,7 +141,7 @@ protected:
 	bool pushPtrCodeConstant(uintb val,const TypePointer *ct,const Varnode *vn,
 													 const PcodeOp *op);
 	virtual bool doEmitWideCharPrefix(void) const;
-	
+
 	bool checkArrayDeref(const Varnode *vn) const;        ///< Determine whether a LOAD/STORE expression requires pointer '*' syntax
 	void emitStructDefinition(const TypeStruct *ct);      ///< Emit the definition of a \e structure data-type
 	void emitEnumDefinition(const TypeEnum *ct);          ///< Emit the definition of an \e enumeration data-type
@@ -216,6 +216,10 @@ public:
 	virtual void docAllGlobals(void);
 	virtual void docSingleGlobal(const Symbol *sym);
 	virtual void docFunction(const Funcdata *fd);
+
+	virtual uint4 getBlockStatementCount(const BlockBasic *bb);
+	virtual bool isOneLineBlock(const FlowBlock *bl);
+	virtual bool bodyNeedsBraces(const BlockIf *bl);
 
 	virtual void emitBlockBasic(const BlockBasic *bb);
 	virtual void emitBlockGraph(const BlockGraph *bl);
