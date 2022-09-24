@@ -3553,18 +3553,14 @@ int4 RuleTransformCpool::applyOp(PcodeOp *op,Funcdata &data)
 
 int4 RulePropagateCopy::eliminateTemporary(PcodeOp *copy, Varnode *vn, Varnode *tmp, Funcdata &data)
 {
-	if (!tmp->isWritten())
-		return 0;;
+	// check if temporary initialization is interchangeable with copy
+	auto *def = tmp->getDef();
+	auto *point = copy->previousOp();
 
-	for (auto it = tmp->beginDescend(); it != tmp->endDescend(); ++it) {
-		// copy must be the first read of the temporary
-		auto *descendant = *it;
-		if (descendant != copy && descendant->compareOrder(copy) <= 0)
-			return 0;
-	}
+	if (def == nullptr || point == nullptr || !def->isMoveable(point))
+		return 0;
 
 	// replace the temporary with the persistent variable
-	auto *def = tmp->getDef();
 	data.opUninsert(def);
 	data.opInsertBefore(def, copy);
 	data.opSetOutput(def, vn);
