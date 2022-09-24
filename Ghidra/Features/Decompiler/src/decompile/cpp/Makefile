@@ -35,16 +35,20 @@ ifeq ($(OS),Darwin)
   OSDIR=mac_x86_64
 endif
 
-CC=gcc
-CXX=g++
+CC=clang
+CXX=clang++
 
 # Debug flags
-DBG_CXXFLAGS=-g -std=c++23 -Wall -Wno-sign-compare -Wno-unknown-pragmas -Wno-deprecated-enum-enum-conversion
+#DBG_CXXFLAGS=-g -std=c++23 -Wall -Wno-sign-compare -Wno-unknown-pragmas -Wno-deprecated-enum-enum-conversion
+DBG_CXXFLAGS=-std=c++2b -Wall -Wno-sign-compare -Wno-unknown-pragmas \
+             -Wno-deprecated-anon-enum-enum-conversion -Wno-unused-but-set-variable
+
 #DBG_CXXFLAGS=-g -pg -Wall -Wno-sign-compare
 #DBG_CXXFLAGS=-g -fprofile-arcs -ftest-coverage -Wall -Wno-sign-compare
 
 # Optimization flags
-OPT_CXXFLAGS=-O2 -std=c++23 -Wall -Wno-sign-compare -Wno-unknown-pragmas -Wno-deprecated-enum-enum-conversion
+OPT_CXXFLAGS=-O2 -std=c++2b -Wall -Wno-sign-compare -Wno-unknown-pragmas \
+		     -Wno-deprecated-anon-enum-enum-conversion -Wno-unused-but-set-variable
 
 YACC=bison
 
