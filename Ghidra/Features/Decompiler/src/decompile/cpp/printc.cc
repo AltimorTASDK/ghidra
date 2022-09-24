@@ -2186,10 +2186,12 @@ bool PrintC::emitInplaceOp(const PcodeOp *op)
 	OpToken *tok;
 	switch(op->code()) {
 	case CPUI_INT_MULT:
+	case CPUI_FLOAT_MULT:
 		tok = &multequal;
 		break;
 	case CPUI_INT_DIV:
 	case CPUI_INT_SDIV:
+	case CPUI_FLOAT_DIV:
 		tok = &divequal;
 		break;
 	case CPUI_INT_REM:
@@ -2197,9 +2199,11 @@ bool PrintC::emitInplaceOp(const PcodeOp *op)
 		tok = &remequal;
 		break;
 	case CPUI_INT_ADD:
+	case CPUI_FLOAT_ADD:
 		tok = &plusequal;
 		break;
 	case CPUI_INT_SUB:
+	case CPUI_FLOAT_SUB:
 		tok = &minusequal;
 		break;
 	case CPUI_INT_LEFT:
