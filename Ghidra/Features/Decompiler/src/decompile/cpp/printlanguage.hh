@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -89,10 +89,16 @@ public:
 		space,                      ///< No explicitly printed token
 		hiddenfunction              ///< Operation that isn't explicitly printed
 	};
+	/// \brief The possible types of operator associativity
+	enum token_assoc {
+		l2r_associative,
+		r2l_associative,
+		non_associative
+	};
 	const char *print;            ///< Printing characters for the token
 	int4 stage;                   ///< Additional elements consumed from the RPN stack when emitting this token
 	int4 precedence;              ///< Precedence level of this token (higher binds more tightly)
-	bool associative;             ///< True if the operator is associative
+	token_assoc associativity;    ///< Indicates associativity and direction of associativity
 	tokentype type;               ///< The basic token type
 	int4 spacing;                 ///< Spaces to print around operator
 	int4 bump;                    ///< Spaces to indent if we break here
