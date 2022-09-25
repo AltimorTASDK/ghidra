@@ -262,6 +262,7 @@ public:
 	bool hasCover(void) const {
 		return ((flags&(Varnode::constant|Varnode::annotation|Varnode::insert))==Varnode::insert); }
 	bool hasNoDescend(void) const { return descend.empty(); } ///< Return \b true if nothing reads this Varnode
+	bool descendCount(void) const { return descend.size(); } ///< Return number of reads of this Varnode
 
 	/// Return \b true if \b this is a constant with value \b val
 	bool constantMatch(uintb val) const {

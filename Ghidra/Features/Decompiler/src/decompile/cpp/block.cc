@@ -2283,61 +2283,53 @@ void BlockBasic::flipInPlaceExecute(void)
 	FlowBlock::negateCondition(true); // Flip the order of outof this
 }
 
+bool BlockBasic::isStatement(PcodeOp *inst) const
+{
+	if (inst->isMarker())
+		return false;
+
+	if (inst->isCall())
+		return true;
+
+	auto *vn = inst->getOut();
+
+	if (vn == nullptr)
+		return !inst->isFlowBreak();
+
+	if (vn->hasNoDescend())
+		return true;
+
+	if (vn->isAddrTied())
+		return true; // Being conservative
+
+	if (vn->descendCount() > data->getArch()->max_implied_ref)
+		return true; // Too many uses to be considered implicit
+
+	for(auto iter = vn->beginDescend(); iter != vn->endDescend(); ++iter) {
+		auto *descendant = *iter;
+		if (descendant->isMarker() || descendant->getParent() != this)
+			return true; // Variable used outside of block
+	}
+
+	return false;
+}
+
 bool BlockBasic::isComplex(void) const
 
 {
-	list<PcodeOp *>::const_iterator iter,iter2;
-	PcodeOp *inst,*d_op;
-	Varnode *vn;
-	int4 statement,maxref;
-
 	// Is this block too complicated for a condition.
 	// We count the number of statements in the block
-	statement = 0;
-	if (sizeOut()>=2)
-		statement = 1;              // Consider the branch as a statement
-	maxref = data->getArch()->max_implied_ref; // Max number of uses a varnode can have
-																// before it must be considered an explicit variable
-	for(iter=op.begin();iter!=op.end();++iter) {
-		inst = *iter;
-		if (inst->isMarker()) continue;
-		vn = inst->getOut();
-		if (inst->isCall())
-			statement += 1;
-		else if (vn==(Varnode *)0) {
-			if (inst->isFlowBreak()) continue;
-			statement += 1;
-		}
-		else {                      // If the operation is a calculation with output
-																// This is a conservative version of
-																// Varnode::calc_explicit
-			bool yesstatement = false;
-			if (vn->hasNoDescend())
-				yesstatement = true;
-			else if (vn->isAddrTied())        // Being conservative
-				yesstatement = true;
-			else {
-				int4 totalref = 0;      // Number of references to this variable
+	int4 statement = 0;
 
-				for(iter2=vn->beginDescend();iter2!=vn->endDescend();++iter2) {
-					d_op = *iter2;
-					if (d_op->isMarker()||(d_op->getParent() != this)) { // Variable used outside of block
-						yesstatement = true;
-						break;
-					}
-					totalref += 1;
-					if (totalref > maxref) {      // If used too many times
-						yesstatement = true; // consider defining op as a statement
-						break;
-					}
-				}
-			}
-			if (yesstatement)
-				statement += 1;
-		}
+	// Consider a branch as a statement
+	if (sizeOut() >= 2)
+		statement++;
 
-		if (statement >2) return true;
+	for (auto iter = op.begin(); iter != op.end(); ++iter) {
+		if (isStatement(*iter) && ++statement > 2)
+			return true;
 	}
+
 	return false;
 }
 
@@ -2445,16 +2437,17 @@ bool BlockBasic::unblockedMulti(int4 outslot) const
 	list<PcodeOp *>::const_iterator iter;
 	Varnode *vnremove,*vnredund;
 
-																// First we build list of blocks which would have
-																// redundant branches into blout
+	// First we build list of blocks which would have
+	// redundant branches into blout
 	vector<const FlowBlock *> redundlist;
-	for(int4 i=0;i<sizeIn();++i) {
+	for (int4 i=0;i<sizeIn();++i) {
 		bl = getIn(i);
-		for(int4 j=0;j<bl->sizeOut();++j)
+		for (int4 j=0;j<bl->sizeOut();++j) {
+			// We assume blout appears only once in bl's and this's
+			// outlists
 			if (bl->getOut(j)==blout)
 				redundlist.push_back(bl);
-																// We assume blout appears only once in bl's and this's
-																// outlists
+		}
 	}
 	if (redundlist.empty()) return true;
 	for(iter=blout->op.begin();iter!=blout->op.end();++iter) {
