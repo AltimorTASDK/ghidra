@@ -3551,14 +3551,20 @@ int4 RuleTransformCpool::applyOp(PcodeOp *op,Funcdata &data)
 	return 1;
 }
 
-int4 RulePropagateCopy::eliminateTemporary(PcodeOp *copy, Varnode *vn, Varnode *tmp, Funcdata &data)
+bool RulePropagateCopy::eliminateTemporary(PcodeOp *copy, Varnode *vn, Varnode *tmp, Funcdata &data)
 {
 	// check if temporary initialization is interchangeable with copy
 	auto *def = tmp->getDef();
 	auto *point = copy->previousOp();
 
 	if (def == nullptr || point == nullptr || !def->isMoveable(point))
-		return 0;
+		return false;
+
+	// must not be referenced beyond defining block
+	for (auto iter = tmp->beginDescend(); iter != tmp->endDescend(); ++iter) {
+		if ((*iter)->getParent() != def->getParent())
+			return false;
+	}
 
 	// replace the temporary with the persistent variable
 	data.opUninsert(def);
@@ -3566,7 +3572,7 @@ int4 RulePropagateCopy::eliminateTemporary(PcodeOp *copy, Varnode *vn, Varnode *
 	data.opSetOutput(def, vn);
 	data.opDestroy(copy);
 	data.totalReplace(tmp, vn);
-	return 1;
+	return true;
 }
 
 /// \class RulePropagateCopy
@@ -3580,10 +3586,9 @@ int4 RulePropagateCopy::applyOp(PcodeOp *op,Funcdata &data)
 	OpCode opc;
 
 	opc = op->code();
-	if (opc==CPUI_RETURN) return 0; // Preserve the address of return variable
-//   else if (opc == CPUI_INDIRECT) {
-//     if (op->Output()->isAddrForce()) return 0;
-//   }
+	if (opc == CPUI_RETURN)
+		return 0; // Preserve the address of return variable
+
 	auto preserve_vn = false;
 
 	// Preserve multiequals that recombine overlapping varnodes, likely a single variable
