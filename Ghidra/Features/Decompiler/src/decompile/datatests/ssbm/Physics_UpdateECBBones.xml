@@ -572,9 +572,74 @@ cb610038cb41003083e1002c83c10028
 <rangelist/>
 <symbollist>
 <mapsym>
-<symbol id="0x1d74f" name="max_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<symbol id="0x1d781" name="min_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
 <typeref name="float"/></symbol>
-<hash val="0x3fdf868234"/><rangelist><range space="ram" first="0x80042870" last="0x80042870"/></rangelist>
+<addr space="register" offset="0x40f4" size="4"/><rangelist><range space="ram" first="0x80042868" last="0x80042868"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d780" name="max_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x40e4" size="4"/><rangelist><range space="ram" first="0x80042870" last="0x80042870"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d783" name="min_x_constrained" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x402c" size="4"/><rangelist><range space="ram" first="0x8004285c" last="0x8004285c"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d782" name="max_x_constrained" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x4024" size="4"/><rangelist><range space="ram" first="0x8004285c" last="0x8004285c"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d784" name="center_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x63fbe4d8975"/><rangelist><range space="ram" first="0x800428e4" last="0x800428e4"/></rangelist>
+<hash val="0x63f5b70444e"/><rangelist><range space="ram" first="0x800428a0" last="0x800428a0"/></rangelist>
+<hash val="0x63f247e12a4"/><rangelist><range space="ram" first="0x80042814" last="0x80042814"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d787" name="pos_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x5fa819bf7f"/><rangelist><range space="ram" first="0x80042594" last="0x80042594"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d786" name="tmp" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042554" last="0x80042554"/></rangelist>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042568" last="0x80042568"/></rangelist>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042578" last="0x80042578"/></rangelist>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042588" last="0x80042588"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d789" name="min_x" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x40fc" size="4"/><rangelist><range space="ram" first="0x800425b4" last="0x800425b4"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d788" name="pos_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<hash val="0x5fb7d75b6d"/><rangelist><range space="ram" first="0x80042598" last="0x80042598"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d78a" name="max_x" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x40ec" size="4"/><rangelist><range space="ram" first="0x800425f8" last="0x800425f8"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d78d" name="height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x4014" size="4"/><rangelist><range space="ram" first="0x800427ec" last="0x800427ec"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d78c" name="width" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x4014" size="4"/><rangelist><range space="ram" first="0x800427a8" last="0x800427a8"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d78f" name="min_asymmetrical_width" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
+<addr space="register" offset="0x400c" size="4"/><rangelist><range space="ram" first="0x800427a4" last="0x800427a4"/></rangelist>
 </mapsym>
 <mapsym>
 <symbol id="0x1be0f" name="phys" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
@@ -582,14 +647,9 @@ cb610038cb41003083e1002c83c10028
 <addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x800424db" last="0x800424db"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d751" name="max_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<symbol id="0x1d78e" name="min_asymmetrical_height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
 <typeref name="float"/></symbol>
-<hash val="0x3f618d766f"/><rangelist><range space="ram" first="0x8004282c" last="0x8004282c"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d750" name="min_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x79fb8d7d22a"/><rangelist><range space="ram" first="0x800428bc" last="0x800428bc"/></rangelist>
+<addr space="register" offset="0x400c" size="4"/><rangelist><range space="ram" first="0x800427e8" last="0x800427e8"/></rangelist>
 </mapsym>
 <mapsym>
 <symbol id="0x1be10" name="flags" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="1">
@@ -597,123 +657,23 @@ cb610038cb41003083e1002c83c10028
 <addr space="register" offset="0x10" size="4"/><rangelist><range space="ram" first="0x800424db" last="0x800424db"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d753" name="side_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x63fbe4d8975"/><rangelist><range space="ram" first="0x800428e4" last="0x800428e4"/></rangelist>
+<symbol id="0x1d793" name="bone_x" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<hash val="0x65f3986fb94"/><rangelist><range space="ram" first="0x800425d4" last="0x800425d4"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d752" name="min_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x79f1d3edd0d"/><rangelist><range space="ram" first="0x8004285c" last="0x8004285c"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d754" name="center_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x63f5b70444e"/><rangelist><range space="ram" first="0x800428a0" last="0x800428a0"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d757" name="width" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f446ed6fc"/><rangelist><range space="ram" first="0x800427a8" last="0x800427a8"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d756" name="height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65fe367cd83"/><rangelist><range space="ram" first="0x800427ec" last="0x800427ec"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d759" name="min_height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x5fb02d9419"/><rangelist><range space="ram" first="0x800427d8" last="0x800427d8"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d758" name="min_width" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x5fba56d99b"/><rangelist><range space="ram" first="0x80042794" last="0x80042794"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d75b" name="pos_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x5fb7d75b6d"/><rangelist><range space="ram" first="0x80042598" last="0x80042598"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d75a" name="pos_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x5fa819bf7f"/><rangelist><range space="ram" first="0x80042594" last="0x80042594"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d75f" name="bone1_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65fa880044a"/><rangelist><range space="ram" first="0x800425d8" last="0x800425d8"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d75e" name="bone1_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f23ba1b1a"/><rangelist><range space="ram" first="0x800425d4" last="0x800425d4"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d761" name="bone2_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f2e6f5962"/><rangelist><range space="ram" first="0x8004262c" last="0x8004262c"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d760" name="bone0_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f996fbb6b"/><rangelist><range space="ram" first="0x800425b4" last="0x800425b4"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d763" name="bone3_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f7f9b8c4b"/><rangelist><range space="ram" first="0x80042684" last="0x80042684"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d762" name="bone2_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65fd7bd73a6"/><rangelist><range space="ram" first="0x80042630" last="0x80042630"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d765" name="bone4_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f9f7a2aa8"/><rangelist><range space="ram" first="0x800426dc" last="0x800426dc"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d764" name="bone3_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f0415c4c1"/><rangelist><range space="ram" first="0x80042688" last="0x80042688"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d767" name="bone5_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65ff5c768cb"/><rangelist><range space="ram" first="0x80042734" last="0x80042734"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d766" name="bone4_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65f7d6dc952"/><rangelist><range space="ram" first="0x800426e0" last="0x800426e0"/></rangelist>
+<symbol id="0x1d794" name="bone_y" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<hash val="0x65f9d44e316"/><rangelist><range space="ram" first="0x800425d8" last="0x800425d8"/></rangelist>
 </mapsym>
 <mapsym>
 <symbol id="0xbea9" name="local_60" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined4"/></symbol>
 <addr space="stack" offset="0xffffffa0" size="4"/><rangelist/></mapsym>
 <mapsym>
-<symbol id="0x1d768" name="bone5_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x65fc82c20c6"/><rangelist><range space="ram" first="0x80042738" last="0x80042738"/></rangelist>
-</mapsym>
-<mapsym>
 <symbol id="0xbeaa" name="bone_pos" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
 <typeref name="Vec" id="0x100000000000004"/></symbol>
 <addr space="stack" offset="0xffffffb8" size="12"/><rangelist/></mapsym>
-<mapsym>
-<symbol id="0x1d76b" name="min_x_tmp2" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3f73d7cbbb"/><rangelist><range space="ram" first="0x80042690" last="0x80042690"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d76a" name="min_x_tmp1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3f8a8abfd6"/><rangelist><range space="ram" first="0x80042638" last="0x80042638"/></rangelist>
-</mapsym>
 <mapsym>
 <symbol id="0xbeac" name="local_38" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined4"/></symbol>
@@ -723,19 +683,9 @@ cb610038cb41003083e1002c83c10028
 <typeref name="undefined4"/></symbol>
 <addr space="stack" offset="0xffffffcc" size="4"/><rangelist/></mapsym>
 <mapsym>
-<symbol id="0x1d76c" name="min_x_tmp3" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3f1f54550a"/><rangelist><range space="ram" first="0x800426e8" last="0x800426e8"/></rangelist>
-</mapsym>
-<mapsym>
 <symbol id="0xbeae" name="local_30" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined8"/></symbol>
 <addr space="stack" offset="0xffffffd0" size="8"/><rangelist/></mapsym>
-<mapsym>
-<symbol id="0x1d76f" name="min_y_tmp2" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3f70e8e1b6"/><rangelist><range space="ram" first="0x800426ac" last="0x800426ac"/></rangelist>
-</mapsym>
 <mapsym>
 <symbol id="0xbeaf" name="local_28" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined8"/></symbol>
@@ -749,37 +699,13 @@ cb610038cb41003083e1002c83c10028
 <typeref name="undefined8"/></symbol>
 <addr space="stack" offset="0xffffffe8" size="8"/><rangelist/></mapsym>
 <mapsym>
-<symbol id="0x1d770" name="min_y_tmp3" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3f3f3e4491"/><rangelist><range space="ram" first="0x80042704" last="0x80042704"/></rangelist>
-</mapsym>
-<mapsym>
 <symbol id="0xbeb2" name="local_10" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined8"/></symbol>
 <addr space="stack" offset="0xfffffff0" size="8"/><rangelist/></mapsym>
 <mapsym>
-<symbol id="0x1d773" name="min_y_tmp1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3ffbac1c31"/><rangelist><range space="ram" first="0x80042654" last="0x80042654"/></rangelist>
-</mapsym>
-<mapsym>
 <symbol id="0xbeb3" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined8"/></symbol>
 <addr space="stack" offset="0xfffffff8" size="8"/><rangelist/></mapsym>
-<mapsym>
-<symbol id="0x1d772" name="min_y_tmp0" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3fd625e2a2"/><rangelist><range space="ram" first="0x800425fc" last="0x800425fc"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0xbeb4" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
-<typeref name="undefined4"/></symbol>
-<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
-<mapsym>
-<symbol id="0x1d775" name="fVar1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<hash val="0x3fd7330759"/><rangelist><range space="ram" first="0x800425f0" last="0x800425f0"/></rangelist>
-</mapsym>
 </symbollist>
 </scope>
 </localdb>
@@ -970,6 +896,10 @@ cb610038cb41003083e1002c83c10028
 </commentinstruction>
  <namespacestrategy>all</namespacestrategy>
  <protoeval>__stdcall</protoeval>
+ <togglerule>
+  <param1>shiftand</param1>
+  <param2>off</param2>
+</togglerule>
 </optionslist>
 </save_state>
 </xml_savefile>
