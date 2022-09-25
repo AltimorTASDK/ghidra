@@ -499,7 +499,7 @@ void Architecture::nameFunction(const Address &addr,string &name) const
 /// \param isreversejustified is \b true if small variables are justified opposite of endianness
 /// \param stackGrowth is \b true if a stack implemented in this space grows in the negative direction
 void Architecture::addSpacebase(AddrSpace *basespace,const string &nm,const VarnodeData &ptrdata,
-																int4 truncSize,bool isreversejustified,bool stackGrowth)
+                                int4 truncSize,bool isreversejustified,bool stackGrowth)
 
 {
 	int4 ind = numSpaces();
