@@ -898,7 +898,7 @@ void Funcdata::debugModPrint(PcodeOp *origin, const string &actionname)
 	if (modify_list.empty())
 		return;
 
-	if (!opactdbg_traceon) {
+	if (!opactdbg_traceon && !debugCheckRange(origin)) {
 		modify_list.clear();
 		modify_before.clear();
 		return;
