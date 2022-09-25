@@ -2864,18 +2864,20 @@ void BlockIf::printHeader(ostream &s) const
 bool BlockIf::preferComplement(Funcdata &data)
 
 {
-	if (getSize()!=3)             // If we are an if/else
+	if (!hasElse())
 		return false;
 
-	FlowBlock *split = getBlock(0)->getSplitPoint();
-	if (split == (FlowBlock *)0)
+	FlowBlock *split = getCondition()->getSplitPoint();
+	if (split == nullptr)
 		return false;
-	vector<PcodeOp *> fliplist;
-	if (0 != split->flipInPlaceTest(fliplist))
+
+	vector<PcodeOp*> fliplist;
+	if (split->flipInPlaceTest(fliplist) != 0)
 		return false;
+
 	split->flipInPlaceExecute();
-	opFlipInPlaceExecute(data,fliplist);
-	swapBlocks(1,2);
+	opFlipInPlaceExecute(data, fliplist);
+	swapBlocks(1, 2);
 	return true;
 }
 
