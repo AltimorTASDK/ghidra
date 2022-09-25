@@ -604,16 +604,8 @@ cb610038cb41003083e1002c83c10028
 <hash val="0x5fa819bf7f"/><rangelist><range space="ram" first="0x80042594" last="0x80042594"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d786" name="tmp" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<symbol id="0x1d789" name="min_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
 <typeref name="float"/></symbol>
-<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042554" last="0x80042554"/></rangelist>
-<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042568" last="0x80042568"/></rangelist>
-<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042578" last="0x80042578"/></rangelist>
-<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x80042588" last="0x80042588"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d789" name="min_x" typelock="false" namelock="true" readonly="false" cat="-1">
-<typeref name="undefined4"/></symbol>
 <addr space="register" offset="0x40fc" size="4"/><rangelist><range space="ram" first="0x800425b4" last="0x800425b4"/></rangelist>
 </mapsym>
 <mapsym>
@@ -622,8 +614,8 @@ cb610038cb41003083e1002c83c10028
 <hash val="0x5fb7d75b6d"/><rangelist><range space="ram" first="0x80042598" last="0x80042598"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d78a" name="max_x" typelock="false" namelock="true" readonly="false" cat="-1">
-<typeref name="undefined4"/></symbol>
+<symbol id="0x1d78a" name="max_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="float"/></symbol>
 <addr space="register" offset="0x40ec" size="4"/><rangelist><range space="ram" first="0x800425f8" last="0x800425f8"/></rangelist>
 </mapsym>
 <mapsym>
