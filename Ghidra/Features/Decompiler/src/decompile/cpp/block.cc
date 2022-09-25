@@ -2291,7 +2291,7 @@ bool BlockBasic::isStatement(PcodeOp *inst) const
 	if (inst->isCall())
 		return true;
 
-	auto *vn = inst->getOut();
+	const auto *vn = inst->getOut();
 
 	if (vn == nullptr)
 		return !inst->isFlowBreak();
