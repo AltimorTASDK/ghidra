@@ -3008,7 +3008,7 @@ bool ActionMarkImplied::checkImpliedCover(Funcdata &data,Varnode *vn)
 				// and let it through unless we can verify
 				// that the pointers are actually the same
 				if (storeop->getIn(0)->getOffset() == op->getIn(0)->getOffset()) {
-					if (isPossibleAlias(data,storeop->getIn(1),op->getIn(1),2))
+					if (isPossibleAlias(storeop->getIn(1),op->getIn(1),2))
 						return false;
 				}
 			}
