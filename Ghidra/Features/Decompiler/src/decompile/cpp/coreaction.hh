@@ -442,9 +442,9 @@ class ActionMarkImplied : public Action {
 		DescTreeElement(Varnode *v) {
 			vn = v; desciter = v->beginDescend(); }   ///< Constructor
 	};
-	static bool isPossibleAliasStep(Varnode *vn1,Varnode *vn2);   ///< Check for additive relationship
-	static bool isPossibleAlias(Varnode *vn1,Varnode *vn2,int4 depth);    ///< Check for possible duplicate value
-	static bool checkImpliedCover(Funcdata &data,Varnode *vn);    ///< Check for cover violation if Varnode is implied
+	static bool isPossibleAliasStep(Varnode *vn1, Varnode *vn2);   ///< Check for additive relationship
+	static bool isPossibleAlias(Varnode *vn1, Varnode *vn2, int4 depth);    ///< Check for possible duplicate value
+	static bool checkImpliedCover(Funcdata &data, Varnode *vn);    ///< Check for cover violation if Varnode is implied
 public:
 	ActionMarkImplied(const string &g) : Action(rule_onceperfunc,"markimplied",g) {}      ///< Constructor
 	virtual Action *clone(const ActionGroupList &grouplist) const {

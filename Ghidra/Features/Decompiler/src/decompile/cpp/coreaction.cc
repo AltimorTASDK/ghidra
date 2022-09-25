@@ -2886,9 +2886,8 @@ int4 ActionMarkExplicit::apply(Funcdata &data)
 bool ActionMarkImplied::isPossibleAliasStep(Varnode *vn1,Varnode *vn2)
 
 {
-	Varnode *var[2];
-	var[0] = vn1;
-	var[1] = vn2;
+	Varnode *var[2] = { vn1, vn2 };
+
 	for(int4 i=0;i<2;++i) {
 		Varnode *vncur = var[i];
 		if (!vncur->isWritten()) continue;
@@ -2898,9 +2897,9 @@ bool ActionMarkImplied::isPossibleAliasStep(Varnode *vn1,Varnode *vn2)
 		if (var[1-i] != op->getIn(0)) continue;
 		if (op->getIn(1)->isConstant()) return false;
 	}
+
 	return true;
 }
-
 
 /// Return false \b only if we can guarantee two Varnodes have different values.
 /// \param vn1 is the first Varnode
@@ -2919,6 +2918,7 @@ bool ActionMarkImplied::isPossibleAlias(Varnode *vn1,Varnode *vn2,int4 depth)
 
 	if (!isPossibleAliasStep(vn1,vn2))
 		return false;
+
 	Varnode *cvn1,*cvn2;
 	PcodeOp *op1 = vn1->getDef();
 	PcodeOp *op2 = vn2->getDef();
@@ -2926,21 +2926,23 @@ bool ActionMarkImplied::isPossibleAlias(Varnode *vn1,Varnode *vn2,int4 depth)
 	OpCode opc2 = op2->code();
 	int4 mult1 = 1;
 	int4 mult2 = 1;
-	if (opc1 == CPUI_PTRSUB)
+	if (opc1 == CPUI_PTRSUB) {
 		opc1 = CPUI_INT_ADD;
-	else if (opc1 == CPUI_PTRADD) {
+	} else if (opc1 == CPUI_PTRADD) {
 		opc1 = CPUI_INT_ADD;
 		mult1 = (int4) op1->getIn(2)->getOffset();
 	}
-	if (opc2 == CPUI_PTRSUB)
+	if (opc2 == CPUI_PTRSUB) {
 		opc2 = CPUI_INT_ADD;
-	else if (opc2 == CPUI_PTRADD) {
+	} else if (opc2 == CPUI_PTRADD) {
 		opc2 = CPUI_INT_ADD;
 		mult2 = (int4) op2->getIn(2)->getOffset();
 	}
+
 	if (opc1 != opc2) return true;
 	if (depth == 0) return true;  // Couldn't find absolute difference
 	depth -= 1;
+
 	switch(opc1) {
 	case CPUI_COPY:
 	case CPUI_INT_ZEXT:
@@ -2956,6 +2958,13 @@ bool ActionMarkImplied::isPossibleAlias(Varnode *vn1,Varnode *vn2,int4 depth)
 			uintb val2 = mult2 * cvn2->getOffset();
 			if (val1 == val2)
 				return isPossibleAlias(op1->getIn(0),op2->getIn(0),depth);
+
+			// Different offsets within the same struct type are assumed not to alias
+			const auto *type1 = op1->getIn(0)->getHigh()->getType();
+			const auto *type2 = op2->getIn(0)->getHigh()->getType();
+			if (type1 == type2 && type1->getSubMeta() == SUB_PTR_STRUCT)
+				return false;
+
 			return !functionalEquality(op1->getIn(0),op2->getIn(0));
 		}
 		if (mult1 != mult2) return true;
@@ -2995,12 +3004,12 @@ bool ActionMarkImplied::checkImpliedCover(Funcdata &data,Varnode *vn)
 			storeop = *oiter;
 			if (storeop->isDead()) continue;
 			if (vn->getCover()->contain(storeop,2)) {
-																// The LOAD crosses a STORE. We are cavalier
-																// and let it through unless we can verify
-																// that the pointers are actually the same
+				// The LOAD crosses a STORE. We are cavalier
+				// and let it through unless we can verify
+				// that the pointers are actually the same
 				if (storeop->getIn(0)->getOffset() == op->getIn(0)->getOffset()) {
-					//      if (!functionalDifference(storeop->getIn(1),op->getIn(1),2)) return false;
-					if (isPossibleAlias(storeop->getIn(1),op->getIn(1),2)) return false;
+					if (isPossibleAlias(data,storeop->getIn(1),op->getIn(1),2))
+						return false;
 				}
 			}
 		}
