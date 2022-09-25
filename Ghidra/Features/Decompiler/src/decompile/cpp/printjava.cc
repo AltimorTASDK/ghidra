@@ -16,7 +16,7 @@
 #include "printjava.hh"
 #include "funcdata.hh"
 
-OpToken PrintJava::instanceof = { "instanceof", 2, 60, OpToken::l2r_associative, false, OpToken::binary, 1, 0, (OpToken *)0 };
+OpToken PrintJava::instanceof = { "instanceof", 2, 60, OpToken::l2r_associative, false, OpToken::binary, 1, 0, 0, (OpToken *)0 };
 
 // Constructing this registers the capability
 PrintJavaCapability PrintJavaCapability::printJavaCapability;

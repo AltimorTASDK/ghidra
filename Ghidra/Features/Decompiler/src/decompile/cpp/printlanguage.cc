@@ -339,7 +339,7 @@ void PrintLanguage::emitOp(const ReversePolish &entry)
 		if (entry.visited!=1) return;
 		emit->spaces(entry.tok->spacing,entry.tok->bump); // Spacing around operator
 		emit->tagOp(entry.tok->print,EmitXml::no_color,entry.op);
-		emit->spaces(entry.tok->spacing,entry.tok->bump);
+		emit->spaces(entry.tok->spacing+entry.tok->rhs_spacing,entry.tok->bump);
 		break;
 	case OpToken::unary_prefix:
 		if (entry.visited!=0) return;

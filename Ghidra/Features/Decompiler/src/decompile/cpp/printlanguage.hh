@@ -102,6 +102,7 @@ public:
 	bool exclusion;               ///< Prevents grouping with other operators with the exclusion flag
 	tokentype type;               ///< The basic token type
 	int4 spacing;                 ///< Spaces to print around operator
+	int4 rhs_spacing;             ///< Right hand side only spacing
 	int4 bump;                    ///< Spaces to indent if we break here
 	OpToken *negate;              ///< The token representing the negation of this token
 };
