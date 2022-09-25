@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -120,12 +120,6 @@ OpCode get_booleanflip(OpCode opc,bool &reorder)
 	case CPUI_FLOAT_NOTEQUAL:
 		reorder = false;
 		return CPUI_FLOAT_EQUAL;
-	case CPUI_FLOAT_LESS:
-		reorder = true;
-		return CPUI_FLOAT_LESSEQUAL;
-	case CPUI_FLOAT_LESSEQUAL:
-		reorder = true;
-		return CPUI_FLOAT_LESS;
 	default:
 		break;
 	}
