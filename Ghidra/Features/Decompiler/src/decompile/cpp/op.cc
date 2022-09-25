@@ -378,7 +378,7 @@ void PcodeOp::printDebug(ostream &s) const
 {
 	s << start << ": ";
 	if (opcode != nullptr)
-		s << opcode->getName() << "(" << opcode->getOpcode() << "): ";
+		s << opcode->getName() << "(" << dec << opcode->getOpcode() << "): ";
 
 	if (isDead()||(parent==(BlockBasic *)0))
 		s << "**";
