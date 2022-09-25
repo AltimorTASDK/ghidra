@@ -1118,9 +1118,9 @@ int4 functionalEqualityLevel(Varnode *vn1,Varnode *vn2,Varnode **res1,Varnode **
 	if (op1->isMarker()) return -1;
 	if (op2->isCall()) return -1;
 	if (opc == CPUI_LOAD) {
-																// FIXME: We assume two loads produce the same
-																// result if the address is the same and the loads
-																// occur in the same instruction
+		// FIXME: We assume two loads produce the same
+		// result if the address is the same and the loads
+		// occur in the same instruction
 		if (op1->getAddr() != op2->getAddr()) return -1;
 	}
 	if (num >= 3) {
