@@ -648,13 +648,13 @@ int4 RuleEquality::applyOp(PcodeOp *op,Funcdata &data)
 void RuleTermOrder::getOpList(vector<uint4> &oplist) const
 
 {
-																// FIXME:  All the commutative ops
-																// Use the TypeOp::commutative function
+	// FIXME:  All the commutative ops
+	// Use the TypeOp::commutative function
 	uint4 list[]={ CPUI_INT_EQUAL, CPUI_INT_NOTEQUAL, CPUI_INT_ADD, CPUI_INT_CARRY,
-								 CPUI_INT_SCARRY, CPUI_INT_XOR, CPUI_INT_AND, CPUI_INT_OR,
-								 CPUI_INT_MULT, CPUI_BOOL_XOR, CPUI_BOOL_AND, CPUI_BOOL_OR,
-								 CPUI_FLOAT_EQUAL, CPUI_FLOAT_NOTEQUAL, CPUI_FLOAT_ADD,
-								 CPUI_FLOAT_MULT };
+	               CPUI_INT_SCARRY, CPUI_INT_XOR, CPUI_INT_AND, CPUI_INT_OR,
+	               CPUI_INT_MULT, CPUI_BOOL_XOR, CPUI_BOOL_AND, CPUI_BOOL_OR,
+	               CPUI_FLOAT_EQUAL, CPUI_FLOAT_NOTEQUAL, CPUI_FLOAT_ADD,
+	               CPUI_FLOAT_MULT };
 	oplist.insert(oplist.end(),list,list+16);
 }
 
@@ -8257,6 +8257,11 @@ void RuleSubfloatConvert::getOpList(vector<uint4> &oplist) const
 int4 RuleSubfloatConvert::applyOp(PcodeOp *op,Funcdata &data)
 
 {
+#ifdef OPACTION_DEBUG
+	// Don't trace every change
+	data.debugRecordAllOff();
+#endif
+
 	Varnode *invn = op->getIn(0);
 	Varnode *outvn = op->getOut();
 	int4 insize = invn->getSize();

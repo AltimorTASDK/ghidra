@@ -3711,7 +3711,7 @@ int4 ActionDeadCode::apply(Funcdata &data)
 			data.seenDeadcode(spc);   // Record that we have seen dead code for this space
 	}
 #ifdef OPACTION_DEBUG
-	data.debugModPrint(getName()); // Print dead ops before freeing them
+	data.debugModPrint(nullptr, getName()); // Print dead ops before freeing them
 #endif
 	data.clearDeadVarnodes();
 	data.clearDeadOps();

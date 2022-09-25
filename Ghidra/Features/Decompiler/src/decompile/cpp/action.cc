@@ -316,7 +316,7 @@ int4 Action::perform(Funcdata &data)
 #endif
 			res = apply(data);        // Start or continue action
 #ifdef OPACTION_DEBUG
-			data.debugModPrint(getName());
+			data.debugModPrint(nullptr, getName());
 #endif
 			if (res < 0) {            // negative indicates partial completion
 				status = status_mid;
@@ -836,11 +836,12 @@ int4 ActionPool::processOp(PcodeOp *op,Funcdata &data)
 		if (rl->isDisabled()) continue;
 #ifdef OPACTION_DEBUG
 		data.debugActivate();
+		data.debugRecordAllOn();
 #endif
 		rl->count_tests += 1;
 		res = rl->applyOp(op,data);
 #ifdef OPACTION_DEBUG
-		data.debugModPrint(rl->getName());
+		data.debugModPrint(op, rl->getName());
 #endif
 		if (res>0) {
 			rl->count_apply += 1;

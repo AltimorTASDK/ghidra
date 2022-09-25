@@ -536,6 +536,8 @@ public:
 	bool opactdbg_on;                             ///< Are we currently doing op action debugs
 	bool opactdbg_active;                         ///< \b true if current op mods should be recorded
 	bool opactdbg_breakon;                        ///< Has a breakpoint been hit
+	bool opactdbg_traceon;                        ///< Has a traced address been modified
+	bool opactdbg_recordall;                      ///< Record modifications to addresses outside of trace range
 	vector<Address> opactdbg_pclow;               ///< Lower bounds on the PC register
 	vector<Address> opactdbg_pchigh;              ///< Upper bounds on the PC register
 	vector<uintm> opactdbg_uqlow;                 ///< Lower bounds on the unique register
@@ -544,9 +546,11 @@ public:
 	void disableJTCallback(void) { jtcallback = (void (*)(Funcdata &orig,Funcdata &fd))0; }       ///< Disable debug callback
 	void debugActivate(void) { if (opactdbg_on) opactdbg_active=true; }   ///< Turn on recording
 	void debugDeactivate(void) { opactdbg_active = false; }               ///< Turn off recording
-	void debugModCheck(PcodeOp *op);              ///< Cache \e before state of the given PcodeOp
-	void debugModClear(void);                     ///< Abandon printing debug for current action
-	void debugModPrint(const string &actionname); ///< Print before and after strings for PcodeOps modified by given action
+	void debugRecordAllOn(void) { if (opactdbg_on) opactdbg_recordall=true; }   ///< Turn on recording modifications outside of trace range
+	void debugRecordAllOff(void) { if (opactdbg_on) opactdbg_recordall=false; } ///< Turn off recording modifications outside of trace range
+	void debugModCheck(PcodeOp *op);                               ///< Cache \e before state of the given PcodeOp
+	void debugModClear(void);                                      ///< Abandon printing debug for current action
+	void debugModPrint(PcodeOp *origin, const string &actionname); ///< Print before and after strings for PcodeOps modified by given action
 	bool debugBreak(void) const { return opactdbg_on&&opactdbg_breakon; } ///< Has a breakpoint been hit
 	int4 debugSize(void) const { return opactdbg_pclow.size(); }  ///< Number of code ranges being debug traced
 	void debugEnable(void) { opactdbg_on = true; opactdbg_count = 0; }    ///< Turn on debugging

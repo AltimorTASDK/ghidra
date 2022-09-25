@@ -860,8 +860,14 @@ void PcodeEmitFd::dump(const Address &addr,OpCode opc,VarnodeData *outvar,Varnod
 void Funcdata::debugModCheck(PcodeOp *op)
 
 {
-	if (op->isModified()) return;
-	if (!debugCheckRange(op)) return;
+	if (op->isModified())
+		return;
+
+	if (debugCheckRange(op))
+		opactdbg_traceon = true;
+	else if (!opactdbg_recordall)
+		return;
+
 	op->setAdditionalFlag(PcodeOp::modified);
 	ostringstream before;
 	op->printDebug(before);
@@ -880,24 +886,47 @@ void Funcdata::debugModClear(void)
 }
 
 /// \param actionname is the name of the Action being debugged
-void Funcdata::debugModPrint(const string &actionname)
+void Funcdata::debugModPrint(PcodeOp *origin, const string &actionname)
 
 {
-	if (!opactdbg_active) return;
+	if (!opactdbg_active)
+		return;
+
 	opactdbg_active = false;
-	if (modify_list.empty()) return;
-	PcodeOp *op;
+	opactdbg_recordall = false;
+
+	if (modify_list.empty())
+		return;
+
+	if (!opactdbg_traceon) {
+		modify_list.clear();
+		modify_before.clear();
+		return;
+	}
+
+	opactdbg_traceon = false;
+
 	ostringstream s;
 	opactdbg_breakon |= (opactdbg_count == opactdbg_breakcount);
 
+	auto found_origin = false;
+
 	s << "DEBUG " << dec << opactdbg_count++ << ": " << actionname << endl;
-	for(int4 i=0;i<modify_list.size();++i) {
-		op = modify_list[i];
+	for (int4 i = 0; i < modify_list.size(); i++) {
+		auto *op = modify_list[i];
 		s << modify_before[i] << endl;
+		if (op == origin) {
+			s << "   ORIGIN" << endl;
+			found_origin = true;
+		}
 		s << "   ";
 		op->printDebug(s);
 		s << endl;
 		op->clearAdditionalFlag(PcodeOp::modified);
+	}
+	if (origin != nullptr && !found_origin) {
+		origin->printDebug(s);
+		s << endl << "   ORIGIN" << endl;
 	}
 	modify_list.clear();
 	modify_before.clear();

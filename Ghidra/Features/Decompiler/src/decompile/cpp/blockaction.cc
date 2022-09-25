@@ -2143,12 +2143,12 @@ int4 ActionPreferComplement::apply(Funcdata &data)
 		for(int4 i=0;i<sz;++i) {
 			FlowBlock *childbl = curbl->getBlock(i);
 			bt = childbl->getType();
-			if ((bt == FlowBlock::t_copy)||(bt == FlowBlock::t_basic))
+			if (bt == FlowBlock::t_copy || bt == FlowBlock::t_basic)
 				continue;
 			vec.push_back((BlockGraph *)childbl);
 		}
 		if (curbl->preferComplement(data))
-			count += 1;
+			count++;
 	}
 	data.clearDeadOps();          // Clear any ops deleted during this action
 	return 0;
