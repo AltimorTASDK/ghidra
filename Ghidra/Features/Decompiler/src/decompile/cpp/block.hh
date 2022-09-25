@@ -561,6 +561,12 @@ public:
 	void setGotoTarget(FlowBlock *bl) { gototarget = bl; }                ///< Mark the target of the unstructured edge
 	FlowBlock *getGotoTarget(void) const { return gototarget; }           ///< Get the target of the unstructured edge
 	uint4 getGotoType(void) const { return gototype; }                    ///< Get the type of unstructured edge
+	bool hasElse() const { return getSize() == 3; }
+
+	FlowBlock *getCondition(void) const { return getBlock(0); }
+	FlowBlock *getIfBody(void)    const { return getBlock(1); }
+	FlowBlock *getElseBody(void)  const { return getBlock(2); }
+
 	virtual block_type getType(void) const { return t_if; }
 	virtual void markUnstructured(void);
 	virtual void scopeBreak(int4 curexit,int4 curloopexit);

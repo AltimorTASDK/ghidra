@@ -2497,43 +2497,44 @@ bool PrintC::isOneLineBlock(const FlowBlock *bl)
 	case FlowBlock::t_copy:
 		return isOneLineBlock(bl->subBlock(0));
 	case FlowBlock::t_basic:
-		return getBlockStatementCount((const BlockBasic*)bl) == 1;
+		return getBlockStatementCount((BlockBasic*)bl) == 1;
 	default:
 		return false;
 	}
 }
 
-bool PrintC::bodyNeedsBraces(const BlockIf *bl, bool descend)
+bool PrintC::bodyNeedsBraces(const BlockIf *bl)
 {
-	// complex init statements prevent else if chains
-	if (!isOneLineBlock(bl->getBlock(0))) {
-		if (descend)
-			return true;
-		else
-			descend = true;
-	} else if (!descend && bl->getParent()->getType() == FlowBlock::t_if) {
-		// Start from head of else if chain
-		const auto *prev = (const BlockIf*)bl->getParent();
-		if (prev->getBlock(2) == bl)
-			return bodyNeedsBraces(prev);
+	// Start from head of else if chain
+	while (isOneLineBlock(bl->getCondition())) {
+		const auto *parent = (BlockIf*)bl->getParent();
+
+		if (parent->getType() != FlowBlock::t_if || parent->getElseBody() != bl)
+			break;
+
+		bl = parent;
 	}
 
-	if (bl->getGotoTarget() != nullptr)
-		return false;
+	// Descend else if chain
+	while (true) {
+		if (bl->getGotoTarget() != nullptr)
+			return false;
 
-	// one line true clause
-	if (!isOneLineBlock(bl->getBlock(1)))
-		return true;
+		if (!isOneLineBlock(bl->getIfBody()))
+			return true;
 
-	if (bl->getSize() != 3)
-		return false;
+		if (!bl->hasElse())
+			return false;
 
-	const auto *else_block = bl->getBlock(2);
+		if (bl->getElseBody()->getType() != FlowBlock::t_if)
+			return !isOneLineBlock(bl->getElseBody());
 
-	if (else_block->getType() == FlowBlock::t_if)
-		return bodyNeedsBraces((const BlockIf*)else_block, true);
-	else
-		return !isOneLineBlock(else_block);
+		bl = (BlockIf*)bl->getElseBody();
+
+		// else if chain prevented by statements preceding condition
+		if (!isOneLineBlock(bl->getCondition()))
+			return true;
+	}
 }
 
 bool PrintC::bodyNeedsBraces(const BlockGraph *bl)
