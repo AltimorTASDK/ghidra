@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,10 +24,10 @@ class SleighSymbol {
 	friend class SymbolTable;
 public:
 	enum symbol_type { space_symbol, token_symbol, userop_symbol, value_symbol, valuemap_symbol,
-										 name_symbol, varnode_symbol, varnodelist_symbol, operand_symbol,
-										 start_symbol, end_symbol, subtable_symbol, macro_symbol, section_symbol,
-										 bitrange_symbol, context_symbol, epsilon_symbol, label_symbol,
-										 dummy_symbol };
+	                   name_symbol, varnode_symbol, varnodelist_symbol, operand_symbol,
+	                   start_symbol, end_symbol, subtable_symbol, macro_symbol, section_symbol,
+	                   bitrange_symbol, context_symbol, epsilon_symbol, label_symbol,
+	                   dummy_symbol };
 private:
 	string name;
 	uintm id;                     // Unique id across all symbols
@@ -79,7 +79,7 @@ public:
 	~SymbolTable(void);
 	SymbolScope *getCurrentScope(void) { return curscope; }
 	SymbolScope *getGlobalScope(void) { return table[0]; }
-	
+
 	void setCurrentScope(SymbolScope *scope) { curscope = scope; }
 	void addScope(void);          // Add new scope off of current scope, make it current
 	void popScope(void);          // Make parent of current scope current
@@ -154,7 +154,7 @@ public:
 	virtual void print(ostream &s,ParserWalker &walker) const=0;
 	virtual void collectLocalValues(vector<uintb> &results) const {}
 };
-	
+
 class FamilySymbol : public TripleSymbol {
 public:
 	FamilySymbol(void) {}
@@ -299,7 +299,7 @@ class VarnodeListSymbol : public ValueSymbol {
 	void checkTableFill(void);
 public:
 	VarnodeListSymbol(void) {}    // For use with restoreXml
-	VarnodeListSymbol(const string &nm,PatternValue *pv,const vector<SleighSymbol *> &vt); 
+	VarnodeListSymbol(const string &nm,PatternValue *pv,const vector<SleighSymbol *> &vt);
 	virtual Constructor *resolve(ParserWalker &walker);
 	virtual void getFixedHandle(FixedHandle &hand,ParserWalker &walker) const;
 	virtual int4 getSize(void) const;
@@ -309,7 +309,7 @@ public:
 	virtual void saveXmlHeader(ostream &s) const;
 	virtual void restoreXml(const Element *el,SleighBase *trans);
 };
-	
+
 class OperandSymbol : public SpecificSymbol {
 	friend class Constructor;
 	friend class OperandEquation;
