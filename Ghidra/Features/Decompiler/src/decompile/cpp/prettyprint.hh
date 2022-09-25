@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,7 @@ class FlowBlock;
 class Funcdata;
 class Symbol;
 class PendPrint;
+class PendBreak;
 
 /// \brief Base class (and interface) for pretty printing and XML markup of tokens
 ///
@@ -82,10 +83,11 @@ protected:
 	int4 parenlevel;                      ///< Current depth of parentheses
 	int4 indentincrement;                 ///< Change in indentlevel per level of nesting
 	PendPrint *pendPrint;                 ///< Pending print callback
+	PendBreak *pendBreak;                 ///< Pending line break callback
 	void resetDefaultsInternal(void) { indentincrement = 2; }     ///< Set options to default values for EmitXml
 	void emitPending(void);               ///< Emit any pending print commands
 public:
-	EmitXml(void) { s = (ostream *)0; indentlevel=0; parenlevel=0; pendPrint=(PendPrint *)0; resetDefaultsInternal(); }   ///< Constructor
+	EmitXml(void) { s = nullptr; indentlevel=0; parenlevel=0; pendPrint=nullptr; pendBreak=nullptr; resetDefaultsInternal(); }   ///< Constructor
 
 	/// \brief Possible types of syntax highlighting
 	enum syntax_highlight {
@@ -235,6 +237,17 @@ public:
 	/// \param pend is the given print callback to check
 	/// \return \b true if the specific print callback is pending
 	bool hasPendingPrint(PendPrint *pend) const { return (pendPrint == pend); }
+
+	/// \brief Set a pending line break callback
+	///
+	/// The callback will be issued prior to the the next forced line break.
+	/// \param pend is the callback to be issued
+	void setPendingBreak(PendBreak *pend) { pendBreak = pend; }
+
+	/// \brief Cancel any pending line break callback
+	///
+	/// If there is any line break callback pending, cancel it
+	void cancelPendingBreak(void) { pendBreak = (PendBreak *)0; }
 };
 
 /// \brief A trivial emitter that outputs syntax straight to the stream
@@ -412,7 +425,7 @@ public:
 	///
 	/// \param v (if non-null) is the storage location for the return value
 	/// \return an id associated with the return type
-	int4 beginReturnType(const Varnode *v) { 
+	int4 beginReturnType(const Varnode *v) {
 		tagtype=rtyp_b; delimtype=begin; ptr_second.vn=v; count=countbase++; return count; }
 
 	/// \brief Create an "end return type declaration" command
@@ -693,7 +706,7 @@ void circularqueue<_type>::expand(int4 amount)
 
 {
 	_type *newcache = new _type [ max + amount ];
-	
+
 	int4 i=left;
 	int4 j=0;
 
@@ -705,10 +718,10 @@ void circularqueue<_type>::expand(int4 amount)
 	newcache[j] = cache[i];       // Copy rightmost
 	left=0;
 	right = j;
-	
+
 	delete [] cache;
 	cache = newcache;
-	max += amount; 
+	max += amount;
 }
 
 /// \brief A generic source code pretty printer
@@ -800,7 +813,7 @@ public:
 	void setXML(bool val);        ///< Toggle whether the low-level emitter emits XML markup or not
 };
 
-/// \brief Helper class for sending cancelable print commands to an ExitXml
+/// \brief Helper class for sending cancelable print commands to an EmitXml
 ///
 /// The PendPrint is issued as a placeholder for commands to the emitter using its
 /// setPendingPrint() method.  The callback() method is overridden to tailor the exact
@@ -820,5 +833,12 @@ inline void EmitXml::emitPending(void)
 		pendPrint = (PendPrint *)0;
 	}
 }
+
+/// \brief Helper class for intercepting automatic line breaks
+class PendBreak {
+public:
+	virtual ~PendBreak(void) {}                   ///< Destructor
+	virtual void callback(EmitXml *emit)=0;       ///< Callback that executes the actual commands
+};
 
 #endif

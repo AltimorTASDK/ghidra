@@ -1,14 +1,18 @@
-restore ../datatests/ssbm/Physics_UpdateECBBones.xml
-load function Physics_UpdateECBBones
-trace enable
-trace address 0x800425e8
+// restore ../datatests/ssbm/Physics_UpdateECBBones.xml
+// load function Physics_UpdateECBBones
+// trace address 0x8004254c
+// trace address 0x80042554
+// trace address 0x8004255c
+// trace address 0x80042560
 // trace address 0x800425f8
-// debug action restructure_varnode
-// debug action restructure_high
-// debug action inputprototype
-// option togglerule subfloat_convert off
-// option togglerule shiftand off
+
+restore ../datatests/ssbm/Interrupt_Throw.xml
+load function Interrupt_Throw
+
+trace enable
+option togglerule shiftand off
 option inplaceops on
+option indentincrement 2
 decompile
 print C
 quit

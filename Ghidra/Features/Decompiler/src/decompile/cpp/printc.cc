@@ -54,6 +54,7 @@ OpToken PrintC::boolean_and       = { "&&",  2, 22, OpToken::l2r_associative, tr
 OpToken PrintC::boolean_xor       = { "^^",  2, 20, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::boolean_or        = { "||",  2, 18, OpToken::l2r_associative, true,  OpToken::binary,         1,  0, (OpToken *)0 };
 OpToken PrintC::comma             = { ",",   2,  2, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
+OpToken PrintC::comma_space       = { ", ",  2,  2, OpToken::l2r_associative, false, OpToken::binary,         0,  0, (OpToken *)0 };
 OpToken PrintC::new_op            = { "",    2, 62, OpToken::non_associative, false, OpToken::space,          1,  0, (OpToken *)0 };
 
 // Inplace assignment operators
@@ -2446,96 +2447,6 @@ void PrintC::docFunction(const Funcdata *fd)
 	}
 }
 
-uint4 PrintC::getBlockStatementCount(const BlockBasic *bb)
-{
-	if (isSet(only_branch))
-		return 1;
-
-	uint4 statements = 0;
-
-	for(auto iter = bb->beginOp(); iter != bb->endOp(); ++iter) {
-		auto *inst = *iter;
-
-		if (inst->notPrinted())
-			continue;
-
-		if (inst->isBranch() && (isSet(no_branch) || inst->code() == CPUI_BRANCH))
-			continue;
-
-		if (inst->getOut() != nullptr && inst->getOut()->isImplied())
-			continue;
-
-		if (isSet(comma_separate) && statements > 0)
-			continue;
-
-		statements++;
-	}
-
-	// If we are printing flat structure and there
-	// is no longer a normal fallthru, print a goto
-	if (isSet(flat) && isSet(nofallthru))
-		statements++;
-
-	return statements;
-}
-
-bool PrintC::isOneLineBlock(const FlowBlock *bl)
-{
-	switch (bl->getType()) {
-	case FlowBlock::t_condition:
-	case FlowBlock::t_copy:
-		return isOneLineBlock(bl->subBlock(0));
-	case FlowBlock::t_basic:
-		return getBlockStatementCount((const BlockBasic*)bl) == 1;
-	default:
-		return false;
-	}
-}
-
-bool PrintC::bodyNeedsBraces(const BlockIf *bl, bool descend)
-{
-	if (!descend && bl->sizeIn() == 1 && bl->getIn(0)->getType() == FlowBlock::t_if) {
-		// Start from head of else if chain
-		const auto *prev = (const BlockIf*)bl->getIn(0);
-		if (prev->getBlock(2) == bl)
-			return bodyNeedsBraces(prev);
-	}
-
-	// no complex conditions for else ifs
-	if (descend && !isOneLineBlock(bl->getBlock(0)))
-		return true;
-
-	if (bl->getGotoTarget() != nullptr)
-		return false;
-
-	// one line true clause
-	if (!isOneLineBlock(bl->getBlock(1)))
-		return true;
-
-	if (bl->getSize() != 3)
-		return false;
-
-	const auto *else_block = bl->getBlock(2);
-
-	if (else_block->getType() == FlowBlock::t_if)
-		return bodyNeedsBraces((const BlockIf*)else_block, true);
-	else
-		return isOneLineBlock(else_block);
-}
-
-bool PrintC::bodyNeedsBraces(const BlockGraph *bl)
-{
-	if (bl->getType() == FlowBlock::t_if)
-		return bodyNeedsBraces((const BlockIf*)bl);
-	else
-		return !isOneLineBlock(bl->getBlock(1));
-}
-
-bool PrintC::isLastChildBlock(const FlowBlock *bl)
-{
-	return bl->getOut(0)->getParent() != bl->getParent();
-}
-
 bool PrintC::shouldEmitInstruction(const PcodeOp *inst)
 {
 	if (inst->notPrinted())
@@ -2554,6 +2465,91 @@ bool PrintC::shouldEmitInstruction(const PcodeOp *inst)
 	return true;
 }
 
+uint4 PrintC::getBlockStatementCount(const BlockBasic *bb)
+{
+	if (isSet(only_branch))
+		return 1;
+
+	uint4 statements = 0;
+
+	for(auto iter = bb->beginOp(); iter != bb->endOp(); ++iter) {
+		if (shouldEmitInstruction(*iter) && (!isSet(comma_separate) || statements == 0))
+			statements++;
+	}
+
+	// If we are printing flat structure and there
+	// is no longer a normal fallthru, print a goto
+	if (isSet(flat) && isSet(nofallthru))
+		statements++;
+
+	return statements;
+}
+
+bool PrintC::isOneLineBlock(const FlowBlock *bl)
+{
+	switch (bl->getType()) {
+	case FlowBlock::t_condition: {
+		pushMod();
+		setMod(no_branch);
+		const auto result = isOneLineBlock(bl->subBlock(0));
+		popMod();
+		return result;
+	}
+	case FlowBlock::t_copy:
+		return isOneLineBlock(bl->subBlock(0));
+	case FlowBlock::t_basic:
+		return getBlockStatementCount((const BlockBasic*)bl) == 1;
+	default:
+		return false;
+	}
+}
+
+bool PrintC::bodyNeedsBraces(const BlockIf *bl, bool descend)
+{
+	// complex init statements prevent else if chains
+	if (!isOneLineBlock(bl->getBlock(0))) {
+		if (descend)
+			return true;
+		else
+			descend = true;
+	} else if (!descend && bl->getParent()->getType() == FlowBlock::t_if) {
+		// Start from head of else if chain
+		const auto *prev = (const BlockIf*)bl->getParent();
+		if (prev->getBlock(2) == bl)
+			return bodyNeedsBraces(prev);
+	}
+
+	if (bl->getGotoTarget() != nullptr)
+		return false;
+
+	// one line true clause
+	if (!isOneLineBlock(bl->getBlock(1)))
+		return true;
+
+	if (bl->getSize() != 3)
+		return false;
+
+	const auto *else_block = bl->getBlock(2);
+
+	if (else_block->getType() == FlowBlock::t_if)
+		return bodyNeedsBraces((const BlockIf*)else_block, true);
+	else
+		return !isOneLineBlock(else_block);
+}
+
+bool PrintC::bodyNeedsBraces(const BlockGraph *bl)
+{
+	if (bl->getType() == FlowBlock::t_if)
+		return bodyNeedsBraces((const BlockIf*)bl);
+	else
+		return !isOneLineBlock(bl->getBlock(1));
+}
+
+bool PrintC::isLastChildBlock(const FlowBlock *bl)
+{
+	return bl->getOut(0)->getParent() != bl->getParent();
+}
+
 void PrintC::emitBlockBasic(const BlockBasic *bb)
 {
 	commsorter.setupBlockList(bb);
@@ -2568,15 +2564,15 @@ void PrintC::emitBlockBasic(const BlockBasic *bb)
 
 	if (isSet(comma_separate)) {
 		// Create a comma for each instruction past the first
-		auto first = false;
+		auto first = true;
 		for (auto iter = bb->beginOp(); iter != bb->endOp(); ++iter) {
 			if (!shouldEmitInstruction(*iter))
 				continue;
 
-			if (first)
-				pushOp(&comma, nullptr);
+			if (!first)
+				pushOp(&comma_space, nullptr);
 			else
-				first = true;
+				first = false;
 		}
 	}
 
@@ -2754,10 +2750,6 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 	pushMod();
 	unsetMod(no_branch|only_branch|pending_brace);
 
-	const auto emit_braces  = bodyNeedsBraces(bl);
-	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
-	const auto has_else     = bl->getSize() == 3;
-
 	pushMod();
 	setMod(no_branch);
 	FlowBlock *condBlock = bl->getBlock(0);
@@ -2771,18 +2763,25 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 		emit->tagLine();                      // Otherwise start the "if" on a new line
 	}
 
-	PendingDetector condLineBreakDetector;
-	emit->setPendingPrint(&condLineBreakDetector);
-
 	op = condBlock->lastOp();
-	emit->tagOp("if",EmitXml::keyword_color,op);
+	emit->tagOp("if", EmitXml::keyword_color, op);
 	emit->spaces(1);
+
+	BreakDetector lineBreakDetector;
+	emit->setPendingBreak(&lineBreakDetector);
+
 	pushMod();
 	setMod(only_branch);
 	int4 id = emit->openParen('(');
 	condBlock->emit(this);
 	emit->closeParen(')', id);
 	popMod();
+
+	emit->cancelPendingBreak();
+
+	const auto emit_braces  = bodyNeedsBraces(bl) || lineBreakDetector.check();
+	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
+	const auto has_else     = bl->getSize() == 3;
 
 	if (bl->getGotoTarget() != nullptr) {
 		emit->spaces(1);

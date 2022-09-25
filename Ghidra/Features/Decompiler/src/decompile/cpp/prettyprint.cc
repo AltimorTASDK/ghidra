@@ -704,6 +704,10 @@ void EmitPrettyPrint::print(const TokenSplit &tok)
 				indentstack.back() = val;
 				spaceremain = val;
 			}
+
+			if (pendBreak != nullptr)
+				pendBreak->callback(this);
+
 			lowlevel->tagLine(maxlinesize-spaceremain);
 			if (commentmode &&(commentfill.size() != 0)) {
 				lowlevel->print(commentfill.c_str(),EmitXml::comment_color);

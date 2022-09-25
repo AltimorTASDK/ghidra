@@ -97,6 +97,7 @@ protected:
 	static OpToken boolean_xor;           ///< The \e boolean \e xor operator
 	static OpToken assignment;            ///< The \e assignment operator
 	static OpToken comma;                 ///< The \e comma operator (for parameter lists)
+	static OpToken comma_space;           ///< The \e comma operator with a space between arguments
 	static OpToken new_op;                ///< The \e new operator
 	static OpToken multequal;             ///< The \e in-place \e multiplication operator
 	static OpToken divequal;              ///< The \e in-place \e division operator
@@ -217,13 +218,12 @@ public:
 	virtual void docSingleGlobal(const Symbol *sym);
 	virtual void docFunction(const Funcdata *fd);
 
+	virtual bool shouldEmitInstruction(const PcodeOp *inst);
 	virtual uint4 getBlockStatementCount(const BlockBasic *bb);
 	virtual bool isOneLineBlock(const FlowBlock *bl);
 	virtual bool bodyNeedsBraces(const BlockIf *bl, bool descend = false);
 	virtual bool bodyNeedsBraces(const BlockGraph *bl);
 	virtual bool isLastChildBlock(const FlowBlock *bl);
-
-	virtual bool shouldEmitInstruction(const PcodeOp *inst);
 
 	virtual void emitBlockBasic(const BlockBasic *bb);
 	virtual void emitBlockGraph(const BlockGraph *bl);
@@ -323,8 +323,8 @@ public:
 	virtual void callback(EmitXml *emit);
 };
 
-/// \brief Pending print without side effects for detecting line breaks.
-class PendingDetector : public PendPrint {
+/// \brief For detecting automatic line breaks
+class BreakDetector : public PendBreak {
 	bool triggered = false;
 public:
 	bool check() const { return triggered; }
