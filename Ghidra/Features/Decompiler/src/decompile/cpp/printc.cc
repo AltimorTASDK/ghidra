@@ -2503,9 +2503,8 @@ bool PrintC::isOneLineBlock(const FlowBlock *bl)
 	}
 }
 
-bool PrintC::bodyNeedsBraces(const BlockIf *bl)
+const BlockIf *PrintC::getElseIfChainHead(const BlockIf *bl)
 {
-	// Start from head of else if chain
 	while (isOneLineBlock(bl->getCondition())) {
 		const auto *parent = (BlockIf*)bl->getParent();
 
@@ -2515,7 +2514,20 @@ bool PrintC::bodyNeedsBraces(const BlockIf *bl)
 		bl = parent;
 	}
 
-	// Descend else if chain
+	return bl;
+}
+
+BlockIf *PrintC::getElseIfChainHead(BlockIf *bl)
+{
+	return (BlockIf*)getElseIfChainHead((const BlockIf*)bl);
+}
+
+bool PrintC::bodyNeedsBraces(const BlockIf *bl)
+{
+	// Start from head of else if chain
+	bl = getElseIfChainHead(bl);
+
+	// Descend back down else if chain
 	while (true) {
 		if (bl->getGotoTarget() != nullptr)
 			return false;
@@ -2547,6 +2559,9 @@ bool PrintC::bodyNeedsBraces(const BlockGraph *bl)
 
 bool PrintC::isLastChildBlock(const FlowBlock *bl)
 {
+	if (bl->getType() == FlowBlock::t_if)
+		bl = getElseIfChainHead((const BlockIf*)bl);
+
 	return bl->getOut(0)->getParent() != bl->getParent();
 }
 

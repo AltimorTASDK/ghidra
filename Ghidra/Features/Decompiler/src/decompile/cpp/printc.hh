@@ -220,6 +220,8 @@ public:
 	virtual bool shouldEmitInstruction(const PcodeOp *inst);
 	virtual uint4 getBlockStatementCount(const BlockBasic *bb);
 	virtual bool isOneLineBlock(const FlowBlock *bl);
+	virtual const BlockIf *getElseIfChainHead(const BlockIf *bl);
+	BlockIf *getElseIfChainHead(BlockIf *bl);
 	virtual bool bodyNeedsBraces(const BlockIf *bl);
 	virtual bool bodyNeedsBraces(const BlockGraph *bl);
 	virtual bool isLastChildBlock(const FlowBlock *bl);
