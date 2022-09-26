@@ -549,14 +549,25 @@ void PrintLanguage::opBinary(const OpToken *tok,const PcodeOp *op)
 	if (isSet(negatetoken)) {
 		tok = tok->negate;
 		unsetMod(negatetoken);
-		if (tok == (const OpToken *)0)
+		if (tok == nullptr)
 			throw LowlevelError("Could not find fliptoken");
 	}
-	pushOp(tok,op);               // Push on reverse polish notation
-	// implied vn's pushed on in reverse order for efficiency
-	// see PrintLanguage::pushVnImplied
-	pushVnImplied(op->getIn(1),op,mods);
-	pushVnImplied(op->getIn(0),op,mods);
+	if (tok->reverse != nullptr && op->getIn(0)->termOrder(op->getIn(1)) == 1) {
+		// Apply ordered comparison term order at print time
+		tok = tok->reverse;
+		if (tok == nullptr)
+			throw LowlevelError("Could not find reversed token");
+
+		pushOp(tok,op);
+		pushVnImplied(op->getIn(0),op,mods);
+		pushVnImplied(op->getIn(1),op,mods);
+	} else {
+		pushOp(tok,op); // Push on reverse polish notation
+		// implied vn's pushed on in reverse order for efficiency
+		// see PrintLanguage::pushVnImplied
+		pushVnImplied(op->getIn(1),op,mods);
+		pushVnImplied(op->getIn(0),op,mods);
+	}
 }
 
 /// Push an operator onto the stack that has a normal unary format.

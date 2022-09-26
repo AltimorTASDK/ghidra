@@ -105,6 +105,7 @@ public:
 	int4 rhs_spacing;             ///< Right hand side only spacing
 	int4 bump;                    ///< Spaces to indent if we break here
 	OpToken *negate;              ///< The token representing the negation of this token
+	OpToken *reverse;             ///< Reversed token for ordered compares
 };
 
 /// \brief The base class API for emitting a high-level language
