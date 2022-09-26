@@ -2503,6 +2503,18 @@ bool PrintC::isOneLineBlock(const FlowBlock *bl)
 	}
 }
 
+bool PrintC::isEmptyBlock(const FlowBlock *bl)
+{
+	switch (bl->getType()) {
+	case FlowBlock::t_copy:
+		return isEmptyBlock(bl->subBlock(0));
+	case FlowBlock::t_basic:
+		return getBlockStatementCount((BlockBasic*)bl) == 0;
+	default:
+		return false;
+	}
+}
+
 const BlockIf *PrintC::getElseIfChainHead(const BlockIf *bl)
 {
 	while (isOneLineBlock(bl->getCondition())) {
@@ -2535,7 +2547,7 @@ bool PrintC::bodyNeedsBraces(const BlockIf *bl)
 		if (!isOneLineBlock(bl->getIfBody()))
 			return true;
 
-		if (!bl->hasElse())
+		if (!bl->hasElse() || isEmptyBlock(bl->getElseBody()))
 			return false;
 
 		if (bl->getElseBody()->getType() != FlowBlock::t_if)
@@ -2796,7 +2808,7 @@ void PrintC::emitBlockIf(const BlockIf *bl)
 
 	const auto emit_braces  = bodyNeedsBraces(bl) || lineBreakDetector.check();
 	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
-	const auto has_else     = bl->getSize() == 3;
+	const auto has_else     = bl->hasElse() && !isEmptyBlock(bl->getElseBody());
 
 	if (bl->getGotoTarget() != nullptr) {
 		emit->spaces(1);
