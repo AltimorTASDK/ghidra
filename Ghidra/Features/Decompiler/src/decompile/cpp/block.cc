@@ -2577,6 +2577,21 @@ void BlockBasic::printRaw(ostream &s) const
 	}
 }
 
+void BlockBasic::printTree(ostream &s,int4 level) const
+{
+	FlowBlock::printTree(s, level);
+
+	for (auto iter = op.begin(); iter != op.end(); ++iter) {
+		for (auto i = 0; i < level + 1; i++)
+			s << "  ";
+
+		auto *inst = *iter;
+		s << inst->getSeqNum() << ": ";
+		inst->printRaw(s);
+		s << endl;
+	}
+}
+
 /// \brief Check if there is meaningful activity between two branch instructions
 ///
 /// The first branch is assumed to be a CBRANCH one edge of which flows into

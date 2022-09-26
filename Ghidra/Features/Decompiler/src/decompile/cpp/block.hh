@@ -388,6 +388,7 @@ public:
 	virtual void restoreXmlBody(List::const_iterator &iter,List::const_iterator enditer,BlockMap &resolver);
 	virtual void printHeader(ostream &s) const;
 	virtual void printRaw(ostream &s) const;
+	virtual void printTree(ostream &s,int4 level) const;
 	virtual void emit(PrintLanguage *lng) const { lng->emitBlockBasic(this); }
 	virtual const FlowBlock *getExitLeaf(void) const { return this; }
 	virtual PcodeOp *lastOp(void) const;
