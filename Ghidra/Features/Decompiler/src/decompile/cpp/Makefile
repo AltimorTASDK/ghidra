@@ -39,8 +39,7 @@ CC=clang
 CXX=clang++
 
 # Debug flags
-#DBG_CXXFLAGS=-g -std=c++23 -Wall -Wno-sign-compare -Wno-unknown-pragmas -Wno-deprecated-enum-enum-conversion
-DBG_CXXFLAGS=-std=c++2b -Wall -Wno-sign-compare -Wno-unknown-pragmas \
+DBG_CXXFLAGS=-g -std=c++2b -Wall -Wno-sign-compare -Wno-unknown-pragmas \
              -Wno-deprecated-anon-enum-enum-conversion -Wno-unused-but-set-variable
 
 #DBG_CXXFLAGS=-g -pg -Wall -Wno-sign-compare
