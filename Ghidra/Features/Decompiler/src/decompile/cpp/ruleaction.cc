@@ -853,11 +853,11 @@ Varnode *RulePullsubMulti::findSubpiece(Varnode *basevn,uint4 outsize,uint4 shif
 	for(iter=basevn->beginDescend();iter!=basevn->endDescend();++iter) {
 		prevop = *iter;
 		if (prevop->code() != CPUI_SUBPIECE) continue; // Find previous SUBPIECE
-																// Make sure output is defined in same block as vn_piece
+		// Make sure output is defined in same block as vn_piece
 		if (basevn->isInput() && (prevop->getParent()->getIndex()!=0)) continue;
 		if (!basevn->isWritten()) continue;
 		if (basevn->getDef()->getParent() != prevop->getParent()) continue;
-																// Make sure subpiece matches form
+		// Make sure subpiece matches form
 		if ((prevop->getIn(0) == basevn)&&
 				(prevop->getOut()->getSize() == outsize)&&
 				(prevop->getIn(1)->getOffset()==shift)) {
@@ -8795,6 +8795,94 @@ int4 RuleConditionalMove::applyOp(PcodeOp *op,Funcdata &data)
 		data.opSetInput(op,body0,1);
 	}
 	return 1;
+}
+
+/// \class RuleRecoverTernary
+/// \brief Convert the following into an if-else structure:
+///
+/// x = constant;
+/// if (condition)
+///     x = v;
+///
+/// Compilers can make this optimization to eliminate a branch.
+/// Using an if-else structure instead allows more freedom with
+/// condition flow and variable aliasing.
+void RuleRecoverTernary::getOpList(vector<uint4> &oplist) const
+{
+	oplist.push_back(CPUI_MULTIEQUAL);
+}
+
+bool RuleRecoverTernary::tryToRestructure(PcodeOp *op, Varnode *vn1, Varnode *vn2, Funcdata &data)
+{
+	if (!vn1->isWritten() || !vn2->isWritten())
+		return false;
+
+	auto *in1 = vn1->getDef()->getParent();
+	auto *in2 = vn2->getDef()->getParent();
+
+	// Order the blocks and check for the expected edge structure
+	if (in1->sizeOut() == 1 && in2->sizeOut() == 2)
+		swap(in1, in2);
+	else if (in1->sizeOut() != 2 || in2->sizeOut() != 1)
+		return false;
+
+	if (in1->getOutIndex(in2) == -1)
+		return false;
+
+	// Must end with cbranch
+	const auto *cbranch = in1->lastOp();
+
+	if (cbranch == nullptr || cbranch->code() != CPUI_CBRANCH)
+		return false;
+
+	if (vn1->loneDescend() != op)
+		return false;
+
+	auto *def = vn1->getDef();
+
+	// Must be a constant initialization (could be generalized to no side effects)
+	if (def->code() != CPUI_COPY || !def->getIn(0)->isConstant())
+		return false;
+
+	// Move initialization to beginning of else block
+	auto *else_block = (BlockBasic*)in1->getOut(1 - in1->getOutIndex(in2));
+
+	if (in2->getOut(0) == else_block) {
+		// No else block, add one
+		auto &bblocks = data.getBasicBlocks();
+		auto *exit_block = else_block;
+		else_block = bblocks.newBlockBasic(&data);
+
+		bblocks.switchEdge(in1, exit_block, else_block);
+		bblocks.addEdge(else_block, exit_block);
+		data.setBasicBlockRange(else_block, cbranch->getAddr(), cbranch->getAddr());
+	}
+
+	// Move unconditional definition into else block
+	data.opUninsert(def);
+	data.opInsertBegin(def, else_block);
+
+	return true;
+}
+
+int4 RuleRecoverTernary::applyOp(PcodeOp *op,Funcdata &data)
+{
+	auto changed = false;
+
+	// Try each combination of two inputs
+	for (auto i = 0; i < op->numInput(); i++) {
+		for (auto j = i + 1; j < op->numInput(); j++) {
+			if (tryToRestructure(op, op->getIn(i), op->getIn(j), data)) {
+				changed = true;
+				break;
+			}
+		}
+	}
+
+	if (changed)
+		data.structureReset();
+
+	return changed;
 }
 
 /// \class RuleFloatCast

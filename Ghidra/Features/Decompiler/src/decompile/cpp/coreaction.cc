@@ -5185,6 +5185,7 @@ void ActionDatabase::universalAction(Architecture *conf)
 				actprop->addRule( new RuleSubvarZext("subvar") );
 				actprop->addRule( new RuleSubvarSext("subvar") );
 				actprop->addRule( new RuleNegateNegate("analysis") );
+				actprop->addRule( new RuleRecoverTernary("conditionalexe") );
 				actprop->addRule( new RuleConditionalMove("conditionalexe") );
 				actprop->addRule( new RuleOrPredicate("conditionalexe") );
 				actprop->addRule( new RuleFuncPtrEncoding("analysis") );

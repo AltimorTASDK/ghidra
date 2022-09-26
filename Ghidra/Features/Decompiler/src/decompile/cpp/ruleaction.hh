@@ -1448,6 +1448,18 @@ public:
 	virtual int4 applyOp(PcodeOp *op,Funcdata &data);
 };
 
+class RuleRecoverTernary : public Rule {
+public:
+	RuleRecoverTernary(const string &g) : Rule( g, 0, "recoverternary") {}  ///< Constructor
+	virtual Rule *clone(const ActionGroupList &grouplist) const {
+		if (!grouplist.contains(getGroup())) return (Rule *)0;
+		return new RuleRecoverTernary(getGroup());
+	}
+	virtual void getOpList(vector<uint4> &oplist) const;
+	virtual bool tryToRestructure(PcodeOp *op, Varnode *vn1, Varnode *vn2, Funcdata &data);
+	virtual int4 applyOp(PcodeOp *op, Funcdata &data);
+};
+
 class RuleFloatCast : public Rule {
 public:
 	RuleFloatCast(const string &g) : Rule( g, 0, "floatcast") {}  ///< Constructor
