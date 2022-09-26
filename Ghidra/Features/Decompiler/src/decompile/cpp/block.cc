@@ -578,6 +578,26 @@ void FlowBlock::printHeader(ostream &s) const
 	if (!getStart().isInvalid() && !getStop().isInvalid()) {
 		s << ' ' << getStart() << '-' << getStop();
 	}
+
+	if (sizeIn() != 0) {
+		s << " (in: ";
+		for (auto i = 0; i < sizeIn(); i++) {
+			if (i > 0)
+				s << ", ";
+			s << dec << getIn(i)->getIndex();
+		}
+		s << ")";
+	}
+
+	if (sizeOut() != 0) {
+		s << " (out: ";
+		for (auto i = 0; i < sizeOut(); i++) {
+			if (i > 0)
+				s << ", ";
+			s << dec << getOut(i)->getIndex();
+		}
+		s << ")";
+	}
 }
 
 /// Recursively print out the hierarchical structure of \b this FlowBlock.
@@ -586,10 +606,9 @@ void FlowBlock::printHeader(ostream &s) const
 void FlowBlock::printTree(ostream &s,int4 level) const
 
 {
-	int4 i;
-
-	for(i=0;i<level;++i)
+	for(auto i = 0; i < level; i++)
 		s << "  ";
+
 	printHeader(s);
 	s << endl;
 }
