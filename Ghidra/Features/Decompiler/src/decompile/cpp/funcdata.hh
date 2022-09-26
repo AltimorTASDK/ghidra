@@ -107,7 +107,6 @@ class Funcdata {
 	void branchRemoveInternal(BlockBasic *bb,int4 num);
 	void pushMultiequals(BlockBasic *bb);         ///< Push MULTIEQUAL Varnodes of the given block into the output block
 	void clearBlocks(void);                       ///< Clear all basic blocks
-	void structureReset(void);                    ///< Calculate initial basic block structures (after a control-flow change)
 	int4 stageJumpTable(JumpTable *jt,PcodeOp *op,FlowInfo *flow);
 	void switchOverJumpTables(const FlowInfo &flow);      ///< Convert jump-table addresses to basic block indices
 	void clearJumpTables(void);                   ///< Clear any jump-table information
@@ -501,6 +500,7 @@ public:
 	// Block routines
 	BlockGraph &getStructure(void) { return sblocks; }    ///< Get the current control-flow structuring hierarchy
 	const BlockGraph &getStructure(void) const { return sblocks; }        ///< Get the current control-flow structuring hierarchy
+	BlockGraph &getBasicBlocks(void) { return bblocks; }      ///< Get the basic blocks container
 	const BlockGraph &getBasicBlocks(void) const { return bblocks; }      ///< Get the basic blocks container
 
 	/// \brief Set the initial ownership range for the given basic block
@@ -515,7 +515,7 @@ public:
 	void pushBranch(BlockBasic *bb,int4 slot,BlockBasic *bbnew);
 	void removeBranch(BlockBasic *bb,int4 num);   ///< Remove the indicated branch from a basic block
 	BlockBasic *nodeJoinCreateBlock(BlockBasic *block1,BlockBasic *block2,BlockBasic *exita,BlockBasic *exitb,
-																	bool fora_block1ishigh,bool forb_block1ishigh,const Address &addr);
+	                                bool fora_block1ishigh,bool forb_block1ishigh,const Address &addr);
 	void nodeSplit(BlockBasic *b,int4 inedge);
 	bool forceGoto(const Address &pcop,const Address &pcdest);
 	void removeFromFlowSplit(BlockBasic *bl,bool swap);
@@ -525,6 +525,7 @@ public:
 	bool replaceLessequal(PcodeOp *op);           ///< Replace INT_LESSEQUAL and INT_SLESSEQUAL expressions
 	bool distributeIntMultAdd(PcodeOp *op);       ///< Distribute constant coefficient to additive input
 	bool collapseIntMultMult(Varnode *vn);        ///< Collapse constant coefficients for two chained CPUI_INT_MULT
+	void structureReset(void);                    ///< Calculate initial basic block structures (after a control-flow change)
 	static bool compareCallspecs(const FuncCallSpecs *a,const FuncCallSpecs *b);
 
 #ifdef OPACTION_DEBUG
