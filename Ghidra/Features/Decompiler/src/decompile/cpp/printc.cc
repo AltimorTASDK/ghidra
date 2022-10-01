@@ -2424,7 +2424,6 @@ void PrintC::docFunction(const Funcdata *fd)
 		emit->tagLine();
 		emitFunctionDeclaration(fd);        // Causes us to enter function's scope
 		emit->tagLine();
-		emit->tagLine();
 		int4 id = emit->startIndent();
 		emit->print("{");
 		emitLocalVarDecls(fd);
