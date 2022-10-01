@@ -166,7 +166,7 @@ ifeq ($(MAKECMDGOALS),install_ghidradbg)
 	DEPNAMES=$(GHIDRA_DBG_OBJS:%.o=%.d)
 endif
 ifeq ($(MAKECMDGOALS),ghidra_opt)
-	DEPNAMES=ghi_opt/depend
+	DEPNAMES=$(GHIDRA_OPT_OBJS:%.o=%.d)
 endif
 ifeq ($(MAKECMDGOALS),ghidra_opt_mac)
 	DEPNAMES=ghi_opt/depend
@@ -193,7 +193,7 @@ ifeq ($(MAKECMDGOALS),decomp_dbg)
 	DEPNAMES=$(COMMANDLINE_DBG_OBJS:%.o=%.d)
 endif
 ifeq ($(MAKECMDGOALS),decomp_opt)
-	DEPNAMES=com_opt/depend
+	DEPNAMES=$(COMMANDLINE_OPT_OBJS:%.o=%.d)
 endif
 ifneq (,$(filter $(MAKECMDGOALS),ghidra_test_dbg test))
 	DEPNAMES=test_dbg/depend
@@ -220,7 +220,7 @@ endif
 com_dbg/%.o:	%.cc
 	$(CXX) -MMD -MP -MF $(patsubst %.o, %.d, $@) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(COMMANDLINE_DEBUG) $< -o $@
 com_opt/%.o:	%.cc
-	$(CXX) $(ARCH_TYPE) -c $(OPT_CXXFLAGS) $(ADDITIONAL_FLAGS) $(COMMANDLINE_OPT)   $< -o $@
+	$(CXX) -MMD -MP -MF $(patsubst %.o, %.d, $@) $(ARCH_TYPE) -c $(OPT_CXXFLAGS) $(ADDITIONAL_FLAGS) $(COMMANDLINE_OPT) $< -o $@
 test_dbg/%.o:	%.cc
 	$(CXX) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(TEST_DEBUG)        $< -o $@
 test_dbg/%.o:	../unittests/%.cc
@@ -228,7 +228,7 @@ test_dbg/%.o:	../unittests/%.cc
 ghi_dbg/%.o:	%.cc
 	$(CXX) -MMD -MP -MF $(patsubst %.o, %.d, $@) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(GHIDRA_DEBUG) $< -o $@
 ghi_opt/%.o:	%.cc
-	$(CXX) $(ARCH_TYPE) -c $(OPT_CXXFLAGS) $(ADDITIONAL_FLAGS) $(GHIDRA_OPT)        $< -o $@
+	$(CXX) -MMD -MP -MF $(patsubst %.o, %.d, $@) $(ARCH_TYPE) -c $(OPT_CXXFLAGS) $(ADDITIONAL_FLAGS) $(GHIDRA_OPT) $< -o $@
 sla_dbg/%.o:	%.cc
 	$(CXX) $(ARCH_TYPE) -c $(DBG_CXXFLAGS) $(ADDITIONAL_FLAGS) $(SLEIGH_DEBUG)      $< -o $@
 sla_opt/%.o:	%.cc
@@ -335,32 +335,11 @@ tags:
 	etags *.c *.h *.cc *.hh
 
 # Rules to build the different dependency files
-com_dbg/depend:	$(COMMANDLINE_NAMES:%=%.cc)
-	mkdir -p com_dbg
-	@set -e; rm -f $@; \
-	$(CXX) -MM $(COMMANDLINE_DEBUG) $^ > $@.$$$$; \
-	sed 's,\(.*\)\.o[ :]*,com_dbg/\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$
-
-com_opt/depend:	$(COMMANDLINE_NAMES:%=%.cc)
-	mkdir -p com_opt
-	@set -e; rm -f $@; \
-	$(CXX) -MM $(COMMANDLINE_OPT) $^ > $@.$$$$; \
-	sed 's,\(.*\)\.o[ :]*,com_opt/\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$
-
 test_dbg/depend:	$(TEST_NAMES:%=%.cc) $(UNITTEST_NAMES:%=%.cc)
 	mkdir -p test_dbg
 	@set -e; rm -f $@; \
 	$(CXX) -I. -MM $(TEST_DEBUG) $^ > $@.$$$$; \
 	sed 's,\(.*\)\.o[ :]*,test_dbg/\1.o $@ : ,g' < $@.$$$$ > $@; \
-	rm -f $@.$$$$
-
-ghi_opt/depend:	$(GHIDRA_NAMES:%=%.cc)
-	mkdir -p ghi_opt
-	@set -e; rm -f $@; \
-	$(CXX) -MM $(GHIDRA_OPT) $^ > $@.$$$$; \
-	sed 's,\(.*\)\.o[ :]*,ghi_opt/\1.o $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 sla_dbg/depend:	$(SLEIGH_NAMES:%=%.cc)
