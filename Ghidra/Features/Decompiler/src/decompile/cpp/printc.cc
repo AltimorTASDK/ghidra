@@ -2981,10 +2981,12 @@ void PrintC::emitBlockWhileDo(const BlockWhileDo *bl)
 		emit->tagLine();
 		emit->tagOp("if",EmitXml::keyword_color,op);
 		emit->spaces(1);
+		int4 id = emit->openParen('(');
 		pushMod();
 		setMod(only_branch);
 		condBlock->emit(this);
 		popMod();
+		emit->closeParen(')', id);
 		emit->spaces(1);
 		emitGotoStatement(condBlock,(const FlowBlock *)0,FlowBlock::f_break_goto);
 		emit_braces = true;
@@ -3000,12 +3002,12 @@ void PrintC::emitBlockWhileDo(const BlockWhileDo *bl)
 
 		emit->tagOp("while",EmitXml::keyword_color,op);
 		emit->spaces(1);
-		int4 id1 = emit->openParen('(');
+		int4 id = emit->openParen('(');
 		pushMod();
 		setMod(comma_separate);
 		condBlock->emit(this);
 		popMod();
-		emit->closeParen(')',id1);
+		emit->closeParen(')',id);
 
 		emit->cancelPendingBreak();
 
@@ -3021,9 +3023,9 @@ void PrintC::emitBlockWhileDo(const BlockWhileDo *bl)
 	const auto emit_newline = emit_braces || !isLastChildBlock(bl);
 
 	setMod(no_branch); // Dont print goto at bottom of clause
-	int4 id2 = emit->beginBlock(bl->getBlock(1));
+	int4 id = emit->beginBlock(bl->getBlock(1));
 	bl->getBlock(1)->emit(this);
-	emit->endBlock(id2);
+	emit->endBlock(id);
 	emit->stopIndent(indent);
 	if (emit_newline)
 		emit->tagLine();
@@ -3059,8 +3061,10 @@ void PrintC::emitBlockDoWhile(const BlockDoWhile *bl)
 	op = bl->getBlock(0)->lastOp();
 	emit->tagOp("while",EmitXml::keyword_color,op);
 	emit->spaces(1);
+	int4 id3 = emit->openParen('(');
 	setMod(only_branch);
 	bl->getBlock(0)->emit(this);
+	emit->closeParen(')', id3);
 	emit->print(";");
 	popMod();
 }
@@ -3087,11 +3091,11 @@ void PrintC::emitBlockInfLoop(const BlockInfLoop *bl)
 	emit->spaces(1);
 	op = bl->getBlock(0)->lastOp();
 	emit->tagOp("while",EmitXml::keyword_color,op);
+	emit->spaces(1);
 	int4 id2 = emit->openParen('(');
-	emit->spaces(1);
 	emit->print("true",EmitXml::const_color);
-	emit->spaces(1);
 	emit->closeParen(')',id2);
+	emit->spaces(1);
 	emit->print(";");
 	popMod();
 }
