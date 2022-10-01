@@ -1,0 +1,801 @@
+<xml_savefile name="CheckCommandInput" target="default" adjustvma="0">
+<binaryimage arch="x86:LE:32:default:windows">
+<bytechunk space="ram" offset="0x46ca40" readonly="true">
+83ec58535556578d442438e820fcffff
+8b74246c33db803eff7412eb03
+</bytechunk>
+<bytechunk space="ram" offset="0x46ca60" readonly="true">
+83c301803c33ff75f785db750a33c05f
+5e5d5b83c458c3895c24188d44243883
+eb01e849fdffff8be883fdff74df83fd
+037dda8b44243e8b4c24448b54244a89
+44241c8b44245083c50683fd09894c24
+208b4c2456895424248b54245c894424
+288b442462894c242c89542430894424
+347d9a85db0f8ca3000000eb07
+</bytechunk>
+<bytechunk space="ram" offset="0x46cae0" readonly="true">
+8b74246c568d7424188d7c24178bc3e8
+4cfeffff8bd883c40483fb9c0f846bff
+ffff8b7424148a4c24138bfe8d44241c
+e80bfdffff85c0755b83c501837c2418
+01750583fd01eb0383fd090f8d3cffff
+ff8d7c2438e826fcffff8b4c243e8b54
+24448b44244a894c241c8b4c24508954
+24208b542456894424248b44245c894c
+24288b4c24628954242c89442430894c
+2434eb9233ed85db0f8d62ffffff5f5e
+5db8010000005b83c458c3
+</bytechunk>
+</binaryimage>
+<coretypes>
+<void/>
+<type name="uint" size="4" metatype="uint" id="-9223371465083307041"/>
+<type name="code" size="1" metatype="code" id="-9223371462259126427"/>
+<type name="int" size="4" metatype="int" id="-9223370945157383201"/>
+<type name="uint3" size="3" metatype="uint" id="-9223225663358771405"/>
+<type name="uint5" size="5" metatype="uint" id="-9223225663358771403"/>
+<type name="uint7" size="7" metatype="uint" id="-9223225663358771401"/>
+<type name="uint6" size="6" metatype="uint" id="-9223225661105102435"/>
+<type name="int3" size="3" metatype="int" id="-9223092562322268365"/>
+<type name="int5" size="5" metatype="int" id="-9223092562322268363"/>
+<type name="int7" size="7" metatype="int" id="-9223092562322268361"/>
+<type name="int6" size="6" metatype="int" id="-9223092560068599395"/>
+<type name="char" size="1" metatype="int" char="true" id="-9223091865880322087"/>
+<type name="uint16" size="16" metatype="uint" id="-9185900419569365091"/>
+<type name="ushort" size="2" metatype="uint" id="-9185691276929259553"/>
+<type name="int16" size="16" metatype="int" id="-9151826554224586851"/>
+<type name="byte" size="1" metatype="uint" id="-9151688846347870363"/>
+<type name="bool" size="1" metatype="bool" id="-9151688804115639865"/>
+<type name="sbyte" size="1" metatype="int" id="-9151648198777381019"/>
+<type name="short" size="2" metatype="int" id="-9151648197910059041"/>
+<type name="wchar_t" size="2" metatype="int" utf="true" id="-8801050271826140705"/>
+<type name="wchar32" size="4" metatype="int" utf="true" id="-8801050271826129511"/>
+<type name="double" size="8" metatype="float" id="-6087405195602966429"/>
+<type name="float10" size="10" metatype="float" id="-5894303970639204475"/>
+<type name="float16" size="16" metatype="float" id="-5894303970639204469"/>
+<type name="undefined" size="1" metatype="unknown" id="-4223139060020122321"/>
+<type name="float2" size="2" metatype="float" id="-3085472373819564389"/>
+<type name="undefined2" size="2" metatype="unknown" id="-1989071053142544393"/>
+<type name="undefined4" size="4" metatype="unknown" id="-1989071053142544391"/>
+<type name="undefined6" size="6" metatype="unknown" id="-1989071053142544389"/>
+<type name="undefined8" size="8" metatype="unknown" id="-1989071053142544387"/>
+<type name="undefined5" size="5" metatype="unknown" id="-1989071052499136175"/>
+<type name="undefined3" size="3" metatype="unknown" id="-1989071052499136173"/>
+<type name="undefined7" size="7" metatype="unknown" id="-1989071052499136169"/>
+<type name="undefined1" size="1" metatype="unknown" id="-1989071052499136163"/>
+<type name="ulonglong" size="8" metatype="uint" id="-1409786767045072009"/>
+<type name="longlong" size="8" metatype="int" id="-1409786554015684791"/>
+<type name="float" size="4" metatype="float" id="-120139017508053025"/>
+</coretypes>
+<save_state>
+<typegrp intsize="4" structalign="4" enumsize="4" enumsigned="false">
+<type name="CHitboxData" id="0x100000000000244" metatype="struct" size="0"></type>
+<type name="CStateVelocityData" id="0x100000000000242" metatype="struct" size="0"></type>
+<type name="CAnimationData" id="0x100000000000248" metatype="struct" size="0"></type>
+<type name="CHan6Data" id="0x10000000000024c" metatype="struct" size="0"></type>
+<type name="CStateData" id="0x100000000000072" metatype="struct" size="0"></type>
+<type name="InputBufferEntry" id="0x100000000000250" metatype="struct" size="0"></type>
+<type name="CAttackData" id="0x10000000000024a" metatype="struct" size="0"></type>
+<type name="CSineData" id="0x100000000000249" metatype="struct" size="0"></type>
+<type name="UsedCancelData" id="0x10000000000006e" metatype="struct" size="0"></type>
+<type name="CFrameData" id="0x100000000000071" metatype="struct" size="0"></type>
+<type name="CCharacterData" id="0x10000000000024e" metatype="struct" size="0"></type>
+<type name="CEffectData" id="0x100000000000243" metatype="struct" size="0"></type>
+<type name="CConditionData" id="0x100000000000245" metatype="struct" size="0"></type>
+<type name="List" id="0x100000000000247" metatype="struct" size="0"></type>
+<type name="InputProcessingEntry" id="0x100000000000253" metatype="struct" size="0"></type>
+<type name="InputBuffer" id="0x100000000000251" metatype="struct" size="0"></type>
+<type name="InputProcessing" id="0x100000000000252" metatype="struct" size="0"></type>
+<type name="CPlayer" id="0x100000000000070" metatype="struct" size="0"></type>
+<type name="CPlayerFull" id="0x10000000000006b" metatype="struct" size="0"></type>
+<type name="" metatype="ptr" size="4"><typeref name="CFrameData" id="0x100000000000071"/></type>
+<type name="Stance" id="0x800000000000003" metatype="uint" size="1" enum="true">
+<val name="stand" value="0"/><val name="air" value="1"/><val name="crouch" value="2"/></type>
+<type name="Pattern16" id="0x800000000000006" metatype="uint" size="2" enum="true">
+<val name="wait" value="0"/><val name="5A" value="1"/><val name="5B" value="2"/><val name="5C" value="3"/><val name="2A" value="4"/><val name="2B" value="5"/><val name="2C" value="6"/><val name="jA" value="7"/><val name="jB" value="8"/><val name="jC" value="9"/><val name="walk_f" value="10"/><val name="walk_b" value="11"/><val name="crouch" value="12"/><val name="crouch_wait" value="13"/><val name="uncrouch" value="14"/><val name="turn_stand" value="15"/><val name="turn_crouch" value="16"/><val name="block_stand" value="17"/><val name="block_crouch" value="18"/><val name="block_air" value="19"/><val name="knockdown" value="26"/><val name="hard_knockdown" value="27"/><val name="jump_f" value="35"/><val name="jump_n" value="36"/><val name="jump_b" value="37"/><val name="dj_f" value="38"/><val name="dj_n" value="39"/><val name="dj_b" value="40"/><val name="intro" value="50"/><val name="win_pose" value="52"/><val name="heat" value="250"/><val name="burst" value="260"/><val name="charge" value="265"/><val name="NO_SEQUENCE" value="65535"/></type>
+<type name="Pattern" id="0x800000000000007" metatype="uint" size="4" enum="true">
+<val name="wait" value="0"/><val name="5A" value="1"/><val name="5B" value="2"/><val name="5C" value="3"/><val name="2A" value="4"/><val name="2B" value="5"/><val name="2C" value="6"/><val name="jA" value="7"/><val name="jB" value="8"/><val name="jC" value="9"/><val name="walk_f" value="10"/><val name="walk_b" value="11"/><val name="crouch" value="12"/><val name="crouch_wait" value="13"/><val name="uncrouch" value="14"/><val name="turn_stand" value="15"/><val name="turn_crouch" value="16"/><val name="block_stand" value="17"/><val name="block_crouch" value="18"/><val name="block_air" value="19"/><val name="hit_kd" value="26"/><val name="hit_hard_kd" value="27"/><val name="airtech_vulnerable?" value="28"/><val name="hit_trip" value="29"/><val name="hit_juggle" value="30"/><val name="jump_f" value="35"/><val name="jump_n" value="36"/><val name="jump_b" value="37"/><val name="dj_f" value="38"/><val name="dj_n" value="39"/><val name="dj_b" value="40"/><val name="intro" value="50"/><val name="win_pose" value="52"/><val name="heat" value="250"/><val name="burst" value="260"/><val name="charge" value="265"/><val name="NO_SEQUENCE" value="4294967295"/></type>
+<type name="AnimFlag" id="0x80000000000000b" metatype="uint" size="1" enum="true">
+<val name="has_land_pattern" value="1"/><val name="has_loop_end" value="2"/><val name="relative_jump" value="4"/><val name="relative_loop_end" value="8"/></type>
+<type name="AnimType" id="0x80000000000000c" metatype="uint" size="1" enum="true">
+<val name="end" value="0"/><val name="next" value="1"/><val name="goto" value="2"/></type>
+<type name="CancelAbility" id="0x80000000000000e" metatype="uint" size="1" enum="true">
+<val name="never" value="0"/><val name="on_hit" value="1"/><val name="always" value="2"/><val name="on_successful_hit" value="3"/></type>
+<type name="ConditionType" id="0x80000000000000f" metatype="uint" size="4" enum="true">
+<val name="effect_despawn" value="2"/><val name="shield" value="51"/></type>
+<type name="HitFlag" id="0x800000000000011" metatype="uint" size="2" enum="true">
+<val name="hit_successful" value="2"/><val name="HIT_MASK" value="15"/></type>
+<type name="StateFlag2" id="0x800000000000012" metatype="uint" size="4" enum="true">
+<val name="always_ex_cancel" value="1"/><val name="jump_cancel_only" value="4"/></type>
+<type name="Button" id="0x800000000000013" metatype="uint" size="4" enum="true">
+<val name="press_a" value="1"/><val name="press_b" value="2"/><val name="press_c" value="4"/><val name="press_d" value="8"/><val name="press_e" value="16"/><val name="hold_a" value="4096"/><val name="hold_b" value="8192"/><val name="hold_c" value="16384"/><val name="hold_d" value="32768"/><val name="hold_e" value="65536"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CStateVelocityData" id="0x100000000000242"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CHitboxData" id="0x100000000000244"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CEffectData" id="0x100000000000243"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CConditionData" id="0x100000000000245"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="List" id="0x100000000000247"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CSineData" id="0x100000000000249"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CAttackData" id="0x10000000000024a"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CPlayerFull" id="0x10000000000006b"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CHan6Data" id="0x10000000000024c"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CCharacterData" id="0x10000000000024e"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="InputBuffer" id="0x100000000000251"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="InputProcessing" id="0x100000000000252"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CPlayer" id="0x100000000000070"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="InputBufferEntry" id="0x100000000000250"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="CStateData" id="0x100000000000072"/></type>
+<type name="CHitboxData" id="0x100000000000244" metatype="struct" size="8">
+<field name="x1" offset="0"><type name="short" metatype="int" size="2"></type></field>
+<field name="y1" offset="2"><type name="short" metatype="int" size="2"></type></field>
+<field name="x2" offset="4"><type name="short" metatype="int" size="2"></type></field>
+<field name="y2" offset="6"><type name="short" metatype="int" size="2"></type></field>
+</type>
+<type name="" metatype="array" size="4" arraysize="2"><type name="short" metatype="int" size="2"></type></type>
+<type name="" metatype="array" size="16" arraysize="8"><type name="short" metatype="int" size="2"></type></type>
+<type name="" metatype="array" size="8" arraysize="2"><typeref name="float"/></type>
+<type name="" metatype="array" size="16" arraysize="4"><typeref name="float"/></type>
+<type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type>
+<type name="CStateVelocityData" id="0x100000000000242" metatype="struct" size="10">
+<field name="flags" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="velocity_x" offset="2"><type name="short" metatype="int" size="2"></type></field>
+<field name="velocity_y" offset="4"><type name="short" metatype="int" size="2"></type></field>
+<field name="accel_x" offset="6"><type name="short" metatype="int" size="2"></type></field>
+<field name="accel_y" offset="8"><type name="short" metatype="int" size="2"></type></field>
+</type>
+<type name="" metatype="array" size="10" arraysize="10"><type name="byte" metatype="uint" size="1"></type></type>
+<type name="" metatype="ptr" size="4"><type name="byte" metatype="uint" size="1"></type></type>
+<type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CHitboxData" id="0x100000000000244"/></type></type>
+<type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CEffectData" id="0x100000000000243"/></type></type>
+<type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CConditionData" id="0x100000000000245"/></type></type>
+<type name="" metatype="array" size="128" arraysize="32"><type name="uint" metatype="uint" size="4"></type></type>
+<type name="" metatype="ptr" size="4"><type name="uint" metatype="uint" size="4"></type></type>
+<type name="CAnimationData" id="0x100000000000248" metatype="struct" size="56">
+<field name="use_pat" offset="0"><type name="short" metatype="int" size="2"></type></field>
+<field name="sprite_id" offset="2"><type name="short" metatype="int" size="2"></type></field>
+<field name="offset_x" offset="4"><type name="int" metatype="int" size="4"></type></field>
+<field name="offset_y" offset="8"><type name="int" metatype="int" size="4"></type></field>
+<field name="duration" offset="12"><type name="short" metatype="int" size="2"></type></field>
+<field name="type" offset="14"><typeref name="AnimType" id="0x80000000000000c"/></field>
+<field name="flags" offset="15"><typeref name="AnimFlag" id="0x80000000000000b"/></field>
+<field name="jump" offset="16"><type name="short" metatype="int" size="2"></type></field>
+<field name="land_jump" offset="18"><type name="short" metatype="int" size="2"></type></field>
+<field name="loop_count" offset="20"><type name="short" metatype="int" size="2"></type></field>
+<field name="loop_end" offset="22"><type name="short" metatype="int" size="2"></type></field>
+<field name="color_r" offset="24"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_g" offset="25"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="color_b" offset="26"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="blend_mode" offset="27"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="alpha" offset="28"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="interpolation_type" offset="29"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="rotation_x" offset="32"><typeref name="float"/></field>
+<field name="rotation_y" offset="36"><typeref name="float"/></field>
+<field name="rotation_z" offset="40"><typeref name="float"/></field>
+<field name="rotation_type" offset="44"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="priority" offset="46"><type name="short" metatype="int" size="2"></type></field>
+<field name="scale_x" offset="48"><typeref name="float"/></field>
+<field name="scale_y" offset="52"><typeref name="float"/></field>
+</type>
+<type name="" metatype="array" size="12" arraysize="3"><type name="int" metatype="int" size="4"></type></type>
+<type name="CHan6Data" id="0x10000000000024c" metatype="struct" size="8">
+<field name="is_static_size" offset="0"><type name="int" metatype="int" size="4"></type></field>
+<field name="patterns" offset="4"><type name="" metatype="ptr" size="4"><typeref name="List" id="0x100000000000247"/></type></field>
+</type>
+<type name="" metatype="array" size="8" arraysize="2"><type name="int" metatype="int" size="4"></type></type>
+<type name="" metatype="array" size="28" arraysize="7"><type name="int" metatype="int" size="4"></type></type>
+<type name="" metatype="array" size="48" arraysize="12"><type name="int" metatype="int" size="4"></type></type>
+<type name="" metatype="array" size="40" arraysize="10"><type name="int" metatype="int" size="4"></type></type>
+<type name="" metatype="ptr" size="4"><void/></type>
+<type name="CStateData" id="0x100000000000072" metatype="struct" size="28">
+<field name="velocity_data" offset="0"><type name="" metatype="ptr" size="4"><typeref name="CStateVelocityData" id="0x100000000000242"/></type></field>
+<field name="max_speed_x" offset="4"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_data" offset="8"><type name="" metatype="ptr" size="4"><typeref name="CSineData" id="0x100000000000249"/></type></field>
+<field name="stance" offset="12"><typeref name="Stance" id="0x800000000000003"/></field>
+<field name="invuln" offset="13"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="cancel_normal" offset="14"><typeref name="CancelAbility" id="0x80000000000000e"/></field>
+<field name="cancel_special" offset="15"><typeref name="CancelAbility" id="0x80000000000000e"/></field>
+<field name="hit_count" offset="16"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="actionable" offset="17"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="counter_type" offset="18"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="flags1" offset="20"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="flags2" offset="24"><typeref name="StateFlag2" id="0x800000000000012"/></field>
+</type>
+<type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CHan6Data" id="0x10000000000024c"/></type></type>
+<def name="size_t" id="0x50000000000008e"><type name="ulong" metatype="uint" size="4"></type></def>
+<type name="InputBufferEntry" id="0x100000000000250" metatype="struct" size="4">
+<field name="input" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="frames" offset="2"><type name="ushort" metatype="uint" size="2"></type></field>
+</type>
+<type name="CAttackData" id="0x10000000000024a" metatype="struct" size="80">
+<field name="guard_flags" offset="0"><type name="int" metatype="int" size="4"></type></field>
+<field name="hit_vector" offset="4"><type name="" metatype="array" size="16" arraysize="8"><type name="short" metatype="int" size="2"></type></type></field>
+<field name="guard_vector" offset="20"><type name="" metatype="array" size="16" arraysize="8"><type name="short" metatype="int" size="2"></type></type></field>
+<field name="hit_effect" offset="36"><type name="short" metatype="int" size="2"></type></field>
+<field name="sound_effect" offset="38"><type name="short" metatype="int" size="2"></type></field>
+<field name="atge1" offset="40"><type name="short" metatype="int" size="2"></type></field>
+<field name="atge2" offset="42"><type name="short" metatype="int" size="2"></type></field>
+<field name="hitstop_override" offset="44"><type name="short" metatype="int" size="2"></type></field>
+<field name="untech_time" offset="46"><type name="short" metatype="int" size="2"></type></field>
+<field name="added_effect" offset="48"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="hitgrab" offset="49"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="hit_level" offset="50"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="proration" offset="51"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="proration_type" offset="52"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="blockstop" offset="54"><type name="short" metatype="int" size="2"></type></field>
+<field name="extra_gravity" offset="56"><type name="int" metatype="int" size="4"></type></field>
+<field name="hit_flags" offset="60"><type name="int" metatype="int" size="4"></type></field>
+<field name="flags2" offset="64"><type name="int" metatype="int" size="4"></type></field>
+<field name="damage" offset="68"><type name="short" metatype="int" size="2"></type></field>
+<field name="meter_gain" offset="70"><type name="short" metatype="int" size="2"></type></field>
+<field name="red_damage" offset="72"><type name="short" metatype="int" size="2"></type></field>
+<field name="guard_damage" offset="74"><type name="short" metatype="int" size="2"></type></field>
+<field name="break_time" offset="76"><type name="short" metatype="int" size="2"></type></field>
+<field name="atbg" offset="78"><type name="byte" metatype="uint" size="1"></type></field>
+</type>
+<type name="CSineData" id="0x100000000000249" metatype="struct" size="20">
+<field name="flags" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="dist_x" offset="2"><type name="short" metatype="int" size="2"></type></field>
+<field name="dist_y" offset="4"><type name="short" metatype="int" size="2"></type></field>
+<field name="freq_x" offset="6"><type name="short" metatype="int" size="2"></type></field>
+<field name="freq_y" offset="8"><type name="short" metatype="int" size="2"></type></field>
+<field name="phases" offset="12"><type name="" metatype="array" size="8" arraysize="2"><typeref name="float"/></type></field>
+</type>
+<type name="UsedCancelData" id="0x10000000000006e" metatype="struct" size="148">
+<field name="used_normals" offset="0"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="used_specials" offset="4"><type name="" metatype="array" size="128" arraysize="32"><type name="uint" metatype="uint" size="4"></type></type></field>
+<field name="cancel_id" offset="132"><type name="int" metatype="int" size="4"></type></field>
+<field name="cancel_count" offset="140"><type name="int" metatype="int" size="4"></type></field>
+<field name="actionable" offset="144"><type name="int" metatype="int" size="4"></type></field>
+</type>
+<type name="CFrameData" id="0x100000000000071" metatype="struct" size="84">
+<field name="anim_data" offset="0"><typeref name="CAnimationData" id="0x100000000000248"/></field>
+<field name="state_data" offset="56"><type name="" metatype="ptr" size="4"><typeref name="CStateData" id="0x100000000000072"/></type></field>
+<field name="attack_data" offset="60"><type name="" metatype="ptr" size="4"><typeref name="CAttackData" id="0x10000000000024a"/></type></field>
+<field name="condition_count" offset="64"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="effect_count" offset="65"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="hitbox_reference_count" offset="66"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="hitbox_count" offset="67"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="conditions" offset="68"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CConditionData" id="0x100000000000245"/></type></type></field>
+<field name="effects" offset="72"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CEffectData" id="0x100000000000243"/></type></type></field>
+<field name="hitbox_references" offset="76"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CHitboxData" id="0x100000000000244"/></type></type></field>
+<field name="hitboxes" offset="80"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CHitboxData" id="0x100000000000244"/></type></type></field>
+</type>
+<type name="CCharacterData" id="0x10000000000024e" metatype="struct" size="104">
+<field name="command_list" offset="0"><type name="" metatype="ptr" size="4"><typeref name="List" id="0x100000000000247"/></type></field>
+<field name="air_jumps" offset="4"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="destroy_num" offset="7"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="custom_meter_flags" offset="9"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="sp_critical" offset="10"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="ko_rare_voice" offset="11"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="tag_heart" offset="12"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="gravity_add_y" offset="16"><type name="int" metatype="int" size="4"></type></field>
+<field name="gravity_max_x" offset="20"><type name="int" metatype="int" size="4"></type></field>
+<field name="guard" offset="24"><type name="" metatype="array" size="16" arraysize="4"><typeref name="float"/></type></field>
+<field name="tag_pattern" offset="44"><typeref name="Pattern" id="0x800000000000007"/></field>
+<field name="shield_counter_seq" offset="48"><type name="" metatype="array" size="12" arraysize="3"><type name="int" metatype="int" size="4"></type></type></field>
+<field name="dash_cancel_seq" offset="60"><type name="" metatype="array" size="8" arraysize="2"><type name="int" metatype="int" size="4"></type></type></field>
+<field name="spark_cancel_seq" offset="68"><type name="" metatype="array" size="8" arraysize="2"><type name="int" metatype="int" size="4"></type></type></field>
+<field name="superjump_cancel_seq" offset="76"><typeref name="Pattern" id="0x800000000000007"/></field>
+<field name="has_ground_throw" offset="80"><type name="short" metatype="int" size="2"></type></field>
+<field name="throw_ground" offset="82"><type name="" metatype="array" size="4" arraysize="2"><type name="short" metatype="int" size="2"></type></type></field>
+<field name="has_air_throw" offset="86"><type name="short" metatype="int" size="2"></type></field>
+<field name="throw_air" offset="88"><type name="" metatype="array" size="4" arraysize="2"><type name="short" metatype="int" size="2"></type></type></field>
+<field name="ko_ani_eff" offset="92"><type name="int" metatype="int" size="4"></type></field>
+<field name="ex_com_check_num" offset="96"><type name="int" metatype="int" size="4"></type></field>
+<field name="ex_com_check_data" offset="100"><type name="int" metatype="int" size="4"></type></field>
+</type>
+<type name="CEffectData" id="0x100000000000243" metatype="struct" size="56">
+<field name="command" offset="0"><type name="int" metatype="int" size="4"></type></field>
+<field name="parameter" offset="4"><type name="int" metatype="int" size="4"></type></field>
+<field name="values" offset="8"><type name="" metatype="array" size="48" arraysize="12"><type name="int" metatype="int" size="4"></type></type></field>
+</type>
+<type name="CConditionData" id="0x100000000000245" metatype="struct" size="44">
+<field name="type" offset="0"><typeref name="ConditionType" id="0x80000000000000f"/></field>
+<field name="values" offset="4"><type name="" metatype="array" size="40" arraysize="10"><type name="int" metatype="int" size="4"></type></type></field>
+</type>
+<type name="List" id="0x100000000000247" metatype="struct" size="20">
+<field name="is_pointer_list" offset="0"><type name="int" metatype="int" size="4"></type></field>
+<field name="data" offset="4"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="elem_size" offset="8"><typeref name="size_t" id="0x50000000000008e"/></field>
+<field name="count" offset="12"><typeref name="size_t" id="0x50000000000008e"/></field>
+<field name="capacity" offset="16"><typeref name="size_t" id="0x50000000000008e"/></field>
+</type>
+<type name="InputProcessingEntry" id="0x100000000000253" metatype="struct" size="6">
+<field name="real_index" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="index" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="entry" offset="2"><typeref name="InputBufferEntry" id="0x100000000000250"/></field>
+</type>
+<type name="" metatype="array" size="256" arraysize="64"><typeref name="InputBufferEntry" id="0x100000000000250"/></type>
+<type name="" metatype="array" size="42" arraysize="7"><typeref name="InputProcessingEntry" id="0x100000000000253"/></type>
+<type name="InputBuffer" id="0x100000000000251" metatype="struct" size="258">
+<field name="head" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="entries" offset="2"><type name="" metatype="array" size="256" arraysize="64"><typeref name="InputBufferEntry" id="0x100000000000250"/></type></field>
+</type>
+<type name="InputProcessing" id="0x100000000000252" metatype="struct" size="46">
+<field name="input_buffer" offset="0"><type name="" metatype="ptr" size="4"><typeref name="InputBuffer" id="0x100000000000251"/></type></field>
+<field name="buffers" offset="4"><type name="" metatype="array" size="42" arraysize="7"><typeref name="InputProcessingEntry" id="0x100000000000253"/></type></field>
+</type>
+<type name="" metatype="array" size="1806" arraysize="7"><typeref name="InputBuffer" id="0x100000000000251"/></type>
+<type name="CPlayer" id="0x100000000000070" metatype="struct" size="2808">
+<field name="index" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="char_id" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="is_dummy" offset="3"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="cg_index" offset="4"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field5_0x5" offset="5"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="moon" offset="8"><type name="short" metatype="int" size="2"></type></field>
+<field name="pattern" offset="12"><typeref name="Pattern" id="0x800000000000007"/></field>
+<field name="pat_frame" offset="16"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="sprite" offset="20"><type name="int" metatype="int" size="4"></type></field>
+<field name="pat_frame_elapsed" offset="24"><type name="int" metatype="int" size="4"></type></field>
+<field name="field17_0x1e" offset="30"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="anim_update_finished" offset="31"><typeref name="undefined1"/></field>
+<field name="anim_loop_count" offset="33"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field25_0x26" offset="38"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="field78_0x5c" offset="92"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field82_0x60" offset="96"><type name="int" metatype="int" size="4"></type></field>
+<field name="field83_0x64" offset="100"><type name="int" metatype="int" size="4"></type></field>
+<field name="field84_0x68" offset="104"><type name="" metatype="array" size="28" arraysize="7"><type name="int" metatype="int" size="4"></type></type></field>
+<field name="field85_0x84" offset="132"><type name="" metatype="array" size="28" arraysize="7"><type name="int" metatype="int" size="4"></type></type></field>
+<field name="field106_0xb4" offset="180"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field110_0xb8" offset="184"><type name="int" metatype="int" size="4"></type></field>
+<field name="field111_0xbc" offset="188"><type name="int" metatype="int" size="4"></type></field>
+<field name="guard_gauge" offset="192"><typeref name="float"/></field>
+<field name="guard_gauge_heal" offset="196"><typeref name="float"/></field>
+<field name="field114_0xc8" offset="200"><type name="int" metatype="int" size="4"></type></field>
+<field name="guard_gauge_heal_delay" offset="204"><type name="int" metatype="int" size="4"></type></field>
+<field name="field116_0xd0" offset="208"><type name="short" metatype="int" size="2"></type></field>
+<field name="guard_quality_heal_delay" offset="210"><type name="short" metatype="int" size="2"></type></field>
+<field name="guard_quality" offset="212"><typeref name="float"/></field>
+<field name="meter" offset="220"><type name="int" metatype="int" size="4"></type></field>
+<field name="field124_0xe0" offset="224"><type name="int" metatype="int" size="4"></type></field>
+<field name="heat_max_type" offset="228"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field129_0xe8" offset="232"><type name="short" metatype="int" size="2"></type></field>
+<field name="field148_0xfc" offset="252"><type name="short" metatype="int" size="2"></type></field>
+<field name="field151_0x100" offset="256"><type name="short" metatype="int" size="2"></type></field>
+<field name="position_x" offset="260"><type name="int" metatype="int" size="4"></type></field>
+<field name="position_y" offset="264"><type name="int" metatype="int" size="4"></type></field>
+<field name="last_position_x" offset="272"><type name="int" metatype="int" size="4"></type></field>
+<field name="last_position_y" offset="276"><type name="int" metatype="int" size="4"></type></field>
+<field name="vel_x" offset="280"><type name="int" metatype="int" size="4"></type></field>
+<field name="vel_y" offset="284"><type name="int" metatype="int" size="4"></type></field>
+<field name="accel_x" offset="288"><type name="short" metatype="int" size="2"></type></field>
+<field name="accel_y" offset="290"><type name="short" metatype="int" size="2"></type></field>
+<field name="max_speed_x" offset="292"><type name="short" metatype="int" size="2"></type></field>
+<field name="hit_vel_x" offset="296"><type name="int" metatype="int" size="4"></type></field>
+<field name="hit_vel_y" offset="300"><type name="int" metatype="int" size="4"></type></field>
+<field name="hit_accel_x" offset="304"><type name="short" metatype="int" size="2"></type></field>
+<field name="hit_accel_y" offset="306"><type name="short" metatype="int" size="2"></type></field>
+<field name="extra_velocity_x" offset="308"><type name="int" metatype="int" size="4"></type></field>
+<field name="saved_velocity_x" offset="312"><type name="int" metatype="int" size="4"></type></field>
+<field name="extra_velocity_x_friction" offset="316"><type name="short" metatype="int" size="2"></type></field>
+<field name="saved_pat_velocity_related" offset="318"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="last_air_pattern" offset="320"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_flags_x" offset="322"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_dist_x" offset="324"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_phase_x" offset="326"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_freq_x" offset="328"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_flags_y" offset="330"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_dist_y" offset="332"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_phase_y" offset="334"><type name="short" metatype="int" size="2"></type></field>
+<field name="sine_freq_y" offset="336"><type name="short" metatype="int" size="2"></type></field>
+<field name="field188_0x154" offset="340"><type name="int" metatype="int" size="4"></type></field>
+<field name="field189_0x158" offset="344"><type name="int" metatype="int" size="4"></type></field>
+<field name="hit_flags" offset="348"><typeref name="HitFlag" id="0x800000000000011"/></field>
+<field name="field191_0x15e" offset="350"><type name="short" metatype="int" size="2"></type></field>
+<field name="shield_frames" offset="360"><type name="int" metatype="int" size="4"></type></field>
+<field name="can_superjump_cancel" offset="365"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field203_0x16e" offset="366"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field204_0x16f" offset="367"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="being_thrown" offset="370"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="is_frozen?" offset="371"><typeref name="undefined1"/></field>
+<field name="in_background" offset="372"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="last_hit_count" offset="374"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="in_blockstun" offset="375"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="proximity_block_frames" offset="377"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field215_0x17a" offset="378"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="hit_direction" offset="380"><typeref name="undefined1"/></field>
+<field name="pending_jump_cancel" offset="381"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="throw_invuln_frames" offset="386"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="stun_recovery" offset="387"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="airborne_frames" offset="390"><type name="short" metatype="int" size="2"></type></field>
+<field name="field228_0x188" offset="392"><type name="short" metatype="int" size="2"></type></field>
+<field name="last_untech_time" offset="394"><type name="short" metatype="int" size="2"></type></field>
+<field name="untech_elapsed" offset="396"><type name="short" metatype="int" size="2"></type></field>
+<field name="field237_0x194" offset="404"><type name="short" metatype="int" size="2"></type></field>
+<field name="confusion_frames" offset="406"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="damage_shake_frames" offset="416"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="stun_elapsed" offset="420"><type name="int" metatype="int" size="4"></type></field>
+<field name="stun_remaining" offset="424"><type name="int" metatype="int" size="4"></type></field>
+<field name="hit_vector" offset="428"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="facing_left_on_hit" offset="429"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="hit_type" offset="430"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field258_0x1b1" offset="433"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="is_dead" offset="434"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="used_air_jumps" offset="435"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="variables" offset="436"><type name="" metatype="array" size="10" arraysize="10"><type name="byte" metatype="uint" size="1"></type></type></field>
+<field name="air_action_count" offset="446"><typeref name="undefined1"/></field>
+<field name="field282_0x1d2" offset="466"><type name="ushort" metatype="uint" size="2"></type></field>
+<field name="stored_vel_x" offset="468"><type name="short" metatype="int" size="2"></type></field>
+<field name="stored_vel_y" offset="470"><type name="short" metatype="int" size="2"></type></field>
+<field name="stored_accel_x" offset="472"><type name="short" metatype="int" size="2"></type></field>
+<field name="stored_accel_y" offset="474"><type name="short" metatype="int" size="2"></type></field>
+<field name="field301_0x1ea" offset="490"><type name="short" metatype="int" size="2"></type></field>
+<field name="field302_0x1ec" offset="492"><type name="short" metatype="int" size="2"></type></field>
+<field name="field305_0x1f0" offset="496"><type name="short" metatype="int" size="2"></type></field>
+<field name="field309_0x1f5" offset="501"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="counterhit_type" offset="502"><typeref name="undefined1"/></field>
+<field name="opponent" offset="696"><type name="" metatype="ptr" size="4"><typeref name="CPlayer" id="0x100000000000070"/></type></field>
+<field name="field509_0x2c0" offset="704"><type name="" metatype="ptr" size="4"><typeref name="CPlayer" id="0x100000000000070"/></type></field>
+<field name="self_p" offset="712"><type name="" metatype="ptr" size="4"><typeref name="CPlayer" id="0x100000000000070"/></type></field>
+<field name="field531_0x2dc" offset="732"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="field535_0x2e0" offset="736"><type name="int" metatype="int" size="4"></type></field>
+<field name="field536_0x2e4" offset="740"><type name="short" metatype="int" size="2"></type></field>
+<field name="stick_direction" offset="742"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="real_stick_direction" offset="743"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="buttons" offset="744"><typeref name="Button" id="0x800000000000013"/></field>
+<field name="buttons_released" offset="748"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="port" offset="752"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="pending_pat" offset="776"><typeref name="Pattern16" id="0x800000000000006"/></field>
+<field name="pending_pat_priority" offset="778"><type name="short" metatype="int" size="2"></type></field>
+<field name="pending_pat_frame" offset="780"><type name="short" metatype="int" size="2"></type></field>
+<field name="field568_0x30e" offset="782"><type name="short" metatype="int" size="2"></type></field>
+<field name="facing_left" offset="784"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="facing_left_pending" offset="785"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="autocorrect_pending" offset="786"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="field572_0x313" offset="787"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="landed" offset="789"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="stance" offset="791"><typeref name="Stance" id="0x800000000000003"/></field>
+<field name="frame_data" offset="796"><type name="" metatype="ptr" size="4"><typeref name="CFrameData" id="0x100000000000071"/></type></field>
+<field name="self_ptr" offset="804"><type name="" metatype="ptr" size="4"><typeref name="CPlayerFull" id="0x10000000000006b"/></type></field>
+<field name="partner" offset="808"><type name="" metatype="ptr" size="4"><typeref name="CPlayer" id="0x100000000000070"/></type></field>
+<field name="ha6" offset="812"><type name="" metatype="ptr" size="4"><type name="" metatype="ptr" size="4"><typeref name="CHan6Data" id="0x10000000000024c"/></type></type></field>
+<field name="field589_0x330" offset="816"><type name="int" metatype="int" size="4"></type></field>
+<field name="char_data" offset="824"><type name="" metatype="ptr" size="4"><typeref name="CCharacterData" id="0x10000000000024e"/></type></field>
+<field name="field595_0x33c" offset="828"><typeref name="float"/></field>
+<field name="field596_0x340" offset="832"><type name="short" metatype="int" size="2"></type></field>
+<field name="cancel_data" offset="848"><typeref name="UsedCancelData" id="0x10000000000006e"/></field>
+<field name="input_buffer" offset="996"><type name="" metatype="array" size="1806" arraysize="7"><typeref name="InputBuffer" id="0x100000000000251"/></type></field>
+<field name="last_quick_action" offset="2804"><type name="int" metatype="int" size="4"></type></field>
+</type>
+<type name="CPlayerFull" id="0x10000000000006b" metatype="struct" size="2812">
+<field name="initialized" offset="0"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="p" offset="4"><typeref name="CPlayer" id="0x100000000000070"/></field>
+</type>
+</typegrp>
+<db scodeidbyname="false">
+<scope name="" id="0x0">
+<symbollist>
+<mapsym>
+<function id="0x12f2" name="ParseCommandInput" size="1">
+<addr space="ram" offset="0x46c940"/><localdb lock="false" main="stack">
+<scope name="ParseCommandInput">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x72e6" name="buttons" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="1">
+<type name="" metatype="ptr" size="4"><type name="uint" metatype="uint" size="4"></type></type></symbol>
+<addr space="register" offset="0x18" size="4"/><rangelist><range space="ram" first="0x46c93f" last="0x46c93f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72e7" name="direction" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="2">
+<type name="" metatype="ptr" size="4"><type name="byte" metatype="uint" size="1"></type></type></symbol>
+<addr space="register" offset="0x1c" size="4"/><rangelist><range space="ram" first="0x46c93f" last="0x46c93f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72e8" name="index" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="3">
+<type name="int" metatype="int" size="4"></type></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46c93f" last="0x46c93f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x5249" name="command" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x72ea" name="input" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="char" metatype="int" size="1" char="true"></type></symbol>
+<hash val="0x5f4efbfed9"/><rangelist><range space="ram" first="0x46c954" last="0x46c954"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72eb" name="cVar1" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="register" offset="0x8" size="1"/><rangelist><range space="ram" first="0x46c94a" last="0x46c94a"/></rangelist>
+</mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="4" model="__stdcall" modellock="true" custom="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0x0" size="4"/>
+   <type name="int" metatype="int" size="4"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x46c940" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x12f1" name="CheckMatchingInput" size="1">
+<addr space="ram" offset="0x46c820"/><localdb lock="false" main="stack">
+<scope name="CheckMatchingInput">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x72f2" name="index" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x4" size="4"/><rangelist><range space="ram" first="0x46c877" last="0x46c877"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72f3" name="button_entry" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46c877" last="0x46c877"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72ed" name="entries" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="InputBufferEntry" id="0x100000000000250"/></type></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46c81f" last="0x46c81f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72ee" name="direction" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="1">
+<type name="char" metatype="int" size="1" char="true"></type></symbol>
+<addr space="register" offset="0x4" size="1"/><rangelist><range space="ram" first="0x46c81f" last="0x46c81f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72ef" name="buttons" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="2">
+<type name="uint" metatype="uint" size="4"></type></symbol>
+<addr space="register" offset="0x1c" size="4"/><rangelist><range space="ram" first="0x46c81f" last="0x46c81f"/></rangelist>
+</mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="4" model="__fastcall" modellock="true" custom="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0x0" size="4"/>
+   <type name="int" metatype="int" size="4"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x46c820" size="1"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+<scope name="CPlayer" id="0x70bc">
+<parent id="0x0"/>
+<rangeequalssymbols/>
+<symbollist>
+<mapsym>
+<function id="0x12f3" name="CheckCommandInput" size="1">
+<addr space="ram" offset="0x46ca40"/><localdb lock="false" main="stack">
+<scope name="CheckCommandInput">
+<parent id="0x70bc"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x72e2" name="input" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="InputProcessing" id="0x100000000000252"/></symbol>
+<addr space="stack" offset="0xffffffd0" size="46"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x72f4" name="entries" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="" metatype="array" size="28" arraysize="7"><typeref name="InputBufferEntry" id="0x100000000000250"/></type></symbol>
+<addr space="stack" offset="0xffffffb4" size="28"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x72f5" name="iVar1" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46ca82" last="0x46ca82"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72f6" name="bVar3" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined1"/></symbol>
+<addr space="register" offset="0x20b" size="1"/><rangelist><range space="ram" first="0x46cb23" last="0x46cb23"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72f7" name="iVar2" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46cb10" last="0x46cb10"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72f8" name="this" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="CPlayerFull" id="0x10000000000006b"/></type></symbol>
+<addr space="register" offset="0x4" size="4"/><rangelist><range space="ram" first="0x46ca3f" last="0x46ca3f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72e9" name="index" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46caef" last="0x46caef"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x524a" name="command" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="1">
+<type name="" metatype="ptr" size="4"><type name="char" metatype="int" size="1" char="true"></type></type></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x524b" name="direction" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined1"/></symbol>
+<addr space="stack" offset="0xffffffab" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x748b" name="_buttons" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="uint" metatype="uint" size="4"></type></symbol>
+<hash val="0x3f009f9920"/><rangelist><range space="ram" first="0x46caef" last="0x46caef"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x524c" name="buttons" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="uint" metatype="uint" size="4"></type></symbol>
+<addr space="stack" offset="0xffffffac" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x524d" name="command_length" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffb0" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="4" model="__thiscall" modellock="true" custom="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0x0" size="4"/>
+   <type name="int" metatype="int" size="4"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x46ca40" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x12ee" name="InitInputProcessingData" size="1">
+<addr space="ram" offset="0x46c670"/><localdb lock="false" main="stack">
+<scope name="InitInputProcessingData">
+<parent id="0x70bc"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x72e0" name="input_buffer" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<hash val="0x5fcf9852d5"/><rangelist><range space="ram" first="0x46c68a" last="0x46c68a"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72dc" name="this" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="CPlayerFull" id="0x10000000000006b"/></type></symbol>
+<addr space="register" offset="0x4" size="4"/><rangelist><range space="ram" first="0x46c66f" last="0x46c66f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72dd" name="param_2" typelock="true" namelock="false" readonly="false" merge="false" cat="0" index="1">
+<type name="" metatype="ptr" size="4"><typeref name="InputProcessing" id="0x100000000000252"/></type></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46c66f" last="0x46c66f"/></rangelist>
+</mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="4" model="__fastcall" modellock="true" custom="true">
+  <returnsym typelock="true">
+   <addr/>
+   <void/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x46c670" size="1"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+<scope name="InputProcessing" id="0x72e5">
+<parent id="0x0"/>
+<rangeequalssymbols/>
+<symbollist>
+<mapsym>
+<function id="0x12f0" name="FramesSinceLastInputAlways0" size="1">
+<addr space="ram" offset="0x46c7d0"/><localdb lock="false" main="stack">
+<scope name="FramesSinceLastInputAlways0">
+<parent id="0x72e5"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x72e3" name="param_1" typelock="true" namelock="false" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="InputProcessing" id="0x100000000000252"/></type></symbol>
+<addr space="register" offset="0x0" size="4"/><rangelist><range space="ram" first="0x46c7cf" last="0x46c7cf"/></rangelist>
+</mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="4" model="__stdcall" modellock="true" custom="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0x0" size="4"/>
+   <type name="int" metatype="int" size="4"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x46c7d0" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x12ef" name="GoBackOneFrame" size="1">
+<addr space="ram" offset="0x46c760"/><localdb lock="false" main="stack">
+<scope name="GoBackOneFrame">
+<parent id="0x72e5"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<equatesymbol name="" typelock="false" namelock="false" readonly="false" cat="1" format="dec">
+  <value>0x3f</value>
+</equatesymbol>
+<hash val="0x2015dbe2c4"/><rangelist><range space="ram" first="0x46c78f" last="0x46c78f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x72e4" name="param_1" typelock="true" namelock="false" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="InputProcessing" id="0x100000000000252"/></type></symbol>
+<addr space="register" offset="0x1c" size="4"/><rangelist><range space="ram" first="0x46c75f" last="0x46c75f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x5248" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined1"/></symbol>
+<addr space="stack" offset="0xfffffff8" size="1"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="4" model="__stdcall" modellock="true" custom="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0x0" size="4"/>
+   <type name="int" metatype="int" size="4"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x46c760" size="1"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</db>
+<context_points>
+<context_pointset space="ram" offset="0x46ca40">
+  <set name="reserved" val="0"/>
+  <set name="bit64" val="0"/>
+  <set name="addrsize" val="1"/>
+  <set name="opsize" val="1"/>
+  <set name="segover" val="0"/>
+  <set name="highseg" val="0"/>
+  <set name="protectedMode" val="0"/>
+  <set name="repneprefx" val="0"/>
+  <set name="prefix_f2" val="0"/>
+  <set name="mandover" val="0"/>
+  <set name="repprefx" val="0"/>
+  <set name="prefix_f3" val="0"/>
+  <set name="prefix_66" val="0"/>
+  <set name="rexWprefix" val="0"/>
+  <set name="rexRprefix" val="0"/>
+  <set name="rexXprefix" val="0"/>
+  <set name="rexBprefix" val="0"/>
+  <set name="rexprefix" val="0"/>
+  <set name="vexMode" val="0"/>
+  <set name="vexL" val="0"/>
+  <set name="suffix3D" val="0"/>
+  <set name="vexVVVV" val="0"/>
+  <set name="vexVVVV_r64" val="0"/>
+  <set name="vexMMMMM" val="0"/>
+  <set name="instrPhase" val="0"/>
+</context_pointset>
+<tracked_pointset space="ram" offset="0x46ca40">
+<set space="register" offset="0x20a" size="1" val="0x0"/>
+</tracked_pointset>
+</context_points>
+<commentdb>
+</commentdb>
+<optionslist>
+ <currentaction>
+  <param1>conditionalexe</param1>
+  <param2>on</param2>
+</currentaction>
+ <readonly>on</readonly>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>unreachable</param2>
+  <param3>on</param3>
+</currentaction>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>doubleprecis</param2>
+  <param3>on</param3>
+</currentaction>
+ <setlanguage>c-language</setlanguage>
+ <nullprinting>on</nullprinting>
+ <inplaceops>on</inplaceops>
+ <aliasblock>none</aliasblock>
+ <maxlinewidth>80</maxlinewidth>
+ <commentindent>0</commentindent>
+ <commentstyle>cplusplus</commentstyle>
+ <commentinstruction>
+  <param1>header</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user1</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user3</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <namespacestrategy>all</namespacestrategy>
+ <protoeval>__fastcall/__thiscall/__stdcall</protoeval>
+</optionslist>
+</save_state>
+</xml_savefile>
