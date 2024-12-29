@@ -554,11 +554,7 @@ void PrintLanguage::opBinary(const OpToken *tok,const PcodeOp *op)
 	}
 	if (tok->reverse != nullptr && op->getIn(0)->termOrder(op->getIn(1)) == 1) {
 		// Apply ordered comparison term order at print time
-		tok = tok->reverse;
-		if (tok == nullptr)
-			throw LowlevelError("Could not find reversed token");
-
-		pushOp(tok,op);
+		pushOp(tok->reverse,op);
 		pushVnImplied(op->getIn(0),op,mods);
 		pushVnImplied(op->getIn(1),op,mods);
 	} else {

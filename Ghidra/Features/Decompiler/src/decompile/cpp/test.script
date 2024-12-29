@@ -1,17 +1,28 @@
 // restore ../datatests/ssbm/Physics_UpdateECBBones.xml
 // load function Physics_UpdateECBBones
-// trace address 0x8004254c
-// trace address 0x80042554
-// trace address 0x8004255c
-// trace address 0x80042560
-// trace address 0x800425f8
+// trace address 0x800427d0
 
-restore ../datatests/ssbm/Interrupt_Throw.xml
-load function Interrupt_Throw
+// restore ../datatests/ssbm/Interrupt_Throw.xml
+// load function Interrupt_Throw
+// trace address 0x800dd2e0
+
+// restore ../datatests/ssbm/PlayerThink_Collision.xml
+// load function PlayerThink_Collision
+// trace address 0x8006c574
+// trace address 0x8006c57c
+
+// restore ../datatests/ssbm/Interrupt_AS_Dash.xml
+// load function Interrupt_AS_Dash
+
+// restore ../datatests/mbaacc/CheckCommandInput.xml
+// load function CPlayer::CheckCommandInput
+
+restore ../datatests/ssbm/HSD_PadRenewRawStatus.xml
+load function HSD_PadRenewRawStatus
 
 trace enable
 option togglerule shiftand off
-option inplaceops on
+// option togglerule ignorenan off
 option indentincrement 2
 decompile
 print C

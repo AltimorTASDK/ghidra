@@ -582,16 +582,6 @@ cb610038cb41003083e1002c83c10028
 <addr space="register" offset="0x40e4" size="4"/><rangelist><range space="ram" first="0x80042870" last="0x80042870"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d783" name="min_x_constrained" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<addr space="register" offset="0x402c" size="4"/><rangelist><range space="ram" first="0x8004285c" last="0x8004285c"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d782" name="max_x_constrained" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<addr space="register" offset="0x4024" size="4"/><rangelist><range space="ram" first="0x8004285c" last="0x8004285c"/></rangelist>
-</mapsym>
-<mapsym>
 <symbol id="0x1d784" name="center_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
 <typeref name="float"/></symbol>
 <hash val="0x63fbe4d8975"/><rangelist><range space="ram" first="0x800428e4" last="0x800428e4"/></rangelist>
@@ -604,19 +594,9 @@ cb610038cb41003083e1002c83c10028
 <hash val="0x5fa819bf7f"/><rangelist><range space="ram" first="0x80042594" last="0x80042594"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d789" name="min_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<addr space="register" offset="0x40fc" size="4"/><rangelist><range space="ram" first="0x800425b4" last="0x800425b4"/></rangelist>
-</mapsym>
-<mapsym>
 <symbol id="0x1d788" name="pos_y" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
 <typeref name="float"/></symbol>
 <hash val="0x5fb7d75b6d"/><rangelist><range space="ram" first="0x80042598" last="0x80042598"/></rangelist>
-</mapsym>
-<mapsym>
-<symbol id="0x1d78a" name="max_x" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
-<typeref name="float"/></symbol>
-<addr space="register" offset="0x40ec" size="4"/><rangelist><range space="ram" first="0x800425f8" last="0x800425f8"/></rangelist>
 </mapsym>
 <mapsym>
 <symbol id="0x1d78d" name="height" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
@@ -649,14 +629,24 @@ cb610038cb41003083e1002c83c10028
 <addr space="register" offset="0x10" size="4"/><rangelist><range space="ram" first="0x800424db" last="0x800424db"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d793" name="bone_x" typelock="false" namelock="true" readonly="false" cat="-1">
+<symbol id="0x1d795" name="min_x" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined4"/></symbol>
-<hash val="0x65f3986fb94"/><rangelist><range space="ram" first="0x800425d4" last="0x800425d4"/></rangelist>
+<addr space="register" offset="0x402c" size="4"/><rangelist><range space="ram" first="0x80042828" last="0x80042828"/></rangelist>
 </mapsym>
 <mapsym>
-<symbol id="0x1d794" name="bone_y" typelock="false" namelock="true" readonly="false" cat="-1">
+<symbol id="0x1d796" name="max_x" typelock="false" namelock="true" readonly="false" cat="-1">
 <typeref name="undefined4"/></symbol>
-<hash val="0x65f9d44e316"/><rangelist><range space="ram" first="0x800425d8" last="0x800425d8"/></rangelist>
+<addr space="register" offset="0x4024" size="4"/><rangelist><range space="ram" first="0x8004282c" last="0x8004282c"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d79b" name="bone_x" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<hash val="0x65fd6d44d75"/><rangelist><range space="ram" first="0x800425d4" last="0x800425d4"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d79c" name="bone_y" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<hash val="0x65f1c618631"/><rangelist><range space="ram" first="0x800425d8" last="0x800425d8"/></rangelist>
 </mapsym>
 <mapsym>
 <symbol id="0xbea9" name="local_60" typelock="false" namelock="true" readonly="false" cat="-1">

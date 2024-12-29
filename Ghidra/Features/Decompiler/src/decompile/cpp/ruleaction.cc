@@ -8821,21 +8821,23 @@ bool RuleRecoverTernary::tryToRestructure(PcodeOp *op, Varnode *vn1, Varnode *vn
 	auto *in2 = vn2->getDef()->getParent();
 
 	// Order the blocks and check for the expected edge structure
-	if (in1->sizeOut() == 1 && in2->sizeOut() == 2)
+	if (in1->sizeOut() == 1 && in2->sizeOut() == 2) {
 		swap(in1, in2);
-	else if (in1->sizeOut() != 2 || in2->sizeOut() != 1)
+		swap(vn1, vn2);
+	} else if (in1->sizeOut() != 2 || in2->sizeOut() != 1) {
+		return false;
+	}
+
+	if (vn1->loneDescend() != op)
 		return false;
 
 	if (in1->getOutIndex(in2) == -1)
 		return false;
 
 	// Must end with cbranch
-	const auto *cbranch = in1->lastOp();
+	auto *cbranch = in1->lastOp();
 
 	if (cbranch == nullptr || cbranch->code() != CPUI_CBRANCH)
-		return false;
-
-	if (vn1->loneDescend() != op)
 		return false;
 
 	auto *def = vn1->getDef();
@@ -8855,12 +8857,14 @@ bool RuleRecoverTernary::tryToRestructure(PcodeOp *op, Varnode *vn1, Varnode *vn
 
 		bblocks.switchEdge(in1, exit_block, else_block);
 		bblocks.addEdge(else_block, exit_block);
-		data.setBasicBlockRange(else_block, cbranch->getAddr(), cbranch->getAddr());
+		in1->FlowBlock::negateCondition(true);
 	}
 
 	// Move unconditional definition into else block
 	data.opUninsert(def);
 	data.opInsertBegin(def, else_block);
+
+	data.opSetInput(cbranch, data.newCodeRef(def->getAddr()), 0);
 
 	return true;
 }

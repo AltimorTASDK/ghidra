@@ -92,7 +92,7 @@ void Funcdata::pushMultiequals(BlockBasic *bb)
 	if (bb->sizeOut()>1)
 		warningHeader("push_multiequal on block with multiple outputs");
 	outblock = (BlockBasic *) bb->getOut(0); // Take first output block. If this is a
-																// donothing block, it is the only output block
+	                                         // donothing block, it is the only output block
 	int4 outblock_ind = bb->getOutRevIndex(0);
 	for(iter=bb->beginOp();iter!=bb->endOp();++iter) {
 		origop = *iter;
@@ -113,10 +113,10 @@ void Funcdata::pushMultiequals(BlockBasic *bb)
 					}
 				}
 				if (deadEdge) {
-					if ((origvn->getAddr() == op->getOut()->getAddr())&&origvn->isAddrTied())
 					// If origvn is addrtied and feeds into a MULTIEQUAL at same address in outblock
 					// Then any use of origvn beyond outblock that did not go thru this MULTIEQUAL must have
 					// propagated through some other register.  So we make the new MULTIEQUAL write to a unique register
+					if ((origvn->getAddr() == op->getOut()->getAddr())&&origvn->isAddrTied())
 						neednewunique = true;
 					continue;
 				}
@@ -125,7 +125,7 @@ void Funcdata::pushMultiequals(BlockBasic *bb)
 			break;
 		}
 		if (!needreplace) continue;
-																// Construct artificial MULTIEQUAL
+		// Construct artificial MULTIEQUAL
 		vector<Varnode *> branches;
 		if (neednewunique)
 			replacevn = newUnique(origvn->getSize());
@@ -694,8 +694,8 @@ bool Funcdata::forceGoto(const Address &pcop,const Address &pcdest)
 /// \param addr is the Address associated with (1 of the) CBRANCH ops
 /// \return the new basic block
 BlockBasic *Funcdata::nodeJoinCreateBlock(BlockBasic *block1,BlockBasic *block2,
-																					BlockBasic *exita,BlockBasic *exitb,
-																					bool fora_block1ishigh,bool forb_block1ishigh,const Address &addr)
+                                          BlockBasic *exita,BlockBasic *exitb,
+                                          bool fora_block1ishigh,bool forb_block1ishigh,const Address &addr)
 
 {
 	BlockBasic *newblock = bblocks.newBlockBasic(this);
@@ -918,11 +918,11 @@ void Funcdata::nodeSplit(BlockBasic *b,int4 inedge)
 	for(int4 i=0;i<b->sizeIn();++i)
 		b->clearMark();
 
-																// Create duplicate block
+	// Create duplicate block
 	BlockBasic *bprime = nodeSplitBlockEdge(b,inedge);
-																// Make copy of b's ops
+	// Make copy of b's ops
 	nodeSplitRawDuplicate(b,bprime);
-																// Patch up inputs based on split
+	// Patch up inputs based on split
 	nodeSplitInputPatch(b,bprime,inedge);
 
 	// We would need to patch outputs here for the more general

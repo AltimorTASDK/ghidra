@@ -1,0 +1,354 @@
+<xml_savefile name="Scene_RunMajorState" target="default" adjustvma="0">
+<binaryimage arch="PowerPC:BE:32:Gekko_Broadway:default">
+<bytechunk space="ram" offset="0x801a43a0">
+7c0802a63c808048900100049421ffd0
+bf61001c3b6300003be49d3048000cf1
+5760063e480000187c0400404082000c
+7c7e1b78480000183863001488830001
+2804002d4082ffe43bc0000038000000
+981f000c981f0003981f0004981f0005
+887e00004be74b55819e0004280c0000
+4182000c7d8803a64e8000213c608047
+3bbf00063b83b0f04800009c819f0010
+280c0000418200887d8803a64e800021
+547b063e281b002d41820074807f0000
+38000000907d0000a07f0004b07d0004
+981f000c981f0003981f0004981f0005
+48000c3d480000147c00d84040820008
+4800001838630014880300012800002d
+4082ffe8386000004bfffb7d801c0004
+2c00000040820020801d0000901f0000
+a01d0004b01f00044800000c7fc3f378
+4bfffb55881f000c280000004182ff60
+3c6080473863b0f0800300042c000000
+40820018819e0008280c00004182000c
+7d8803a64e800021887f0001bb61001c
+80010034382100307c0803a64e800020
+</bytechunk>
+</binaryimage>
+<coretypes>
+<void/>
+<type name="uint" size="4" metatype="uint" id="-9223371465083307041"/>
+<type name="code" size="1" metatype="code" id="-9223371462259126427"/>
+<type name="int" size="4" metatype="int" id="-9223370945157383201"/>
+<type name="uint3" size="3" metatype="uint" id="-9223225663358771405"/>
+<type name="uint5" size="5" metatype="uint" id="-9223225663358771403"/>
+<type name="uint7" size="7" metatype="uint" id="-9223225663358771401"/>
+<type name="uint6" size="6" metatype="uint" id="-9223225661105102435"/>
+<type name="int3" size="3" metatype="int" id="-9223092562322268365"/>
+<type name="int5" size="5" metatype="int" id="-9223092562322268363"/>
+<type name="int7" size="7" metatype="int" id="-9223092562322268361"/>
+<type name="int6" size="6" metatype="int" id="-9223092560068599395"/>
+<type name="char" size="1" metatype="int" char="true" id="-9223091865880322087"/>
+<type name="uint16" size="16" metatype="uint" id="-9185900419569365091"/>
+<type name="ushort" size="2" metatype="uint" id="-9185691276929259553"/>
+<type name="int16" size="16" metatype="int" id="-9151826554224586851"/>
+<type name="byte" size="1" metatype="uint" id="-9151688846347870363"/>
+<type name="bool" size="1" metatype="bool" id="-9151688804115639865"/>
+<type name="sbyte" size="1" metatype="int" id="-9151648198777381019"/>
+<type name="short" size="2" metatype="int" id="-9151648197910059041"/>
+<type name="wchar_t" size="2" metatype="int" utf="true" id="-8801050271826140705"/>
+<type name="wchar32" size="4" metatype="int" utf="true" id="-8801050271826129511"/>
+<type name="double" size="8" metatype="float" id="-6087405195602966429"/>
+<type name="float10" size="10" metatype="float" id="-5894303970639204475"/>
+<type name="float16" size="16" metatype="float" id="-5894303970639204469"/>
+<type name="undefined" size="1" metatype="unknown" id="-4223139060020122321"/>
+<type name="float2" size="2" metatype="float" id="-3085472373819564389"/>
+<type name="undefined2" size="2" metatype="unknown" id="-1989071053142544393"/>
+<type name="undefined4" size="4" metatype="unknown" id="-1989071053142544391"/>
+<type name="undefined6" size="6" metatype="unknown" id="-1989071053142544389"/>
+<type name="undefined8" size="8" metatype="unknown" id="-1989071053142544387"/>
+<type name="undefined5" size="5" metatype="unknown" id="-1989071052499136175"/>
+<type name="undefined3" size="3" metatype="unknown" id="-1989071052499136173"/>
+<type name="undefined7" size="7" metatype="unknown" id="-1989071052499136169"/>
+<type name="undefined1" size="1" metatype="unknown" id="-1989071052499136163"/>
+<type name="ulonglong" size="8" metatype="uint" id="-1409786767045072009"/>
+<type name="longlong" size="8" metatype="int" id="-1409786554015684791"/>
+<type name="float" size="4" metatype="float" id="-120139017508053025"/>
+</coretypes>
+<save_state>
+<typegrp intsize="4" structalign="4" enumsize="4" enumsigned="false">
+<type name="SceneDataPointers" id="0x1000000000000d5" metatype="struct" size="0"></type>
+<type name="SceneMajorData" id="0x1000000000000af" metatype="struct" size="0"></type>
+<type name="SceneMinorData" id="0x1000000000000b0" metatype="struct" size="0"></type>
+<type name="undefined" metatype="unknown" size="1"></type>
+<type name="Scene" id="0x80000000000004f" metatype="uint" size="1" enum="true">
+<val name="Scene_Menu" value="1"/><val name="Scene_VsMode" value="2"/><val name="Scene_Tournament" value="27"/><val name="Scene_Training" value="28"/><val name="Scene_None" value="45"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="SceneMajorData" id="0x1000000000000af"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="SceneMinorData" id="0x1000000000000b0"/></type>
+<type name="" metatype="ptr" size="4"><void/></type>
+<type name="SceneDataPointers" id="0x1000000000000d5" metatype="struct" size="12">
+<field name="menu_id" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="enter_data" offset="4"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="exit_data" offset="8"><type name="" metatype="ptr" size="4"><void/></type></field>
+</type>
+<type name="SceneMajorData" id="0x1000000000000af" metatype="struct" size="20">
+<field name="id" offset="1"><typeref name="Scene" id="0x80000000000004f"/></field>
+<field name="enter" offset="4"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="exit" offset="8"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="initialize" offset="12"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="minor_data" offset="16"><type name="" metatype="ptr" size="4"><typeref name="SceneMinorData" id="0x1000000000000b0"/></type></field>
+</type>
+<type name="SceneMinorData" id="0x1000000000000b0" metatype="struct" size="24">
+<field name="id" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="persistent_heaps" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="enter" offset="4"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="exit" offset="8"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="data" offset="12"><typeref name="SceneDataPointers" id="0x1000000000000d5"/></field>
+</type>
+</typegrp>
+<db scodeidbyname="false">
+<scope name="" id="0x0">
+<symbollist>
+<mapsym>
+<function id="0x480b" name="Scene_RunMajorState" size="1">
+<addr space="ram" offset="0x801a43a0"/><localdb lock="false" main="stack">
+<scope name="Scene_RunMajorState">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x12981" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x12980" name="local_14" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffec" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d4b3" name="major_id" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="register" offset="0xf" size="1"/><rangelist><range space="ram" first="0x801a439f" last="0x801a439f"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d4b2" name="major" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="" metatype="ptr" size="4"><typeref name="SceneMajorData" id="0x1000000000000af"/></type></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x801a43bc" last="0x801a43bc"/></rangelist>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x801a4470" last="0x801a4470"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1297f" name="local_30" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffd0" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0xf" size="1"/>
+   <type name="byte" metatype="uint" size="1"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x801a43a0" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x4840" name="Scene_GetMajorDataTable" size="1">
+<addr space="ram" offset="0x801a50ac"/><localdb lock="false" main="stack">
+<scope name="Scene_GetMajorDataTable">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true" voidlock="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0xc" size="4"/>
+   <type name="" metatype="ptr" size="4"><typeref name="SceneMajorData" id="0x1000000000000af"/></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x801a50ac" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x241" name="zz_0018f58_" size="1">
+<addr space="ram" offset="0x80018f58"/><localdb lock="false" main="stack">
+<scope name="zz_0018f58_">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="unknown">
+  <returnsym>
+   <addr space="register" offset="0xf" size="1"/>
+   <typeref name="undefined"/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x80018f58" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x47ef" name="Scene_Execute" size="1">
+<addr space="ram" offset="0x801a4014"/><localdb lock="false" main="stack">
+<scope name="Scene_Execute">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1ca80" name="minor" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<hash val="0x3ffd9a9130"/><rangelist><range space="ram" first="0x801a4054" last="0x801a4054"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1ca83" name="callbacks" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x801a40bc" last="0x801a40bc"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1297d" name="local_1c" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffe4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1297c" name="local_38" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffc8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1c52c" name="major" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="SceneMajorData" id="0x1000000000000af"/></type></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x801a4013" last="0x801a4013"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1ca7f" name="scene" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x6c" size="4"/><rangelist><range space="ram" first="0x801a4088" last="0x801a4088"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1297e" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr/>
+   <void/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x801a4014" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1caa8" name="SceneMajorChangePending" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="undefined1"/></symbol>
+<addr space="ram" offset="0x80479d3c" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1c851" name="SceneMinor" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="ram" offset="0x80479d33" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1c8a2" name="SceneMinorPrevious" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="ram" offset="0x80479d34" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1c8a3" name="SceneMinorPending" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="ram" offset="0x80479d35" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1cd13" name="GetNextSceneMajorCallback" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="" metatype="ptr" size="4"><void/></type></symbol>
+<addr space="ram" offset="0x80479d40" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1bc2a" name="SceneMajor" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="ram" offset="0x80479d30" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_80479d36" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x80479d36" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_80479d3a" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="undefined2"/></symbol>
+<addr space="ram" offset="0x80479d3a" size="2"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1caa9" name="ResetFlag" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x8046b0f4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1c85a" name="SceneMajorPending" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="byte" metatype="uint" size="1"></type></symbol>
+<addr space="ram" offset="0x80479d31" size="1"/><rangelist/></mapsym>
+<mapsym>
+ <labelsym name="LAB_801a43ec" id="0x40000000801a43ec"/>
+ <addr space="ram" offset="0x801a43ec"/>
+ <rangelist/>
+</mapsym>
+<mapsym>
+ <labelsym name="LAB_801a44bc" id="0x40000000801a44bc"/>
+ <addr space="ram" offset="0x801a44bc"/>
+ <rangelist/>
+</mapsym>
+</symbollist>
+</scope>
+</db>
+<context_points>
+<context_pointset space="ram" offset="0x801a427c">
+  <set name="linkreg" val="0"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<context_pointset space="ram" offset="0x801a450c">
+  <set name="linkreg" val="1"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<context_pointset space="ram" offset="0x801a4510">
+  <set name="linkreg" val="0"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<tracked_pointset space="ram" offset="0x801a43a0">
+<set space="register" offset="0x8" size="4" val="0x804df9e0"/>
+<set space="register" offset="0x34" size="4" val="0x804db6a0"/>
+<set space="register" offset="0x1e40" size="4" val="0x0"/>
+<set space="register" offset="0x1e48" size="4" val="0x40004"/>
+<set space="register" offset="0x1e4c" size="4" val="0x50005"/>
+<set space="register" offset="0x1e50" size="4" val="0x60006"/>
+<set space="register" offset="0x1e54" size="4" val="0x70007"/>
+<set space="register" offset="0x1e58" size="4" val="0x3d043d04"/>
+</tracked_pointset>
+</context_points>
+<commentdb>
+</commentdb>
+<optionslist>
+ <currentaction>
+  <param1>conditionalexe</param1>
+  <param2>on</param2>
+</currentaction>
+ <readonly>on</readonly>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>unreachable</param2>
+  <param3>on</param3>
+</currentaction>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>doubleprecis</param2>
+  <param3>on</param3>
+</currentaction>
+ <setlanguage>c-language</setlanguage>
+ <nullprinting>on</nullprinting>
+ <inplaceops>on</inplaceops>
+ <aliasblock>none</aliasblock>
+ <maxlinewidth>80</maxlinewidth>
+ <commentindent>0</commentindent>
+ <commentstyle>cplusplus</commentstyle>
+ <commentinstruction>
+  <param1>header</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user1</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user3</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <namespacestrategy>all</namespacestrategy>
+ <protoeval>__stdcall</protoeval>
+ <togglerule>
+  <param1>shiftand</param1>
+  <param2>off</param2>
+</togglerule>
+</optionslist>
+</save_state>
+</xml_savefile>

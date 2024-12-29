@@ -1,0 +1,517 @@
+<xml_savefile name="HSD_PadRenewRawStatus" target="default" adjustvma="0">
+<binaryimage arch="PowerPC:BE:32:Gekko_Broadway:default">
+<bytechunk space="ram" offset="0x803769fc">
+                        7c0802a6
+3c80804c900100049421ff9893e10064
+3be41f7893c100603bc3000048001cd5
+3861002c4bfd6fdd2c1e00004182005c
+880100363861002c388000007c000775
+4182004088030016388000013863000c
+7c0007754182002c8803001638800002
+3863000c7c0007754182001888030016
+388000037c0007754182000838800004
+2c04000441820268881f0002889f0003
+88bf00001c000030807f00087c042840
+7c63021440820104881f00042c000001
+418200dc408000102c00000040800014
+480000f02c000003408000e848000160
+889f0001388400017c042bd67c0029d6
+7c002050981f0001889f0001881f0000
+1c84003080bf0008280000017ca52214
+41820048a0830000a00500007c800378
+b0050000a083000ca005000c7c800378
+b005000ca0830018a00500187c800378
+b0050018a0830024a00500247c800378
+b00500244800006ca081002ca0050000
+7c800378b001002ca0810038a005000c
+7c800378b0010038a0810044a0050018
+7c800378b0010044a0810050a0050024
+7c800378b001005048000028889f0001
+388400017c042bd67c0029d67c002050
+981f00014800000c38040001981f0003
+8081002c800100309083000090030004
+8081003480010038908300089003000c
+8081003c800100409083001090030014
+8081004480010048908300189003001c
+8081004c800100509083002090030024
+8081005480010058908300289003002c
+889f0002887f0000388400017c041bd6
+7c0019d67c002050981f000288010036
+3c60803c38a1002c7c0007742c00ffff
+38839570386000004082000880640000
+880500163884000438a5000c7c000774
+2c00ffff4082000c800400007c630378
+8805001638a5000c388400047c000774
+2c00ffff4082000c800400007c630378
+88050016388400047c0007742c00ffff
+4082000c800400007c63037828030000
+418200084bfd69354bfd1db92c030000
+4182001038000001981f002a48000020
+881f002a280000004182001438000001
+981f002b38000000981f002a8001006c
+83e1006483c10060382100687c0803a6
+4e800020
+</bytechunk>
+<bytechunk space="ram" offset="0x803b9570" readonly="true">
+80000000400000002000000010000000
+</bytechunk>
+</binaryimage>
+<coretypes>
+<void/>
+<type name="uint" size="4" metatype="uint" id="-9223371465083307041"/>
+<type name="code" size="1" metatype="code" id="-9223371462259126427"/>
+<type name="int" size="4" metatype="int" id="-9223370945157383201"/>
+<type name="uint3" size="3" metatype="uint" id="-9223225663358771405"/>
+<type name="uint5" size="5" metatype="uint" id="-9223225663358771403"/>
+<type name="uint7" size="7" metatype="uint" id="-9223225663358771401"/>
+<type name="uint6" size="6" metatype="uint" id="-9223225661105102435"/>
+<type name="int3" size="3" metatype="int" id="-9223092562322268365"/>
+<type name="int5" size="5" metatype="int" id="-9223092562322268363"/>
+<type name="int7" size="7" metatype="int" id="-9223092562322268361"/>
+<type name="int6" size="6" metatype="int" id="-9223092560068599395"/>
+<type name="char" size="1" metatype="int" char="true" id="-9223091865880322087"/>
+<type name="uint16" size="16" metatype="uint" id="-9185900419569365091"/>
+<type name="ushort" size="2" metatype="uint" id="-9185691276929259553"/>
+<type name="int16" size="16" metatype="int" id="-9151826554224586851"/>
+<type name="byte" size="1" metatype="uint" id="-9151688846347870363"/>
+<type name="bool" size="1" metatype="bool" id="-9151688804115639865"/>
+<type name="sbyte" size="1" metatype="int" id="-9151648198777381019"/>
+<type name="short" size="2" metatype="int" id="-9151648197910059041"/>
+<type name="wchar_t" size="2" metatype="int" utf="true" id="-8801050271826140705"/>
+<type name="wchar32" size="4" metatype="int" utf="true" id="-8801050271826129511"/>
+<type name="double" size="8" metatype="float" id="-6087405195602966429"/>
+<type name="float10" size="10" metatype="float" id="-5894303970639204475"/>
+<type name="float16" size="16" metatype="float" id="-5894303970639204469"/>
+<type name="undefined" size="1" metatype="unknown" id="-4223139060020122321"/>
+<type name="float2" size="2" metatype="float" id="-3085472373819564389"/>
+<type name="undefined2" size="2" metatype="unknown" id="-1989071053142544393"/>
+<type name="undefined4" size="4" metatype="unknown" id="-1989071053142544391"/>
+<type name="undefined6" size="6" metatype="unknown" id="-1989071053142544389"/>
+<type name="undefined8" size="8" metatype="unknown" id="-1989071053142544387"/>
+<type name="undefined5" size="5" metatype="unknown" id="-1989071052499136175"/>
+<type name="undefined3" size="3" metatype="unknown" id="-1989071052499136173"/>
+<type name="undefined7" size="7" metatype="unknown" id="-1989071052499136169"/>
+<type name="undefined1" size="1" metatype="unknown" id="-1989071052499136163"/>
+<type name="ulonglong" size="8" metatype="uint" id="-1409786767045072009"/>
+<type name="longlong" size="8" metatype="int" id="-1409786554015684791"/>
+<type name="float" size="4" metatype="float" id="-120139017508053025"/>
+</coretypes>
+<save_state>
+<typegrp intsize="4" structalign="4" enumsize="4" enumsigned="false">
+<type name="SIPADStatus" id="0x10000000000011b" metatype="struct" size="0"></type>
+<type name="PADStatus" id="0x100000000000034" metatype="struct" size="0"></type>
+<type name="PadLibData" id="0x100000000000033" metatype="struct" size="0"></type>
+<type name="DVDDiskID" id="0x100000000000185" metatype="struct" size="0"></type>
+<type name="OSBootInfo" id="0x100000000000186" metatype="struct" size="0"></type>
+<type name="HSD_PadRawQueue" id="0x100000000000035" metatype="struct" size="0"></type>
+<type name="undefined" metatype="unknown" size="1"></type>
+<type name="" metatype="ptr" size="4"><typeref name="undefined"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="PADStatus" id="0x100000000000034"/></type>
+<type name="" metatype="ptr" size="4"><typeref name="HSD_PadRawQueue" id="0x100000000000035"/></type>
+<type name="bool32" id="0x800000000000057" metatype="uint" size="4" enum="true">
+<val name="false" value="0"/><val name="true" value="1"/></type>
+<type name="Button16" id="0x800000000000062" metatype="uint" size="2" enum="true">
+<val name="Button_DPadLeft" value="1"/><val name="Button_DPadRight" value="2"/><val name="Button_DPadUp" value="4"/><val name="Button_DPadDown" value="8"/><val name="Button_Z" value="16"/><val name="Button_DigitalR" value="32"/><val name="Button_DigitalL" value="64"/><val name="Button_A" value="256"/><val name="Button_B" value="512"/><val name="Button_X" value="1024"/><val name="Button_Y" value="2048"/><val name="Button_Start" value="4096"/></type>
+<type name="" metatype="array" size="4" arraysize="4"><type name="char" metatype="int" size="1" char="true"></type></type>
+<type name="" metatype="array" size="2" arraysize="2"><type name="char" metatype="int" size="1" char="true"></type></type>
+<type name="SIPADStatus" id="0x10000000000011b" metatype="struct" size="8">
+<field name="buttons" offset="0"><typeref name="Button16" id="0x800000000000062"/></field>
+<field name="stick_x" offset="2"><type name="char" metatype="int" size="1" char="true"></type></field>
+<field name="stick_y" offset="3"><type name="char" metatype="int" size="1" char="true"></type></field>
+<field name="cstick_x" offset="4"><type name="char" metatype="int" size="1" char="true"></type></field>
+<field name="cstick_y" offset="5"><type name="char" metatype="int" size="1" char="true"></type></field>
+<field name="analog_l" offset="6"><type name="char" metatype="int" size="1" char="true"></type></field>
+<field name="analog_r" offset="7"><type name="char" metatype="int" size="1" char="true"></type></field>
+</type>
+<type name="" metatype="ptr" size="4"><void/></type>
+<type name="" metatype="array" size="22" arraysize="22"><type name="byte" metatype="uint" size="1"></type></type>
+<type name="PADStatus" id="0x100000000000034" metatype="struct" size="12">
+<field name="buttons" offset="0"><typeref name="Button16" id="0x800000000000062"/></field>
+<field name="stick_x" offset="2"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="stick_y" offset="3"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="cstick_x" offset="4"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="cstick_y" offset="5"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="analog_l" offset="6"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="analog_r" offset="7"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="analog_a" offset="8"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="analog_b" offset="9"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="err" offset="10"><type name="byte" metatype="uint" size="1"></type></field>
+</type>
+<type name="PadLibData" id="0x100000000000033" metatype="struct" size="48">
+<field name="qnum" offset="0"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="qread" offset="1"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="qwrite" offset="2"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="qcount" offset="3"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="qtype" offset="4"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="queue" offset="8"><type name="" metatype="ptr" size="4"><typeref name="HSD_PadRawQueue" id="0x100000000000035"/></type></field>
+<field name="repeat_start" offset="12"><type name="int" metatype="int" size="4"></type></field>
+<field name="repeat_interval" offset="16"><type name="int" metatype="int" size="4"></type></field>
+<field name="adc_type" offset="20"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="adc_th" offset="21"><type name="char" metatype="int" size="1" char="true"></type></field>
+<field name="adc_angle" offset="24"><typeref name="float"/></field>
+<field name="clamp_stickType" offset="28"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="clamp_stickShift" offset="29"><type name="bool" metatype="bool" size="1"></type></field>
+<field name="clamp_stickMax" offset="30"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="clamp_stickMin" offset="31"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="clamp_analogLRShift" offset="32"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="clamp_analogLRMax" offset="33"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="clamp_analogLRMin" offset="34"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="clamp_analogABShift" offset="35"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="clamp_analogABMax" offset="36"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="clamp_analogABMin" offset="37"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="scale_stick" offset="38"><type name="sbyte" metatype="int" size="1"></type></field>
+<field name="scale_analogLR" offset="39"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="scale_analogAB" offset="40"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="cross_dir" offset="41"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="reset_switch_status" offset="42"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="reset_switch" offset="43"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="rumble_info" offset="44"><type name="" metatype="ptr" size="4"><void/></type></field>
+</type>
+<type name="DVDDiskID" id="0x100000000000185" metatype="struct" size="32">
+<field name="gameName" offset="0"><type name="" metatype="array" size="4" arraysize="4"><type name="char" metatype="int" size="1" char="true"></type></type></field>
+<field name="company" offset="4"><type name="" metatype="array" size="2" arraysize="2"><type name="char" metatype="int" size="1" char="true"></type></type></field>
+<field name="diskNumber" offset="6"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="gameVersion" offset="7"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="streaming" offset="8"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="streamingBufSize" offset="9"><type name="byte" metatype="uint" size="1"></type></field>
+<field name="padding" offset="10"><type name="" metatype="array" size="22" arraysize="22"><type name="byte" metatype="uint" size="1"></type></type></field>
+</type>
+<type name="" metatype="array" size="48" arraysize="4"><typeref name="PADStatus" id="0x100000000000034"/></type>
+<type name="OSBootInfo" id="0x100000000000186" metatype="struct" size="64">
+<field name="DVDDiskID" offset="0"><typeref name="DVDDiskID" id="0x100000000000185"/></field>
+<field name="magic" offset="32"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="version" offset="36"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="memorySize" offset="40"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="consoleType" offset="44"><type name="uint" metatype="uint" size="4"></type></field>
+<field name="arenaLo" offset="48"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="arenaHi" offset="52"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="FSTLocation" offset="56"><type name="" metatype="ptr" size="4"><void/></type></field>
+<field name="FSTMaxLength" offset="60"><type name="uint" metatype="uint" size="4"></type></field>
+</type>
+<type name="HSD_PadRawQueue" id="0x100000000000035" metatype="struct" size="48">
+<field name="stat" offset="0"><type name="" metatype="array" size="48" arraysize="4"><typeref name="PADStatus" id="0x100000000000034"/></type></field>
+</type>
+</typegrp>
+<db scodeidbyname="false">
+<scope name="" id="0x0">
+<symbollist>
+<mapsym>
+<function id="0x963d" name="HSD_PadRenewRawStatus" size="1">
+<addr space="ram" offset="0x803769fc"/><localdb lock="false" main="stack">
+<scope name="HSD_PadRenewRawStatus">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1ae13" name="local_4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffffc" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1ae12" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffff8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1ae05" name="local_68" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffff98" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1ae14" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1cc94" name="check_for_error" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<typeref name="bool32" id="0x800000000000057"/></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x803769fb" last="0x803769fb"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1ae06" name="status" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="" metatype="array" size="48" arraysize="4"><typeref name="PADStatus" id="0x100000000000034"/></type></symbol>
+<addr space="stack" offset="0xffffffc4" size="48"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1bfe9" name="rqueue" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<type name="" metatype="ptr" size="4"><typeref name="HSD_PadRawQueue" id="0x100000000000035"/></type></symbol>
+<addr space="register" offset="0x14" size="4"/><rangelist><range space="ram" first="0x80376afc" last="0x80376afc"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d12b" name="qnum" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x14" size="4"/><rangelist><range space="ram" first="0x80376a90" last="0x80376a90"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1bfec" name="queue" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x80376aa0" last="0x80376aa0"/></rangelist>
+</mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr/>
+   <void/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x803769fc" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x966d" name="HSD_PadRumbleInterpret" size="1">
+<addr space="ram" offset="0x803786f0"/><localdb lock="false" main="stack">
+<scope name="HSD_PadRumbleInterpret">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1ae73" name="local_14" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffec" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1ae72" name="local_28" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffd8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1ae74" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="unknown">
+  <returnsym>
+   <addr space="register" offset="0xf" size="1"/>
+   <typeref name="undefined"/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x803786f0" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x90df" name="PADRead" size="1">
+<addr space="ram" offset="0x8034da00"/><localdb lock="false" main="stack">
+<scope name="PADRead">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1a401" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1c631" name="status" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="" metatype="ptr" size="4"><typeref name="PADStatus" id="0x100000000000034"/></type></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x8034d9ff" last="0x8034d9ff"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d040" name="port_mask" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x5c" size="4"/><rangelist><range space="ram" first="0x8034da54" last="0x8034da54"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1a400" name="local_30" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffd0" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d7f3" name="pend_bits" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x1c" size="4"/><rangelist><range space="ram" first="0x8034da80" last="0x8034da80"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d7f4" name="enable" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined1"/></symbol>
+<addr space="register" offset="0xf" size="1"/><rangelist><range space="ram" first="0x8034da60" last="0x8034da60"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1d03f" name="i" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x54" size="4"/><rangelist><range space="ram" first="0x8034da18" last="0x8034da18"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1a3ff" name="response" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="SIPADStatus" id="0x10000000000011b"/></symbol>
+<addr space="stack" offset="0xffffffc4" size="8"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d03e" name="result" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="register" offset="0x50" size="4"/><rangelist><range space="ram" first="0x8034da48" last="0x8034da48"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1a3fe" name="local_50" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffb0" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym>
+   <addr space="register" offset="0xf" size="1"/>
+   <typeref name="undefined"/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x8034da00" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x90d9" name="PADReset" size="1">
+<addr space="ram" offset="0x8034d5e8"/><localdb lock="false" main="stack">
+<scope name="PADReset">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1a3f3" name="local_18" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xffffffe8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d193" name="chan" typelock="true" namelock="true" readonly="false" merge="false" cat="0" index="0">
+<type name="int" metatype="int" size="4"></type></symbol>
+<addr space="register" offset="0xc" size="4"/><rangelist><range space="ram" first="0x8034d5e7" last="0x8034d5e7"/></rangelist>
+</mapsym>
+<mapsym>
+<symbol id="0x1a3f5" name="local_4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffffc" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1a3f4" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffff8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1a3f6" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="__stdcall" modellock="true">
+  <returnsym typelock="true">
+   <addr space="register" offset="0xc" size="4"/>
+   <type name="int" metatype="int" size="4"></type>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x8034d5e8" size="1"/><rangelist/></mapsym>
+<mapsym>
+<function id="0x903b" name="OSGetResetSwitchState" size="1">
+<addr space="ram" offset="0x80348a70"/><localdb lock="false" main="stack">
+<scope name="OSGetResetSwitchState">
+<parent id="0x0"/>
+<rangelist/>
+<symbollist>
+<mapsym>
+<symbol id="0x1a305" name="local_8" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0xfffffff8" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1a306" name="local_res4" typelock="false" namelock="true" readonly="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="stack" offset="0x4" size="4"/><rangelist/></mapsym>
+</symbollist>
+</scope>
+</localdb>
+<prototype extrapop="0" model="unknown">
+  <returnsym>
+   <addr space="register" offset="0xf" size="1"/>
+   <typeref name="undefined"/>  </returnsym>
+</prototype>
+</function>
+<addr space="ram" offset="0x80348a70" size="1"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1bfeb" name="HSD_PadLibData" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="PadLibData" id="0x100000000000033"/></symbol>
+<addr space="ram" offset="0x804c1f78" size="48"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_803b9570" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x803b9570" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_803b9574" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x803b9574" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_803b9578" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x803b9578" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol name="DAT_803b957c" typelock="true" namelock="true" readonly="true" merge="false" cat="-1">
+<typeref name="undefined4"/></symbol>
+<addr space="ram" offset="0x803b957c" size="4"/><rangelist/></mapsym>
+<mapsym>
+<symbol id="0x1d5ec" name="__OSBootInfo" typelock="true" namelock="true" readonly="false" merge="false" cat="-1">
+<typeref name="OSBootInfo" id="0x100000000000186"/></symbol>
+<addr space="ram" offset="0x80000000" size="64"/><rangelist/></mapsym>
+<mapsym>
+ <labelsym name="LAB_80376c2c" id="0x4000000080376c2c"/>
+ <addr space="ram" offset="0x80376c2c"/>
+ <rangelist/>
+</mapsym>
+</symbollist>
+</scope>
+</db>
+<context_points>
+<context_pointset space="ram" offset="0x803769d8">
+  <set name="linkreg" val="0"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<context_pointset space="ram" offset="0x80376d00">
+  <set name="linkreg" val="1"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<context_pointset space="ram" offset="0x80376d04">
+  <set name="linkreg" val="0"/>
+  <set name="vle" val="0"/>
+  <set name="lsmul" val="0"/>
+  <set name="regpset" val="0"/>
+</context_pointset>
+<tracked_pointset space="ram" offset="0x803769fc">
+<set space="register" offset="0x8" size="4" val="0x804df9e0"/>
+<set space="register" offset="0x34" size="4" val="0x804db6a0"/>
+<set space="register" offset="0x1e40" size="4" val="0x0"/>
+<set space="register" offset="0x1e48" size="4" val="0x40004"/>
+<set space="register" offset="0x1e4c" size="4" val="0x50005"/>
+<set space="register" offset="0x1e50" size="4" val="0x60006"/>
+<set space="register" offset="0x1e54" size="4" val="0x70007"/>
+<set space="register" offset="0x1e58" size="4" val="0x3d043d04"/>
+</tracked_pointset>
+</context_points>
+<commentdb>
+</commentdb>
+<optionslist>
+ <currentaction>
+  <param1>conditionalexe</param1>
+  <param2>on</param2>
+</currentaction>
+ <readonly>on</readonly>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>unreachable</param2>
+  <param3>on</param3>
+</currentaction>
+ <currentaction>
+  <param1>decompile</param1>
+  <param2>doubleprecis</param2>
+  <param3>on</param3>
+</currentaction>
+ <setlanguage>c-language</setlanguage>
+ <nullprinting>on</nullprinting>
+ <inplaceops>on</inplaceops>
+ <aliasblock>none</aliasblock>
+ <maxlinewidth>80</maxlinewidth>
+ <commentindent>0</commentindent>
+ <commentstyle>cplusplus</commentstyle>
+ <commentinstruction>
+  <param1>header</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user1</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <commentinstruction>
+  <param1>user3</param1>
+  <param2>on</param2>
+</commentinstruction>
+ <namespacestrategy>all</namespacestrategy>
+ <protoeval>__stdcall</protoeval>
+ <togglerule>
+  <param1>shiftand</param1>
+  <param2>off</param2>
+</togglerule>
+</optionslist>
+</save_state>
+</xml_savefile>
